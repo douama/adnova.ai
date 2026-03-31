@@ -5,19 +5,34 @@ import { type Lang } from '../lib/i18n'
 export function renderAnalytics(lang: Lang = 'en'): string {
   const content = `
   <!-- Date Range + Export -->
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-    <div class="flex items-center gap-2">
-      ${dateBtn('Today')}&nbsp;${dateBtn('7D')}&nbsp;${dateBtn('30D', true)}&nbsp;${dateBtn('90D')}&nbsp;${dateBtn('Custom')}
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
+    <div class="flex items-center gap-1.5 flex-wrap">
+      ${dateBtn('Today', false, '1d')}
+      ${dateBtn('7D', false, '7d')}
+      ${dateBtn('30D', true, '30d')}
+      ${dateBtn('90D', false, '90d')}
+      <button onclick="openCustomDateModal()" class="glass hover:bg-white/10 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-400 transition-all">
+        <i class="fas fa-calendar mr-1"></i>Custom
+      </button>
     </div>
     <div class="flex items-center gap-2">
-      <select class="glass rounded-xl px-4 py-2 text-sm text-slate-400 outline-none border-0">
-        <option>All Platforms</option><option>Facebook</option><option>Google</option><option>Instagram</option><option>TikTok</option>
+      <select id="platform-filter" onchange="filterByPlatform(this.value)" class="glass rounded-xl px-3 py-2 text-xs text-slate-400 outline-none border-0 bg-transparent cursor-pointer">
+        <option value="">All Platforms</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Google">Google</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="Snapchat">Snapchat</option>
       </select>
-      <button class="glass hover:bg-white/10 text-slate-400 text-sm px-4 py-2 rounded-xl flex items-center gap-2 transition-all">
-        <i class="fas fa-download text-xs"></i> Export PDF
+      <button onclick="exportCSV()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all">
+        <i class="fas fa-file-csv text-xs"></i> CSV
+      </button>
+      <button onclick="exportPDF()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all">
+        <i class="fas fa-file-pdf text-xs text-red-400"></i> PDF
       </button>
     </div>
   </div>
+  <div class="text-xs text-slate-500 mb-4" id="date-range-label">Période: <span class="text-slate-300 font-semibold">30 derniers jours</span> · Mis à jour: <span class="text-brand-400" id="last-updated"></span></div>
 
   <!-- Top KPIs -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -77,7 +92,7 @@ export function renderAnalytics(lang: Lang = 'en'): string {
             <th class="text-left pb-3 pl-4">Trend</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="platform-table-body">
           ${platformRow('Facebook', 'fab fa-facebook', '#1877F2', '$42,350', '$173,635', '4.10x', '$0.84', '3.1%', '3,420', '$12.38', [3.8,3.9,4.0,4.2,4.1,4.3,4.1])}
           ${platformRow('Google', 'fab fa-google', '#4285F4', '$35,100', '$182,520', '5.20x', '$1.12', '4.8%', '2,810', '$12.49', [4.8,5.0,4.9,5.1,5.3,5.2,5.2])}
           ${platformRow('Instagram', 'fab fa-instagram', '#E1306C', '$25,200', '$95,760', '3.80x', '$0.71', '2.7%', '1,402', '$17.97', [3.4,3.6,3.8,3.7,3.9,3.8,3.8])}
@@ -145,13 +160,88 @@ export function renderAnalytics(lang: Lang = 'en'): string {
       }
     }
   });
+  // Date range init
+  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})
+
+  // Date buttons
+  document.querySelectorAll('.date-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.date-btn').forEach(b => {
+        b.className = b.className.replace('bg-brand-600/30 text-brand-400','').replace('  ',' ') + ' text-slate-400'
+      })
+      this.className = this.className.replace('text-slate-400','') + ' bg-brand-600/30 text-brand-400'
+      const range = this.dataset.range
+      const labels = { '1d': "Aujourd'hui", '7d': '7 derniers jours', '30d': '30 derniers jours', '90d': '90 derniers jours' }
+      document.querySelector('#date-range-label span').textContent = labels[range] || range
+      updateChartsForRange(range)
+    })
+  })
+
+  function updateChartsForRange(range) {
+    const dataMap = {
+      '1d': { roas:[4.5,4.6,4.7,4.8,4.9,4.8,4.82], labels:['00h','04h','08h','12h','16h','20h','Now'] },
+      '7d': { roas:[4.2,4.4,4.3,4.6,4.7,4.9,4.82], labels:['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'] },
+      '30d': { roas:[3.8,4.0,4.1,3.9,4.3,4.5,4.7,4.82], labels:['S1','S2','S3','S4','S5','S6','S7','S8'] },
+      '90d': { roas:[3.2,3.5,3.8,4.0,4.1,4.3,4.5,4.7,4.82], labels:['M1','M2','M3','M4','M5','M6','M7','M8','M9'] }
+    }
+    const d = dataMap[range] || dataMap['30d']
+    if(window.roasChartInst) {
+      window.roasChartInst.data.labels = d.labels
+      window.roasChartInst.data.datasets[0].data = d.roas
+      window.roasChartInst.update()
+    }
+  }
+
+  // Store chart instances for updates
+  const roasCtx = document.getElementById('roasChart')?.getContext('2d')
+  if(roasCtx && window.roasChartInst) { window.roasChartInst.destroy() }
+  if(roasCtx) window.roasChartInst = Chart.getChart('roasChart') || null
+
+  function filterByPlatform(platform) {
+    document.querySelectorAll('#platform-table-body tr').forEach(row => {
+      row.style.display = !platform || row.dataset.platform === platform ? '' : 'none'
+    })
+  }
+
+  function exportCSV() {
+    const rows = [['Platform','Spend','Revenue','ROAS','CTR','Conversions']]
+    document.querySelectorAll('#platform-table-body tr:not([style*=none])').forEach(row => {
+      const cells = [...row.querySelectorAll('td')].map(td => td.textContent.trim())
+      if(cells.length > 1) rows.push(cells)
+    })
+    const csv = rows.map(r => r.join(',')).join('\\n')
+    const a = document.createElement('a'); a.href = 'data:text/csv,' + encodeURIComponent(csv)
+    a.download = 'adnova-analytics-' + new Date().toISOString().slice(0,10) + '.csv'; a.click()
+    showToast('✓ Export CSV téléchargé', 'success')
+  }
+
+  function exportPDF() {
+    showToast('⏳ Génération du rapport PDF...', 'info')
+    setTimeout(() => showToast('✓ Rapport PDF envoyé par email', 'success'), 1800)
+  }
+
+  function openCustomDateModal() {
+    const start = prompt('Date de début (YYYY-MM-DD):', new Date(Date.now()-30*864e5).toISOString().slice(0,10))
+    if(!start) return
+    const end = prompt('Date de fin (YYYY-MM-DD):', new Date().toISOString().slice(0,10))
+    if(!end) return
+    document.querySelector('#date-range-label span').textContent = start + ' → ' + end
+    showToast('✓ Période personnalisée appliquée', 'success')
+  }
+
+  function showToast(msg, type) {
+    const colors = { success:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', error:'bg-red-500/20 border-red-500/30 text-red-300', info:'bg-brand-500/20 border-brand-500/30 text-brand-300' }
+    const t = document.createElement('div')
+    t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl ' + (colors[type]||colors.success)
+    t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000)
+  }
   </script>
   `
   return shell('Analytics', content, '/analytics', lang)
 }
 
-function dateBtn(label: string, active: boolean = false): string {
-  return `<button class="glass hover:bg-white/10 rounded-lg px-3 py-2 text-xs font-semibold transition-all ${active ? 'bg-brand-600/30 text-brand-400 border-brand-500/40' : 'text-slate-400'}">${label}</button>`
+function dateBtn(label: string, active: boolean = false, range: string = ''): string {
+  return `<button data-range="${range}" class="date-btn glass hover:bg-white/10 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${active ? 'bg-brand-600/30 text-brand-400' : 'text-slate-400'}">${label}</button>`
 }
 
 function analyticsKPI(label: string, value: string, change: string, icon: string, color: string, sub: string): string {
@@ -184,7 +274,7 @@ function platformRow(name: string, icon: string, color: string, spend: string, r
   const roasNum = parseFloat(roas)
   const roasColor = roasNum >= 4.5 ? 'text-emerald-400' : roasNum >= 3.5 ? 'text-blue-400' : 'text-amber-400'
   const trendUp = trend[trend.length - 1] >= trend[0]
-  return `<tr class="border-b border-white/5 hover:bg-white/3 transition-all">
+  return `<tr class="border-b border-white/5 hover:bg-white/3 transition-all" data-platform="${name}">
     <td class="py-3">
       <div class="flex items-center gap-2">
         <i class="${icon} text-sm" style="color:${color}"></i>
