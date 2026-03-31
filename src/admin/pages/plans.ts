@@ -1,5 +1,6 @@
 import type { Context } from 'hono'
 import { adminShell } from '../layout'
+import { PLANS } from '../../pages/landing'
 
 export const renderAdminPlans = (c: Context) => {
   const content = `
@@ -7,27 +8,23 @@ export const renderAdminPlans = (c: Context) => {
   <div class="flex items-center justify-between mb-6">
     <div>
       <h2 class="text-xl font-black text-white">Plans & Tarification</h2>
-      <p class="text-xs text-slate-500 mt-0.5">Gérez les plans d'abonnement et leurs limites</p>
+      <p class="text-xs text-slate-500 mt-0.5">Gérez les plans d'abonnement et leurs limites — synchronisés avec la landing page</p>
     </div>
-    <button class="bg-gradient-to-r from-orange-500 to-red-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition-all shadow-lg">
-      <i class="fas fa-plus mr-1.5"></i> Nouveau Plan
-    </button>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 text-xs text-emerald-400 glass px-3 py-1.5 rounded-xl">
+        <i class="fas fa-check-circle"></i> Synced with landing
+      </div>
+      <button class="bg-gradient-to-r from-orange-500 to-red-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition-all shadow-lg">
+        <i class="fas fa-plus mr-1.5"></i> Nouveau Plan
+      </button>
+    </div>
   </div>
 
-  <!-- Plans Cards -->
+  <!-- Plans Cards (dynamically from PLANS source of truth) -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-    ${planCard('Starter', 299, 1240, 370760, '#6366f1',
-      ['10 campagnes actives', '50 créatifs générés/mois', '2 plateformes (FB + Google)', '2 utilisateurs', '$10K ad spend max', 'Optimisation IA de base', 'Analytics standard', 'Support email'],
-      '37.1%', '94.2%'
-    )}
-    ${planCard('Growth', 799, 892, 713108, '#f97316',
-      ['50 campagnes actives', '500 créatifs générés/mois', '5 plateformes (toutes)', '10 utilisateurs', '$100K ad spend max', 'IA complète + UGC vidéo', 'A/B testing', 'Lookalike audiences', 'Analytics avancé', 'Support prioritaire'],
-      '37.0%', '96.8%'
-    )}
-    ${planCard('Enterprise', 0, 280, 3360000, '#10b981',
-      ['Campagnes illimitées', 'Créatifs illimités', 'Toutes plateformes', 'Utilisateurs illimités', 'Ad spend illimité', 'Modèles IA custom', 'CSM dédié', 'SLA 99.9%', 'White-label', 'API privée'],
-      '26.0%', '99.1%'
-    )}
+    ${adminPlanCard(PLANS[0], 1240, 370760, '37.1%', '94.2%')}
+    ${adminPlanCard(PLANS[1], 892, 713108, '37.0%', '96.8%')}
+    ${adminPlanCard(PLANS[2], 280, 3360000, '26.0%', '99.1%')}
   </div>
 
   <!-- Plan Stats Table -->
@@ -73,6 +70,11 @@ export const renderAdminPlans = (c: Context) => {
   </div>
   `
   return c.html(adminShell('Plans & Tarification', content, '/admin/plans'))
+}
+
+// New function using PLANS source of truth
+function adminPlanCard(plan: { id: string; name: string; price: number; color: string; features: string[]; adSpend: string; campaigns: number; platforms: number; users: number; creatives: number }, clients: number, mrr: number, growth: string, retention: string): string {
+  return planCard(plan.name, plan.price, clients, mrr, plan.color, plan.features, growth, retention)
 }
 
 function planCard(name: string, price: number, clients: number, mrr: number, color: string, features: string[], growth: string, retention: string): string {
