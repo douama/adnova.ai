@@ -1,0 +1,163 @@
+import type { Context } from 'hono'
+import { adminShell } from '../layout'
+
+export const renderAdminRevenue = (c: Context) => {
+  const content = `
+  <!-- KPIs Revenus -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    ${revKPI('MRR Actuel', '$1,847,200', '+12.4%', 'fa-dollar-sign', 'orange')}
+    ${revKPI('ARR Projeté', '$22,166,400', '+14.1%', 'fa-chart-line', 'emerald')}
+    ${revKPI('Churn MRR', '-$24,800', '-1.3%', 'fa-arrow-trend-down', 'red')}
+    ${revKPI('Net New MRR', '+$198,600', '+12.0%', 'fa-arrow-trend-up', 'blue')}
+  </div>
+
+  <!-- Revenue par Plan + Churn -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="glass rounded-2xl p-5">
+      <h3 class="font-bold text-white mb-4">MRR par Plan</h3>
+      <canvas id="revenueByPlanChart" height="220"></canvas>
+    </div>
+    <div class="glass rounded-2xl p-5">
+      <h3 class="font-bold text-white mb-1">Taux de Churn</h3>
+      <p class="text-xs text-slate-500 mb-4">Évolution mensuelle</p>
+      <canvas id="churnChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- Breakdown Plans -->
+  <div class="glass rounded-2xl p-5 mb-6">
+    <h3 class="font-bold text-white mb-4">Revenus Détaillés par Plan</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="text-slate-600 border-b border-white/5">
+            <th class="text-left pb-3 font-semibold">Plan</th>
+            <th class="text-right pb-3 font-semibold">Clients</th>
+            <th class="text-right pb-3 font-semibold">Prix unitaire</th>
+            <th class="text-right pb-3 font-semibold">MRR</th>
+            <th class="text-right pb-3 font-semibold">% Total</th>
+            <th class="text-right pb-3 font-semibold">Churn</th>
+            <th class="text-right pb-3 font-semibold">LTV moyen</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${revenueRow('Starter', '1,240', '$299', '$370,760', '20.1%', '3.2%', '$2,243', 'indigo')}
+          ${revenueRow('Growth', '892', '$799', '$712,508', '38.6%', '1.8%', '$7,989', 'orange')}
+          ${revenueRow('Enterprise', '280', 'Avg $2,800', '$784,000', '42.4%', '0.7%', '$48,000', 'emerald')}
+          ${revenueRow('Trial → Conv.', '284', '$0', '$0', '—', '—', '—', 'amber')}
+        </tbody>
+        <tfoot>
+          <tr class="border-t border-white/10">
+            <td class="pt-3 font-bold text-white">Total</td>
+            <td class="pt-3 text-right font-bold text-white">2,412</td>
+            <td class="pt-3 text-right">—</td>
+            <td class="pt-3 text-right font-black text-orange-400">$1,847,268</td>
+            <td class="pt-3 text-right font-bold text-white">100%</td>
+            <td class="pt-3 text-right text-red-400">Moy. 1.9%</td>
+            <td class="pt-3 text-right">—</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Factures récentes -->
+  <div class="glass rounded-2xl p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-bold text-white">Transactions Récentes</h3>
+      <button class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
+        <i class="fas fa-download text-xs"></i> Export Stripe
+      </button>
+    </div>
+    <div class="space-y-2">
+      ${transaction('Digital Storm Agency', 'Growth', '$799.00', 'success', 'Aujourd\'hui 09:14')}
+      ${transaction('NovaBrand Inc.', 'Starter', '$299.00', 'success', 'Hier 18:32')}
+      ${transaction('Apex Marketing', 'Enterprise', '$2,800.00', 'success', '30 mar 2026')}
+      ${transaction('Fashion Brand', 'Starter', '$299.00', 'failed', '29 mar 2026')}
+      ${transaction('LuxoGroup', 'Growth', '$799.00', 'success', '25 mar 2026')}
+    </div>
+  </div>
+
+  <script>
+  new Chart(document.getElementById('revenueByPlanChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: ['Oct','Nov','Déc','Jan','Fév','Mar'],
+      datasets: [
+        { label:'Starter', data:[280000,310000,340000,362000,368000,370760], borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.1)', fill:true, tension:0.4, borderWidth:2, pointRadius:2 },
+        { label:'Growth', data:[480000,534000,588000,638000,692000,712508], borderColor:'#f97316', backgroundColor:'rgba(249,115,22,0.1)', fill:true, tension:0.4, borderWidth:2, pointRadius:2 },
+        { label:'Enterprise', data:[560000,610000,660000,700000,748000,784000], borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.1)', fill:true, tension:0.4, borderWidth:2, pointRadius:2 },
+      ]
+    },
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#94a3b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:10},callback:v=>'$'+(v/1000).toFixed(0)+'K'}}
+      }
+    }
+  });
+  new Chart(document.getElementById('churnChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Oct','Nov','Déc','Jan','Fév','Mar'],
+      datasets: [
+        { label:'Churn (%)', data:[2.8,2.4,2.1,2.0,1.9,1.9], backgroundColor:'rgba(239,68,68,0.4)', borderColor:'#ef4444', borderWidth:1, borderRadius:4 },
+        { label:'Rétention (%)', data:[97.2,97.6,97.9,98.0,98.1,98.1], backgroundColor:'rgba(16,185,129,0.2)', borderColor:'#10b981', borderWidth:1, borderRadius:4, yAxisID:'y1' }
+      ]
+    },
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#94a3b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:10},callback:v=>v+'%'}},
+        y1:{display:false}
+      }
+    }
+  });
+  </script>
+  `
+  return c.html(adminShell('Revenus & MRR', content, '/admin/revenue'))
+}
+
+function revKPI(label: string, value: string, change: string, icon: string, color: string): string {
+  const isPos = change.includes('+')
+  return `<div class="glass rounded-2xl p-5">
+    <div class="flex items-start justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl bg-${color}-500/20 flex items-center justify-center"><i class="fas ${icon} text-${color}-400"></i></div>
+      <span class="text-xs font-bold px-2 py-1 rounded-full ${isPos ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'}">${change}</span>
+    </div>
+    <div class="text-xl font-black text-white">${value}</div>
+    <div class="text-xs text-slate-400 mt-0.5">${label}</div>
+  </div>`
+}
+
+function revenueRow(plan: string, clients: string, price: string, mrr: string, pct: string, churn: string, ltv: string, color: string): string {
+  return `<tr class="table-row border-b border-white/5">
+    <td class="py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-${color}-500/15 text-${color}-400 font-semibold">${plan}</span></td>
+    <td class="py-3 text-right text-slate-300">${clients}</td>
+    <td class="py-3 text-right text-slate-400">${price}</td>
+    <td class="py-3 text-right font-black text-orange-400">${mrr}</td>
+    <td class="py-3 text-right text-slate-400">${pct}</td>
+    <td class="py-3 text-right text-red-400">${churn}</td>
+    <td class="py-3 text-right text-emerald-400 font-semibold">${ltv}</td>
+  </tr>`
+}
+
+function transaction(client: string, plan: string, amount: string, status: string, date: string): string {
+  return `<div class="flex items-center justify-between p-3 glass rounded-xl hover:bg-white/3 transition-all">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg ${status === 'success' ? 'bg-emerald-500/20' : 'bg-red-500/20'} flex items-center justify-center">
+        <i class="fas ${status === 'success' ? 'fa-check' : 'fa-xmark'} text-${status === 'success' ? 'emerald' : 'red'}-400 text-xs"></i>
+      </div>
+      <div>
+        <div class="text-xs font-semibold text-slate-200">${client}</div>
+        <div class="text-xs text-slate-600">Plan ${plan} · ${date}</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-sm font-black ${status === 'success' ? 'text-emerald-400' : 'text-red-400'}">${amount}</span>
+      <span class="text-xs px-2 py-0.5 rounded-full ${status === 'success' ? 'badge-active' : 'badge-inactive'}">${status === 'success' ? 'Réussi' : 'Échoué'}</span>
+    </div>
+  </div>`
+}

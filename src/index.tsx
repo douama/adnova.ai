@@ -30,11 +30,26 @@ import { renderSettings } from './pages/settings'
 import { renderRegister } from './pages/register'
 import { renderLanding } from './pages/landing'
 
+// ─── Super Admin imports ───────────────────────────────────────────────────
+import { adminRoutes } from './admin/routes/admin'
+import { renderAdminLogin } from './admin/pages/login'
+import { renderAdminDashboard } from './admin/pages/dashboard'
+import { renderAdminTenants } from './admin/pages/tenants'
+import { renderAdminUsers } from './admin/pages/users'
+import { renderAdminRevenue } from './admin/pages/revenue'
+import { renderAdminAIMonitor } from './admin/pages/ai-monitor'
+import { renderAdminLogs } from './admin/pages/logs'
+import { renderAdminSecurity } from './admin/pages/security'
+import { renderAdminConfig } from './admin/pages/config'
+import { renderAdminPlans } from './admin/pages/plans'
+import { renderAdminBilling } from './admin/pages/billing'
+
 const app = new Hono()
 
 // Middleware
 app.use('*', logger())
 app.use('/api/*', cors())
+app.use('/admin/api/*', cors())
 
 // ─── Favicon ──────────────────────────────────────────────────────────────
 app.get('/favicon.ico', (c) => c.redirect('/favicon.svg', 301))
@@ -76,5 +91,26 @@ app.route('/api/billing', billingRoutes)
 app.route('/api/tenants', tenantRoutes)
 app.route('/api/audiences', audienceRoutes)
 app.route('/api/automation', automationRoutes)
+
+// ─── Super Admin Pages ─────────────────────────────────────────────────────
+app.get('/admin/login', renderAdminLogin)
+app.get('/admin', renderAdminDashboard)
+app.get('/admin/tenants', renderAdminTenants)
+app.get('/admin/users', renderAdminUsers)
+app.get('/admin/revenue', renderAdminRevenue)
+app.get('/admin/ai-monitor', renderAdminAIMonitor)
+app.get('/admin/logs', renderAdminLogs)
+app.get('/admin/security', renderAdminSecurity)
+app.get('/admin/config', renderAdminConfig)
+app.get('/admin/plans', renderAdminPlans)
+app.get('/admin/billing', renderAdminBilling)
+
+// Placeholder pages for remaining admin links
+app.get('/admin/campaigns', (c) => c.redirect('/admin', 302))
+app.get('/admin/creatives', (c) => c.redirect('/admin', 302))
+app.get('/admin/platforms', (c) => c.redirect('/admin/config', 302))
+
+// ─── Super Admin API Routes ────────────────────────────────────────────────
+app.route('/admin/api', adminRoutes)
 
 export default app

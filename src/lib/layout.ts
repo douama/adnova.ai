@@ -167,6 +167,17 @@ export function shell(title: string, content: string, activePage: string = ''): 
       </div>
     </div>
 
+    <!-- Super Admin Quick Access -->
+    <div class="px-4 pb-2">
+      <a href="/admin/login" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-500/10 transition-all group border border-orange-500/10 hover:border-orange-500/25">
+        <div class="w-5 h-5 rounded-md bg-gradient-to-br from-orange-500/20 to-red-600/20 flex items-center justify-center flex-shrink-0">
+          <i class="fas fa-shield-halved text-orange-500 text-xs group-hover:text-orange-400"></i>
+        </div>
+        <span class="text-xs text-slate-600 group-hover:text-orange-400 transition-colors font-medium">Super Admin Panel</span>
+        <i class="fas fa-external-link text-xs text-slate-700 group-hover:text-orange-500 ml-auto"></i>
+      </a>
+    </div>
+
     <!-- User Profile -->
     <div class="p-4 border-t border-white/5">
       <div class="flex items-center gap-3">

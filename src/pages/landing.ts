@@ -212,6 +212,9 @@ export const renderLanding = (c: Context) => {
         <a href="#" class="hover:text-slate-300">Terms</a>
         <a href="#" class="hover:text-slate-300">API Docs</a>
         <a href="#" class="hover:text-slate-300">Status</a>
+        <a href="/admin/login" class="hover:text-orange-500 text-slate-700 flex items-center gap-1">
+          <i class="fas fa-shield-halved text-xs"></i> Admin
+        </a>
       </div>
     </div>
   </footer>

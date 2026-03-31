@@ -99,6 +99,14 @@ export const renderLogin = (c: Context) => {
       <i class="fas fa-info-circle text-indigo-400"></i>
       Demo mode: credentials pre-filled. Click "Sign In" to explore the full platform.
     </div>
+
+    <!-- Super Admin Link -->
+    <div class="mt-3 text-center">
+      <a href="/admin/login" class="text-xs text-slate-700 hover:text-orange-500 transition-all flex items-center justify-center gap-1.5">
+        <i class="fas fa-shield-halved text-orange-600/50 text-xs"></i>
+        Accès Super Admin
+      </a>
+    </div>
   </div>
 
   <script>
