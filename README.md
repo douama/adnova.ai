@@ -1,168 +1,94 @@
-# AdNova AI — Autonomous Advertising Intelligence Platform
+# AdNova AI — Autonomous Advertising SaaS
 
-> The World's First Fully Autonomous AI Advertising SaaS
+**Plateforme autonome de publicité IA** — Multi-tenant, multi-plateforme, déployable sur Cloudflare Pages.
 
-## 🚀 Live Demo
-**URL**: https://3000-ip790jyz6bks9o8n61dej-d0b9e1e2.sandbox.novita.ai
+## 🚀 URL Live (Sandbox)
+- **App** : https://3000-ip790jyz6bks9o8n61dej-d0b9e1e2.sandbox.novita.ai
+- **Super Admin** : https://3000-ip790jyz6bks9o8n61dej-d0b9e1e2.sandbox.novita.ai/admin/login
 
-| Page | URL |
-|------|-----|
-| Landing Page | `/` |
-| Login | `/login` |
-| Register | `/register` |
-| Dashboard | `/dashboard` |
-| Campaigns | `/campaigns` |
-| Creative Studio | `/creatives` |
-| Analytics | `/analytics` |
-| AI Engine | `/ai-engine` |
-| Platforms | `/platforms` |
-| Automation | `/automation` |
-| Audiences | `/audiences` |
-| Billing | `/billing` |
-| Settings | `/settings` |
+## 🔑 Identifiants Démo
+| Rôle | Email | Mot de passe |
+|------|-------|--------------|
+| User | `demo@adnova.ai` | `demo1234` |
+| Super Admin | `superadmin@adnova.ai` | `superadmin2026` |
 
-## 📋 Project Overview
+## 📋 Fonctionnalités
+- **13 pages** : Landing, Login, Register, Dashboard, Campaigns, Creatives, Analytics, AI Engine, Platforms, Audiences, Automation, Billing, Settings
+- **11 pages Super Admin** : Dashboard global, Tenants, Users, Revenue, AI Monitor, Plans, Billing, Logs, Security, Config, Admin Login
+- **20+ API routes** : Auth, Dashboard, Campaigns, Creatives, Analytics, AI, Platforms, Billing, Tenants, Audiences, Automation + Admin APIs
+- **Auth fonctionnelle** : POST /api/auth/login, /api/auth/register, /api/auth/logout
+- **Navigation mobile** : sidebar responsive avec overlay
+- **Multi-tenant** : tenant switcher dans la sidebar
+- **Auto-scale IA** : +10% budget toutes les 72h si ROAS ≥ 3.5x
+- **Auto-kill** : pause créatifs CTR < 0.8%
 
-**AdNova AI** is a fully autonomous AI advertising SaaS platform that manages campaigns across:
-- ✅ **Facebook Ads** 
-- ✅ **Instagram Ads**
-- ✅ **TikTok Ads**
-- ✅ **Snapchat Ads**
-- ✅ **Google Ads**
+## 🛠️ Stack Technique
+- **Framework** : Hono v4 (edge-native)
+- **Runtime** : Cloudflare Pages / Workers
+- **Build** : Vite + @hono/vite-cloudflare-pages
+- **UI** : Tailwind CSS CDN + Chart.js + FontAwesome
+- **Taille build** : ~330KB (worker unique)
 
-## 🧠 Core Features
+## 🚀 Déploiement Cloudflare Pages
 
-### AI Autonomous Engine
-- **Performance Predictor** — 94.2% ROAS prediction accuracy before spending
-- **Creative Generator** — AI-powered image, video, and UGC creation
-- **Budget Optimizer** — Real-time reallocation across platforms  
-- **Creative Killer** — Auto-pauses creatives with CTR < 0.8% threshold
-- **Auto-Scaler** — +10% budget every 72h for winning campaigns (ROAS ≥ 3.5x)
-- **Audience Intelligence** — Predictive lookalike building from top converters
-- **Copy Engine** — AI headline/description generation and A/B testing
+### Prérequis
+1. Compte Cloudflare avec Pages activé
+2. API Token avec permissions `Cloudflare Pages:Edit`
 
-### Multi-Tenant Architecture
-- Multiple workspaces per account
-- Role-based access: Owner, Admin, Editor, Viewer
-- Isolated tenant data and billing
+### Commandes
+\`\`\`bash
+# Installer les dépendances
+npm install
 
-### Automation Rules Engine
-- Visual IF/THEN rule builder
-- Pre-built rules: Scale Winners, Kill Underperformers, Budget Guardian, etc.
-- AI suggests new rules based on performance patterns
+# Build
+npm run build
 
-### Analytics & Reporting
-- Real-time ROAS, CTR, CPA, CPC across all platforms
-- Conversion funnel visualization
-- Platform breakdown comparison
-- AI-generated insights and recommendations
+# Créer le projet Cloudflare Pages (première fois)
+npx wrangler pages project create adnova-ai --production-branch main
 
-## 🔌 API Endpoints
+# Déployer
+npx wrangler pages deploy dist --project-name adnova-ai
+\`\`\`
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/dashboard/stats` | Overall KPIs and metrics |
-| `GET /api/campaigns` | List all campaigns |
-| `POST /api/campaigns` | Create new campaign |
-| `POST /api/campaigns/:id/scale` | Scale campaign +10% |
-| `GET /api/creatives` | List creatives |
-| `POST /api/creatives/generate` | AI creative generation |
-| `POST /api/creatives/ab-test` | Start A/B test |
-| `GET /api/analytics/overview` | Analytics summary |
-| `GET /api/analytics/platforms` | Per-platform breakdown |
-| `GET /api/ai/status` | AI engine status |
-| `POST /api/ai/predict` | Campaign performance prediction |
-| `POST /api/ai/generate-copy` | AI ad copy generation |
-| `GET /api/platforms` | Platform connections |
-| `POST /api/platforms/:id/connect` | Connect ad platform |
-| `GET /api/audiences` | Audience management |
-| `POST /api/audiences/build-lookalike` | Build lookalike audience |
-| `GET /api/automation` | List automation rules |
-| `POST /api/automation` | Create automation rule |
-| `GET /api/billing/plan` | Current plan & usage |
-| `GET /api/tenants` | List workspaces |
-| `POST /api/auth/login` | Authentication |
-| `POST /api/auth/register` | User registration |
+### Variables d'environnement (optionnelles)
+\`\`\`bash
+npx wrangler pages secret put JWT_SECRET --project-name adnova-ai
+npx wrangler pages secret put STRIPE_KEY --project-name adnova-ai
+\`\`\`
 
-## 🏗️ Technical Architecture
+## 📁 Structure du Projet
+\`\`\`
+src/
+├── index.tsx          # Entry point Hono + routes
+├── lib/layout.ts      # Layout partagé (sidebar, topbar, modals)
+├── pages/             # Pages HTML (13 pages)
+│   ├── landing.ts, login.ts, register.ts
+│   ├── dashboard.ts, campaigns.ts, creatives.ts
+│   ├── analytics.ts, ai-engine.ts, platforms.ts
+│   ├── audiences.ts, automation.ts, billing.ts, settings.ts
+├── routes/            # API routes (11 fichiers)
+│   ├── auth.ts, dashboard.ts, campaigns.ts, creatives.ts
+│   ├── analytics.ts, ai.ts, platforms.ts, billing.ts
+│   ├── tenants.ts, audiences.ts, automation.ts
+└── admin/             # Super Admin (séparé)
+    ├── layout.ts      # Layout admin orange
+    ├── pages/         # 11 pages admin
+    └── routes/admin.ts # 9 APIs admin
+\`\`\`
 
-### Tech Stack
-- **Runtime**: Cloudflare Pages / Workers (Edge)
-- **Framework**: Hono v4 (TypeScript)
-- **Build**: Vite + @hono/vite-build
-- **Frontend**: Vanilla JS + Tailwind CSS CDN + Chart.js + FontAwesome
-- **Dev Server**: wrangler pages dev via PM2
-
-### Project Structure
-```
-webapp/
-├── src/
-│   ├── index.tsx          # Main app router
-│   ├── lib/
-│   │   └── layout.ts      # Shared HTML shell + navigation
-│   ├── pages/             # SSR page renderers
-│   │   ├── landing.ts     # Marketing landing page
-│   │   ├── login.ts       # Authentication
-│   │   ├── register.ts    # Registration
-│   │   ├── dashboard.ts   # Main KPI dashboard
-│   │   ├── campaigns.ts   # Campaign management
-│   │   ├── creatives.ts   # Creative Studio
-│   │   ├── analytics.ts   # Analytics & reporting
-│   │   ├── ai-engine.ts   # AI engine control
-│   │   ├── platforms.ts   # Platform connections
-│   │   ├── automation.ts  # Automation rules
-│   │   ├── audiences.ts   # Audience management
-│   │   ├── billing.ts     # Billing & plans
-│   │   └── settings.ts    # Workspace settings
-│   └── routes/            # API route handlers
-│       ├── auth.ts
-│       ├── campaigns.ts
-│       ├── creatives.ts
-│       ├── analytics.ts
-│       ├── ai.ts
-│       ├── platforms.ts
-│       ├── billing.ts
-│       ├── tenants.ts
-│       ├── audiences.ts
-│       └── automation.ts
-├── public/
-│   └── favicon.svg
-├── dist/                  # Built output
-├── ecosystem.config.cjs   # PM2 config
-├── wrangler.jsonc         # Cloudflare config
-└── package.json
-```
-
-## 🚀 Development
-
-```bash
+## 🔧 Développement Local
+\`\`\`bash
 npm install
 npm run build
-pm2 start ecosystem.config.cjs
-```
+npx wrangler pages dev dist --ip 0.0.0.0 --port 3000
+\`\`\`
 
-## 📦 Deployment
-
-```bash
-npm run build
-wrangler pages deploy dist --project-name adnova-ai
-```
-
-## 💡 Key Design Decisions
-
-1. **Server-Side Rendering** — All pages rendered via Hono, no SPA framework needed
-2. **Edge-First** — Runs on Cloudflare Workers global edge network
-3. **CDN Dependencies** — Tailwind, Chart.js, FontAwesome loaded from CDN
-4. **Dark Theme UI** — Professional dark glassmorphism design
-5. **Real-time AI Feed** — Live activity log updates every 8 seconds
-6. **Multi-Platform** — Unified interface for 5 ad platforms
-
-## 📊 Dashboard Metrics (Demo)
-
-- **Total Ad Spend**: $124,850/month
-- **Blended ROAS**: 4.82x
-- **Active Campaigns**: 47 (12 actively scaling)
-- **AI Decisions Today**: 12,847
-- **Creatives Generated**: 142 total
-
-**Platform**: Cloudflare Pages · **Status**: ✅ Active · **Last Updated**: March 31, 2026
+## 📊 État du Projet
+- ✅ Build Cloudflare Pages propre (0 erreurs)
+- ✅ 44 routes testées (200 OK)
+- ✅ Auth API fonctionnelle (login, register, logout)
+- ✅ Navigation mobile responsive
+- ✅ Déconnexion fonctionnelle (localStorage)
+- ✅ Super Admin panel complet
+- ✅ Date SSR-safe (côté client)
+- ✅ Prêt pour déploiement Cloudflare Pages
