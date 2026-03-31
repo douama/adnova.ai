@@ -1,94 +1,145 @@
-# AdNova AI — Autonomous Advertising SaaS
+# AdNova AI — Autonomous Advertising Intelligence
 
-**Plateforme autonome de publicité IA** — Multi-tenant, multi-plateforme, déployable sur Cloudflare Pages.
+## 🚀 Vue d'ensemble
 
-## 🚀 URL Live (Sandbox)
-- **App** : https://3000-ip790jyz6bks9o8n61dej-d0b9e1e2.sandbox.novita.ai
-- **Super Admin** : https://3000-ip790jyz6bks9o8n61dej-d0b9e1e2.sandbox.novita.ai/admin/login
+**AdNova AI** est une plateforme SaaS d'advertising autonome pilotée par IA, déployée sur Cloudflare Pages.
 
-## 🔑 Identifiants Démo
-| Rôle | Email | Mot de passe |
-|------|-------|--------------|
-| User | `demo@adnova.ai` | `demo1234` |
-| Super Admin | `superadmin@adnova.ai` | `superadmin2026` |
+- **URL Live** : https://3000-ip790jyz6bks9o8n61dej-d0b9e1e2.sandbox.novita.ai
+- **Tech** : Hono v4 + TypeScript + Cloudflare Pages
+- **Taille build** : 368 KB (68 modules)
+- **Version** : 3.0
 
-## 📋 Fonctionnalités
-- **13 pages** : Landing, Login, Register, Dashboard, Campaigns, Creatives, Analytics, AI Engine, Platforms, Audiences, Automation, Billing, Settings
-- **11 pages Super Admin** : Dashboard global, Tenants, Users, Revenue, AI Monitor, Plans, Billing, Logs, Security, Config, Admin Login
-- **20+ API routes** : Auth, Dashboard, Campaigns, Creatives, Analytics, AI, Platforms, Billing, Tenants, Audiences, Automation + Admin APIs
-- **Auth fonctionnelle** : POST /api/auth/login, /api/auth/register, /api/auth/logout
-- **Navigation mobile** : sidebar responsive avec overlay
-- **Multi-tenant** : tenant switcher dans la sidebar
-- **Auto-scale IA** : +10% budget toutes les 72h si ROAS ≥ 3.5x
-- **Auto-kill** : pause créatifs CTR < 0.8%
+---
 
-## 🛠️ Stack Technique
-- **Framework** : Hono v4 (edge-native)
-- **Runtime** : Cloudflare Pages / Workers
-- **Build** : Vite + @hono/vite-cloudflare-pages
-- **UI** : Tailwind CSS CDN + Chart.js + FontAwesome
-- **Taille build** : ~330KB (worker unique)
+## ✅ Fonctionnalités implémentées
+
+### 🌐 Multilingue (i18n)
+- Détection automatique de la langue par **IP (CF-IPCountry)** + `Accept-Language` + cookie
+- 6 langues : **English, Français, Español, Deutsch, Português, العربية**
+- Support RTL pour l'arabe
+- Sélecteur de langue dans la barre de navigation
+- Persistance via cookie `adnova_lang` (1 an)
+- API `/api/lang` pour détection côté client
+
+### 🌑🌕 Mode Sombre / Clair
+- Toggle dans la barre de navigation (icône lune/soleil)
+- Persistance via `localStorage` (`adnova_theme`)
+- Graphiques Chart.js adaptatifs (couleurs grille + labels)
+- CSS complet pour les deux modes
+
+### 📢 9 Plateformes Publicitaires
+| Plateforme | Spend/mois | ROAS | Campagnes |
+|-----------|-----------|------|-----------|
+| Facebook Ads | $42,350 | 4.1x | 47 |
+| Google Ads | $35,100 | 5.2x | 12 |
+| Instagram Ads | $25,200 | 3.8x | 22 |
+| TikTok Ads | $15,400 | 4.6x | 8 |
+| LinkedIn Ads | $8,920 | 3.3x | 6 |
+| YouTube Ads | $11,750 | 3.9x | 9 |
+| X (Twitter) Ads | $4,200 | 2.8x | 3 |
+| Pinterest Ads | $3,150 | 3.1x | 5 |
+| Snapchat Ads | $6,800 | 2.1x | 4 |
+
+### 📊 Dashboard stabilisé
+- KPI cards avec refresh API toutes les 30s
+- Graphiques revenue/spend adaptatifs au thème
+- Donut chart 7 plateformes
+- AI Activity Feed live (nouveau item toutes les 9s)
+- Tableau des 8 meilleures campagnes
+- Panel status 9 plateformes
+
+### 🤖 Super Admin Panel
+- 11 pages : login, dashboard, tenants, users, revenue, AI monitor, logs, security, config, plans, billing
+- 9 API routes sous `/admin/api/*`
+- Accès : `/admin/login` (email: superadmin@adnova.ai / pass: superadmin2026 / 2FA: 842193)
+
+---
+
+## 🗺️ Routes
+
+### Pages publiques
+| Route | Description |
+|-------|-------------|
+| `/` | Landing page |
+| `/login` | Connexion |
+| `/register` | Inscription |
+| `/dashboard` | Dashboard principal |
+| `/campaigns` | Gestion campagnes |
+| `/creatives` | Studio créatif |
+| `/analytics` | Analytiques |
+| `/ai-engine` | Moteur IA (6 modules) |
+| `/platforms` | Intégrations (9 plateformes) |
+| `/billing` | Facturation |
+| `/audiences` | Gestion audiences |
+| `/automation` | Règles d'automatisation |
+| `/settings` | Paramètres compte |
+
+### API Routes
+```
+GET  /api/lang              → détection langue IP
+GET  /api/dashboard/stats   → KPIs dashboard
+GET  /api/campaigns         → liste campagnes
+GET  /api/platforms         → 9 plateformes (summary + liste)
+GET  /api/platforms/:id     → détails plateforme
+POST /api/platforms/:id/connect    → connecter
+POST /api/platforms/:id/disconnect → déconnecter
+POST /api/platforms/:id/sync       → synchroniser
+GET  /api/platforms/:id/metrics    → métriques détaillées
+GET  /api/ai/status         → statut moteur IA
+GET  /api/analytics/overview→ données analytiques
+POST /api/auth/login        → authentification
+POST /api/auth/register     → inscription
+```
+
+---
+
+## 🏗️ Architecture
+
+```
+webapp/
+├── src/
+│   ├── index.tsx           # Router principal + middleware i18n
+│   ├── lib/
+│   │   ├── layout.ts       # Shell HTML avec dark/light + i18n
+│   │   └── i18n.ts         # Système i18n 6 langues + IP detection
+│   ├── pages/              # 13 pages UI
+│   ├── routes/             # 11 API routers
+│   └── admin/              # Super Admin (11 pages + 9 API)
+├── dist/                   # Build Cloudflare Pages
+├── wrangler.jsonc
+└── ecosystem.config.cjs    # PM2 config
+```
+
+---
 
 ## 🚀 Déploiement Cloudflare Pages
 
-### Prérequis
-1. Compte Cloudflare avec Pages activé
-2. API Token avec permissions `Cloudflare Pages:Edit`
-
-### Commandes
-\`\`\`bash
-# Installer les dépendances
-npm install
-
-# Build
+```bash
+# 1. Configurer la clé API dans l'onglet Deploy
+# 2. Puis :
 npm run build
-
-# Créer le projet Cloudflare Pages (première fois)
 npx wrangler pages project create adnova-ai --production-branch main
-
-# Déployer
 npx wrangler pages deploy dist --project-name adnova-ai
-\`\`\`
+```
 
-### Variables d'environnement (optionnelles)
-\`\`\`bash
-npx wrangler pages secret put JWT_SECRET --project-name adnova-ai
-npx wrangler pages secret put STRIPE_KEY --project-name adnova-ai
-\`\`\`
+**Nom du projet Cloudflare** : `adnova-ai`
 
-## 📁 Structure du Projet
-\`\`\`
-src/
-├── index.tsx          # Entry point Hono + routes
-├── lib/layout.ts      # Layout partagé (sidebar, topbar, modals)
-├── pages/             # Pages HTML (13 pages)
-│   ├── landing.ts, login.ts, register.ts
-│   ├── dashboard.ts, campaigns.ts, creatives.ts
-│   ├── analytics.ts, ai-engine.ts, platforms.ts
-│   ├── audiences.ts, automation.ts, billing.ts, settings.ts
-├── routes/            # API routes (11 fichiers)
-│   ├── auth.ts, dashboard.ts, campaigns.ts, creatives.ts
-│   ├── analytics.ts, ai.ts, platforms.ts, billing.ts
-│   ├── tenants.ts, audiences.ts, automation.ts
-└── admin/             # Super Admin (séparé)
-    ├── layout.ts      # Layout admin orange
-    ├── pages/         # 11 pages admin
-    └── routes/admin.ts # 9 APIs admin
-\`\`\`
+---
 
-## 🔧 Développement Local
-\`\`\`bash
+## 💻 Développement local
+
+```bash
 npm install
 npm run build
-npx wrangler pages dev dist --ip 0.0.0.0 --port 3000
-\`\`\`
+pm2 start ecosystem.config.cjs
+# → http://localhost:3000
+```
 
-## 📊 État du Projet
-- ✅ Build Cloudflare Pages propre (0 erreurs)
-- ✅ 44 routes testées (200 OK)
-- ✅ Auth API fonctionnelle (login, register, logout)
-- ✅ Navigation mobile responsive
-- ✅ Déconnexion fonctionnelle (localStorage)
-- ✅ Super Admin panel complet
-- ✅ Date SSR-safe (côté client)
-- ✅ Prêt pour déploiement Cloudflare Pages
+---
+
+## 📦 Backup
+- v3.0 : https://www.genspark.ai/api/files/s/Z78VMUeh
+
+---
+
+*Dernière mise à jour : 2026-03-31 — v3.0*
