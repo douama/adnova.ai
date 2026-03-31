@@ -319,7 +319,7 @@ export const renderLanding = (c: Context) => {
     </a>
 
     <!-- Desktop Links -->
-    <div class="hidden md:flex items-center gap-8">
+    <div class="hidden md:flex items-center gap-5">
       <a href="#features" class="nav-link text-sm font-medium">Features</a>
       <a href="#platforms" class="nav-link text-sm font-medium">Platforms</a>
       <a href="#pricing" class="nav-link text-sm font-medium">Pricing</a>
@@ -375,10 +375,10 @@ export const renderLanding = (c: Context) => {
   <!-- Scanline effect -->
   <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/30 to-transparent scanline pointer-events-none"></div>
 
-  <div class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 text-center relative z-10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-8 md:py-14 text-center relative z-10">
 
     <!-- Status badge — pulsing AI system -->
-    <div class="inline-flex items-center gap-3 glass-neo px-6 py-3 rounded-full mb-12 fade-up cursor-default border-glow">
+    <div class="inline-flex items-center gap-3 glass-neo px-6 py-3 rounded-full mb-2 fade-up cursor-default border-glow">
       <div class="relative">
         <div class="ai-dot blink"></div>
         <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
@@ -389,7 +389,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- Main headline — massive futuristic -->
-    <div class="fade-up mb-8">
+    <div class="fade-up mb-3">
       <h1 class="font-black leading-[1.0] tracking-tight" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(52px,9vw,110px)">
         <span class="text-white block">Advertising that</span>
         <span class="hero-text block mt-2">thinks for itself.</span>
@@ -397,12 +397,12 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- Sub headline -->
-    <p class="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed fade-up" style="font-weight:300">
+    <p class="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto mb-2 leading-relaxed fade-up" style="font-weight:300">
       AdNova AI autonomously scales campaigns across <strong class="text-slate-200 font-semibold">9 platforms</strong>, kills underperformers, and generates winning creatives — <em class="text-slate-300 font-normal">while you sleep.</em>
     </p>
 
     <!-- CTA row -->
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 fade-up">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3 fade-up">
       <a href="/register" class="btn-primary text-white font-black px-10 py-4.5 rounded-2xl text-base flex items-center gap-3 w-full sm:w-auto justify-center group relative overflow-hidden" style="padding-top:18px;padding-bottom:18px;min-width:240px">
         <span class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></span>
         <i class="fas fa-rocket text-sm group-hover:translate-x-1 transition-transform"></i>
@@ -418,7 +418,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- Live stats bar -->
-    <div class="glass-neo inline-flex items-center gap-0 rounded-2xl py-4 px-6 mb-20 fade-up max-w-full overflow-hidden">
+    <div class="glass-neo inline-flex items-center gap-0 rounded-2xl py-4 px-6 mb-3 fade-up max-w-full overflow-hidden">
       <div class="flex items-center gap-2.5 flex-shrink-0 mr-6 border-r border-white/10 pr-6">
         <div class="relative">
           <div class="ai-dot blink"></div>
@@ -482,9 +482,9 @@ export const renderLanding = (c: Context) => {
         </div>
       </div>
       <!-- Dashboard UI -->
-      <div class="p-5 md:p-7" style="background:rgba(2,4,18,0.6)">
+      <div class="p-5 md:p-5" style="background:rgba(2,4,18,0.6)">
         <!-- Top KPIs -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
           ${heroKPI('$124,850', 'Ad Spend', '+18.4%', 'fa-dollar-sign', 'from-brand-500 to-purple-600', true)}
           ${heroKPI('4.82x', 'Blended ROAS', '+0.6x', 'fa-chart-line', 'from-emerald-500 to-teal-600', true)}
           ${heroKPI('47', 'Active Campaigns', '12 scaling', 'fa-bullhorn', 'from-blue-500 to-cyan-600', false)}
@@ -525,7 +525,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- Scroll indicator -->
-    <div class="mt-16 scroll-indicator flex flex-col items-center gap-2 opacity-35">
+    <div class="mt-3 scroll-indicator flex flex-col items-center gap-2 opacity-35">
       <span class="text-xs text-slate-600 tracking-wider uppercase">Scroll to explore</span>
       <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center pt-1.5">
         <div class="w-1 h-2 rounded-full bg-brand-400/60" style="animation:float 1.8s ease-in-out infinite"></div>
@@ -537,7 +537,7 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      PLATFORM TICKER
 ════════════════════════════════════════════════════════════ -->
-<div class="py-10 overflow-hidden relative" id="platforms" style="background:rgba(4,7,20,0.8);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05)">
+<div class="py-8 overflow-hidden relative" id="platforms" style="background:rgba(4,7,20,0.8);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05)">
   <!-- Fade edges -->
   <div class="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style="background:linear-gradient(90deg,rgba(2,5,16,0.95),transparent)"></div>
   <div class="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style="background:linear-gradient(-90deg,rgba(2,5,16,0.95),transparent)"></div>
@@ -555,12 +555,12 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      STATS — IMPACT NUMBERS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-28 relative overflow-hidden">
+<section class="py-8 relative overflow-hidden">
   <div class="absolute inset-0 grid-lines-fine opacity-50"></div>
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-16 fade-up">
-      <div class="section-label mb-6"><i class="fas fa-chart-bar text-brand-400"></i> Platform Impact</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
+    <div class="text-center mb-3 fade-up">
+      <div class="section-label mb-2"><i class="fas fa-chart-bar text-brand-400"></i> Platform Impact</div>
+      <h2 class="font-black text-4xl md:text-6xl text-white mb-2" style="font-family:'Space Grotesk',sans-serif">
         Numbers that<br/><span class="glow-text-2">speak volumes</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-xl mx-auto">Real metrics from 2,412+ brands actively running on AdNova AI</p>
@@ -573,7 +573,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- Extra metrics bar -->
-    <div class="mt-12 glass-neo rounded-2xl p-6 grid grid-cols-2 md:grid-cols-4 gap-6 fade-up">
+    <div class="mt-3 glass-neo rounded-2xl p-4 grid grid-cols-2 md:grid-cols-4 gap-4 fade-up">
       ${miniMetric('94.2%', 'AI Prediction Accuracy', 'fa-bullseye', '#6366f1')}
       ${miniMetric('72h', 'Performance Forecasting', 'fa-clock', '#a855f7')}
       ${miniMetric('0.3%', 'Avg Wasted Spend', 'fa-trash', '#10b981')}
@@ -587,15 +587,15 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      FEATURES — AI MODULES
 ════════════════════════════════════════════════════════════ -->
-<section class="py-28 relative" id="features">
+<section class="py-8 relative" id="features">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
     <!-- Header -->
-    <div class="text-center mb-20 fade-up">
-      <div class="section-label mb-6"><i class="fas fa-brain text-brand-400"></i> AI-Powered Features</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-6" style="font-family:'Space Grotesk',sans-serif">
+    <div class="text-center mb-3 fade-up">
+      <div class="section-label mb-2"><i class="fas fa-brain text-brand-400"></i> AI-Powered Features</div>
+      <h2 class="font-black text-4xl md:text-6xl text-white mb-2" style="font-family:'Space Grotesk',sans-serif">
         The AI that never<br/><span class="glow-text">stops optimizing</span>
       </h2>
-      <p class="text-slate-500 text-xl max-w-2xl mx-auto leading-relaxed">6 autonomous AI modules working 24/7 to maximize your advertising ROI — zero manual effort required.</p>
+      <p class="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed">6 autonomous AI modules working 24/7 to maximize your advertising ROI — zero manual effort required.</p>
     </div>
 
     <!-- Feature Grid -->
@@ -620,19 +620,19 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      HOW IT WORKS — 3 STEPS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-28 relative overflow-hidden" style="background:rgba(4,7,20,0.6)">
+<section class="py-8 relative overflow-hidden" style="background:rgba(4,7,20,0.6)">
   <div class="absolute inset-0 grid-lines opacity-40"></div>
   <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(99,102,241,0.06),transparent)"></div>
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-20 fade-up">
-      <div class="section-label mb-6"><i class="fas fa-gears text-brand-400"></i> How It Works</div>
+    <div class="text-center mb-3 fade-up">
+      <div class="section-label mb-2"><i class="fas fa-gears text-brand-400"></i> How It Works</div>
       <h2 class="font-black text-4xl md:text-6xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Live in <span class="glow-text-2">3 minutes</span>
       </h2>
-      <p class="text-slate-500 text-xl mt-5 max-w-xl mx-auto">No code, no complexity. Connect, configure, and watch the AI take over.</p>
+      <p class="text-slate-500 text-lg mt-2 max-w-xl mx-auto">No code, no complexity. Connect, configure, and watch the AI take over.</p>
     </div>
     <!-- Steps -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 relative">
       <!-- Connector line (desktop) -->
       <div class="hidden md:block absolute top-16 left-1/3 right-1/3 h-px" style="background:linear-gradient(90deg,rgba(99,102,241,0.6),rgba(168,85,247,0.6));box-shadow:0 0 8px rgba(99,102,241,0.4)"></div>
       ${howStep('01','Connect Platforms','Link Facebook, Google, TikTok and 6 more in one click. OAuth-based, no coding required.','fa-plug','brand','rgba(99,102,241,0.12)')}
@@ -645,14 +645,14 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      TESTIMONIALS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-28" id="testimonials">
+<section class="py-8" id="testimonials">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-20 fade-up">
-      <div class="section-label mb-6"><i class="fas fa-star text-brand-400"></i> Customer Stories</div>
+    <div class="text-center mb-3 fade-up">
+      <div class="section-label mb-2"><i class="fas fa-star text-brand-400"></i> Customer Stories</div>
       <h2 class="font-black text-4xl md:text-6xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Brands that <span class="glow-text">outperform</span>
       </h2>
-      <p class="text-slate-500 text-xl mt-5">Real results from real customers. No cherry-picking.</p>
+      <p class="text-slate-500 text-lg mt-2">Real results from real customers. No cherry-picking.</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       ${testimonial('Sarah K.','CMO, TechStart Inc','from-emerald-500 to-teal-600','SK','AdNova AI took our ROAS from 2.1x to 4.8x in just 3 weeks. We now spend 80% less time on manual bid adjustments. It feels like having a genius media buyer on 24/7 autopilot.','4.8x ROAS in 3 weeks','Growth plan')}
@@ -661,7 +661,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- Trust badges -->
-    <div class="mt-16 flex flex-wrap items-center justify-center gap-6 fade-up">
+    <div class="mt-3 flex flex-wrap items-center justify-center gap-4 fade-up">
       ${trustBadge('fa-shield-halved', 'SOC2 Type II')}
       ${trustBadge('fa-lock', 'GDPR Compliant')}
       ${trustBadge('fa-star', '4.9/5 G2 Rating')}
@@ -676,24 +676,24 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      PRICING — SYNCED WITH SUPER ADMIN PLANS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-28 relative overflow-hidden" id="pricing">
+<section class="py-8 relative overflow-hidden" id="pricing">
   <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 60% at 50% 80%,rgba(99,102,241,0.09),transparent)"></div>
   <div class="absolute inset-0 grid-lines-fine opacity-40"></div>
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-16 fade-up">
-      <div class="section-label mb-6"><i class="fas fa-tags text-brand-400"></i> Transparent Pricing</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-5" style="font-family:'Space Grotesk',sans-serif">
+    <div class="text-center mb-3 fade-up">
+      <div class="section-label mb-2"><i class="fas fa-tags text-brand-400"></i> Transparent Pricing</div>
+      <h2 class="font-black text-4xl md:text-6xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Pay as you <span class="glow-text">grow</span>
       </h2>
-      <p class="text-slate-500 text-xl max-w-xl mx-auto">Full AI engine on every plan. No hidden fees. Cancel anytime.</p>
+      <p class="text-slate-500 text-base max-w-xl mx-auto">Full AI engine on every plan. No hidden fees. Cancel anytime.</p>
       <!-- Toggle annual/monthly -->
-      <div class="inline-flex items-center gap-2 glass-neo px-4 py-3 rounded-2xl mt-10">
+      <div class="inline-flex items-center gap-2 glass-neo px-4 py-3 rounded-2xl mt-3">
         <button id="btn-monthly" onclick="setFreq('monthly')" class="text-sm font-bold px-5 py-2 rounded-xl transition-all bg-brand-600/25 text-brand-300 border border-brand-500/20">Monthly</button>
         <button id="btn-annual" onclick="setFreq('annual')" class="text-sm font-bold px-5 py-2 rounded-xl transition-all text-slate-500 hover:text-slate-300">
           Annual <span class="text-xs text-emerald-400 font-black ml-1">-20%</span>
         </button>
       </div>
-      <div class="mt-4 text-xs text-emerald-500/70 font-semibold">
+      <div class="mt-3 text-xs text-emerald-500/70 font-semibold">
         <i class="fas fa-tag mr-1"></i> Annual plan saves up to $1,918/year on Growth
       </div>
     </div>
@@ -706,12 +706,12 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <!-- FAQ teaser -->
-    <div class="mt-12 text-center fade-up">
+    <div class="mt-3 text-center fade-up">
       <p class="text-slate-600 text-sm">
         All prices in USD. Annual billing saves 20%. VAT may apply.
         <a href="#" class="text-brand-400 hover:text-brand-300 transition-colors ml-2">View full feature comparison →</a>
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-6 mt-8">
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-3">
         ${planPerk('fa-shield-halved', 'No credit card required')}
         ${planPerk('fa-rotate-left', 'Cancel anytime')}
         ${planPerk('fa-bolt', '14-day free trial')}
@@ -724,15 +724,15 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      FAQ SECTION
 ════════════════════════════════════════════════════════════ -->
-<section class="py-24 relative overflow-hidden" style="background:rgba(4,7,20,0.6)">
+<section class="py-8 relative overflow-hidden" style="background:rgba(4,7,20,0.6)">
   <div class="max-w-4xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-16 fade-up">
-      <div class="section-label mb-6"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
+    <div class="text-center mb-3 fade-up">
+      <div class="section-label mb-2"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
       <h2 class="font-black text-4xl md:text-5xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Common <span class="glow-text-2">questions</span>
       </h2>
     </div>
-    <div class="space-y-3 fade-up" id="faq">
+    <div class="space-y-2 fade-up" id="faq">
       ${faqItem('How long does it take to see results?', 'Most brands see measurable improvements within 72 hours. The AI starts learning your campaigns immediately after connection, and begins making autonomous decisions within the first hour.')}
       ${faqItem('Do I need to know coding to use AdNova AI?', 'Zero coding required. Everything is done through our intuitive dashboard. Connect your ad accounts with OAuth in one click, set your goals, and the AI handles everything else.')}
       ${faqItem('What platforms does AdNova AI support?', 'All 9 major platforms: Facebook Ads, Google Ads, Instagram Ads, TikTok Ads, LinkedIn Ads, YouTube Ads, Pinterest Ads, X (Twitter) Ads, and Snapchat Ads.')}
@@ -745,7 +745,7 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      CTA FINAL
 ════════════════════════════════════════════════════════════ -->
-<section class="py-32 relative overflow-hidden">
+<section class="py-10 relative overflow-hidden">
   <!-- Background layers -->
   <div class="absolute inset-0" style="background:radial-gradient(ellipse 100% 70% at 50% 50%,rgba(79,70,229,0.15),transparent 70%)"></div>
   <div class="absolute inset-0 grid-lines opacity-25"></div>
@@ -754,18 +754,18 @@ export const renderLanding = (c: Context) => {
 
   <div class="max-w-4xl mx-auto px-5 md:px-8 text-center relative z-10 fade-up">
     <!-- Icon -->
-    <div class="relative inline-block mb-10">
+    <div class="relative inline-block mb-2">
       <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-brand-500 via-purple-600 to-pink-600 flex items-center justify-center mx-auto shadow-2xl spin-slow">
         <i class="fas fa-bolt text-white text-3xl"></i>
       </div>
       <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-500 to-pink-600 blur-3xl opacity-50 w-24 h-24 mx-auto"></div>
     </div>
 
-    <div class="section-label mb-7 mx-auto w-fit"><i class="fas fa-rocket text-brand-400"></i> Ready to dominate?</div>
-    <h2 class="font-black text-5xl md:text-7xl text-white mb-7" style="font-family:'Space Grotesk',sans-serif;line-height:1.0">
+    <div class="section-label mb-2 mx-auto w-fit"><i class="fas fa-rocket text-brand-400"></i> Ready to dominate?</div>
+    <h2 class="font-black text-5xl md:text-7xl text-white mb-2" style="font-family:'Space Grotesk',sans-serif;line-height:1.0">
       Your ads deserve<br/><span class="hero-text">better intelligence</span>
     </h2>
-    <p class="text-slate-400 text-xl mb-14 max-w-2xl mx-auto leading-relaxed">
+    <p class="text-slate-400 text-xl mb-6 max-w-2xl mx-auto leading-relaxed">
       Join <strong class="text-white">2,412 brands</strong> using AdNova AI to outperform their competition — with zero manual effort.
     </p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
@@ -778,7 +778,7 @@ export const renderLanding = (c: Context) => {
         Already have an account →
       </a>
     </div>
-    <p class="text-slate-600 text-sm mt-10 flex items-center justify-center gap-5 flex-wrap">
+    <p class="text-slate-600 text-sm mt-3 flex items-center justify-center gap-5 flex-wrap">
       <span><i class="fas fa-shield-halved text-emerald-500 mr-1.5"></i> No credit card required</span>
       <span><i class="fas fa-xmark text-slate-500 mr-1.5"></i> Cancel anytime</span>
       <span><i class="fas fa-clock text-brand-500 mr-1.5"></i> Setup in 3 minutes</span>
@@ -791,22 +791,22 @@ export const renderLanding = (c: Context) => {
      FOOTER
 ════════════════════════════════════════════════════════════ -->
 <footer style="border-top:1px solid rgba(255,255,255,0.05);background:rgba(2,5,16,0.9)">
-  <div class="max-w-7xl mx-auto px-5 md:px-8 py-14">
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-10 mb-10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-3">
       <!-- Brand -->
       <div class="md:col-span-2">
-        <div class="flex items-center gap-3 mb-5">
+        <div class="flex items-center gap-3 mb-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg">
             <i class="fas fa-bolt text-white text-sm"></i>
           </div>
           <span class="font-black text-white text-xl">AdNova <span class="glow-text">AI</span></span>
         </div>
         <p class="text-sm text-slate-600 leading-relaxed max-w-xs">Autonomous advertising intelligence for modern growth teams. Powered by cutting-edge AI.</p>
-        <div class="flex items-center gap-3 mt-5">
+        <div class="flex items-center gap-3 mt-3">
           <div class="w-2 h-2 rounded-full bg-emerald-400 blink"></div>
           <span class="text-xs text-emerald-500 font-bold">All systems operational</span>
         </div>
-        <div class="flex items-center gap-3 mt-5">
+        <div class="flex items-center gap-3 mt-3">
           ${footerSocial('fa-x-twitter', '#')}
           ${footerSocial('fa-linkedin-in', '#')}
           ${footerSocial('fa-github', '#')}
@@ -815,8 +815,8 @@ export const renderLanding = (c: Context) => {
       </div>
       <!-- Product -->
       <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-5">Product</div>
-        <div class="space-y-3">
+        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Product</div>
+        <div class="space-y-2">
           <a href="#features" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Features</a>
           <a href="#pricing" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Pricing</a>
           <a href="#platforms" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Platforms</a>
@@ -826,8 +826,8 @@ export const renderLanding = (c: Context) => {
       </div>
       <!-- Company -->
       <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-5">Company</div>
-        <div class="space-y-3">
+        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Company</div>
+        <div class="space-y-2">
           <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">About</a>
           <a href="#testimonials" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Customers</a>
           <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Blog</a>
@@ -836,8 +836,8 @@ export const renderLanding = (c: Context) => {
       </div>
       <!-- Legal -->
       <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-5">Legal & Support</div>
-        <div class="space-y-3">
+        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Legal & Support</div>
+        <div class="space-y-2">
           <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Privacy Policy</a>
           <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Terms of Service</a>
           <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Status Page</a>
@@ -845,7 +845,7 @@ export const renderLanding = (c: Context) => {
         </div>
       </div>
     </div>
-    <div class="divider mb-7"></div>
+    <div class="divider mb-2"></div>
     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-xs text-slate-700">© 2026 AdNova AI. All rights reserved. Powered by Cloudflare Workers.</p>
       <div class="flex items-center gap-4 text-xs text-slate-700">
@@ -1034,8 +1034,8 @@ function getPlatformIcon(name: string): string {
 }
 
 function bigStat(val: string, label: string, icon: string, gradient: string, sub: string): string {
-  return `<div class="stat-card rounded-2xl p-7 text-center fade-up">
-    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center mx-auto mb-5 shadow-xl">
+  return `<div class="stat-card rounded-2xl p-5 text-center fade-up">
+    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center mx-auto mb-3 shadow-xl">
       <i class="fas ${icon} text-white text-xl"></i>
     </div>
     <div class="text-4xl font-black text-white mb-2" style="font-family:'Space Grotesk',sans-serif">${val}</div>
@@ -1055,13 +1055,13 @@ function miniMetric(val: string, label: string, icon: string, color: string): st
 }
 
 function featureCard(icon: string, gradient: string, glowColor: string, title: string, desc: string, metric: string, mColor: string): string {
-  return `<div class="glass-card rounded-2xl p-7 fade-up group holo-card">
-    <div class="feat-icon bg-gradient-to-br ${gradient} mb-6 relative">
+  return `<div class="glass-card rounded-2xl p-5 fade-up group holo-card">
+    <div class="feat-icon bg-gradient-to-br ${gradient} mb-2 relative">
       <div class="feat-icon-glow" style="background:${glowColor}"></div>
       <i class="fas ${icon} text-white text-xl relative z-10"></i>
     </div>
     <h3 class="font-black text-white text-base mb-3">${title}</h3>
-    <p class="text-sm text-slate-500 leading-relaxed mb-6">${desc}</p>
+    <p class="text-sm text-slate-500 leading-relaxed mb-2">${desc}</p>
     <div class="flex items-center gap-2">
       <span class="metric-badge" style="background:${glowColor.replace('0.45','0.12')};border:1px solid ${glowColor.replace('0.45','0.25')};color:var(--tw-${mColor}-400, #818cf8)">
         <i class="fas fa-bolt text-xs"></i>${metric}
@@ -1071,7 +1071,7 @@ function featureCard(icon: string, gradient: string, glowColor: string, title: s
 }
 
 function featureHighlight(icon: string, color: string, title: string, desc: string): string {
-  return `<div class="glass-neo rounded-2xl p-6 fade-up flex items-start gap-4 group hover:scale-[1.02] transition-transform">
+  return `<div class="glass-neo rounded-2xl p-4 fade-up flex items-start gap-4 group hover:scale-[1.02] transition-transform">
     <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:${color}20;border:1px solid ${color}30">
       <i class="fas ${icon} text-sm" style="color:${color}"></i>
     </div>
@@ -1084,7 +1084,7 @@ function featureHighlight(icon: string, color: string, title: string, desc: stri
 
 function howStep(num: string, title: string, desc: string, icon: string, color: string, bg: string): string {
   return `<div class="text-center fade-up relative">
-    <div class="relative inline-block mb-8">
+    <div class="relative inline-block mb-2">
       <div class="w-28 h-28 rounded-3xl flex items-center justify-center mx-auto" style="background:${bg};border:1px solid ${bg.replace('0.12','0.25')}">
         <i class="fas fa-${icon} text-${color}-400 text-4xl"></i>
       </div>
@@ -1096,8 +1096,8 @@ function howStep(num: string, title: string, desc: string, icon: string, color: 
 }
 
 function testimonial(name: string, role: string, gradient: string, abbr: string, quote: string, metric: string, plan: string): string {
-  return `<div class="testi-card rounded-2xl p-7 fade-up">
-    <div class="flex items-center gap-3 mb-5">
+  return `<div class="testi-card rounded-2xl p-5 fade-up">
+    <div class="flex items-center gap-3 mb-3">
       <div class="w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-sm font-black text-white flex-shrink-0 shadow-xl">${abbr}</div>
       <div class="flex-1">
         <div class="text-sm font-black text-white">${name}</div>
@@ -1107,7 +1107,7 @@ function testimonial(name: string, role: string, gradient: string, abbr: string,
         ${'<i class="fas fa-star text-amber-400 text-xs"></i>'.repeat(5)}
       </div>
     </div>
-    <p class="text-sm text-slate-400 leading-relaxed mb-6">"${quote}"</p>
+    <p class="text-sm text-slate-400 leading-relaxed mb-2">"${quote}"</p>
     <div class="flex items-center gap-2 flex-wrap">
       <span class="text-xs font-black text-emerald-400 px-3 py-1.5 rounded-xl" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)">${metric}</span>
       <span class="text-xs text-slate-600 px-2 py-1 rounded-lg glass">${plan}</span>
@@ -1152,23 +1152,23 @@ function pricingCard(plan: typeof PLANS[0]): string {
     ? `<span class="text-4xl font-black text-white" style="font-family:'Space Grotesk',sans-serif">Custom</span>`
     : `<span class="text-5xl font-black text-white" id="price-${plan.id}" style="font-family:'Space Grotesk',sans-serif">$${plan.price}</span><span class="text-slate-500 ml-1 text-sm plan-period">/month</span>`
 
-  return `<div class="plan-card rounded-2xl p-7 fade-up ${plan.popular ? 'popular' : ''}">
+  return `<div class="plan-card rounded-2xl p-5 fade-up ${plan.popular ? 'popular' : ''}">
     ${plan.popular ? `<div class="absolute top-5 right-5 text-xs font-black px-3 py-1.5 rounded-full" style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;box-shadow:0 4px 12px rgba(249,115,22,0.4)">⭐ Most Popular</div>` : ''}
 
     <!-- Plan header -->
-    <div class="mb-7">
+    <div class="mb-2">
       <div class="flex items-center gap-2 mb-2">
         <div class="w-3 h-3 rounded-full" style="background:${plan.color};box-shadow:0 0 10px ${plan.color}"></div>
         <span class="text-xs font-black uppercase tracking-widest" style="color:${plan.color}">${plan.name}</span>
       </div>
-      <div class="flex items-end gap-2 mt-4">
+      <div class="flex items-end gap-2 mt-3">
         ${priceDisplay}
       </div>
       <div class="text-xs text-slate-600 mt-1.5">${!isEnterprise ? `Up to ${plan.adSpend} ad spend/month` : 'Unlimited ad spend — tailored to you'}</div>
     </div>
 
     <!-- Quick specs -->
-    <div class="grid grid-cols-3 gap-2 mb-7 p-3 rounded-xl" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05)">
+    <div class="grid grid-cols-3 gap-2 mb-2 p-3 rounded-xl" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05)">
       <div class="text-center">
         <div class="text-base font-black text-white">${plan.campaigns === 999 ? '∞' : plan.campaigns}</div>
         <div class="text-xs text-slate-600">campaigns</div>
@@ -1184,7 +1184,7 @@ function pricingCard(plan: typeof PLANS[0]): string {
     </div>
 
     <!-- Features list -->
-    <ul class="space-y-3 mb-8">
+    <ul class="space-y-2 mb-3">
       ${plan.features.map(f => `<li class="flex items-start gap-2.5 text-sm text-slate-400">
         <i class="fas fa-check text-xs mt-0.5 flex-shrink-0" style="color:${plan.color}"></i>
         ${f}
