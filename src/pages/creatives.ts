@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderCreatives = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderCreatives(lang: Lang = 'en'): string {
   const content = `
   <!-- Header -->
   <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -214,7 +215,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
     }
   </script>
   `
-  return c.html(shell('Creative Studio', content, '/creatives'))
+  return shell('Creative Studio', content, '/creatives', lang)
 }
 
 function creativeStat(val: string, label: string, icon: string, color: string): string {

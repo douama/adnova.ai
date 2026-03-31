@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderAudiences = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderAudiences(lang: Lang = 'en'): string {
   const content = `
   <div class="flex items-center justify-between mb-6">
     <p class="text-slate-400">AI-powered audience management. Predictive targeting for maximum conversions.</p>
@@ -51,7 +52,7 @@ export const renderAudiences = (c: Context) => {
     </div>
   </div>
   `
-  return c.html(shell('Audiences', content, '/audiences'))
+  return shell('Audiences', content, '/audiences', lang)
 }
 
 function audStat(val: string, label: string, icon: string, color: string): string {

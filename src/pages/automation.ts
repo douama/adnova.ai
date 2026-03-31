@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderAutomation = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderAutomation(lang: Lang = 'en'): string {
   const content = `
   <div class="flex items-center justify-between mb-6">
     <p class="text-slate-400">Build smart automation rules. AI executes them automatically.</p>
@@ -107,7 +108,7 @@ export const renderAutomation = (c: Context) => {
     function saveRule() { closeRuleModal(); }
   </script>
   `
-  return c.html(shell('Automation', content, '/automation'))
+  return shell('Automation', content, '/automation', lang)
 }
 
 function autoStat(val: string, label: string, icon: string, color: string): string {

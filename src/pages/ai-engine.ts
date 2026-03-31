@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderAIEngine = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderAIEngine(lang: Lang = 'en'): string {
   const content = `
   <!-- Hero AI Status -->
   <div class="glass rounded-2xl p-6 mb-6 border border-brand-500/20 relative overflow-hidden">
@@ -154,7 +155,7 @@ export const renderAIEngine = (c: Context) => {
   });
   </script>
   `
-  return c.html(shell('AI Engine', content, '/ai-engine'))
+  return shell('AI Engine', content, '/ai-engine', lang)
 }
 
 function aiModule(title: string, icon: string, gradient: string, status: string, metric: string, metricLabel: string, desc: string, stats: [string,string][]): string {

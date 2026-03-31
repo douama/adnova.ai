@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderAnalytics = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderAnalytics(lang: Lang = 'en'): string {
   const content = `
   <!-- Date Range + Export -->
   <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -146,7 +147,7 @@ export const renderAnalytics = (c: Context) => {
   });
   </script>
   `
-  return c.html(shell('Analytics', content, '/analytics'))
+  return shell('Analytics', content, '/analytics', lang)
 }
 
 function dateBtn(label: string, active: boolean = false): string {

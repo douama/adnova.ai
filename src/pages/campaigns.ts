@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderCampaigns = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderCampaigns(lang: Lang = 'en'): string {
   const content = `
   <!-- Header Actions -->
   <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -235,7 +236,7 @@ export const renderCampaigns = (c: Context) => {
     }
   </script>
   `
-  return c.html(shell('Campaigns', content, '/campaigns'))
+  return shell('Campaigns', content, '/campaigns', lang)
 }
 
 function campStat(value: string, label: string, icon: string, color: string): string {

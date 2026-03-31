@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderSettings = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderSettings(lang: Lang = 'en'): string {
   const content = `
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <!-- Settings Nav -->
@@ -87,7 +88,7 @@ export const renderSettings = (c: Context) => {
     </div>
   </div>
   `
-  return c.html(shell('Settings', content, '/settings'))
+  return shell('Settings', content, '/settings', lang)
 }
 
 function settingsNav(icon: string, label: string, active: boolean): string {

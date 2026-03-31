@@ -44,12 +44,29 @@ import { renderAdminConfig } from './admin/pages/config'
 import { renderAdminPlans } from './admin/pages/plans'
 import { renderAdminBilling } from './admin/pages/billing'
 
+// ─── i18n detection ────────────────────────────────────────────────────────
+import { detectLang } from './lib/i18n'
+
 const app = new Hono()
 
 // Middleware
 app.use('*', logger())
 app.use('/api/*', cors())
 app.use('/admin/api/*', cors())
+
+// ─── Performance: cache headers ───────────────────────────────────────────
+app.use('*', async (c, next) => {
+  await next()
+  // Cache static assets aggressively
+  const url = c.req.url
+  if (url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.ico')) {
+    c.res.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800')
+  }
+  // Cache API responses briefly
+  if (url.includes('/api/') && c.req.method === 'GET') {
+    c.res.headers.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60')
+  }
+})
 
 // ─── Favicon ──────────────────────────────────────────────────────────────
 app.get('/favicon.ico', (c) => c.redirect('/favicon.svg', 301))
@@ -62,22 +79,56 @@ app.get('/favicon.svg', (c) => {
   return c.body(svg, 200, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'max-age=86400' })
 })
 
+// ─── Language detection API ────────────────────────────────────────────────
+app.get('/api/lang', (c) => {
+  const lang = detectLang(c.req.raw)
+  const country = c.req.raw.headers.get('CF-IPCountry') || 'US'
+  return c.json({ lang, country })
+})
+
 // ─── Landing & Auth Pages ──────────────────────────────────────────────────
 app.get('/', renderLanding)
 app.get('/login', renderLogin)
 app.get('/register', renderRegister)
 
-// ─── Dashboard Pages ───────────────────────────────────────────────────────
+// ─── Dashboard Pages (with i18n) ───────────────────────────────────────────
 app.get('/dashboard', renderDashboard)
-app.get('/campaigns', renderCampaigns)
-app.get('/creatives', renderCreatives)
-app.get('/analytics', renderAnalytics)
-app.get('/ai-engine', renderAIEngine)
-app.get('/platforms', renderPlatforms)
-app.get('/billing', renderBilling)
-app.get('/audiences', renderAudiences)
-app.get('/automation', renderAutomation)
-app.get('/settings', renderSettings)
+app.get('/campaigns', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderCampaigns(lang))
+})
+app.get('/creatives', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderCreatives(lang))
+})
+app.get('/analytics', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderAnalytics(lang))
+})
+app.get('/ai-engine', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderAIEngine(lang))
+})
+app.get('/platforms', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderPlatforms(lang))
+})
+app.get('/billing', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderBilling(lang))
+})
+app.get('/audiences', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderAudiences(lang))
+})
+app.get('/automation', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderAutomation(lang))
+})
+app.get('/settings', (c) => {
+  const lang = detectLang(c.req.raw)
+  return c.html(renderSettings(lang))
+})
 
 // ─── API Routes ────────────────────────────────────────────────────────────
 app.route('/api/auth', authRoutes)
@@ -105,7 +156,7 @@ app.get('/admin/config', renderAdminConfig)
 app.get('/admin/plans', renderAdminPlans)
 app.get('/admin/billing', renderAdminBilling)
 
-// Placeholder pages for remaining admin links
+// Redirects for admin shortlinks
 app.get('/admin/campaigns', (c) => c.redirect('/admin', 302))
 app.get('/admin/creatives', (c) => c.redirect('/admin', 302))
 app.get('/admin/platforms', (c) => c.redirect('/admin/config', 302))

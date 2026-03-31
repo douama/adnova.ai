@@ -1,7 +1,8 @@
-import type { Context } from 'hono'
-import { shell } from '../lib/layout'
 
-export const renderBilling = (c: Context) => {
+import { shell } from '../lib/layout'
+import { type Lang } from '../lib/i18n'
+
+export function renderBilling(lang: Lang = 'en'): string {
   const content = `
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     <!-- Current Plan -->
@@ -74,7 +75,7 @@ export const renderBilling = (c: Context) => {
     </div>
   </div>
   `
-  return c.html(shell('Billing', content, '/billing'))
+  return shell('Billing', content, '/billing', lang)
 }
 
 function usageItem(label: string, used: string, max: string, pct: number): string {
