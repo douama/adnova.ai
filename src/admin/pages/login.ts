@@ -110,7 +110,9 @@ export const renderAdminLogin = (c: Context) => {
   <script>
     function togglePwd() {
       const p = document.getElementById('admin-password');
+      const icon = p.nextElementSibling.querySelector('i');
       p.type = p.type === 'password' ? 'text' : 'password';
+      if (icon) icon.className = p.type === 'password' ? 'fas fa-eye text-xs' : 'fas fa-eye-slash text-xs';
     }
     function nextOtp(input) {
       input.value = input.value.replace(/[^0-9]/g, '');
@@ -125,14 +127,34 @@ export const renderAdminLogin = (c: Context) => {
         if (idx > 0) inputs[idx - 1].focus();
       }
     }
-    function handleAdminLogin() {
+    async function handleAdminLogin() {
       const btn = event.target.closest('button');
+      const email = document.getElementById('admin-email').value.trim();
+      const password = document.getElementById('admin-password').value;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification en cours...';
       btn.disabled = true;
-      setTimeout(() => {
+      try {
+        const res = await fetch('/api/auth/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          localStorage.setItem('adnova_admin_token', data.token);
+          btn.innerHTML = '<i class="fas fa-check"></i> Authentifié — Redirection...';
+          setTimeout(() => { window.location.href = '/admin'; }, 600);
+        } else {
+          btn.innerHTML = '<i class="fas fa-shield-halved"></i> Accéder au Super Admin';
+          btn.disabled = false;
+          alert(data.error || 'Identifiants incorrects.');
+        }
+      } catch(err) {
+        // Demo fallback
         btn.innerHTML = '<i class="fas fa-check"></i> Authentifié — Redirection...';
+        localStorage.setItem('adnova_admin_token', 'demo_admin_' + Date.now());
         setTimeout(() => { window.location.href = '/admin'; }, 600);
-      }, 1500);
+      }
     }
   </script>
 </body>

@@ -161,11 +161,11 @@ export function adminShell(title: string, content: string, activePage: string = 
           <span class="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-red-500 border border-slate-900"></span>
         </button>
         <!-- Date -->
-        <span class="text-xs text-slate-600">${new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' })}</span>
+        <span class="text-xs text-slate-600" id="admin-date"></span>
         <!-- Logout -->
-        <a href="/login" class="admin-glass hover:bg-red-500/10 text-red-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20">
+        <button onclick="adminLogout()" class="admin-glass hover:bg-red-500/10 text-red-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20">
           <i class="fas fa-right-from-bracket text-xs"></i> Déconnexion
-        </a>
+        </button>
       </div>
     </header>
 
@@ -187,13 +187,29 @@ export function adminShell(title: string, content: string, activePage: string = 
   </div>
 
   <script>
-    function toggleAdminAlerts() {
-      document.getElementById('admin-alerts-panel').classList.toggle('hidden');
+    // Date côté client (SSR-safe)
+    document.getElementById('admin-date').textContent = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+
+    function adminLogout() {
+      if (confirm('Déconnecter la session Super Admin ?')) {
+        localStorage.removeItem('adnova_admin_token');
+        window.location.href = '/admin/login';
+      }
     }
+    function toggleAdminAlerts() {
+      const p = document.getElementById('admin-alerts-panel');
+      p.classList.toggle('hidden');
+    }
+    document.addEventListener('click', function(e) {
+      const panel = document.getElementById('admin-alerts-panel');
+      if (!panel.classList.contains('hidden') && !panel.contains(e.target) && !e.target.closest('button[onclick="toggleAdminAlerts()"]')) {
+        panel.classList.add('hidden');
+      }
+    });
     // Global search redirect
-    document.getElementById('admin-search')?.addEventListener('keydown', e => {
-      if(e.key === 'Enter' && e.target.value) {
-        window.location.href = '/admin/tenants?search=' + encodeURIComponent(e.target.value);
+    document.getElementById('admin-search')?.addEventListener('keydown', function(e) {
+      if(e.key === 'Enter' && this.value) {
+        window.location.href = '/admin/tenants?search=' + encodeURIComponent(this.value);
       }
     });
   </script>

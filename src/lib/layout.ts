@@ -15,7 +15,7 @@ export function shell(title: string, content: string, activePage: string = ''): 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -23,105 +23,77 @@ export function shell(title: string, content: string, activePage: string = ''): 
         extend: {
           colors: {
             brand: {
-              50: '#f0f4ff',
-              100: '#e0e9ff',
-              200: '#c7d7fe',
-              300: '#a5bbfc',
-              400: '#8194f8',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-              800: '#3730a3',
-              900: '#312e81',
+              50: '#f0f4ff', 100: '#e0e9ff', 200: '#c7d7fe',
+              300: '#a5bbfc', 400: '#8194f8', 500: '#6366f1',
+              600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
             },
             surface: {
-              50: '#f8fafc',
-              100: '#f1f5f9',
-              200: '#e2e8f0',
-              800: '#1e293b',
-              850: '#172033',
-              900: '#0f172a',
-              950: '#080e1a',
+              50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0',
+              800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#080e1a',
             }
           },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'spin-slow': 'spin 3s linear infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'glow': 'glow 2s ease-in-out infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            glow: {
-              '0%, 100%': { boxShadow: '0 0 20px rgba(99,102,241,0.3)' },
-              '50%': { boxShadow: '0 0 40px rgba(99,102,241,0.6)' },
-            }
-          }
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
-    .gradient-text { background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    body { background: #080e1a; font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.07); }
     .glass-hover:hover { background: rgba(255,255,255,0.06); border-color: rgba(99,102,241,0.4); }
-    .neon-border { border: 1px solid rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.15), inset 0 0 20px rgba(99,102,241,0.05); }
+    .neon-border { border: 1px solid rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.15); }
     .card-hover { transition: all 0.3s ease; }
     .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-    .platform-fb { background: linear-gradient(135deg, #1877f2, #0d5dbf); }
-    .platform-ig { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4); }
-    .platform-tt { background: linear-gradient(135deg, #010101, #ff0050, #00f2ea); }
-    .platform-sc { background: linear-gradient(135deg, #fffc00, #f5c400); }
-    .platform-gl { background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335); }
-    .stat-up { color: #10b981; }
-    .stat-down { color: #ef4444; }
+    .gradient-text { background: linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .sidebar-link { transition: all 0.2s ease; border-left: 3px solid transparent; }
+    .sidebar-link:hover, .sidebar-link.active { background: rgba(99,102,241,0.15); border-left-color: #6366f1; color: #818cf8; }
+    .sidebar-link.active { background: rgba(99,102,241,0.2); color: #a5b4fc; }
     .badge-live { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
     .badge-paused { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
     .badge-draft { background: rgba(148,163,184,0.2); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
     .badge-killed { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
     .badge-scaling { background: rgba(99,102,241,0.2); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); }
-    .progress-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); overflow: hidden; }
+    .progress-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; }
     .progress-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
-    .ai-pulse::before { content: ''; position: absolute; inset: -2px; border-radius: inherit; background: linear-gradient(135deg, #6366f1, #8b5cf6); opacity: 0; transition: opacity 0.3s; z-index: -1; }
-    .ai-pulse:hover::before { opacity: 1; }
-    .sidebar-link { transition: all 0.2s ease; border-left: 3px solid transparent; }
-    .sidebar-link:hover, .sidebar-link.active { background: rgba(99,102,241,0.15); border-left-color: #6366f1; color: #818cf8; }
-    .sidebar-link.active { background: rgba(99,102,241,0.2); color: #a5b4fc; }
-    .metric-card { position: relative; overflow: hidden; }
-    .metric-card::after { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%); pointer-events: none; }
-    .animate-fadeIn { animation: fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .tooltip { position: relative; }
-    .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
-    .tooltip-text { visibility: hidden; opacity: 0; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-size: 12px; white-space: nowrap; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); transition: opacity 0.2s; z-index: 50; }
-    .sparkline { width: 80px; height: 30px; }
+    .animate-fadeIn { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     .blink { animation: blink 1.5s ease infinite; }
+    .platform-fb { background: linear-gradient(135deg,#1877f2,#0d5dbf); }
+    .platform-ig { background: linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); }
+    .platform-tt { background: linear-gradient(135deg,#010101,#ff0050,#00f2ea); }
+    .platform-sc { background: linear-gradient(135deg,#fffc00,#f5c400); }
+    .platform-gl { background: linear-gradient(135deg,#4285f4,#34a853,#fbbc05,#ea4335); }
+    .table-row:hover { background: rgba(255,255,255,0.02); }
+    /* Mobile sidebar */
+    @media (max-width: 768px) {
+      .sidebar-desktop { transform: translateX(-100%); transition: transform 0.3s ease; }
+      .sidebar-desktop.open { transform: translateX(0); }
+      .main-content { margin-left: 0 !important; }
+    }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
+    .sidebar-overlay.show { display: block; }
   </style>
 </head>
-<body class="bg-surface-950 text-slate-200 font-sans min-h-screen flex">
+<body class="text-slate-200 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
-  <aside class="w-64 min-h-screen glass border-r border-white/5 flex flex-col fixed left-0 top-0 z-40">
+  <aside id="main-sidebar" class="sidebar-desktop w-64 min-h-screen glass border-r border-white/5 flex flex-col fixed left-0 top-0 z-40">
     <!-- Logo -->
-    <div class="p-6 border-b border-white/5">
+    <div class="p-5 border-b border-white/5">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg">
-          <i class="fas fa-bolt text-white text-lg"></i>
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg flex-shrink-0">
+          <i class="fas fa-bolt text-white"></i>
         </div>
         <div>
-          <div class="font-black text-white text-lg tracking-tight">${BRAND.name}</div>
+          <div class="font-black text-white text-base tracking-tight">${BRAND.name}</div>
           <div class="text-xs text-slate-500">${BRAND.tagline}</div>
         </div>
       </div>
@@ -129,40 +101,40 @@ export function shell(title: string, content: string, activePage: string = ''): 
 
     <!-- Tenant Selector -->
     <div class="px-4 py-3 border-b border-white/5">
-      <button onclick="toggleTenantMenu()" class="w-full glass rounded-lg px-3 py-2 flex items-center gap-2 text-sm hover:bg-white/5 transition-all">
-        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">A</div>
-        <span class="flex-1 text-left text-slate-300 font-medium truncate">Acme Corp</span>
+      <button onclick="toggleTenantMenu()" id="tenant-btn" class="w-full glass rounded-lg px-3 py-2 flex items-center gap-2 text-sm hover:bg-white/5 transition-all">
+        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0" id="tenant-abbr">A</div>
+        <span class="flex-1 text-left text-slate-300 font-medium truncate" id="tenant-name">Acme Corp</span>
         <i class="fas fa-chevron-down text-slate-500 text-xs"></i>
       </button>
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
-      <div class="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 py-2">Main</div>
+    <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
+      <div class="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 py-2">Principal</div>
       ${navLink('/dashboard', 'fa-chart-line', 'Dashboard', activePage)}
       ${navLink('/campaigns', 'fa-bullhorn', 'Campaigns', activePage)}
       ${navLink('/creatives', 'fa-wand-magic-sparkles', 'Creative Studio', activePage)}
       ${navLink('/analytics', 'fa-chart-bar', 'Analytics', activePage)}
-      <div class="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 py-2 mt-4">AI & Automation</div>
+      <div class="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 py-2 mt-3">IA & Automatisation</div>
       ${navLink('/ai-engine', 'fa-brain', 'AI Engine', activePage)}
       ${navLink('/automation', 'fa-gears', 'Automation', activePage)}
       ${navLink('/audiences', 'fa-users', 'Audiences', activePage)}
-      <div class="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 py-2 mt-4">Configuration</div>
+      <div class="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 py-2 mt-3">Configuration</div>
       ${navLink('/platforms', 'fa-plug', 'Platforms', activePage)}
       ${navLink('/billing', 'fa-credit-card', 'Billing', activePage)}
       ${navLink('/settings', 'fa-gear', 'Settings', activePage)}
     </nav>
 
-    <!-- AI Status Indicator -->
+    <!-- AI Status -->
     <div class="p-4 border-t border-white/5">
       <div class="glass rounded-xl p-3">
         <div class="flex items-center gap-2 mb-2">
-          <div class="w-2 h-2 rounded-full bg-emerald-400 blink"></div>
-          <span class="text-xs font-semibold text-emerald-400">AI ENGINE ACTIVE</span>
+          <div class="w-2 h-2 rounded-full bg-emerald-400 blink flex-shrink-0"></div>
+          <span class="text-xs font-semibold text-emerald-400">AI ENGINE ACTIF</span>
         </div>
-        <div class="text-xs text-slate-500">Processing 47 campaigns</div>
+        <div class="text-xs text-slate-500" id="ai-status-text">Traitement de 47 campagnes</div>
         <div class="progress-bar mt-2">
-          <div class="progress-fill bg-gradient-to-r from-brand-500 to-purple-500" style="width:73%"></div>
+          <div class="progress-fill bg-gradient-to-r from-brand-500 to-purple-500" style="width:73%" id="ai-progress"></div>
         </div>
       </div>
     </div>
@@ -170,10 +142,10 @@ export function shell(title: string, content: string, activePage: string = ''): 
     <!-- Super Admin Quick Access -->
     <div class="px-4 pb-2">
       <a href="/admin/login" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-500/10 transition-all group border border-orange-500/10 hover:border-orange-500/25">
-        <div class="w-5 h-5 rounded-md bg-gradient-to-br from-orange-500/20 to-red-600/20 flex items-center justify-center flex-shrink-0">
+        <div class="w-5 h-5 rounded-md bg-orange-500/15 flex items-center justify-center flex-shrink-0">
           <i class="fas fa-shield-halved text-orange-500 text-xs group-hover:text-orange-400"></i>
         </div>
-        <span class="text-xs text-slate-600 group-hover:text-orange-400 transition-colors font-medium">Super Admin Panel</span>
+        <span class="text-xs text-slate-600 group-hover:text-orange-400 transition-colors font-medium">Super Admin</span>
         <i class="fas fa-external-link text-xs text-slate-700 group-hover:text-orange-500 ml-auto"></i>
       </a>
     </div>
@@ -181,137 +153,221 @@ export function shell(title: string, content: string, activePage: string = ''): 
     <!-- User Profile -->
     <div class="p-4 border-t border-white/5">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white">JD</div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0" id="user-avatar">JD</div>
         <div class="flex-1 min-w-0">
-          <div class="text-sm font-semibold text-white truncate">John Doe</div>
-          <div class="text-xs text-slate-500 truncate">john@acmecorp.com</div>
+          <div class="text-sm font-semibold text-white truncate" id="user-name">John Doe</div>
+          <div class="text-xs text-slate-500 truncate" id="user-email">john@acmecorp.com</div>
         </div>
-        <button class="text-slate-500 hover:text-slate-300 transition-colors">
-          <i class="fas fa-ellipsis-vertical text-xs"></i>
+        <button onclick="handleLogout()" class="text-slate-500 hover:text-red-400 transition-colors" title="Déconnexion">
+          <i class="fas fa-right-from-bracket text-sm"></i>
         </button>
       </div>
     </div>
   </aside>
 
   <!-- Main Content -->
-  <div class="ml-64 flex-1 flex flex-col min-h-screen">
+  <div class="main-content ml-64 flex-1 flex flex-col min-h-screen">
     <!-- Top Bar -->
-    <header class="h-16 glass border-b border-white/5 flex items-center justify-between px-6 sticky top-0 z-30">
-      <div class="flex items-center gap-4">
-        <h1 class="text-lg font-bold text-white">${title}</h1>
-        <div id="page-badge"></div>
-      </div>
+    <header class="h-14 glass border-b border-white/5 flex items-center justify-between px-4 md:px-6 sticky top-0 z-30">
       <div class="flex items-center gap-3">
-        <!-- AI Optimizer Status -->
-        <button class="glass rounded-lg px-3 py-2 text-xs flex items-center gap-2 hover:bg-white/5 transition-all" onclick="showAIStatus()">
-          <i class="fas fa-robot text-brand-400"></i>
-          <span class="text-slate-300">AI Optimizer</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 blink"></span>
+        <!-- Mobile menu button -->
+        <button class="md:hidden glass rounded-lg w-8 h-8 flex items-center justify-center hover:bg-white/5 transition-all" onclick="openSidebar()">
+          <i class="fas fa-bars text-slate-400 text-sm"></i>
+        </button>
+        <h1 class="text-sm font-bold text-white">${title}</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- AI Optimizer -->
+        <button class="hidden sm:flex glass rounded-lg px-3 py-1.5 text-xs items-center gap-2 hover:bg-white/5 transition-all" onclick="showAIStatus()">
+          <i class="fas fa-robot text-brand-400 text-xs"></i>
+          <span class="text-slate-300">AI</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink"></span>
         </button>
         <!-- Notifications -->
-        <button class="glass rounded-lg w-9 h-9 flex items-center justify-center hover:bg-white/5 transition-all relative" onclick="toggleNotifications()">
-          <i class="fas fa-bell text-slate-400 text-sm"></i>
-          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
+        <button class="glass rounded-lg w-8 h-8 flex items-center justify-center hover:bg-white/5 transition-all relative" onclick="toggleNotifications()" id="notif-btn">
+          <i class="fas fa-bell text-slate-400 text-xs"></i>
+          <span class="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-red-500 border border-slate-900" id="notif-badge"></span>
         </button>
-        <!-- Quick Create -->
-        <button onclick="window.location.href='/campaigns'" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white text-sm font-semibold px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-lg">
+        <!-- New Campaign -->
+        <a href="/campaigns" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-lg">
           <i class="fas fa-plus text-xs"></i>
-          New Campaign
-        </button>
+          <span class="hidden sm:inline">Campagne</span>
+        </a>
       </div>
     </header>
 
     <!-- Page Content -->
-    <main class="flex-1 p-6 animate-fadeIn" id="main-content">
+    <main class="flex-1 p-4 md:p-6 animate-fadeIn" id="main-content">
       ${content}
     </main>
   </div>
 
   <!-- Notifications Panel -->
-  <div id="notifications-panel" class="hidden fixed right-0 top-16 w-96 glass border border-white/10 shadow-2xl z-50 rounded-bl-2xl max-h-[80vh] overflow-y-auto">
+  <div id="notifications-panel" class="hidden fixed right-0 top-14 w-80 md:w-96 glass border border-white/10 shadow-2xl z-50 rounded-bl-2xl max-h-[80vh] overflow-y-auto">
     <div class="p-4 border-b border-white/10 flex items-center justify-between">
-      <h3 class="font-bold text-white">Notifications</h3>
-      <button onclick="toggleNotifications()" class="text-slate-500 hover:text-slate-300"><i class="fas fa-times"></i></button>
+      <h3 class="font-bold text-white text-sm">Notifications</h3>
+      <div class="flex items-center gap-2">
+        <button onclick="markAllRead()" class="text-xs text-brand-400 hover:text-brand-300">Tout lire</button>
+        <button onclick="toggleNotifications()" class="text-slate-500 hover:text-slate-300 ml-2"><i class="fas fa-times text-xs"></i></button>
+      </div>
     </div>
-    <div class="p-3 space-y-2">
+    <div class="p-3 space-y-2" id="notif-list">
       ${notificationsHTML()}
     </div>
   </div>
 
   <!-- AI Status Modal -->
-  <div id="ai-status-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
-    <div class="glass neon-border rounded-2xl w-full max-w-2xl p-6 animate-fadeIn">
-      <div class="flex items-center justify-between mb-6">
+  <div id="ai-status-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="closeAIStatus(event)">
+    <div class="glass neon-border rounded-2xl w-full max-w-2xl p-6 animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between mb-5">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
-            <i class="fas fa-brain text-white"></i>
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-brain text-white text-sm"></i>
           </div>
           <div>
-            <h3 class="font-bold text-white text-lg">AI Engine Status</h3>
+            <h3 class="font-bold text-white">AI Engine Status</h3>
             <p class="text-xs text-emerald-400">All systems operational</p>
           </div>
         </div>
-        <button onclick="closeAIStatus()" class="text-slate-500 hover:text-slate-300"><i class="fas fa-times text-lg"></i></button>
+        <button onclick="closeAIStatus()" class="text-slate-500 hover:text-slate-300 transition-colors"><i class="fas fa-times"></i></button>
       </div>
-      <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="grid grid-cols-2 gap-4 mb-5">
         ${aiStatusCard('Campaign Optimizer', '94.2%', 'accuracy', 'fa-chart-line', 'brand')}
         ${aiStatusCard('Creative Generator', 'Active', 'generating 3 creatives', 'fa-wand-magic-sparkles', 'purple')}
         ${aiStatusCard('Budget Allocator', '$12,450', 'managed today', 'fa-dollar-sign', 'emerald')}
         ${aiStatusCard('Audience Predictor', '87.6%', 'CTR prediction accuracy', 'fa-bullseye', 'amber')}
       </div>
       <div class="glass rounded-xl p-4">
-        <div class="text-sm font-semibold text-slate-300 mb-3">AI Activity Log</div>
+        <div class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">Activité Récente</div>
         <div class="space-y-2 text-xs">
-          ${aiLogEntry('Scaled "Summer Sale" campaign budget by 10% — ROAS improved to 4.2x', 'brand', '2 min ago')}
-          ${aiLogEntry('Killed 2 underperforming creatives (CTR < 0.8%) in TikTok campaign', 'red', '8 min ago')}
-          ${aiLogEntry('Generated 4 new UGC video variants for "Product Launch" campaign', 'purple', '15 min ago')}
-          ${aiLogEntry('Detected audience saturation — expanding lookalike to 3%', 'amber', '23 min ago')}
-          ${aiLogEntry('Reallocated $500 from Facebook to Google — predicted +18% ROAS', 'emerald', '31 min ago')}
+          ${aiLogEntry('Scaled "Summer Sale" budget +10% — ROAS improved to 4.2x', 'brand', '2 min')}
+          ${aiLogEntry('Killed 2 underperforming creatives (CTR < 0.8%) in TikTok', 'red', '8 min')}
+          ${aiLogEntry('Generated 4 new UGC video variants for "Product Launch"', 'purple', '15 min')}
+          ${aiLogEntry('Detected audience saturation — expanding lookalike to 3%', 'amber', '23 min')}
+          ${aiLogEntry('Reallocated $500 Facebook → Google — predicted +18% ROAS', 'emerald', '31 min')}
         </div>
       </div>
     </div>
   </div>
 
   <!-- Tenant Menu -->
-  <div id="tenant-menu" class="hidden fixed left-4 top-36 w-60 glass border border-white/10 rounded-xl shadow-2xl z-50">
-    <div class="p-3 border-b border-white/10">
-      <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Switch Workspace</div>
-    </div>
-    <div class="p-2 space-y-1">
-      ${tenantItem('Acme Corp', 'A', 'from-brand-500 to-purple-600', true)}
-      ${tenantItem('TechStart Inc', 'T', 'from-emerald-500 to-teal-600', false)}
-      ${tenantItem('Fashion Brand', 'F', 'from-pink-500 to-rose-600', false)}
-      <div class="border-t border-white/10 mt-2 pt-2">
-        <button class="w-full text-left px-3 py-2 text-xs text-slate-400 hover:text-slate-200 flex items-center gap-2 hover:bg-white/5 rounded-lg">
-          <i class="fas fa-plus text-brand-400"></i> Create New Workspace
+  <div id="tenant-menu" class="hidden fixed left-4 z-50" style="top: 88px;">
+    <div class="w-60 glass border border-white/10 rounded-xl shadow-2xl">
+      <div class="p-3 border-b border-white/10">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Switch Workspace</div>
+      </div>
+      <div class="p-2 space-y-1">
+        <button onclick="switchTenant('Acme Corp','A','from-brand-500 to-purple-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all bg-brand-500/10">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">A</div>
+          <span class="text-sm text-slate-300 font-medium">Acme Corp</span>
+          <i class="fas fa-check text-brand-400 text-xs ml-auto"></i>
         </button>
+        <button onclick="switchTenant('TechStart Inc','T','from-emerald-500 to-teal-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold text-white">T</div>
+          <span class="text-sm text-slate-300 font-medium">TechStart Inc</span>
+        </button>
+        <button onclick="switchTenant('Fashion Brand','F','from-pink-500 to-rose-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-xs font-bold text-white">F</div>
+          <span class="text-sm text-slate-300 font-medium">Fashion Brand</span>
+        </button>
+        <div class="border-t border-white/10 mt-2 pt-2">
+          <button class="w-full text-left px-3 py-2 text-xs text-brand-400 hover:text-brand-300 flex items-center gap-2 hover:bg-white/5 rounded-lg transition-all">
+            <i class="fas fa-plus"></i> Create New Workspace
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    // ─── User info from localStorage ───────────────────────────────────────
+    (function() {
+      try {
+        const u = JSON.parse(localStorage.getItem('adnova_user') || '{}');
+        if (u.name) {
+          document.getElementById('user-name').textContent = u.name;
+          document.getElementById('user-avatar').textContent = u.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+        }
+        if (u.email) document.getElementById('user-email').textContent = u.email;
+        if (u.company) {
+          document.getElementById('tenant-name').textContent = u.company;
+          document.getElementById('tenant-abbr').textContent = u.company[0].toUpperCase();
+        }
+      } catch(e) {}
+    })();
+
+    // ─── Logout ────────────────────────────────────────────────────────────
+    function handleLogout() {
+      if (confirm('Déconnecter votre session ?')) {
+        localStorage.removeItem('adnova_token');
+        localStorage.removeItem('adnova_user');
+        fetch('/api/auth/logout', { method: 'POST' }).catch(()=>{});
+        window.location.href = '/login';
+      }
+    }
+
+    // ─── Notifications ─────────────────────────────────────────────────────
     function toggleNotifications() {
       const p = document.getElementById('notifications-panel');
       p.classList.toggle('hidden');
+      document.getElementById('notif-badge').classList.add('hidden');
     }
-    function showAIStatus() {
-      document.getElementById('ai-status-modal').classList.remove('hidden');
+    function markAllRead() {
+      document.getElementById('notif-badge').classList.add('hidden');
+      document.querySelectorAll('#notif-list .unread-dot').forEach(d => d.remove());
+      toggleNotifications();
     }
-    function closeAIStatus() {
-      document.getElementById('ai-status-modal').classList.add('hidden');
+
+    // ─── AI Status Modal ────────────────────────────────────────────────────
+    function showAIStatus() { document.getElementById('ai-status-modal').classList.remove('hidden'); }
+    function closeAIStatus(e) {
+      if (!e || e.target === document.getElementById('ai-status-modal')) {
+        document.getElementById('ai-status-modal').classList.add('hidden');
+      }
     }
+
+    // ─── Tenant Menu ────────────────────────────────────────────────────────
     function toggleTenantMenu() {
-      const m = document.getElementById('tenant-menu');
-      m.classList.toggle('hidden');
+      document.getElementById('tenant-menu').classList.toggle('hidden');
     }
+    function switchTenant(name, abbr, gradient) {
+      document.getElementById('tenant-name').textContent = name;
+      document.getElementById('tenant-abbr').textContent = abbr;
+      document.getElementById('tenant-menu').classList.add('hidden');
+      try {
+        const u = JSON.parse(localStorage.getItem('adnova_user') || '{}');
+        u.company = name;
+        localStorage.setItem('adnova_user', JSON.stringify(u));
+      } catch(e){}
+    }
+
+    // ─── Mobile Sidebar ─────────────────────────────────────────────────────
+    function openSidebar() {
+      document.getElementById('main-sidebar').classList.add('open');
+      document.getElementById('sidebar-overlay').classList.add('show');
+    }
+    function closeSidebar() {
+      document.getElementById('main-sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('show');
+    }
+
+    // ─── Close menus on outside click ────────────────────────────────────────
     document.addEventListener('click', function(e) {
-      if (!e.target.closest('#tenant-menu') && !e.target.closest('button[onclick="toggleTenantMenu()"]')) {
-        document.getElementById('tenant-menu')?.classList.add('hidden');
+      const tMenu = document.getElementById('tenant-menu');
+      const tBtn = document.getElementById('tenant-btn');
+      if (!tMenu.classList.contains('hidden') && !tMenu.contains(e.target) && !tBtn.contains(e.target)) {
+        tMenu.classList.add('hidden');
+      }
+      const nPanel = document.getElementById('notifications-panel');
+      const nBtn = document.getElementById('notif-btn');
+      if (!nPanel.classList.contains('hidden') && !nPanel.contains(e.target) && !nBtn.contains(e.target)) {
+        nPanel.classList.add('hidden');
       }
     });
-    // Auto-refresh metrics every 30s
-    let refreshInterval = setInterval(() => {
-      if (window.refreshMetrics) window.refreshMetrics();
+
+    // ─── Auto-refresh every 30s ─────────────────────────────────────────────
+    setInterval(() => {
+      if (typeof window.refreshMetrics === 'function') window.refreshMetrics();
     }, 30000);
   </script>
 </body>
@@ -319,31 +375,34 @@ export function shell(title: string, content: string, activePage: string = ''): 
 }
 
 function navLink(href: string, icon: string, label: string, active: string): string {
-  const isActive = active === href || (href !== '/' && active.startsWith(href))
-  return `<a href="${href}" class="sidebar-link ${isActive ? 'active' : ''} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400">
-    <i class="fas ${icon} w-4 text-center ${isActive ? 'text-brand-400' : ''}"></i>
-    ${label}
-    ${href === '/campaigns' ? '<span class="ml-auto text-xs bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded-full">47</span>' : ''}
-    ${href === '/ai-engine' ? '<span class="ml-auto text-xs bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full blink">Live</span>' : ''}
+  const isActive = active === href
+  const badges: Record<string, string> = {
+    '/campaigns': '<span class="ml-auto text-xs bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded-full font-semibold">47</span>',
+    '/ai-engine': '<span class="ml-auto text-xs bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full blink font-semibold">Live</span>',
+  }
+  return `<a href="${href}" class="sidebar-link ${isActive ? 'active' : ''} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500">
+    <i class="fas ${icon} w-4 text-center flex-shrink-0 ${isActive ? 'text-brand-400' : 'text-slate-600'}"></i>
+    <span class="flex-1">${label}</span>
+    ${badges[href] || ''}
   </a>`
 }
 
 function notificationsHTML(): string {
   const items = [
-    { icon: 'fa-arrow-trend-up', color: 'emerald', text: 'Campaign "Summer Sale" scaled +10% — ROAS 4.2x', time: '2m ago' },
-    { icon: 'fa-triangle-exclamation', color: 'amber', text: 'Budget warning: Google Ads at 85% daily limit', time: '15m ago' },
-    { icon: 'fa-scissors', color: 'red', text: '3 creatives paused — CTR below threshold (0.8%)', time: '32m ago' },
-    { icon: 'fa-sparkles', color: 'purple', text: 'AI generated 6 new video creatives ready for review', time: '1h ago' },
-    { icon: 'fa-users', color: 'blue', text: 'New lookalike audience built: 2.3M potential reach', time: '2h ago' },
+    { icon: 'fa-arrow-trend-up', color: 'emerald', text: 'Campaign "Summer Sale" scaled +10% — ROAS 4.2x', time: '2 min' },
+    { icon: 'fa-triangle-exclamation', color: 'amber', text: 'Budget warning: Google Ads at 85% daily limit', time: '15 min' },
+    { icon: 'fa-scissors', color: 'red', text: '3 creatives paused — CTR below 0.8% threshold', time: '32 min' },
+    { icon: 'fa-wand-magic-sparkles', color: 'purple', text: 'AI generated 6 new video creatives ready', time: '1h' },
+    { icon: 'fa-users', color: 'blue', text: 'New lookalike audience: 2.3M potential reach', time: '2h' },
   ]
   return items.map(i => `
-    <div class="flex items-start gap-3 p-3 glass rounded-lg hover:bg-white/5 cursor-pointer transition-all">
-      <div class="w-8 h-8 rounded-lg bg-${i.color}-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+    <div class="flex items-start gap-3 p-3 glass rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+      <div class="w-7 h-7 rounded-lg bg-${i.color}-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
         <i class="fas ${i.icon} text-${i.color}-400 text-xs"></i>
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-xs text-slate-300 leading-relaxed">${i.text}</p>
-        <p class="text-xs text-slate-600 mt-1">${i.time}</p>
+        <p class="text-xs text-slate-600 mt-0.5">${i.time}</p>
       </div>
     </div>`).join('')
 }
@@ -355,22 +414,14 @@ function aiStatusCard(title: string, value: string, sub: string, icon: string, c
       <span class="text-xs text-slate-500">${title}</span>
     </div>
     <div class="text-xl font-bold text-white">${value}</div>
-    <div class="text-xs text-slate-500">${sub}</div>
+    <div class="text-xs text-slate-500 mt-0.5">${sub}</div>
   </div>`
 }
 
 function aiLogEntry(text: string, color: string, time: string): string {
   return `<div class="flex items-start gap-2 py-1.5 border-b border-white/5">
     <div class="w-1.5 h-1.5 rounded-full bg-${color}-400 mt-1.5 flex-shrink-0"></div>
-    <p class="flex-1 text-slate-400">${text}</p>
-    <span class="text-slate-600 flex-shrink-0">${time}</span>
+    <p class="flex-1 text-slate-400 text-xs">${text}</p>
+    <span class="text-slate-600 text-xs flex-shrink-0">${time}</span>
   </div>`
-}
-
-function tenantItem(name: string, abbr: string, gradient: string, active: boolean): string {
-  return `<button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all ${active ? 'bg-brand-500/10' : ''}">
-    <div class="w-7 h-7 rounded-md bg-gradient-to-br ${gradient} flex items-center justify-center text-xs font-bold text-white">${abbr}</div>
-    <span class="text-sm text-slate-300 font-medium">${name}</span>
-    ${active ? '<i class="fas fa-check text-brand-400 text-xs ml-auto"></i>' : ''}
-  </button>`
 }
