@@ -692,149 +692,196 @@ export const renderLanding = (c: Context) => {
 </nav>
 
 <!-- ════════════════════════════════════════════════════════════
-     HERO
+     HERO — 2-column layout (image 2 design)
 ════════════════════════════════════════════════════════════ -->
-<section class="grid-lines min-h-screen flex items-center justify-center relative overflow-hidden pt-[68px]" id="hero">
+<section class="grid-lines min-h-screen flex items-center relative overflow-hidden pt-[68px]" id="hero">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
   <div class="orb orb-4"></div>
+  <!-- Extra orb behind right column -->
+  <div class="orb" style="width:650px;height:650px;background:radial-gradient(circle,rgba(99,102,241,0.18) 0%,rgba(168,85,247,0.1) 40%,transparent 70%);top:10%;right:-100px;filter:blur(90px);animation:orb-float 12s ease-in-out infinite 2s"></div>
 
-  <div class="orbit-ring" style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(15deg);opacity:0.25"></div>
-  <div class="orbit-ring" style="width:1100px;height:1100px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-8deg);opacity:0.1"></div>
+  <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/20 to-transparent scanline pointer-events-none"></div>
 
-  <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/30 to-transparent scanline pointer-events-none"></div>
+  <div class="max-w-7xl mx-auto px-5 md:px-10 py-10 md:py-16 relative z-10 w-full">
 
-  <div class="max-w-7xl mx-auto px-5 md:px-8 py-10 md:py-14 text-center relative z-10">
+    <!-- ─ 2-column grid ─ -->
+    <div class="grid grid-cols-1 lg:grid-cols-[44%_56%] gap-8 xl:gap-12 items-center">
 
-    <!-- Status badge -->
-    <div class="inline-flex items-center gap-3 glass-neo px-6 py-3 rounded-full mb-6 fade-up cursor-default border-glow" id="hero-badge">
-      <div class="relative">
-        <div class="ai-dot blink"></div>
-        <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
-      </div>
-      <span class="text-xs font-bold text-slate-300 tracking-wide">AI Engine v2.0 — Live across 2,412 brands</span>
-      <div class="h-3 w-px bg-white/15"></div>
-      <span class="text-xs bg-gradient-to-r from-brand-500/30 to-purple-500/30 text-brand-300 px-3 py-1 rounded-full font-black border border-brand-500/25">94.2% accuracy</span>
-    </div>
+      <!-- ══ LEFT COLUMN — marketing copy ══ -->
+      <div class="flex flex-col items-start fade-up">
 
-    <!-- Headline -->
-    <div class="fade-up mb-5">
-      <h1 class="font-black leading-[1.0] tracking-tight" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(48px,8.5vw,108px)">
-        <span class="text-white block">Your ads, on</span>
-        <span class="hero-text block mt-2">full autopilot.</span>
-      </h1>
-    </div>
-
-    <!-- Sub headline — concret, pas de marketing vague -->
-    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-3 leading-relaxed fade-up" style="font-weight:300">
-      AdNova AI watches your campaigns <strong class="text-slate-200 font-semibold">every 15 minutes</strong>, scales winners +10% when ROAS &gt; 3.5×, kills creatives with CTR &lt; 0.8%, and generates replacements — <em class="text-slate-300">automatically.</em>
-    </p>
-
-    <!-- Proof points inline -->
-    <div class="flex flex-wrap items-center justify-center gap-3 mb-8 fade-up">
-      <span class="flex items-center gap-2 text-xs text-slate-400 glass px-4 py-2 rounded-full">
-        <i class="fas fa-check-circle text-emerald-400"></i> Avg ROAS boost: <strong class="text-white ml-1">+128%</strong>
-      </span>
-      <span class="flex items-center gap-2 text-xs text-slate-400 glass px-4 py-2 rounded-full">
-        <i class="fas fa-check-circle text-emerald-400"></i> Time saved: <strong class="text-white ml-1">18h/week</strong>
-      </span>
-      <span class="flex items-center gap-2 text-xs text-slate-400 glass px-4 py-2 rounded-full">
-        <i class="fas fa-check-circle text-emerald-400"></i> Wasted spend eliminated: <strong class="text-white ml-1">-73%</strong>
-      </span>
-    </div>
-
-    <!-- CTA row -->
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 fade-up">
-      <a href="/register" class="btn-primary text-white font-black px-10 rounded-2xl text-base flex items-center gap-3 w-full sm:w-auto justify-center group relative overflow-hidden ripple-btn" style="padding-top:18px;padding-bottom:18px;min-width:240px" onclick="trackEvent('hero_cta_primary')">
-        <i class="fas fa-rocket text-sm group-hover:translate-x-1 transition-transform"></i>
-        Start Free — No credit card
-        <i class="fas fa-arrow-right text-xs opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1"></i>
-      </a>
-      <a href="#demo" class="btn-ghost text-slate-300 font-semibold px-8 py-4 rounded-2xl text-base flex items-center gap-3 w-full sm:w-auto justify-center group" style="min-width:200px" onclick="trackEvent('hero_cta_demo')">
-        <div class="w-8 h-8 rounded-lg bg-brand-500/20 flex items-center justify-center group-hover:bg-brand-500/35 transition-colors">
-          <i class="fas fa-play text-brand-400 text-xs"></i>
-        </div>
-        Watch 90s Demo
-      </a>
-    </div>
-
-    <!-- Live stats bar -->
-    <div class="glass-neo inline-flex items-center gap-0 rounded-2xl py-3 px-5 mb-8 fade-up max-w-full overflow-hidden">
-      <div class="flex items-center gap-2 flex-shrink-0 mr-5 border-r border-white/10 pr-5">
-        <div class="relative"><div class="ai-dot blink"></div><div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-40"></div></div>
-        <span class="text-xs font-black text-emerald-400 tracking-widest">LIVE</span>
-      </div>
-      <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
-        <div class="flex items-center gap-2"><i class="fas fa-brain text-brand-400"></i><span class="font-black text-slate-200" id="live-decisions">12,847</span><span class="text-slate-500">AI decisions today</span></div>
-        <span class="text-white/10 hidden sm:block">|</span>
-        <div class="hidden sm:flex items-center gap-2"><i class="fas fa-chart-line text-purple-400"></i><span class="font-black text-purple-400">4.82x</span><span class="text-slate-500">avg ROAS</span></div>
-        <span class="text-white/10 hidden md:block">|</span>
-        <div class="hidden md:flex items-center gap-2"><i class="fas fa-dollar-sign text-emerald-400"></i><span class="font-black text-emerald-400">$601K</span><span class="text-slate-500">revenue today</span></div>
-        <span class="text-white/10 hidden lg:block">|</span>
-        <div class="hidden lg:flex items-center gap-2"><i class="fas fa-users text-cyan-400"></i><span class="font-black text-cyan-400">2,412</span><span class="text-slate-500">active brands</span></div>
-      </div>
-    </div>
-
-    <!-- Hero dashboard mock (animated) -->
-    <div class="demo-screen max-w-5xl mx-auto fade-up float relative" id="hero-dashboard">
-      <div class="screen-shimmer"></div>
-      <!-- Browser chrome -->
-      <div class="px-5 py-3 flex items-center gap-3 border-b border-white/[0.06]" style="background:linear-gradient(180deg,rgba(4,8,24,0.9),rgba(4,8,22,0.85));backdrop-filter:blur(10px)">
-        <div class="flex gap-1.5">
-          <div class="w-3 h-3 rounded-full bg-red-500/70 hover:bg-red-500 transition-colors cursor-pointer"></div>
-          <div class="w-3 h-3 rounded-full bg-amber-500/70 hover:bg-amber-500 transition-colors cursor-pointer"></div>
-          <div class="w-3 h-3 rounded-full bg-emerald-500/70 hover:bg-emerald-500 transition-colors cursor-pointer"></div>
-        </div>
-        <div class="flex-1 rounded-lg h-6 flex items-center px-3 gap-2 max-w-xs mx-auto" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
-          <i class="fas fa-lock text-emerald-500/60 text-xs"></i>
-          <span class="text-xs text-slate-500">app.adnova.ai/dashboard</span>
-        </div>
-        <div class="hidden sm:flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-emerald-400 blink"></div>
-          <span class="text-xs text-slate-600">Live</span>
-        </div>
-      </div>
-      <!-- Dashboard UI -->
-      <div class="p-4 md:p-5" style="background:rgba(2,4,18,0.6)">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-          ${heroKPI('$124,850', 'Ad Spend', '+18.4%', 'fa-dollar-sign', 'from-brand-500 to-purple-600', true)}
-          ${heroKPI('4.82x', 'Blended ROAS', '+0.6x', 'fa-chart-line', 'from-emerald-500 to-teal-600', true)}
-          ${heroKPI('47', 'Campaigns Active', '12 scaling ↑', 'fa-bullhorn', 'from-blue-500 to-cyan-600', false)}
-          ${heroKPI('8,294', 'Conversions', '+22.1%', 'fa-check-circle', 'from-amber-500 to-orange-600', true)}
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div class="rounded-xl p-3 border border-white/[0.06]" style="background:rgba(255,255,255,0.02)">
-            <div class="text-xs font-semibold text-slate-500 mb-2 flex items-center gap-2"><i class="fas fa-plug text-brand-400"></i> Platform ROAS</div>
-            <div class="space-y-2">
-              ${heroPlatformBar('Facebook', '#1877F2', 34, '$42.3K', '4.1x')}
-              ${heroPlatformBar('Google', '#4285F4', 28, '$35.1K', '5.2x')}
-              ${heroPlatformBar('TikTok', '#ff0050', 20, '$25.2K', '4.6x')}
-              ${heroPlatformBar('Instagram', '#E1306C', 12, '$15.4K', '3.8x')}
-            </div>
+        <!-- Status badge -->
+        <div class="inline-flex items-center gap-3 glass-neo px-5 py-2.5 rounded-full mb-7 cursor-default border-glow" id="hero-badge">
+          <div class="relative flex-shrink-0">
+            <div class="ai-dot blink"></div>
+            <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
           </div>
-          <div class="rounded-xl p-3 border border-white/[0.06]" style="background:rgba(255,255,255,0.02)">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-semibold text-slate-500 flex items-center gap-2"><i class="fas fa-brain text-brand-400"></i> AI Activity</span>
-              <span class="text-xs px-2 py-0.5 rounded-full font-black flex items-center gap-1" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.2)"><span class="ai-dot blink" style="width:5px;height:5px"></span> LIVE</span>
+          <span class="text-xs font-bold text-slate-300 tracking-wide">AI Engine v2.0 — Live · 2,412 brands</span>
+          <span class="text-xs bg-gradient-to-r from-brand-500/30 to-purple-500/30 text-brand-300 px-2.5 py-1 rounded-full font-black border border-brand-500/25 flex-shrink-0">94.2% acc.</span>
+        </div>
+
+        <!-- Headline — left aligned, large -->
+        <h1 class="font-black leading-[1.0] tracking-tight mb-5 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(44px,5.5vw,86px)">
+          <span class="text-white block">Your ads, on</span>
+          <span class="hero-text block mt-1">full autopilot.</span>
+        </h1>
+
+        <!-- Sub headline -->
+        <p class="text-base md:text-lg text-slate-400 mb-6 leading-relaxed text-left" style="font-weight:300;max-width:460px">
+          AdNova AI watches your campaigns <strong class="text-slate-200 font-semibold">every 15 minutes</strong>, scales winners +10% when ROAS &gt; 3.5×, kills creatives with CTR &lt; 0.8%, and generates replacements — <em class="text-slate-300">automatically.</em>
+        </p>
+
+        <!-- Proof point chips — horizontal row -->
+        <div class="flex flex-wrap items-center gap-2 mb-7">
+          <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3.5 py-2 rounded-full">
+            <i class="fas fa-check-circle text-emerald-400 text-xs"></i> ROAS boost: <strong class="text-white ml-1">+128%</strong>
+          </span>
+          <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3.5 py-2 rounded-full">
+            <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Time saved: <strong class="text-white ml-1">18h/week</strong>
+          </span>
+          <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3.5 py-2 rounded-full">
+            <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Waste: <strong class="text-white ml-1">-73%</strong>
+          </span>
+        </div>
+
+        <!-- CTA buttons — horizontal -->
+        <div class="flex flex-col sm:flex-row items-start gap-3 mb-8">
+          <a href="/register" class="btn-primary text-white font-black px-8 rounded-2xl text-base flex items-center gap-3 group relative overflow-hidden ripple-btn" style="padding-top:17px;padding-bottom:17px" onclick="trackEvent('hero_cta_primary')">
+            <i class="fas fa-rocket text-sm group-hover:rotate-12 transition-transform"></i>
+            Start Free — No credit card
+          </a>
+          <a href="#demo" class="btn-ghost text-slate-300 font-semibold px-6 py-4 rounded-2xl text-base flex items-center gap-3 group" onclick="trackEvent('hero_cta_demo')">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center group-hover:bg-brand-500/35 transition-colors" style="background:rgba(99,102,241,0.18)">
+              <i class="fas fa-play text-brand-400 text-xs ml-0.5"></i>
             </div>
-            <div class="space-y-2" id="hero-ai-feed">
-              ${heroFeedItem('arrow-trend-up', '#10b981', '"Summer Collection" scaled +10% — ROAS 5.2x', '2m ago')}
-              ${heroFeedItem('scissors', '#ef4444', 'Killed 2 TikTok creatives — CTR 0.3%', '8m ago')}
-              ${heroFeedItem('wand-magic-sparkles', '#a855f7', 'Generated 4 UGC variants for "Product Launch"', '15m ago')}
-              ${heroFeedItem('users', '#06b6d4', 'Expanded lookalike — +1.8M reach added', '31m ago')}
+            Watch 90s Demo
+          </a>
+        </div>
+
+        <!-- Trust micro-line -->
+        <div class="flex items-center gap-4 text-xs text-slate-600 flex-wrap">
+          <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-emerald-600"></i> No credit card</span>
+          <span class="flex items-center gap-1.5"><i class="fas fa-rotate-left text-slate-600"></i> Cancel anytime</span>
+          <span class="flex items-center gap-1.5"><i class="fas fa-lock text-slate-600"></i> SOC2 · GDPR</span>
+        </div>
+
+        <!-- Scroll indicator — desktop only -->
+        <div class="hidden lg:flex mt-10 scroll-indicator flex-col items-start gap-2 opacity-30">
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center pt-1.5">
+              <div class="w-1 h-2 rounded-full bg-brand-400/60" style="animation:float 1.8s ease-in-out infinite"></div>
             </div>
+            <span class="text-xs text-slate-600 tracking-wider uppercase">Scroll to explore</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="mt-6 scroll-indicator flex flex-col items-center gap-2 opacity-35">
-      <span class="text-xs text-slate-600 tracking-wider uppercase">Scroll to explore</span>
-      <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center pt-1.5">
-        <div class="w-1 h-2 rounded-full bg-brand-400/60" style="animation:float 1.8s ease-in-out infinite"></div>
-      </div>
-    </div>
+      <!-- ══ RIGHT COLUMN — live stats bar + dashboard mock ══ -->
+      <div class="flex flex-col gap-3 fade-up" style="transition-delay:.15s">
+
+        <!-- Live stats pill — floats above the dashboard -->
+        <div class="glass-neo flex items-center gap-0 rounded-2xl py-2.5 px-4 overflow-hidden self-stretch" id="hero-live-bar">
+          <div class="flex items-center gap-2 flex-shrink-0 mr-4 border-r border-white/10 pr-4">
+            <div class="relative">
+              <div class="ai-dot blink"></div>
+              <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-40"></div>
+            </div>
+            <span class="text-xs font-black text-emerald-400 tracking-widest">LIVE</span>
+          </div>
+          <div class="flex items-center gap-x-4 gap-y-1.5 text-xs flex-wrap">
+            <div class="flex items-center gap-1.5">
+              <i class="fas fa-brain text-brand-400 text-xs"></i>
+              <span class="font-black text-slate-200" id="live-decisions">12,847</span>
+              <span class="text-slate-500">AI decisions today</span>
+            </div>
+            <span class="text-white/10 hidden sm:block">|</span>
+            <div class="hidden sm:flex items-center gap-1.5">
+              <i class="fas fa-chart-line text-purple-400 text-xs"></i>
+              <span class="font-black text-purple-400">4.82x</span>
+              <span class="text-slate-500">avg ROAS</span>
+            </div>
+            <span class="text-white/10 hidden md:block">|</span>
+            <div class="hidden md:flex items-center gap-1.5">
+              <i class="fas fa-dollar-sign text-emerald-400 text-xs"></i>
+              <span class="font-black text-emerald-400">$601K</span>
+              <span class="text-slate-500">revenue today</span>
+            </div>
+            <span class="text-white/10 hidden lg:block">|</span>
+            <div class="hidden lg:flex items-center gap-1.5">
+              <i class="fas fa-users text-cyan-400 text-xs"></i>
+              <span class="font-black text-cyan-400">2,412</span>
+              <span class="text-slate-500">active brands</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard mock -->
+        <div class="demo-screen relative" id="hero-dashboard">
+          <div class="screen-shimmer"></div>
+
+          <!-- Browser chrome -->
+          <div class="px-4 py-2.5 flex items-center gap-3 border-b border-white/[0.06]" style="background:linear-gradient(180deg,rgba(4,8,24,0.92),rgba(4,8,22,0.85));backdrop-filter:blur(10px)">
+            <div class="flex gap-1.5">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-500/70 hover:bg-red-500 transition-colors cursor-pointer"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-amber-500/70 hover:bg-amber-500 transition-colors cursor-pointer"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 hover:bg-emerald-500 transition-colors cursor-pointer"></div>
+            </div>
+            <div class="flex-1 rounded-md h-5 flex items-center px-2.5 gap-1.5 max-w-[200px] mx-auto" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
+              <i class="fas fa-lock text-emerald-500/60 text-[10px]"></i>
+              <span class="text-[10px] text-slate-500">app.adnova.ai/dashboard</span>
+            </div>
+            <div class="flex items-center gap-1.5 ml-auto">
+              <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink"></div>
+              <span class="text-[10px] text-slate-600">Live</span>
+            </div>
+          </div>
+
+          <!-- Dashboard content -->
+          <div class="p-3 md:p-4" style="background:rgba(2,4,18,0.65)">
+            <!-- 4 KPI cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+              ${heroKPI('$124,850', 'Ad Spend', '+18.4%', 'fa-dollar-sign', 'from-brand-500 to-purple-600', true)}
+              ${heroKPI('4.82x', 'Blended ROAS', '+0.6x', 'fa-chart-line', 'from-emerald-500 to-teal-600', true)}
+              ${heroKPI('47', 'Campaigns Active', '12 scaling ↑', 'fa-bullhorn', 'from-blue-500 to-cyan-600', false)}
+              ${heroKPI('8,294', 'Conversions', '+22.1%', 'fa-check-circle', 'from-amber-500 to-orange-600', true)}
+            </div>
+            <!-- Platform ROAS + AI Activity -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.018)">
+                <div class="text-xs font-semibold text-slate-500 mb-2 flex items-center gap-2">
+                  <i class="fas fa-plug text-brand-400 text-xs"></i> Platform ROAS
+                </div>
+                <div class="space-y-2">
+                  ${heroPlatformBar('Facebook', '#1877F2', 34, '$42.3K', '4.1x')}
+                  ${heroPlatformBar('Google', '#4285F4', 28, '$35.1K', '5.2x')}
+                  ${heroPlatformBar('TikTok', '#ff0050', 20, '$25.2K', '4.6x')}
+                  ${heroPlatformBar('Instagram', '#E1306C', 12, '$15.4K', '3.8x')}
+                </div>
+              </div>
+              <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.018)">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-semibold text-slate-500 flex items-center gap-2">
+                    <i class="fas fa-brain text-brand-400 text-xs"></i> AI Activity
+                  </span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded-full font-black flex items-center gap-1" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.2)">
+                    <span class="ai-dot blink" style="width:4px;height:4px"></span> LIVE
+                  </span>
+                </div>
+                <div class="space-y-1.5" id="hero-ai-feed">
+                  ${heroFeedItem('arrow-trend-up', '#10b981', '"Summer Collection" scaled +10% — ROAS 5.2x', '2m ago')}
+                  ${heroFeedItem('scissors', '#ef4444', 'Killed 2 TikTok creatives — CTR 0.3%', '8m ago')}
+                  ${heroFeedItem('wand-magic-sparkles', '#a855f7', 'Generated 4 UGC variants for "Product Launch"', '15m ago')}
+                  ${heroFeedItem('users', '#06b6d4', 'Expanded lookalike — +1.8M reach added', '31m ago')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /dashboard -->
+
+      </div><!-- /right column -->
+    </div><!-- /2-col grid -->
   </div>
 </section>
 
