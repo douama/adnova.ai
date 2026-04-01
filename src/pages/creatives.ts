@@ -765,7 +765,34 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
     }
 
     function exportCreative(format) {
-      showCrToast('📥 Exporting as ' + format.toUpperCase() + '... (In production: html2canvas → download)');
+      const name = document.getElementById('creative-name')?.value || 'adnova-creative';
+      const canvas = document.getElementById('ad-canvas');
+      if (!canvas) { showCrToast('No canvas to export', 'error'); return; }
+      showCrToast('⏳ Exporting "' + name + '" as ' + format.toUpperCase() + '...', 'info');
+      // SVG/HTML export (fallback for demo — production uses html2canvas)
+      setTimeout(() => {
+        const w = parseInt(canvas.style.width) || 400;
+        const h = parseInt(canvas.style.height) || 400;
+        const bg = canvas.style.background || '#1a1a2e';
+        // Build SVG with elements
+        const elements = canvas.querySelectorAll('.canvas-el');
+        let svgContent = '';
+        elements.forEach(el => {
+          const left = parseInt(el.style.left) || 0;
+          const top = parseInt(el.style.top) || 0;
+          const text = el.textContent.trim();
+          const fontSize = parseInt(el.style.fontSize) || 16;
+          const color = el.style.color || '#ffffff';
+          if (text) svgContent += '<text x="' + (left+w/2) + '" y="' + (top+fontSize) + '" font-size="' + fontSize + '" fill="' + color + '" text-anchor="middle">' + text + '</text>';
+        });
+        const svg = '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '"><rect width="' + w + '" height="' + h + '" fill="' + bg.replace(/linear-gradient[^)]+\)/,'#1a1a2e') + '"/>' + svgContent + '</svg>';
+        const blob = new Blob([svg], {type:'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = name + '.' + (format === 'png' ? 'svg' : format);
+        a.click(); URL.revokeObjectURL(url);
+        showCrToast('✓ "' + name + '" exporté en ' + format.toUpperCase() + '!', 'success');
+      }, 800);
     }
 
     // ── Build creative card HTML ───────────────────────────────────────────

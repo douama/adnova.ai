@@ -65,12 +65,15 @@ export const renderAdminRevenue = (c: Context) => {
   <div class="glass rounded-2xl p-5">
     <div class="flex items-center justify-between mb-4">
       <h3 class="font-bold text-white">Transactions Récentes</h3>
-      <button class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
+      <button onclick="exportStripe()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
         <i class="fas fa-download text-xs"></i> Export Stripe
+      </button>
+      <button onclick="exportRevCSV()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all ml-1">
+        <i class="fas fa-file-csv text-xs"></i> CSV
       </button>
     </div>
     <div class="space-y-2">
-      ${transaction('Digital Storm Agency', 'Growth', '$799.00', 'success', 'Aujourd\'hui 09:14')}
+      ${transaction('Digital Storm Agency', 'Growth', '$799.00', 'success', "Aujourd'hui 09:14")}
       ${transaction('NovaBrand Inc.', 'Starter', '$299.00', 'success', 'Hier 18:32')}
       ${transaction('Apex Marketing', 'Enterprise', '$2,800.00', 'success', '30 mar 2026')}
       ${transaction('Fashion Brand', 'Starter', '$299.00', 'failed', '29 mar 2026')}
@@ -79,6 +82,29 @@ export const renderAdminRevenue = (c: Context) => {
   </div>
 
   <script>
+  function exportStripe() {
+    showRevToast('⏳ Export Stripe en cours...', 'amber');
+    setTimeout(() => showRevToast('✓ Export Stripe téléchargé (derniers 30 jours)', 'emerald'), 1500);
+  }
+  function exportRevCSV() {
+    const rows = [['Client','Plan','Montant','Statut','Date']];
+    document.querySelectorAll('.transaction-row').forEach(row => {
+      const cells = [...row.querySelectorAll('[data-cell]')].map(c => c.textContent.trim());
+      rows.push(cells);
+    });
+    const csv = [['Client','Plan','Montant','Statut','Date'], ["Digital Storm Agency","Growth","$799.00","R\u00e9ussi","Aujourd'hui 09:14"], ['NovaBrand Inc.','Starter','$299.00','Réussi','Hier 18:32'], ['Apex Marketing','Enterprise','$2,800.00','Réussi','30 mar 2026'], ['Fashion Brand','Starter','$299.00','Échoué','29 mar 2026'], ['LuxoGroup','Growth','$799.00','Réussi','25 mar 2026']].map(r => r.join(',')).join('\n');
+    const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'revenue-' + new Date().toISOString().slice(0,10) + '.csv'; a.click();
+    showRevToast('✓ CSV téléchargé', 'emerald');
+  }
+  function showRevToast(msg, type = 'emerald') {
+    const colors = { emerald:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', amber:'bg-amber-500/20 border-amber-500/30 text-amber-300' };
+    const t = document.createElement('div');
+    t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl shadow-2xl ' + (colors[type]||colors.emerald);
+    t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 3500);
+  }
+  window.addEventListener('load', function() {
+  if (typeof Chart === 'undefined') return;
   new Chart(document.getElementById('revenueByPlanChart').getContext('2d'), {
     type: 'line',
     data: {
@@ -115,6 +141,7 @@ export const renderAdminRevenue = (c: Context) => {
       }
     }
   });
+  }); // end window.addEventListener load
   </script>
   `
   return c.html(adminShell('Revenus & MRR', content, '/admin/revenue'))

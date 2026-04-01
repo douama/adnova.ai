@@ -440,46 +440,75 @@ export function renderSettings(lang: Lang = 'en'): string {
     iconEl.className = 'w-10 h-10 rounded-xl flex items-center justify-center text-white bg-gradient-to-br ' + p.grad;
     iconEl.innerHTML = '<i class="' + p.icon + '"></i>';
     document.getElementById('modal-platform-content').innerHTML = \`
-      <div class="glass rounded-xl p-4 border border-\${p.connected ? 'emerald' : 'amber'}-500/20 flex items-center gap-3 mb-2">
-        <i class="fas fa-\${p.connected ? 'check-circle text-emerald-400' : 'triangle-exclamation text-amber-400'}"></i>
-        <span class="text-sm text-slate-300">\${p.connected ? 'Platform connected and active' : 'Not connected — enter credentials below'}</span>
-      </div>
-      <div>
-        <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Account / Advertiser ID</label>
-        <input id="cfg-account" value="\${p.accountId}" placeholder="e.g. act_1234567890" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
-      </div>
-      <div>
-        <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Access Token / API Key</label>
-        <div class="relative">
-          <input id="cfg-token" type="password" value="\${p.token || ''}" placeholder="Paste your access token..." class="w-full glass rounded-xl px-4 py-3 pr-12 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
-          <button onclick="this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password'" class="absolute right-3 top-3 text-slate-500 hover:text-slate-300">
-            <i class="fas fa-eye text-xs"></i>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 mt-1">Required scopes: \${p.scope}</p>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
+      <!-- Statut connexion -->
+      <div class="flex items-center gap-3 p-3.5 rounded-xl \${p.connected ? 'bg-emerald-500/8 border border-emerald-500/20' : 'bg-amber-500/8 border border-amber-500/20'}">
+        <i class="fas fa-\${p.connected ? 'check-circle text-emerald-400' : 'triangle-exclamation text-amber-400'} text-base"></i>
         <div>
-          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Default Daily Budget ($)</label>
-          <input id="cfg-budget" type="number" value="\${p.dailyBudget}" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
+          <div class="text-sm font-semibold \${p.connected ? 'text-emerald-300' : 'text-amber-300'}">\${p.connected ? 'Plateforme connectée et active' : 'Non connectée — renseignez vos identifiants'}</div>
+          <div class="text-xs \${p.connected ? 'text-emerald-600' : 'text-amber-600'} mt-0.5">Scopes requis: \${p.scope}</div>
+        </div>
+      </div>
+
+      <!-- Section Identifiants -->
+      <div class="glass rounded-xl p-4 border border-white/5 space-y-4">
+        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+          <i class="fas fa-id-card text-blue-400"></i> Identifiants API
+        </h4>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">
+            Account / Advertiser ID
+            <span class="text-slate-600 font-normal ml-1">(ex: act_1234567890)</span>
+          </label>
+          <input id="cfg-account" value="\${p.accountId}" placeholder="Collez votre identifiant de compte publicitaire..." class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent font-mono"/>
         </div>
         <div>
-          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Currency</label>
-          <select id="cfg-currency" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-300 outline-none border border-white/10 bg-transparent">
-            <option \${p.currency === 'USD' ? 'selected' : ''}>USD</option>
-            <option \${p.currency === 'EUR' ? 'selected' : ''}>EUR</option>
-            <option \${p.currency === 'GBP' ? 'selected' : ''}>GBP</option>
-          </select>
+          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">
+            Access Token / API Key
+            <span class="text-slate-600 font-normal ml-1">(masqué par défaut)</span>
+          </label>
+          <div class="relative">
+            <input id="cfg-token" type="password" value="\${p.token || ''}" placeholder="Collez votre token d'accès..." class="w-full glass rounded-xl px-4 py-3 pr-12 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent font-mono"/>
+            <button onclick="const i=this.previousElementSibling;i.type=i.type==='password'?'text':'password';this.querySelector('i').className='fas fa-'+(i.type==='password'?'eye':'eye-slash')+' text-xs'" class="absolute right-3 top-3.5 text-slate-500 hover:text-slate-300 transition-colors">
+              <i class="fas fa-eye text-xs"></i>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="flex gap-3 pt-2">
-        <button onclick="savePlatformConfig('\${id}')" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-          <i class="fas fa-save text-xs"></i> Save Configuration
+
+      <!-- Section Budget -->
+      <div class="glass rounded-xl p-4 border border-white/5">
+        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i class="fas fa-dollar-sign text-emerald-400"></i> Budget & Devise
+        </h4>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Budget journalier par défaut ($)</label>
+            <div class="relative">
+              <span class="absolute left-3 top-3.5 text-slate-500 text-sm">$</span>
+              <input id="cfg-budget" type="number" value="\${p.dailyBudget}" class="w-full glass rounded-xl pl-7 pr-4 py-3 text-sm text-slate-200 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Devise</label>
+            <select id="cfg-currency" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-300 outline-none border border-white/10 bg-transparent cursor-pointer">
+              <option \${p.currency==='USD'?'selected':''}>USD ($)</option>
+              <option \${p.currency==='EUR'?'selected':''}>EUR (€)</option>
+              <option \${p.currency==='GBP'?'selected':''}>GBP (£)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3 pt-1">
+        <button onclick="savePlatformConfig('\${id}')" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
+          <i class="fas fa-save text-xs"></i> Sauvegarder
         </button>
-        \${p.connected ? \`<button onclick="testPlatformConn('\${id}')" class="glass hover:bg-white/10 text-emerald-400 text-sm py-3 px-5 rounded-xl font-semibold transition-all">
-          <i class="fas fa-vial text-xs mr-1"></i> Test
-        </button>\` : ''}
-        \${p.connected ? \`<button onclick="disconnectPlatform('\${id}')" class="glass hover:bg-red-500/10 text-red-400 text-sm py-3 px-4 rounded-xl transition-all border border-red-500/20">
+        \${p.connected ? \`
+        <button onclick="testPlatformConn('\${id}')" class="glass hover:bg-emerald-500/10 text-emerald-400 text-sm py-3 px-5 rounded-xl font-semibold transition-all border border-emerald-500/20 flex items-center gap-1.5">
+          <i class="fas fa-vial text-xs"></i> Tester
+        </button>
+        <button onclick="disconnectPlatform('\${id}')" class="glass hover:bg-red-500/10 text-red-400 text-sm py-3 px-4 rounded-xl transition-all border border-red-500/20 flex items-center gap-1.5" title="Déconnecter">
           <i class="fas fa-unlink text-xs"></i>
         </button>\` : ''}
       </div>
@@ -523,6 +552,22 @@ export function renderSettings(lang: Lang = 'en'): string {
     fetch('/api/platforms/' + id + '/disconnect', { method: 'POST', headers: {'Authorization':'Bearer '+(localStorage.getItem('adnova_token')||'')} })
       .then(() => { closePlatformModal(); showToast(id + ' disconnected'); })
       .catch(() => { closePlatformModal(); showToast(id + ' disconnected'); });
+  }
+
+  // ── Team Member actions ───────────────────────────────────────────────────
+  function changeMemberRole(id, name, newRole) {
+    showToast(name + '\'s role changed to ' + newRole);
+    const select = document.querySelector('#member-' + id + ' select');
+    if (select) select.className = select.className.replace(/text-\w+-400/g, 'text-slate-300');
+    const roleColors = { Owner:'brand', Admin:'emerald', Editor:'blue', Viewer:'slate' };
+    const c = roleColors[newRole] || 'slate';
+    if (select) select.classList.add('text-' + c + '-400');
+  }
+  function removeMember(id, name) {
+    if (!confirm('Remove ' + name + ' from your team?')) return;
+    const el = document.getElementById('member-' + id);
+    if (el) { el.style.opacity='0'; el.style.transform='scale(0.95)'; el.style.transition='all 0.3s'; setTimeout(()=>el.remove(), 300); }
+    showToast(name + ' removed from team');
   }
 
   // ── Invite Modal ──────────────────────────────────────────────────────────
@@ -570,35 +615,66 @@ function settingsTab(id: string, icon: string, label: string, active: boolean): 
   </button>`
 }
 
-function platformSettingRow(p: {id:string;name:string;icon:string;grad:string;connected:boolean;accountId:string;dailyBudget:string}): string {
-  return `<div class="glass rounded-xl p-4 flex items-center gap-4" data-platform="${p.id}">
-    <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${p.grad} flex items-center justify-center flex-shrink-0">
-      <i class="${p.icon} text-white text-sm"></i>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center gap-2">
-        <span class="text-sm font-bold text-white">${p.name}</span>
-        <span class="status-badge ${p.connected ? 'badge-live' : 'badge-paused'} text-xs px-2 py-0.5 rounded-full font-semibold">${p.connected ? 'Connected' : 'Disconnected'}</span>
+function platformSettingRow(p: {id:string;name:string;icon:string;color:string;grad:string;connected:boolean;accountId:string;token:string;scope:string;dailyBudget:string;currency:string}): string {
+  return `<div class="glass rounded-xl border ${p.connected ? 'border-white/8' : 'border-amber-500/15'} overflow-hidden" data-platform="${p.id}">
+    <!-- Header plateforme -->
+    <div class="flex items-center gap-4 p-4">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${p.grad} flex items-center justify-center flex-shrink-0 shadow-lg">
+        <i class="${p.icon} text-white text-base"></i>
       </div>
-      <div class="text-xs text-slate-500 mt-0.5">${p.connected ? `ID: ${p.accountId} · Budget: $${p.dailyBudget}/day` : 'Not configured'}</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-sm font-bold text-white">${p.name}</span>
+          <span class="status-badge ${p.connected ? 'badge-live' : 'badge-paused'} text-xs px-2 py-0.5 rounded-full font-semibold">${p.connected ? '● Connected' : '○ Not connected'}</span>
+        </div>
+        ${p.connected ? `
+        <div class="flex items-center flex-wrap gap-x-4 gap-y-0.5 text-xs text-slate-500">
+          <span class="flex items-center gap-1"><i class="fas fa-fingerprint text-slate-600"></i> <span class="font-mono">${p.accountId}</span></span>
+          <span class="flex items-center gap-1"><i class="fas fa-dollar-sign text-emerald-600"></i> $${p.dailyBudget}/jour</span>
+          <span class="flex items-center gap-1"><i class="fas fa-lock text-slate-600"></i> ${p.token.replace(/[^*]/g, (c, i) => i < 4 ? c : '*').slice(0,12)}…</span>
+        </div>` : `<div class="text-xs text-amber-500/80 flex items-center gap-1.5"><i class="fas fa-triangle-exclamation"></i> Aucune configuration — connectez cette plateforme</div>`}
+      </div>
+      <button onclick="openPlatformConfig('${p.id}')" class="${p.connected ? 'glass hover:bg-brand-500/10 text-brand-400 border border-brand-500/20' : 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-400 border border-amber-500/30'} text-xs px-4 py-2.5 rounded-xl transition-all font-semibold flex items-center gap-1.5 flex-shrink-0">
+        <i class="fas fa-${p.connected ? 'sliders' : 'plug'} text-xs"></i>${p.connected ? 'Configurer' : 'Connecter'}
+      </button>
     </div>
-    <button onclick="openPlatformConfig('${p.id}')" class="glass hover:bg-brand-500/10 text-brand-400 text-xs px-4 py-2 rounded-lg transition-all border border-brand-500/20 font-semibold flex items-center gap-1.5 flex-shrink-0">
-      <i class="fas fa-${p.connected ? 'sliders' : 'plus'} text-xs"></i>${p.connected ? 'Configure' : 'Connect'}
-    </button>
+    ${p.connected ? `
+    <!-- Infos rapides connecté -->
+    <div class="border-t border-white/5 px-4 py-2.5 flex items-center gap-6 bg-white/1">
+      <div class="flex items-center gap-1.5 text-xs text-slate-600">
+        <i class="fas fa-key text-xs text-slate-700"></i>
+        <span>Scopes: <span class="text-slate-500">${p.scope}</span></span>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-slate-600 ml-auto">
+        <button onclick="testPlatformConn('${p.id}')" class="text-emerald-500/70 hover:text-emerald-400 transition-colors flex items-center gap-1">
+          <i class="fas fa-vial text-xs"></i> Tester
+        </button>
+        <span class="text-slate-700">·</span>
+        <button onclick="disconnectPlatform('${p.id}')" class="text-red-500/60 hover:text-red-400 transition-colors flex items-center gap-1">
+          <i class="fas fa-unlink text-xs"></i> Déconnecter
+        </button>
+      </div>
+    </div>` : ''}
   </div>`
 }
 
 function teamMember2(name: string, email: string, role: string, abbr: string, gradient: string): string {
   const roleColors: Record<string,string> = { Owner:'brand', Admin:'emerald', Editor:'blue', Viewer:'slate' }
   const c = roleColors[role] || 'slate'
-  return `<div class="flex items-center gap-3 p-3 glass rounded-xl">
+  const safeId = name.replace(/\s+/g, '-').toLowerCase()
+  return `<div class="flex items-center gap-3 p-3 glass rounded-xl" id="member-${safeId}">
     <div class="w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-xs font-bold text-white flex-shrink-0">${abbr}</div>
     <div class="flex-1 min-w-0">
       <div class="text-sm font-semibold text-white">${name}</div>
       <div class="text-xs text-slate-500">${email}</div>
     </div>
-    <span class="text-xs px-2 py-1 rounded-full bg-${c}-500/20 text-${c}-400 font-semibold">${role}</span>
-    ${role !== 'Owner' ? `<button onclick="showToast('Options for ${name}')" class="text-slate-600 hover:text-slate-400 transition-colors ml-2"><i class="fas fa-ellipsis-vertical text-xs"></i></button>` : ''}
+    <select onchange="changeMemberRole('${safeId}', '${name}', this.value)" class="glass rounded-lg px-2 py-1 text-xs text-${c}-400 border border-white/10 bg-transparent cursor-pointer outline-none">
+      <option value="Owner" ${role === 'Owner' ? 'selected' : ''}>Owner</option>
+      <option value="Admin" ${role === 'Admin' ? 'selected' : ''}>Admin</option>
+      <option value="Editor" ${role === 'Editor' ? 'selected' : ''}>Editor</option>
+      <option value="Viewer" ${role === 'Viewer' ? 'selected' : ''}>Viewer</option>
+    </select>
+    ${role !== 'Owner' ? `<button onclick="removeMember('${safeId}','${name}')" class="w-7 h-7 glass hover:bg-red-500/10 rounded-lg flex items-center justify-center text-slate-600 hover:text-red-400 transition-all ml-1"><i class="fas fa-trash text-xs"></i></button>` : '<div class="w-7"></div>'}
   </div>`
 }
 

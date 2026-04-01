@@ -240,7 +240,7 @@ export function renderAudiences(lang: Lang = 'en'): string {
     }
     function saveAudience() {
       const name = document.getElementById('aud-name').value.trim()
-      if (!name) { showToast('Veuillez saisir un nom pour l\\'audience', 'error'); return; }
+      if (!name) { showToast('Veuillez saisir un nom pour audience', 'error'); return; }
       const type = document.getElementById('aud-type').value
       const platforms = [...document.querySelectorAll('input[name="aud-platform"]:checked')].map(i => i.value)
       if (!platforms.length) { showToast('Sélectionnez au moins une plateforme', 'error'); return; }
@@ -287,9 +287,41 @@ export function renderAudiences(lang: Lang = 'en'): string {
       showToast('✓ Audience "' + audience + '" ajoutée à "' + campaign + '"', 'success')
     }
 
+    // ── Edit Audience ─────────────────────────────────────────────────────────
+    function editAudience(id) {
+      const card = document.getElementById('card-' + id);
+      if (!card) return;
+      const name = card.dataset.name || '';
+      const type = card.dataset.type || 'Lookalike';
+      document.getElementById('audience-modal-title').textContent = 'Modifier audience';
+      document.getElementById('aud-name').value = card.querySelector('h3')?.textContent || name;
+      document.getElementById('aud-type').value = type;
+      document.getElementById('aud-desc').value = card.querySelector('p')?.textContent || '';
+      const platforms = (card.dataset.platforms || '').split(',').filter(Boolean);
+      document.querySelectorAll('input[name="aud-platform"]').forEach(cb => {
+        cb.checked = platforms.includes(cb.value);
+      });
+      document.getElementById('audience-modal').classList.remove('hidden');
+      document.getElementById('audience-modal').dataset.editId = id;
+    }
+
+    // ── Delete Audience ───────────────────────────────────────────────────────
+    function deleteAudience(id, name) {
+      if (!confirm('Supprimer "' + name + '" ? Cette action est irréversible.')) return;
+      const card = document.getElementById('card-' + id);
+      if (card) {
+        card.style.transition = 'opacity 0.3s, transform 0.3s';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => { card.remove(); }, 300);
+        showToast('🗑 Audience "' + name + '" supprimée', 'error');
+      }
+    }
+
     // ── Expand Audience ────────────────────────────────────────────────────────
     function expandAudience(name) {
       showToast('⚡ Expansion de "' + name + '" vers 3% Lookalike en cours...', 'info')
+      setTimeout(() => showToast('✓ Expansion planifiée — disponible sous 24h', 'success'), 2000)
     }
 
     // ── Toast ─────────────────────────────────────────────────────────────────

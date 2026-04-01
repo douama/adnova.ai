@@ -109,7 +109,7 @@ export const renderDashboard = (c: Context) => {
         <p class="text-xs text-slate-500">Sorted by ROAS — AI-managed</p>
       </div>
       <div class="flex items-center gap-2">
-        <button class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg transition-all">
+        <button onclick="filterTopCampaigns()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg transition-all">
           <i class="fas fa-filter mr-1"></i>${t(lang,'filter')}
         </button>
         <button onclick="window.location.href='/campaigns'" class="bg-brand-600 hover:bg-brand-500 text-white text-xs px-3 py-1.5 rounded-lg transition-all">
@@ -346,6 +346,32 @@ export const renderDashboard = (c: Context) => {
     if (feed.children.length > 8) feed.removeChild(feed.lastChild);
     feedIdx++;
   }, 9000);
+
+  // ── Filter campaigns table ───────────────────────────────────────────────
+  function filterTopCampaigns() {
+    const filters = ['All', 'Scaling', 'Live', 'Paused'];
+    let idx = (window._filterIdx||0);
+    idx = (idx + 1) % filters.length;
+    window._filterIdx = idx;
+    const filter = filters[idx];
+    document.querySelectorAll('#campaigns-tbody tr').forEach(row => {
+      const status = row.querySelector('[class*="badge"]')?.textContent?.toLowerCase() || '';
+      row.style.display = filter === 'All' || status.includes(filter.toLowerCase()) ? '' : 'none';
+    });
+    const btn = document.querySelector('[onclick="filterTopCampaigns()"]');
+    if (btn) btn.innerHTML = '<i class="fas fa-filter mr-1"></i>' + filter;
+  }
+
+  // ── Live KPI live counter anim ────────────────────────────────────────────
+  let spendCounter = 124850;
+  setInterval(() => {
+    spendCounter += Math.floor(Math.random() * 15 + 5);
+    const el = document.getElementById('id-spend-val');
+    if (el) {
+      const val = spendCounter >= 1000000 ? '$' + (spendCounter/1000000).toFixed(2) + 'M' : '$' + (spendCounter/1000).toFixed(1) + 'K';
+      el.textContent = val;
+    }
+  }, 8000);
 
   // Initial load
   window.refreshMetrics();

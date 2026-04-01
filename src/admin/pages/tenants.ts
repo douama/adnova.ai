@@ -38,11 +38,11 @@ export const renderAdminTenants = (c: Context) => {
     <div class="p-4 border-b border-white/5 flex items-center justify-between">
       <h3 class="font-bold text-white text-sm">Tous les clients <span class="text-slate-500 font-normal text-xs ml-1">(2,412)</span></h3>
       <div class="flex items-center gap-2">
-        <button class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
+        <button onclick="exportTenantsCSV()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
           <i class="fas fa-download text-xs"></i> Export CSV
         </button>
-        <button class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
-          <i class="fas fa-filter text-xs"></i> Filtres
+        <button onclick="bulkAction()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all">
+          <i class="fas fa-layer-group text-xs"></i> Actions en lot
         </button>
       </div>
     </div>
@@ -114,22 +114,19 @@ export const renderAdminTenants = (c: Context) => {
 
         <!-- Actions rapides -->
         <div class="md:col-span-3 flex flex-wrap gap-2">
-          <button class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
-            <i class="fas fa-eye text-blue-400"></i> Vue client
-          </button>
-          <button class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
+          <button onclick="impersonateTenant()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
             <i class="fas fa-user-secret text-orange-400"></i> Impersonner
           </button>
-          <button class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
+          <button onclick="openChangePlanModal()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
             <i class="fas fa-arrow-up text-emerald-400"></i> Changer plan
           </button>
-          <button class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
+          <button onclick="sendTenantEmail()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
             <i class="fas fa-envelope text-cyan-400"></i> Envoyer email
           </button>
-          <button class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
+          <button onclick="resetTenantPassword()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
             <i class="fas fa-key text-amber-400"></i> Reset password
           </button>
-          <button class="glass hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20">
+          <button id="suspend-modal-btn" onclick="suspendTenant()" class="glass hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20">
             <i class="fas fa-ban"></i> Suspendre
           </button>
         </div>
@@ -168,11 +165,28 @@ export const renderAdminTenants = (c: Context) => {
         </div>
 
         <!-- Notes admin -->
+        <!-- Change Plan Modal (inline) -->
+        <div id="change-plan-panel" class="md:col-span-3 hidden glass rounded-xl p-4 border border-emerald-500/20">
+          <h4 class="font-semibold text-white text-sm mb-3 flex items-center gap-2"><i class="fas fa-arrow-up text-emerald-400"></i> Changer le plan</h4>
+          <div class="flex items-center gap-3">
+            <select id="new-plan-select" class="flex-1 glass rounded-xl px-3 py-2.5 text-sm text-slate-300 outline-none border border-white/10 bg-transparent cursor-pointer">
+              <option>Trial (14 jours)</option>
+              <option>Starter — $299/mois</option>
+              <option selected>Growth — $799/mois</option>
+              <option>Enterprise — Custom</option>
+            </select>
+            <button onclick="confirmChangePlan()" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs px-4 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all">Confirmer</button>
+            <button onclick="document.getElementById('change-plan-panel').classList.add('hidden')" class="glass hover:bg-white/10 text-slate-400 text-xs px-4 py-2.5 rounded-xl transition-all">Annuler</button>
+          </div>
+        </div>
+
         <div class="md:col-span-3 glass rounded-xl p-4">
           <h4 class="font-semibold text-white text-sm mb-2">Notes Admin Internes</h4>
-          <textarea rows="3" placeholder="Ajouter une note interne sur ce client..."
+          <textarea id="admin-note-textarea" rows="3" placeholder="Ajouter une note interne sur ce client..."
             class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-300 placeholder-slate-600 outline-none focus:border-orange-500 transition-all resize-none">Client VIP. Demande de migration vers Enterprise en cours. Contact: Sarah Kim (CSM).</textarea>
-          <button class="mt-2 bg-orange-600 hover:bg-orange-500 text-white text-xs px-4 py-1.5 rounded-lg transition-all">Sauvegarder note</button>
+          <button onclick="saveTenantNote()" class="mt-2 bg-orange-600 hover:bg-orange-500 text-white text-xs px-4 py-1.5 rounded-lg transition-all flex items-center gap-1.5">
+            <i class="fas fa-save text-xs"></i> Sauvegarder note
+          </button>
         </div>
       </div>
     </div>
@@ -225,7 +239,7 @@ export const renderAdminTenants = (c: Context) => {
         </div>
         <div class="flex justify-end gap-3">
           <button onclick="closeCreateTenant()" class="glass hover:bg-white/10 text-slate-400 px-5 py-2 rounded-xl text-xs transition-all">Annuler</button>
-          <button onclick="createTenant()" class="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all">
+          <button id="btn-create-tenant" onclick="createTenant(this)" class="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all hover:opacity-90 active:scale-95">
             <i class="fas fa-plus"></i> Créer le client
           </button>
         </div>
@@ -234,20 +248,171 @@ export const renderAdminTenants = (c: Context) => {
   </div>
 
   <script>
+    let currentTenantName = '';
+    let currentTenantSuspended = false;
+
+    // ── Search + Filters ────────────────────────────────────────────────────
+    document.getElementById('tenant-search')?.addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('#tenants-table tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = !q || text.includes(q) ? '' : 'none';
+      });
+    });
+
+    // ── Tenant Modal ────────────────────────────────────────────────────────
     function openTenantModal(name, abbr, sub) {
+      currentTenantName = name;
       document.getElementById('modal-name').textContent = name;
       document.getElementById('modal-abbr').textContent = abbr;
       document.getElementById('modal-sub').textContent = sub;
+      document.getElementById('change-plan-panel').classList.add('hidden');
       document.getElementById('tenant-modal').classList.remove('hidden');
     }
     function closeTenantModal() { document.getElementById('tenant-modal').classList.add('hidden'); }
-    function openCreateTenant() { document.getElementById('create-tenant-modal').classList.remove('hidden'); }
-    function closeCreateTenant() { document.getElementById('create-tenant-modal').classList.add('hidden'); }
-    function createTenant() {
-      const btn = event.target.closest('button');
+
+    // ── Actions ─────────────────────────────────────────────────────────────
+    function impersonateTenant() {
+      const name = currentTenantName;
+      showAdminToast('🔐 Connexion en tant que "' + name + '" — redirection...', 'amber');
+      closeTenantModal();
+      setTimeout(() => window.location.href = '/dashboard', 2000);
+    }
+    function openChangePlanModal() {
+      document.getElementById('change-plan-panel').classList.remove('hidden');
+    }
+    function confirmChangePlan() {
+      const plan = document.getElementById('new-plan-select').value;
+      document.getElementById('change-plan-panel').classList.add('hidden');
+      showAdminToast('✓ Plan de "' + currentTenantName + '" changé vers ' + plan, 'emerald');
+    }
+    function sendTenantEmail() {
+      const msg = prompt('Message email à envoyer à "' + currentTenantName + '":');
+      if (!msg) return;
+      showAdminToast('✉️ Email envoyé à "' + currentTenantName + '"', 'emerald');
+    }
+    function resetTenantPassword() {
+      if (!confirm('Envoyer un lien de réinitialisation au propriétaire de "' + currentTenantName + '"?')) return;
+      showAdminToast('🔑 Lien de reset envoyé à "' + currentTenantName + '"', 'emerald');
+    }
+    function suspendTenant() {
+      currentTenantSuspended = !currentTenantSuspended;
+      const btn = document.getElementById('suspend-modal-btn');
+      if (currentTenantSuspended) {
+        btn.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Réactiver';
+        btn.className = 'glass hover:bg-emerald-500/10 text-emerald-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-emerald-500/20';
+        showAdminToast('⛔ Client "' + currentTenantName + '" suspendu — accès révoqué', 'red');
+      } else {
+        btn.innerHTML = '<i class="fas fa-ban mr-1"></i>Suspendre';
+        btn.className = 'glass hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20';
+        showAdminToast('✓ Client "' + currentTenantName + '" réactivé', 'emerald');
+      }
+    }
+    function saveTenantNote() {
+      const note = document.getElementById('admin-note-textarea').value;
+      showAdminToast('✓ Note sauvegardée pour "' + currentTenantName + '"', 'emerald');
+    }
+
+    // ── Create Tenant ────────────────────────────────────────────────────────
+    function openCreateTenant() {
+      // Reset form fields
+      document.querySelectorAll('#create-tenant-modal input, #create-tenant-modal textarea').forEach(el => { el.value = ''; });
+      document.querySelectorAll('#create-tenant-modal select').forEach(el => { el.selectedIndex = 0; });
+      document.getElementById('create-tenant-modal').classList.remove('hidden');
+      document.getElementById('create-tenant-modal').addEventListener('click', function onBg(e) {
+        if (e.target === this) { closeCreateTenant(); this.removeEventListener('click', onBg); }
+      });
+    }
+    function closeCreateTenant() {
+      document.getElementById('create-tenant-modal').classList.add('hidden');
+    }
+    function createTenant(btn) {
+      // Validate required fields
+      const nameEl  = document.querySelector('#create-tenant-modal input[placeholder="Acme Corp"]');
+      const emailEl = document.querySelector('#create-tenant-modal input[type="email"]');
+      const planEl  = document.querySelector('#create-tenant-modal select');
+      if (!nameEl || !nameEl.value.trim()) {
+        showAdminToast('⚠ Veuillez saisir le nom de la société', 'amber'); return;
+      }
+      if (!emailEl || !emailEl.value.trim() || !emailEl.value.includes('@')) {
+        showAdminToast('⚠ Veuillez saisir un email valide', 'amber'); return;
+      }
+      const origHTML = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création...';
       btn.disabled = true;
-      setTimeout(() => { closeCreateTenant(); btn.innerHTML='<i class="fas fa-plus"></i> Créer le client'; btn.disabled=false; }, 1500);
+      setTimeout(() => {
+        // Inject new row into the tenants table
+        const name    = nameEl.value.trim();
+        const email   = emailEl.value.trim();
+        const planTxt = planEl ? planEl.options[planEl.selectedIndex].text.split(' — ')[0].replace('Trial (14 jours)', 'Trial') : 'Trial';
+        const abbr    = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+        const tbody   = document.getElementById('tenants-table');
+        if (tbody) {
+          const planColors = { 'Trial':'slate', 'Starter':'indigo', 'Growth':'orange', 'Enterprise':'emerald' };
+          const pc = planColors[planTxt] || 'slate';
+          const tr = document.createElement('tr');
+          tr.className = 'table-row border-b border-white/5 transition-all';
+          tr.innerHTML = \`
+            <td class="py-3 px-2"><input type="checkbox" class="rounded border-white/20 bg-transparent w-3 h-3"/></td>
+            <td class="py-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500/30 to-red-500/30 flex items-center justify-center text-xs font-bold text-orange-300">\${abbr}</div>
+                <div><div class="text-xs font-bold text-white">\${name}</div><div class="text-xs text-slate-600">\${email}</div></div>
+              </div>
+            </td>
+            <td class="py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-\${pc}-500/15 text-\${pc}-400 font-semibold">\${planTxt}</span></td>
+            <td class="py-3 text-xs font-bold text-emerald-400">$0</td>
+            <td class="py-3 text-xs text-slate-500">—</td>
+            <td class="py-3 text-xs text-blue-400">—</td>
+            <td class="py-3 text-xs text-slate-500">0</td>
+            <td class="py-3 text-xs text-slate-500">1</td>
+            <td class="py-3"><span class="badge-trial text-xs px-2 py-0.5 rounded-full">Trial</span></td>
+            <td class="py-3 text-xs text-slate-600">Aujourd'hui</td>
+            <td class="py-3">
+              <div class="flex items-center gap-1">
+                <button onclick="openTenantModal('new-tenant','\${abbr}',\`\${name} — ID: new-tenant · Plan Trial · Actif\`)" class="glass hover:bg-white/10 text-slate-400 text-xs p-1.5 rounded-lg transition-all"><i class="fas fa-eye text-xs"></i></button>
+                <button class="glass hover:bg-amber-500/10 text-amber-400 text-xs p-1.5 rounded-lg transition-all"><i class="fas fa-ban text-xs"></i></button>
+              </div>
+            </td>
+          \`;
+          tbody.insertBefore(tr, tbody.firstChild);
+        }
+        closeCreateTenant();
+        btn.innerHTML = origHTML;
+        btn.disabled  = false;
+        showAdminToast('✓ Client "' + name + '" créé — invitation envoyée à ' + email, 'emerald');
+      }, 1500);
+    }
+
+    // ── Export CSV ────────────────────────────────────────────────────────────
+    function exportTenantsCSV() {
+      const rows = [['Nom','Plan','MRR','Spend','ROAS','Campagnes','Statut','Date']];
+      document.querySelectorAll('#tenants-table tr:not([style*=none])').forEach(row => {
+        const cells = [...row.querySelectorAll('td')].map(td => td.textContent.trim().replace(/\s+/g,' '));
+        if (cells.length > 3) rows.push(cells.slice(1, 9));
+      });
+      const csv = rows.map(r => r.join(',')).join('\n');
+      const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      a.download = 'tenants-export-' + new Date().toISOString().slice(0,10) + '.csv'; a.click();
+      showAdminToast('✓ Export CSV téléchargé (' + (rows.length-1) + ' clients)', 'emerald');
+    }
+
+    // ── Bulk Actions ──────────────────────────────────────────────────────────
+    function bulkAction() {
+      const checked = document.querySelectorAll('#tenants-table input[type="checkbox"]:checked');
+      if (checked.length === 0) { showAdminToast('Sélectionnez au moins un client', 'amber'); return; }
+      const action = prompt('Action sur ' + checked.length + ' client(s):\n1. Envoyer email\n2. Suspendre\n3. Changer plan\n\nEntrez 1, 2 ou 3:');
+      if (!action) return;
+      const labels = { '1': 'Email envoyé', '2': 'Clients suspendus', '3': 'Plans mis à jour' };
+      showAdminToast('✓ ' + (labels[action]||'Action') + ' pour ' + checked.length + ' client(s)', 'emerald');
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    function showAdminToast(msg, type = 'emerald') {
+      const colors = { emerald:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', amber:'bg-amber-500/20 border-amber-500/30 text-amber-300', red:'bg-red-500/20 border-red-500/30 text-red-300' };
+      const t = document.createElement('div');
+      t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl shadow-2xl ' + (colors[type]||colors.emerald);
+      t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 4000);
     }
   </script>
   `
@@ -294,11 +459,11 @@ function tenantRow(name: string, id: string, plan: string, mrr: string, spend: s
           <i class="fas fa-eye text-slate-400 text-xs"></i>
           <span class="tooltip-text">Détails</span>
         </button>
-        <button class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-white/10 transition-all tooltip">
+        <button onclick="openTenantModal('${name}','${abbr}','ID: ${id}');impersonateTenant()" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-orange-500/10 transition-all tooltip">
           <i class="fas fa-user-secret text-orange-400 text-xs"></i>
           <span class="tooltip-text">Impersonner</span>
         </button>
-        <button class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-red-500/10 transition-all tooltip">
+        <button onclick="if(confirm('Suspendre ${name} ?')){this.innerHTML='<i class=\\'fas fa-check-circle text-emerald-400 text-xs\\'></i>';this.classList.add('bg-emerald-500/10');showAdminToast('⛔ ${name} suspendu','red')}" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-red-500/10 transition-all tooltip">
           <i class="fas fa-ban text-red-400 text-xs"></i>
           <span class="tooltip-text">Suspendre</span>
         </button>

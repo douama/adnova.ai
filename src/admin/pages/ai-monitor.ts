@@ -24,10 +24,10 @@ export const renderAdminAIMonitor = (c: Context) => {
         </div>
       </div>
       <div class="flex gap-2">
-        <button class="glass hover:bg-white/10 text-slate-400 text-xs px-4 py-2 rounded-xl transition-all">
+        <button id="global-pause-btn" onclick="toggleGlobalPause()" class="glass hover:bg-white/10 text-slate-400 text-xs px-4 py-2 rounded-xl transition-all">
           <i class="fas fa-pause mr-1"></i>Pause globale
         </button>
-        <button class="bg-orange-600/20 hover:bg-orange-600/30 text-orange-400 border border-orange-500/30 text-xs px-4 py-2 rounded-xl transition-all">
+        <button onclick="openMaintenanceModal()" class="bg-orange-600/20 hover:bg-orange-600/30 text-orange-400 border border-orange-500/30 text-xs px-4 py-2 rounded-xl transition-all">
           <i class="fas fa-wrench mr-1"></i>Maintenance
         </button>
       </div>
@@ -58,7 +58,7 @@ export const renderAdminAIMonitor = (c: Context) => {
   <div class="glass rounded-2xl p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="font-bold text-white">Modèles IA Déployés</h3>
-      <button class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg">+ Déployer modèle</button>
+      <button onclick="openDeployModal()" class="glass hover:bg-orange-500/10 text-orange-400 border border-orange-500/20 text-xs px-3 py-1.5 rounded-lg transition-all"><i class="fas fa-plus mr-1"></i>Déployer modèle</button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       ${aiModel('AdNova-Predictor-v2', 'Performance prediction', '94.2%', 'Actif', '2.1M', 'emerald', '12h')}
@@ -83,34 +83,149 @@ export const renderAdminAIMonitor = (c: Context) => {
     </div>
   </div>
 
+  <!-- Maintenance Modal -->
+  <div id="maintenance-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="glass rounded-2xl w-full max-w-md border border-orange-500/30">
+      <div class="p-5 border-b border-white/10 flex items-center justify-between">
+        <h2 class="font-bold text-white flex items-center gap-2"><i class="fas fa-wrench text-orange-400"></i> Mode Maintenance</h2>
+        <button onclick="closeMaintModal()" class="text-slate-500 hover:text-slate-300 w-8 h-8 rounded-lg glass flex items-center justify-center"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2">
+          <i class="fas fa-triangle-exclamation mt-0.5 flex-shrink-0"></i>
+          <span>Le mode maintenance suspend temporairement toutes les décisions IA pour <strong>tous les tenants</strong>. Les campagnes restent actives mais sans optimisation.</span>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Durée de maintenance</label>
+          <select id="maint-duration" class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-300 outline-none border border-white/10 bg-transparent cursor-pointer">
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60">1 heure</option>
+            <option value="120">2 heures</option>
+            <option value="0">Durée indéfinie</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Motif (affiché aux tenants)</label>
+          <textarea id="maint-reason" rows="2" placeholder="Ex: Mise à jour du modèle IA v2.1 — amélioration des performances..." class="w-full glass rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-orange-500 transition-all resize-none"></textarea>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="closeMaintModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm transition-all">Annuler</button>
+          <button onclick="activateMaintenance()" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:opacity-90 text-white py-2.5 rounded-xl text-sm font-bold transition-all">
+            <i class="fas fa-wrench mr-1.5"></i>Activer maintenance
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deploy Model Modal -->
+  <div id="deploy-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="glass rounded-2xl w-full max-w-md border border-orange-500/30">
+      <div class="p-5 border-b border-white/10 flex items-center justify-between">
+        <h2 class="font-bold text-white flex items-center gap-2"><i class="fas fa-rocket text-emerald-400"></i> Déployer un modèle IA</h2>
+        <button onclick="closeDeployModal()" class="text-slate-500 hover:text-slate-300 w-8 h-8 rounded-lg glass flex items-center justify-center"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Modèle à déployer</label>
+          <select class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-300 outline-none border border-white/10 bg-transparent cursor-pointer">
+            <option>AdNova-Predictor-v2.1 (nouveau)</option>
+            <option>Creative-Gen-v4 (beta)</option>
+            <option>Budget-Opt-v3 (stable)</option>
+            <option>Audience-ML-v3 (stable)</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Stratégie de déploiement</label>
+          <select class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-300 outline-none border border-white/10 bg-transparent cursor-pointer">
+            <option>Canary (5% tenants d'abord)</option>
+            <option>Blue/Green (switch instantané)</option>
+            <option>Rolling (10% toutes les 30min)</option>
+          </select>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="closeDeployModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm transition-all">Annuler</button>
+          <button onclick="deployModel()" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white py-2.5 rounded-xl text-sm font-bold transition-all">
+            <i class="fas fa-rocket mr-1.5"></i>Déployer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-  new Chart(document.getElementById('aiDecisionsChart').getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: Array.from({length:24}, (_,i) => i+'h'),
-      datasets: [{
-        label: 'Décisions/heure',
-        data: [380000,320000,280000,240000,210000,230000,310000,420000,480000,510000,487000,495000,502000,490000,483000,476000,488000,495000,487000,480000,472000,465000,458000,487240],
-        borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.1)', fill:true, tension:0.4, pointRadius:2, borderWidth:2
-      }]
-    },
-    options: { responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:9}}},
-        y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:9},callback:v=>(v/1000).toFixed(0)+'K'}}
-      }
+  let aiPaused = false;
+  function toggleGlobalPause() {
+    aiPaused = !aiPaused;
+    const btn = document.getElementById('global-pause-btn');
+    const badge = document.querySelector('.badge-active');
+    if (aiPaused) {
+      btn.innerHTML = '<i class="fas fa-play mr-1"></i>Reprendre';
+      btn.className = 'bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs px-4 py-2 rounded-xl transition-all';
+      if (badge) { badge.className = 'badge-paused text-xs px-2 py-0.5 rounded-full font-bold'; badge.textContent = 'EN PAUSE'; }
+      showAdminToast('⏸ AI Engine mis en pause globale — toutes décisions suspendues', 'amber');
+    } else {
+      btn.innerHTML = '<i class="fas fa-pause mr-1"></i>Pause globale';
+      btn.className = 'glass hover:bg-white/10 text-slate-400 text-xs px-4 py-2 rounded-xl transition-all';
+      if (badge) { badge.className = 'badge-active text-xs px-2 py-0.5 rounded-full font-bold'; badge.textContent = 'OPÉRATIONNEL'; }
+      showAdminToast('▶️ AI Engine réactivé — décisions reprises', 'emerald');
     }
-  });
-  new Chart(document.getElementById('aiActionsChart').getContext('2d'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Budget realloc.','Creative kill','Scale +10%','Audience expand','Creative generate','Other'],
-      datasets:[{ data:[35,24,18,12,8,3],
-        backgroundColor:['rgba(249,115,22,0.8)','rgba(239,68,68,0.8)','rgba(16,185,129,0.8)','rgba(59,130,246,0.8)','rgba(139,92,246,0.8)','rgba(148,163,184,0.5)'],
-        borderWidth:0, hoverOffset:4 }]
-    },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{legend:{position:'right',labels:{color:'#94a3b8',font:{size:10}}}} }
+  }
+  function openMaintenanceModal() { document.getElementById('maintenance-modal').classList.remove('hidden'); }
+  function closeMaintModal() { document.getElementById('maintenance-modal').classList.add('hidden'); }
+  function activateMaintenance() {
+    const duration = document.getElementById('maint-duration').value;
+    const reason = document.getElementById('maint-reason').value || 'Maintenance planifiée';
+    closeMaintModal();
+    const label = duration === '0' ? 'indéfinie' : duration + ' min';
+    showAdminToast('🔧 Mode maintenance activé (' + label + ') — ' + reason, 'amber');
+    if (duration !== '0') {
+      setTimeout(() => showAdminToast('✓ Maintenance terminée — AI Engine opérationnel', 'emerald'), parseInt(duration) * 1000);
+    }
+  }
+  function openDeployModal() { document.getElementById('deploy-modal').classList.remove('hidden'); }
+  function closeDeployModal() { document.getElementById('deploy-modal').classList.add('hidden'); }
+  function deployModel() {
+    closeDeployModal();
+    showAdminToast('🚀 Déploiement lancé — monitoring actif pour les 30 prochaines minutes', 'emerald');
+  }
+  function showAdminToast(msg, type = 'emerald') {
+    const colors = { emerald:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', amber:'bg-amber-500/20 border-amber-500/30 text-amber-300', red:'bg-red-500/20 border-red-500/30 text-red-300' };
+    const t = document.createElement('div');
+    t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl shadow-2xl ' + (colors[type]||colors.emerald);
+    t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 4000);
+  }
+  window.addEventListener('load', function() {
+    if (typeof Chart === 'undefined') return;
+    new Chart(document.getElementById('aiDecisionsChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: Array.from({length:24}, (_,i) => i+'h'),
+        datasets: [{
+          label: 'Décisions/heure',
+          data: [380000,320000,280000,240000,210000,230000,310000,420000,480000,510000,487000,495000,502000,490000,483000,476000,488000,495000,487000,480000,472000,465000,458000,487240],
+          borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.1)', fill:true, tension:0.4, pointRadius:2, borderWidth:2
+        }]
+      },
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:9}}},
+          y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569',font:{size:9},callback:function(v){return (v/1000).toFixed(0)+'K'}}}
+        }
+      }
+    });
+    new Chart(document.getElementById('aiActionsChart').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Budget realloc.','Creative kill','Scale +10%','Audience expand','Creative generate','Other'],
+        datasets:[{ data:[35,24,18,12,8,3],
+          backgroundColor:['rgba(249,115,22,0.8)','rgba(239,68,68,0.8)','rgba(16,185,129,0.8)','rgba(59,130,246,0.8)','rgba(139,92,246,0.8)','rgba(148,163,184,0.5)'],
+          borderWidth:0, hoverOffset:4 }]
+      },
+      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{legend:{position:'right',labels:{color:'#94a3b8',font:{size:10}}}} }
+    });
   });
   </script>
   `

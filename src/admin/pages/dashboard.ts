@@ -13,8 +13,8 @@ export const renderAdminDashboard = (c: Context) => {
 
   <!-- 2ème ligne KPIs -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    ${kpi('Campagnes actives', '47,284', '+1,240', 'fa-bullhorn', 'from-emerald-500 to-teal-600', 'sur 5 plateformes')}
-    ${kpi('Créatifs générés', '12.8M', '+84K/j', 'fa-wand-magic-sparkles', 'from-violet-500 to-purple-600', 'par l\'IA AdNova')}
+    ${kpiClickable('Campagnes actives', '47,284', '+1,240', 'fa-bullhorn', 'from-emerald-500 to-teal-600', 'sur 5 plateformes', 'openAllCampaigns()')}
+    ${kpiClickable('Créatifs générés', '12.8M', '+84K/j', 'fa-wand-magic-sparkles', 'from-violet-500 to-purple-600', 'par l\'IA AdNova', 'openGlobalCreatives()')}
     ${kpi('Uptime système', '99.97%', 'SLA OK', 'fa-server', 'from-teal-500 to-emerald-600', 'derniers 30 jours')}
     ${kpi('NPS Score', '72', '+3 pts', 'fa-star', 'from-yellow-500 to-amber-600', 'enquête Mars 2026')}
   </div>
@@ -145,7 +145,109 @@ export const renderAdminDashboard = (c: Context) => {
     </div>
   </div>
 
+  <!-- ── Modals globaux ──────────────────────────────────────────────── -->
+  <!-- Modal Toutes les Campagnes -->
+  <div id="modal-all-campaigns" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="glass rounded-2xl w-full max-w-3xl border border-orange-500/20 max-h-[85vh] flex flex-col">
+      <div class="p-5 border-b border-white/10 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center"><i class="fas fa-bullhorn text-white text-sm"></i></div>
+          <div><h3 class="font-bold text-white">Toutes les Campagnes — Vue Globale</h3><p class="text-xs text-slate-500">47,284 campagnes actives sur la plateforme</p></div>
+        </div>
+        <button onclick="document.getElementById('modal-all-campaigns').classList.add('hidden')" class="text-slate-500 hover:text-slate-300 w-8 h-8 rounded-lg glass flex items-center justify-center"><i class="fas fa-times text-xs"></i></button>
+      </div>
+      <div class="p-5 overflow-y-auto flex-1">
+        <!-- KPIs rapides -->
+        <div class="grid grid-cols-4 gap-3 mb-5">
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-white">47,284</div><div class="text-xs text-slate-500">Campagnes actives</div></div>
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-emerald-400">4.82×</div><div class="text-xs text-slate-500">ROAS moyen</div></div>
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-blue-400">1,284</div><div class="text-xs text-slate-500">Scalées aujourd'hui</div></div>
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-orange-400">$847M</div><div class="text-xs text-slate-500">Spend géré/mois</div></div>
+        </div>
+        <!-- Table campagnes top -->
+        <table class="w-full text-xs">
+          <thead><tr class="text-slate-600 border-b border-white/5">
+            <th class="text-left pb-2">Client</th><th class="text-left pb-2">Campagne</th><th class="text-center pb-2">Plateforme</th>
+            <th class="text-right pb-2">Spend</th><th class="text-right pb-2">ROAS</th><th class="text-center pb-2">Statut IA</th>
+          </tr></thead>
+          <tbody class="divide-y divide-white/[0.04]">
+            ${[
+              ['Apex Marketing','Summer Collection 2026','Facebook/Instagram','$84,200','5.4×','Scaling +10%','emerald'],
+              ['Digital Storm','Product Launch Q3','Google/TikTok','$67,800','4.8×','Scaling +10%','emerald'],
+              ['LuxoGroup','Brand Awareness FR','LinkedIn','$48,500','3.9×','Monitoring','blue'],
+              ['FlashRetail Pro','Flash Sale Weekend','Facebook','$42,100','6.2×','Scaling +10%','emerald'],
+              ['NovaBrand Inc.','Retargeting Cart','Instagram','$18,400','4.1×','Stable','slate'],
+              ['Trendy Store','New Collection SS26','TikTok','$12,900','3.5×','Monitoring','blue'],
+              ['SportNation','Performance Max','Google','$9,100','2.9×','À surveiller','amber'],
+            ].map(([client,camp,plat,spend,roas,status,color]) => `
+            <tr class="hover:bg-white/2 transition-all">
+              <td class="py-2.5 text-slate-400">${client}</td>
+              <td class="py-2.5 font-semibold text-slate-200">${camp}</td>
+              <td class="py-2.5 text-center text-slate-500">${plat}</td>
+              <td class="py-2.5 text-right font-bold text-emerald-400">${spend}</td>
+              <td class="py-2.5 text-right font-bold text-blue-400">${roas}</td>
+              <td class="py-2.5 text-center"><span class="px-2 py-0.5 rounded-full text-xs bg-${color}-500/15 text-${color}-400 font-semibold">${status}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        <div class="mt-4 text-center">
+          <a href="/campaigns" class="text-xs text-orange-400 hover:text-orange-300 transition-colors">Voir toutes les campagnes dans l'interface client →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Créatifs Globaux -->
+  <div id="modal-global-creatives" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="glass rounded-2xl w-full max-w-3xl border border-purple-500/20 max-h-[85vh] flex flex-col">
+      <div class="p-5 border-b border-white/10 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center"><i class="fas fa-wand-magic-sparkles text-white text-sm"></i></div>
+          <div><h3 class="font-bold text-white">Créatifs Globaux — Statistiques IA</h3><p class="text-xs text-slate-500">12.8M créatifs générés par l'IA AdNova</p></div>
+        </div>
+        <button onclick="document.getElementById('modal-global-creatives').classList.add('hidden')" class="text-slate-500 hover:text-slate-300 w-8 h-8 rounded-lg glass flex items-center justify-center"><i class="fas fa-times text-xs"></i></button>
+      </div>
+      <div class="p-5 overflow-y-auto flex-1">
+        <div class="grid grid-cols-4 gap-3 mb-5">
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-white">12.8M</div><div class="text-xs text-slate-500">Total générés</div></div>
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-emerald-400">84K</div><div class="text-xs text-slate-500">Générés aujourd'hui</div></div>
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-red-400">8,472</div><div class="text-xs text-slate-500">Tués (CTR &lt; 0.8%)</div></div>
+          <div class="glass rounded-xl p-3 text-center"><div class="text-lg font-black text-purple-400">3.4%</div><div class="text-xs text-slate-500">CTR moyen global</div></div>
+        </div>
+        <!-- Répartition par type -->
+        <div class="glass rounded-xl p-4 mb-4">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Répartition par type</h4>
+          <div class="space-y-2">
+            ${[['Vidéo UGC','42%','#a855f7',42],['Image statique','28%','#6366f1',28],['Carrousel','18%','#3b82f6',18],['Story / Reels','9%','#ec4899',9],['Autre','3%','#64748b',3]].map(([type,pct,color,w])=>`
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 w-28">${type}</span>
+              <div class="flex-1 h-1.5 rounded-full bg-white/5"><div class="h-1.5 rounded-full" style="width:${w}%;background:${color}"></div></div>
+              <span class="text-xs font-bold text-slate-300 w-8 text-right">${pct}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <!-- Top créatifs performers -->
+        <div class="glass rounded-xl p-4">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Top Créatifs ce mois</h4>
+          <div class="space-y-2">
+            ${[['Apex-UGC-Hero-V3.mp4','Vidéo 15s','6.8% CTR','#a855f7'],['Flash-Sale-Carousel.jpg','Carrousel ×5','5.2% CTR','#6366f1'],['Summer-Story-V2.mp4','Story 9:16','4.9% CTR','#ec4899'],['B2B-LinkedIn-Static.jpg','Image 1:1','4.1% CTR','#3b82f6']].map(([name,type,ctr,color])=>`
+            <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/3 transition-all">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:${color}20"><i class="fas fa-photo-film text-xs" style="color:${color}"></i></div>
+              <div class="flex-1"><div class="text-xs font-semibold text-white">${name}</div><div class="text-xs text-slate-500">${type}</div></div>
+              <span class="text-xs font-black text-emerald-400">${ctr}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+  function openAllCampaigns() { document.getElementById('modal-all-campaigns').classList.remove('hidden'); }
+  function openGlobalCreatives() { document.getElementById('modal-global-creatives').classList.remove('hidden'); }
+
+  window.addEventListener('load', function() {
+    if (typeof Chart === 'undefined') return;
   // MRR Chart
   new Chart(document.getElementById('mrrChart').getContext('2d'), {
     type: 'bar',
@@ -189,6 +291,7 @@ export const renderAdminDashboard = (c: Context) => {
     },
     options:{ responsive:true, maintainAspectRatio:false, cutout:'72%', plugins:{legend:{display:false}} }
   });
+  }); // end window.load
   </script>
   `
   return c.html(adminShell('Dashboard Super Admin', content, '/admin'))
@@ -207,6 +310,21 @@ function kpi(label: string, value: string, change: string, icon: string, gradien
     <div class="text-xl font-black text-white leading-tight">${value}</div>
     <div class="text-xs font-semibold text-slate-400 mt-0.5">${label}</div>
     <div class="text-xs text-slate-600 mt-0.5">${sub}</div>
+  </div>`
+}
+
+function kpiClickable(label: string, value: string, change: string, icon: string, gradient: string, sub: string, onclick: string): string {
+  const isPos = change.includes('+') || change.includes('OK')
+  return `<div class="glass rounded-2xl p-4 card-hover cursor-pointer group" onclick="${onclick}">
+    <div class="flex items-start justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg flex-shrink-0">
+        <i class="fas ${icon} text-white text-sm"></i>
+      </div>
+      <span class="text-xs font-bold px-2 py-1 rounded-full ${isPos ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'}">${change}</span>
+    </div>
+    <div class="text-xl font-black text-white leading-tight">${value}</div>
+    <div class="text-xs font-semibold text-slate-400 mt-0.5">${label}</div>
+    <div class="text-xs text-slate-600 mt-0.5 flex items-center gap-1">${sub} <i class="fas fa-arrow-up-right-from-square text-xs opacity-0 group-hover:opacity-60 transition-all ml-1"></i></div>
   </div>`
 }
 
