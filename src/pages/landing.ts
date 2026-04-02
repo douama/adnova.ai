@@ -655,7 +655,7 @@ export const renderLanding = (c: Context) => {
       #hero-badge span.text-xs { font-size: 10px !important; }
 
       /* Headline */
-      #hero h1 { font-size: clamp(26px, 7.5vw, 40px) !important; margin-bottom: 12px !important; }
+      #hero h1 { font-size: clamp(20px, 6.5vw, 32px) !important; margin-bottom: 10px !important; }
 
       /* Sub-headline */
       #hero p.text-xs { font-size: 11px !important; max-width: 100% !important; margin-bottom: 16px !important; }
@@ -806,7 +806,7 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      HERO — 2-column layout (image 2 design)
 ════════════════════════════════════════════════════════════ -->
-<section class="grid-lines min-h-screen flex items-center relative overflow-hidden pt-[68px]" id="hero">
+<section class="grid-lines flex items-center relative overflow-hidden pt-[68px]" id="hero">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
@@ -816,7 +816,7 @@ export const renderLanding = (c: Context) => {
 
   <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/20 to-transparent scanline pointer-events-none"></div>
 
-  <div class="max-w-7xl mx-auto px-5 md:px-10 py-10 md:py-16 relative z-10 w-full">
+  <div class="max-w-7xl mx-auto px-5 md:px-10 py-4 md:py-6 relative z-10 w-full">
 
     <!-- ─ 2-column grid ─ -->
     <div class="grid grid-cols-1 lg:grid-cols-[44%_56%] gap-8 xl:gap-12 items-center">
@@ -835,7 +835,7 @@ export const renderLanding = (c: Context) => {
         </div>
 
         <!-- Headline — left aligned, large -->
-        <h1 class="font-black leading-[1.0] tracking-tight mb-5 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,3.8vw,58px)">
+        <h1 class="font-black leading-[1.0] tracking-tight mb-4 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,42px)">
           <span class="text-white block">Your ads, on</span>
           <span class="hero-text block mt-1">full autopilot.</span>
         </h1>
