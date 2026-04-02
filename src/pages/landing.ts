@@ -633,6 +633,118 @@ export const renderLanding = (c: Context) => {
 
     /* ── Hero badge — liquid glass ── */
     #hero-badge{background:linear-gradient(135deg,rgba(255,255,255,0.07) 0%,rgba(99,102,241,0.06) 100%);backdrop-filter:saturate(2) blur(20px)}
+
+    /* ════════════════════════════════════════════
+       MOBILE RESPONSIVE — full overrides ≤ 767px
+    ════════════════════════════════════════════ */
+    @media (max-width: 767px) {
+
+      /* ── Navbar ── */
+      nav .hidden.md\:flex { display: none !important; }
+      nav #mobile-menu-btn { display: flex !important; }
+
+      /* ── Hero section ── */
+      #hero { padding-top: 68px; min-height: auto; }
+      #hero .max-w-7xl { padding-left: 16px; padding-right: 16px; padding-top: 24px; padding-bottom: 24px; }
+
+      /* Stack 2 columns to 1 */
+      #hero .grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+
+      /* Badge — smaller on mobile */
+      #hero-badge { padding: 8px 14px !important; gap: 8px !important; }
+      #hero-badge span.text-xs { font-size: 10px !important; }
+
+      /* Headline */
+      #hero h1 { font-size: clamp(26px, 7.5vw, 40px) !important; margin-bottom: 12px !important; }
+
+      /* Sub-headline */
+      #hero p.text-xs { font-size: 11px !important; max-width: 100% !important; margin-bottom: 16px !important; }
+
+      /* Proof chips — horizontal scroll on mobile */
+      #hero .flex.flex-wrap.items-center.gap-2.mb-7 {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+        gap: 8px !important;
+        scrollbar-width: none;
+      }
+      #hero .flex.flex-wrap.items-center.gap-2.mb-7::-webkit-scrollbar { display: none; }
+
+      /* CTA buttons — always on same line, full stretch on very small */
+      #hero .flex.flex-row.items-center.gap-3.mb-8 {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        width: 100%;
+      }
+      #hero .flex.flex-row.items-center.gap-3.mb-8 a {
+        flex: 1 !important;
+        justify-content: center !important;
+        white-space: nowrap;
+        min-width: 0;
+        text-align: center;
+      }
+
+      /* Trust line — wrap gracefully */
+      #hero .flex.items-center.gap-4 { gap: 10px !important; }
+
+      /* Scroll indicator — hide on mobile */
+      #hero .scroll-indicator { display: none !important; }
+
+      /* LIVE stats pill — horizontal scroll */
+      #hero-live-bar { overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; scrollbar-width: none; }
+      #hero-live-bar::-webkit-scrollbar { display: none; }
+      #hero-live-bar .hidden.sm\:block,
+      #hero-live-bar .hidden.sm\:flex,
+      #hero-live-bar .hidden.md\:flex,
+      #hero-live-bar .hidden.lg\:flex { display: flex !important; }
+
+      /* Dashboard mock — no float animation on mobile (perf) */
+      .demo-screen { animation: none !important; border-radius: 14px !important; }
+      .demo-screen .grid.grid-cols-2.md\:grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
+      .demo-screen .grid.grid-cols-1.md\:grid-cols-2 { grid-template-columns: 1fr !important; gap: 8px !important; }
+      .demo-screen .p-3.md\:p-4 { padding: 10px !important; }
+
+      /* ── Stats section ── */
+      #stats .grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+
+      /* ── Section headings — scale down ── */
+      section h2.text-4xl,
+      section h2.md\:text-6xl { font-size: clamp(22px, 7vw, 34px) !important; }
+
+      /* ── Comparison table — horizontal scroll ── */
+      .overflow-x-auto table { min-width: 520px; }
+
+      /* ── Pricing cards ── */
+      .grid.md\:grid-cols-3 { grid-template-columns: 1fr !important; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+      /* ── UC tabs — horizontal scroll ── */
+      .flex.flex-wrap.justify-center.gap-2.mb-10 {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
+        padding-bottom: 6px;
+        scrollbar-width: none;
+      }
+      .flex.flex-wrap.justify-center.gap-2.mb-10::-webkit-scrollbar { display: none; }
+
+      /* ── How it works — steps ── */
+      .flex.items-center.justify-center.gap-2.flex-wrap { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+      .step-connector { display: none !important; }
+
+      /* ── Orbs — hide heavy orbs on mobile ── */
+      .orb-3, .orb-4 { display: none !important; }
+
+      /* ── Footer ── */
+      footer .grid { grid-template-columns: 1fr 1fr !important; }
+    }
+
+    /* ── Extra small (≤ 380px) ── */
+    @media (max-width: 380px) {
+      #hero h1 { font-size: 24px !important; }
+      #hero .flex.flex-row.items-center.gap-3.mb-8 { flex-direction: column !important; }
+      #hero .flex.flex-row.items-center.gap-3.mb-8 a { width: 100% !important; flex: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -723,13 +835,13 @@ export const renderLanding = (c: Context) => {
         </div>
 
         <!-- Headline — left aligned, large -->
-        <h1 class="font-black leading-[1.0] tracking-tight mb-5 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(44px,5.5vw,86px)">
+        <h1 class="font-black leading-[1.0] tracking-tight mb-5 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,3.8vw,58px)">
           <span class="text-white block">Your ads, on</span>
           <span class="hero-text block mt-1">full autopilot.</span>
         </h1>
 
         <!-- Sub headline -->
-        <p class="text-base md:text-lg text-slate-400 mb-6 leading-relaxed text-left" style="font-weight:300;max-width:460px">
+        <p class="text-xs sm:text-sm text-slate-400 mb-6 leading-relaxed text-left" style="font-weight:300;max-width:420px">
           AdNova AI watches your campaigns <strong class="text-slate-200 font-semibold">every 15 minutes</strong>, scales winners +10% when ROAS &gt; 3.5×, kills creatives with CTR &lt; 0.8%, and generates replacements — <em class="text-slate-300">automatically.</em>
         </p>
 
@@ -746,13 +858,13 @@ export const renderLanding = (c: Context) => {
           </span>
         </div>
 
-        <!-- CTA buttons — horizontal -->
-        <div class="flex flex-col sm:flex-row items-start gap-3 mb-8">
-          <a href="/register" class="btn-primary text-white font-black px-8 rounded-2xl text-base flex items-center gap-3 group relative overflow-hidden ripple-btn" style="padding-top:17px;padding-bottom:17px" onclick="trackEvent('hero_cta_primary')">
+        <!-- CTA buttons — same line always -->
+        <div class="flex flex-row items-center gap-3 mb-8 flex-wrap">
+          <a href="/register" class="btn-primary text-white font-black px-6 rounded-xl text-sm flex items-center gap-2 group relative overflow-hidden ripple-btn" style="padding-top:12px;padding-bottom:12px" onclick="trackEvent('hero_cta_primary')">
             <i class="fas fa-rocket text-sm group-hover:rotate-12 transition-transform"></i>
             Start Free — No credit card
           </a>
-          <a href="#demo" class="btn-ghost text-slate-300 font-semibold px-6 py-4 rounded-2xl text-base flex items-center gap-3 group" onclick="trackEvent('hero_cta_demo')">
+          <a href="#demo" class="btn-ghost text-slate-300 font-semibold px-5 py-3 rounded-xl text-sm flex items-center gap-2 group" onclick="trackEvent('hero_cta_demo')">
             <div class="w-7 h-7 rounded-lg flex items-center justify-center group-hover:bg-brand-500/35 transition-colors" style="background:rgba(99,102,241,0.18)">
               <i class="fas fa-play text-brand-400 text-xs ml-0.5"></i>
             </div>
