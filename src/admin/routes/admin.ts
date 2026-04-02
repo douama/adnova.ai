@@ -89,8 +89,10 @@ adminRoutes.post('/tenants/:id/reactivate', (c) => {
 })
 
 adminRoutes.put('/tenants/:id/plan', async (c) => {
-  const body = await c.req.json()
-  return c.json({ success: true, message: `Plan mis à jour: ${body.plan}` })
+  try {
+    const body = await c.req.json()
+    return c.json({ success: true, message: `Plan mis à jour: ${body.plan}` })
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })
 
 // ─── Users ────────────────────────────────────────────────────────────────
@@ -196,8 +198,10 @@ adminRoutes.get('/security', (c) => {
 })
 
 adminRoutes.post('/security/block-ip', async (c) => {
-  const body = await c.req.json()
-  return c.json({ success: true, message: `IP ${body.ip} bloquée` })
+  try {
+    const body = await c.req.json()
+    return c.json({ success: true, message: `IP ${body.ip || 'unknown'} bloquée` })
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })
 
 // ─── Configuration ────────────────────────────────────────────────────────
@@ -224,8 +228,10 @@ adminRoutes.get('/config', (c) => {
 })
 
 adminRoutes.put('/config', async (c) => {
-  const body = await c.req.json()
-  return c.json({ success: true, message: 'Configuration mise à jour', updated: Object.keys(body) })
+  try {
+    const body = await c.req.json()
+    return c.json({ success: true, message: 'Configuration mise à jour', updated: Object.keys(body) })
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })
 
 // ─── Plans ────────────────────────────────────────────────────────────────

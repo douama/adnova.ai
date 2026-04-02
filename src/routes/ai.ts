@@ -20,29 +20,41 @@ aiRoutes.get('/status', (c) => {
 })
 
 aiRoutes.post('/predict', async (c) => {
-  const { campaignData } = await c.req.json()
-  return c.json({
-    predictions: {
-      expectedRoas: 4.2 + Math.random() * 1.5,
-      expectedCtr: 2.8 + Math.random(),
-      expectedCpa: 12 + Math.random() * 8,
-      confidence: 87 + Math.random() * 8,
-      recommendation: 'Proceed with launch — strong predicted performance',
-      suggestedBudget: 800,
-      suggestedPlatforms: ['Facebook', 'Instagram']
-    }
-  })
+  try {
+    const body = await c.req.json()
+    const { campaignData } = body
+    return c.json({
+      predictions: {
+        expectedRoas: 4.2 + Math.random() * 1.5,
+        expectedCtr: 2.8 + Math.random(),
+        expectedCpa: 12 + Math.random() * 8,
+        confidence: 87 + Math.random() * 8,
+        recommendation: 'Proceed with launch — strong predicted performance',
+        suggestedBudget: 800,
+        suggestedPlatforms: ['Facebook', 'Instagram']
+      }
+    })
+  } catch (_) {
+    return c.json({ error: 'Invalid request body' }, 400)
+  }
 })
 
 aiRoutes.post('/optimize', async (c) => {
-  const { campaignId, type } = await c.req.json()
-  return c.json({
-    success: true,
-    actions: [
-      { type: 'budget_increase', amount: 10, reason: 'ROAS threshold met' },
-      { type: 'audience_expand', newSize: '3%', reason: 'Frequency too high' }
-    ]
-  })
+  try {
+    const body = await c.req.json()
+    const { campaignId, type } = body
+    return c.json({
+      success: true,
+      campaignId: campaignId || null,
+      type: type || 'auto',
+      actions: [
+        { type: 'budget_increase', amount: 10, reason: 'ROAS threshold met' },
+        { type: 'audience_expand', newSize: '3%', reason: 'Frequency too high' }
+      ]
+    })
+  } catch (_) {
+    return c.json({ error: 'Invalid request body' }, 400)
+  }
 })
 
 aiRoutes.get('/log', (c) => {
@@ -56,25 +68,36 @@ aiRoutes.get('/log', (c) => {
 })
 
 aiRoutes.post('/generate-copy', async (c) => {
-  const { product, audience, tone, platform } = await c.req.json()
-  return c.json({
-    success: true,
-    copy: [
-      { headline: `Transform Your ${product} Game Today`, body: `Join 50,000+ customers who switched. Limited offer.`, cta: 'Shop Now', score: 94 },
-      { headline: `Finally — ${product} That Works`, body: `See why experts recommend us over competitors.`, cta: 'Get Started', score: 88 },
-      { headline: `Don't Miss This ${product} Deal`, body: `48-hour flash sale. Prices you won't believe.`, cta: 'Claim Offer', score: 82 },
-    ]
-  })
+  try {
+    const body = await c.req.json()
+    const { product = 'Product', audience, tone, platform } = body
+    return c.json({
+      success: true,
+      copy: [
+        { headline: `Transform Your ${product} Game Today`, body: `Join 50,000+ customers who switched. Limited offer.`, cta: 'Shop Now', score: 94 },
+        { headline: `Finally — ${product} That Works`, body: `See why experts recommend us over competitors.`, cta: 'Get Started', score: 88 },
+        { headline: `Don't Miss This ${product} Deal`, body: `48-hour flash sale. Prices you won't believe.`, cta: 'Claim Offer', score: 82 },
+      ]
+    })
+  } catch (_) {
+    return c.json({ error: 'Invalid request body' }, 400)
+  }
 })
 
 aiRoutes.post('/scale-check', async (c) => {
-  const { campaignId } = await c.req.json()
-  return c.json({
-    eligible: true,
-    reason: 'ROAS 5.26x ≥ 3.5x threshold, CTR 4.2% ≥ 2% threshold',
-    recommendedIncrease: 10,
-    newBudget: 20262,
-    projectedRoas: 5.1,
-    nextCheckIn: 72
-  })
+  try {
+    const body = await c.req.json()
+    const { campaignId } = body
+    return c.json({
+      eligible: true,
+      campaignId: campaignId || null,
+      reason: 'ROAS 5.26x ≥ 3.5x threshold, CTR 4.2% ≥ 2% threshold',
+      recommendedIncrease: 10,
+      newBudget: 20262,
+      projectedRoas: 5.1,
+      nextCheckIn: 72
+    })
+  } catch (_) {
+    return c.json({ error: 'Invalid request body' }, 400)
+  }
 })

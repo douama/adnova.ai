@@ -90,22 +90,49 @@ export const renderLanding = (c: Context) => {
   c.header('Vary', 'Accept-Language, CF-IPCountry')
 
   // ── Language detection via IP / Accept-Language ──
-  const cfCountry = c.req.raw.headers.get('CF-IPCountry') || ''
+  const cfCountry = (c.req.raw.headers.get('CF-IPCountry') || '').toUpperCase()
   const acceptLang = c.req.raw.headers.get('Accept-Language') || ''
   const cookieLang = (() => { const m = (c.req.raw.headers.get('Cookie')||'').match(/adnova_lang=([a-z]{2})/); return m ? m[1] : '' })()
   const COUNTRY_LANG: Record<string,string> = {
+    // French
     FR:'fr',BE:'fr',CH:'fr',SN:'fr',CI:'fr',CM:'fr',DZ:'fr',MA:'fr',TN:'fr',LU:'fr',MC:'fr',ML:'fr',BF:'fr',
+    NE:'fr',TD:'fr',RW:'fr',BI:'fr',DJ:'fr',MG:'fr',
+    // Spanish
     ES:'es',MX:'es',AR:'es',CO:'es',PE:'es',CL:'es',VE:'es',EC:'es',BO:'es',PY:'es',UY:'es',CR:'es',
-    PA:'es',DO:'es',GT:'es',HN:'es',NI:'es',SV:'es',CU:'es',
+    PA:'es',DO:'es',GT:'es',HN:'es',NI:'es',SV:'es',CU:'es',PR:'es',
+    // German
     DE:'de',AT:'de',LI:'de',
-    BR:'pt',PT:'pt',AO:'pt',MZ:'pt',CV:'pt',GW:'pt',
+    // Portuguese
+    BR:'pt',PT:'pt',AO:'pt',MZ:'pt',CV:'pt',GW:'pt',ST:'pt',
+    // Arabic
     SA:'ar',AE:'ar',EG:'ar',IQ:'ar',JO:'ar',KW:'ar',LB:'ar',LY:'ar',OM:'ar',QA:'ar',SD:'ar',SY:'ar',YE:'ar',BH:'ar',
+    MR:'ar',PS:'ar',
+    // English (bilingual countries fall back to Accept-Language)
+    US:'en',GB:'en',AU:'en',NZ:'en',ZA:'en',IE:'en',IN:'en',SG:'en',PH:'en',
+    NG:'en',GH:'en',KE:'en',ZW:'en',CA:'en',JM:'en',TT:'en',BB:'en',
   }
+  const bilingualCountries = new Set(['CA','BE','CH','LU','SG','IN','ZA'])
   const supported = ['en','fr','es','de','pt','ar']
+  // Parse Accept-Language with q-value weighting
+  const parsedLang = (() => {
+    if (!acceptLang) return ''
+    const entries = acceptLang.split(',').map((e:string) => {
+      const [l, q] = e.trim().split(';q=')
+      return { code: l.trim().substring(0,2).toLowerCase(), q: q ? parseFloat(q) : 1.0 }
+    }).sort((a,b) => b.q - a.q)
+    for (const {code} of entries) { if (supported.includes(code)) return code }
+    return ''
+  })()
   let lang = 'en'
-  if (cookieLang && supported.includes(cookieLang)) { lang = cookieLang }
-  else if (cfCountry && COUNTRY_LANG[cfCountry.toUpperCase()]) { lang = COUNTRY_LANG[cfCountry.toUpperCase()] }
-  else { const h = acceptLang.split(',').map((l:string)=>l.split(';')[0].trim().substring(0,2).toLowerCase()).find((l:string)=>supported.includes(l)); if(h) lang=h }
+  if (cookieLang && supported.includes(cookieLang)) {
+    lang = cookieLang
+  } else if (bilingualCountries.has(cfCountry) && parsedLang) {
+    lang = parsedLang
+  } else if (parsedLang) {
+    lang = parsedLang
+  } else if (cfCountry && COUNTRY_LANG[cfCountry]) {
+    lang = COUNTRY_LANG[cfCountry]
+  }
 
   const isRTL = lang === 'ar'
 

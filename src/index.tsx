@@ -49,28 +49,37 @@ import { detectLang } from './lib/i18n'
 
 const app = new Hono()
 
-// Middleware
+// Middleware (must be registered before routes)
 app.use('*', logger())
 app.use('/api/*', cors())
 app.use('/admin/api/*', cors())
 
-// ─── Performance: cache headers ───────────────────────────────────────────
+// ─── Performance: cache headers + security ────────────────────────────────
 app.use('*', async (c, next) => {
   await next()
-  // Cache static assets aggressively
-  const url = c.req.url
-  if (url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.ico')) {
-    c.res.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800')
-  }
-  // Cache API responses briefly
-  if (url.includes('/api/') && c.req.method === 'GET') {
-    c.res.headers.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60')
-  }
-  // Security headers for all responses
-  c.res.headers.set('X-Frame-Options', 'SAMEORIGIN')
-  c.res.headers.set('X-Content-Type-Options', 'nosniff')
-  c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  // Guard: don't touch headers on 204/205 (no-content responses)
+  const status = c.res.status
+  if (status === 204 || status === 205) return
+
+  try {
+    const url = c.req.url
+    // Cache static assets aggressively
+    if (url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.ico')) {
+      c.res.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800')
+    }
+    // Cache GET API responses briefly (not /api/track)
+    if (url.includes('/api/') && c.req.method === 'GET' && !url.includes('/api/track')) {
+      c.res.headers.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60')
+    }
+    // Security headers for all responses
+    c.res.headers.set('X-Frame-Options', 'SAMEORIGIN')
+    c.res.headers.set('X-Content-Type-Options', 'nosniff')
+    c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  } catch (_) { /* headers already sent — ignore */ }
 })
+
+// ─── Health check ─────────────────────────────────────────────────────────
+app.get('/health', (c) => c.json({ status: 'ok', version: '2.0', ts: Date.now() }))
 
 // ─── Favicon ──────────────────────────────────────────────────────────────
 app.get('/favicon.ico', (c) => c.redirect('/favicon.svg', 301))
@@ -88,6 +97,16 @@ app.get('/api/lang', (c) => {
   const lang = detectLang(c.req.raw)
   const country = c.req.raw.headers.get('CF-IPCountry') || 'US'
   return c.json({ lang, country })
+})
+
+// ─── Analytics tracking endpoint (replaces missing /api/track) ─────────────
+// Accepts sendBeacon POST from frontend — always returns 204 No Content
+app.post('/api/track', async (c) => {
+  try {
+    // Silently consume the body to drain the stream (required by Hono/Workers)
+    await c.req.text()
+  } catch (_) { /* ignore */ }
+  return new Response(null, { status: 204 })
 })
 
 // ─── Landing & Auth Pages ──────────────────────────────────────────────────
@@ -167,5 +186,23 @@ app.get('/admin/platforms', (c) => c.redirect('/admin/config', 302))
 
 // ─── Super Admin API Routes ────────────────────────────────────────────────
 app.route('/admin/api', adminRoutes)
+
+// ─── Global error handler ─────────────────────────────────────────────────
+app.onError((err, c) => {
+  console.error('[AdNova Error]', err.message, c.req.url)
+  if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/admin/api/')) {
+    return c.json({ error: 'Internal server error', message: err.message }, 500)
+  }
+  return c.html(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error — AdNova AI</title></head><body style="background:#030512;color:#e2e8f0;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0"><div style="text-align:center"><h1 style="font-size:2rem;color:#6366f1;margin-bottom:1rem">AdNova AI</h1><p style="color:#64748b;margin-bottom:1.5rem">Something went wrong on our end.</p><a href="/" style="background:#6366f1;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600">Return to homepage</a></div></body></html>`, 500)
+})
+
+// ─── 404 handler ──────────────────────────────────────────────────────────
+app.notFound((c) => {
+  if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/admin/api/')) {
+    return c.json({ error: 'Route not found', path: c.req.path }, 404)
+  }
+  // Redirect unknown pages to home
+  return c.redirect('/', 302)
+})
 
 export default app

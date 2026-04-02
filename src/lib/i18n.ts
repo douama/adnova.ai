@@ -7,40 +7,46 @@ export const SUPPORTED_LANGS: Lang[] = ['en', 'fr', 'es', 'de', 'pt', 'ar']
 
 // IP → country → language mapping (top countries per language)
 const COUNTRY_LANG: Record<string, Lang> = {
-  // French
-  FR: 'fr', BE: 'fr', CH: 'fr', CA: 'fr', SN: 'fr', CI: 'fr', CM: 'fr',
+  // French — incl. Canada (bilingual: Accept-Language takes priority for CA)
+  FR: 'fr', BE: 'fr', CH: 'fr', SN: 'fr', CI: 'fr', CM: 'fr',
   DZ: 'fr', MA: 'fr', TN: 'fr', LU: 'fr', MC: 'fr', ML: 'fr', BF: 'fr',
+  NE: 'fr', TD: 'fr', RW: 'fr', BI: 'fr', DJ: 'fr', KM: 'fr', MG: 'fr',
   // Spanish
   ES: 'es', MX: 'es', AR: 'es', CO: 'es', PE: 'es', CL: 'es', VE: 'es',
   EC: 'es', BO: 'es', PY: 'es', UY: 'es', CR: 'es', PA: 'es', DO: 'es',
-  GT: 'es', HN: 'es', NI: 'es', SV: 'es', CU: 'es',
+  GT: 'es', HN: 'es', NI: 'es', SV: 'es', CU: 'es', PR: 'es',
   // German
   DE: 'de', AT: 'de', LI: 'de',
   // Portuguese
-  BR: 'pt', PT: 'pt', AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt',
+  BR: 'pt', PT: 'pt', AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt', ST: 'pt',
   // Arabic
   SA: 'ar', AE: 'ar', EG: 'ar', IQ: 'ar', JO: 'ar', KW: 'ar', LB: 'ar',
   LY: 'ar', OM: 'ar', QA: 'ar', SD: 'ar', SY: 'ar', YE: 'ar', BH: 'ar',
+  MR: 'ar', PS: 'ar',
   // English (default for US, UK, AU, etc.)
   US: 'en', GB: 'en', AU: 'en', NZ: 'en', ZA: 'en', IE: 'en', IN: 'en',
-  SG: 'en', PH: 'en', NG: 'en', GH: 'en', KE: 'en', ZW: 'en',
+  SG: 'en', PH: 'en', NG: 'en', GH: 'en', KE: 'en', ZW: 'en', CA: 'en',
+  JM: 'en', TT: 'en', BB: 'en',
 }
 
 export function detectLang(request: Request): Lang {
-  // 1. Check cookie preference
+  // 1. Check cookie preference (explicit user choice — highest priority)
   const cookieLang = getCookieLang(request)
   if (cookieLang) return cookieLang
 
-  // 2. Accept-Language header
+  // 2. Accept-Language header with proper q-value weighting
   const acceptLang = request.headers.get('Accept-Language') || ''
   const headerLang = parseAcceptLanguage(acceptLang)
-  if (headerLang) return headerLang
 
   // 3. Cloudflare CF-IPCountry header
-  const country = request.headers.get('CF-IPCountry') || ''
-  if (country && COUNTRY_LANG[country.toUpperCase()]) {
-    return COUNTRY_LANG[country.toUpperCase()]
-  }
+  const country = (request.headers.get('CF-IPCountry') || '').toUpperCase()
+  const countryLang = country && COUNTRY_LANG[country] ? COUNTRY_LANG[country] : null
+
+  // For bilingual countries (CA, BE, CH), prefer Accept-Language over IP
+  const bilingualCountries = new Set(['CA', 'BE', 'CH', 'LU', 'SG', 'IN', 'ZA'])
+  if (bilingualCountries.has(country) && headerLang) return headerLang
+  if (headerLang) return headerLang
+  if (countryLang) return countryLang
 
   return 'en'
 }
@@ -55,9 +61,17 @@ function getCookieLang(request: Request): Lang | null {
 }
 
 function parseAcceptLanguage(header: string): Lang | null {
-  const langs = header.split(',').map(l => l.split(';')[0].trim().substring(0, 2).toLowerCase())
-  for (const l of langs) {
-    if (SUPPORTED_LANGS.includes(l as Lang)) return l as Lang
+  if (!header) return null
+  // Parse with q-values, e.g. "fr-CA,fr;q=0.9,en;q=0.8"
+  const entries = header.split(',').map(entry => {
+    const [lang, q] = entry.trim().split(';q=')
+    const code = lang.trim().substring(0, 2).toLowerCase()
+    const quality = q ? parseFloat(q) : 1.0
+    return { code, quality }
+  }).sort((a, b) => b.quality - a.quality)
+
+  for (const { code } of entries) {
+    if (SUPPORTED_LANGS.includes(code as Lang)) return code as Lang
   }
   return null
 }

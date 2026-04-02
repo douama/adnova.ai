@@ -16,12 +16,16 @@ automationRoutes.get('/:id', (c) => {
   return r ? c.json(r) : c.json({ error: 'Not found' }, 404)
 })
 automationRoutes.post('/', async (c) => {
-  const body = await c.req.json()
-  return c.json({ success: true, rule: { id: Date.now().toString(), active: true, actionsToday: 0, ...body } }, 201)
+  try {
+    const body = await c.req.json()
+    return c.json({ success: true, rule: { id: Date.now().toString(), active: true, actionsToday: 0, ...body } }, 201)
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })
 automationRoutes.put('/:id', async (c) => {
-  const body = await c.req.json()
-  return c.json({ success: true, rule: { id: c.req.param('id'), ...body } })
+  try {
+    const body = await c.req.json()
+    return c.json({ success: true, rule: { id: c.req.param('id'), ...body } })
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })
 automationRoutes.delete('/:id', (c) => c.json({ success: true, deleted: c.req.param('id') }))
-automationRoutes.post('/:id/toggle', (c) => c.json({ success: true, message: 'Rule toggled' }))
+automationRoutes.post('/:id/toggle', (c) => c.json({ success: true, message: 'Rule toggled', id: c.req.param('id') }))

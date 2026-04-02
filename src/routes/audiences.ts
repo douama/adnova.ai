@@ -15,13 +15,24 @@ audienceRoutes.get('/:id', (c) => {
   return a ? c.json(a) : c.json({ error: 'Not found' }, 404)
 })
 audienceRoutes.post('/', async (c) => {
-  const body = await c.req.json()
-  return c.json({ success: true, audience: { id: Date.now().toString(), ...body } }, 201)
+  try {
+    const body = await c.req.json()
+    return c.json({ success: true, audience: { id: Date.now().toString(), ...body } }, 201)
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })
 audienceRoutes.post('/build-lookalike', async (c) => {
-  const { sourceAudienceId, percentage, platforms } = await c.req.json()
-  return c.json({
-    success: true,
-    audience: { id: `la_${Date.now()}`, type: 'lookalike', percentage, estimatedSize: Math.floor(Math.random() * 3000000 + 500000), status: 'building', eta: '5 minutes' }
-  })
+  try {
+    const body = await c.req.json()
+    const { sourceAudienceId, percentage, platforms } = body
+    return c.json({
+      success: true,
+      audience: {
+        id: `la_${Date.now()}`, type: 'lookalike',
+        sourceAudienceId: sourceAudienceId || null,
+        percentage: percentage || 1,
+        estimatedSize: Math.floor(Math.random() * 3000000 + 500000),
+        status: 'building', eta: '5 minutes'
+      }
+    })
+  } catch (_) { return c.json({ error: 'Invalid request body' }, 400) }
 })

@@ -16,22 +16,24 @@ creativeRoutes.get('/:id', (c) => {
 })
 
 creativeRoutes.post('/generate', async (c) => {
-  const { prompt, type, variants, platform } = await c.req.json()
-  if (!prompt) return c.json({ error: 'Prompt is required' }, 400)
-  
-  // Simulate AI generation
-  const generated = Array.from({ length: variants || 3 }, (_, i) => ({
-    id: `gen_${Date.now()}_${i}`,
-    name: `AI-Generated-${type || 'image'}-${i + 1}`,
-    type: type || 'image',
-    prompt,
-    platform: platform || 'all',
-    status: 'generating',
-    eta: '2 minutes',
-    score: null
-  }))
-  
-  return c.json({ success: true, jobId: `job_${Date.now()}`, creatives: generated, estimatedTime: '2 minutes' }, 202)
+  try {
+    const body = await c.req.json()
+    const { prompt, type, variants, platform } = body
+    if (!prompt) return c.json({ error: 'Prompt is required' }, 400)
+    const generated = Array.from({ length: variants || 3 }, (_, i) => ({
+      id: `gen_${Date.now()}_${i}`,
+      name: `AI-Generated-${type || 'image'}-${i + 1}`,
+      type: type || 'image',
+      prompt,
+      platform: platform || 'all',
+      status: 'generating',
+      eta: '2 minutes',
+      score: null
+    }))
+    return c.json({ success: true, jobId: `job_${Date.now()}`, creatives: generated, estimatedTime: '2 minutes' }, 202)
+  } catch (_) {
+    return c.json({ error: 'Invalid request body' }, 400)
+  }
 })
 
 creativeRoutes.get('/generate/:jobId', (c) => {
@@ -49,6 +51,11 @@ creativeRoutes.post('/:id/pause', (c) => c.json({ success: true, status: 'paused
 creativeRoutes.post('/:id/activate', (c) => c.json({ success: true, status: 'active' }))
 
 creativeRoutes.post('/ab-test', async (c) => {
-  const { variantA, variantB, campaignId } = await c.req.json()
-  return c.json({ success: true, testId: `ab_${Date.now()}`, variantA, variantB, status: 'running' })
+  try {
+    const body = await c.req.json()
+    const { variantA, variantB, campaignId } = body
+    return c.json({ success: true, testId: `ab_${Date.now()}`, variantA, variantB, campaignId, status: 'running' })
+  } catch (_) {
+    return c.json({ error: 'Invalid request body' }, 400)
+  }
 })
