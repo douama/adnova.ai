@@ -835,9 +835,8 @@ export const renderLanding = (c: Context) => {
         </div>
 
         <!-- Headline — left aligned, large -->
-        <h1 class="font-black leading-[1.0] tracking-tight mb-4 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,42px)">
-          <span class="text-white block">Your ads, on</span>
-          <span class="hero-text block mt-1">full autopilot.</span>
+        <h1 class="font-black leading-[1.05] tracking-tight mb-4 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,42px)">
+          <span class="text-white">Your ads, on </span><span class="hero-text">full autopilot.</span>
         </h1>
 
         <!-- Sub headline -->
@@ -1021,7 +1020,7 @@ export const renderLanding = (c: Context) => {
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-chart-bar text-brand-400"></i> Verified Platform Impact</div>
       <h2 class="font-black text-4xl md:text-6xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
-        Numbers that<br/><span class="glow-text-2">don't lie</span>
+        Numbers that <span class="glow-text-2">don't lie</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-xl mx-auto">Aggregated from 2,412 live brands — updated daily. <a href="#case-studies" class="text-brand-400 hover:text-brand-300 transition-colors">See individual case studies →</a></p>
     </div>
@@ -1050,7 +1049,7 @@ export const renderLanding = (c: Context) => {
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-lightbulb text-brand-400"></i> Real Use Cases</div>
       <h2 class="font-black text-4xl md:text-6xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
-        See exactly what<br/><span class="glow-text">AdNova does</span>
+        See exactly what <span class="glow-text">AdNova does</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-2xl mx-auto">Not "AI magic" — concrete actions your campaigns get, every day.</p>
     </div>
@@ -1304,7 +1303,7 @@ export const renderLanding = (c: Context) => {
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-brain text-brand-400"></i> AI-Powered Modules</div>
       <h2 class="font-black text-4xl md:text-6xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
-        6 AI engines,<br/><span class="glow-text">zero manual work</span>
+        6 AI engines, <span class="glow-text">zero manual work</span>
       </h2>
       <p class="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed">Each module runs independently, 24/7, making hundreds of micro-decisions that compound into massive performance gains.</p>
     </div>
@@ -1432,7 +1431,7 @@ export const renderLanding = (c: Context) => {
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-trophy text-brand-400"></i> Verified Case Studies</div>
       <h2 class="font-black text-4xl md:text-6xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
-        Real brands,<br/><span class="glow-text">real numbers</span>
+        Real brands, <span class="glow-text">real numbers</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-xl mx-auto">Verified by third-party audits. No cherry-picking — these are median results.</p>
     </div>
@@ -1509,9 +1508,9 @@ export const renderLanding = (c: Context) => {
       <p class="text-slate-500 text-lg mt-3">4.9/5 on G2 · 847 verified reviews</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      ${testimonial('Sarah K.','CMO, TechStart Inc','from-emerald-500 to-teal-600','SK','Went from 2.1× to 4.8× ROAS in 3 weeks. The AI killed 23 creatives our team was emotionally attached to and replaced them overnight. We now spend 80% less time on manual work.','4.8× ROAS in 3 weeks','Growth plan')}
-      ${testimonial('James R.','Growth Lead, Fashion Brand','from-brand-500 to-purple-600','JR','Creative Killer saves us $15K/month. I set it up in 14 minutes, connected Facebook and Google, defined my ROAS floor at 3× and walked away. It just... works. Nothing else does this.','$15K saved/month','Enterprise plan')}
-      ${testimonial('Amira T.','Founder, Digital Storm','from-pink-500 to-rose-600','AT','$10K to $200K ad spend in 8 weeks without hiring anyone new. The Auto-Scaling compounded every 72h. Our media buyer now just reviews the AI daily digest — she does strategy, not babysitting.','20× spend scale in 8 weeks','Growth plan')}
+      ${testimonial('Sarah K.','CMO, TechStart Inc','from-emerald-500 to-teal-600','SK','Went from 2.1× to 4.8× ROAS in 3 weeks. The AI killed 23 creatives our team was emotionally attached to and replaced them overnight. We now spend 80% less time on manual work.','4.8× ROAS in 3 weeks','Growth plan','https://randomuser.me/api/portraits/women/44.jpg')}
+      ${testimonial('James R.','Growth Lead, Fashion Brand','from-brand-500 to-purple-600','JR','Creative Killer saves us $15K/month. I set it up in 14 minutes, connected Facebook and Google, defined my ROAS floor at 3× and walked away. It just... works. Nothing else does this.','$15K saved/month','Enterprise plan','https://randomuser.me/api/portraits/men/32.jpg')}
+      ${testimonial('Amira T.','Founder, Digital Storm','from-pink-500 to-rose-600','AT','$10K to $200K ad spend in 8 weeks without hiring anyone new. The Auto-Scaling compounded every 72h. Our media buyer now just reviews the AI daily digest — she does strategy, not babysitting.','20× spend scale in 8 weeks','Growth plan','https://randomuser.me/api/portraits/women/68.jpg')}
     </div>
 
     <div class="mt-8 flex flex-wrap items-center justify-center gap-4 fade-up">
@@ -2235,10 +2234,13 @@ function howStep(num: string, title: string, desc: string, icon: string, color: 
   </div>`
 }
 
-function testimonial(name: string, role: string, gradient: string, abbr: string, quote: string, metric: string, plan: string): string {
+function testimonial(name: string, role: string, gradient: string, abbr: string, quote: string, metric: string, plan: string, photoUrl?: string): string {
+  const avatar = photoUrl
+    ? `<img src="${photoUrl}" alt="${name}" class="w-12 h-12 rounded-full object-cover flex-shrink-0 shadow-xl" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="w-12 h-12 rounded-full bg-gradient-to-br ${gradient} items-center justify-center text-sm font-black text-white flex-shrink-0 shadow-xl" style="display:none">${abbr}</div>`
+    : `<div class="w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-sm font-black text-white flex-shrink-0 shadow-xl">${abbr}</div>`;
   return `<div class="testi-card rounded-2xl p-5 fade-up">
     <div class="flex items-center gap-3 mb-4">
-      <div class="w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-sm font-black text-white flex-shrink-0 shadow-xl">${abbr}</div>
+      ${avatar}
       <div class="flex-1">
         <div class="text-sm font-black text-white">${name}</div>
         <div class="text-xs text-slate-500 mt-0.5">${role}</div>
