@@ -84,8 +84,98 @@ export const PLANS = [
 ]
 
 export const renderLanding = (c: Context) => {
+  // ── Performance: HTML cache 60s + stale 5min ──
+  c.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+  c.header('X-Content-Type-Options', 'nosniff')
+  c.header('Vary', 'Accept-Language, CF-IPCountry')
+
+  // ── Language detection via IP / Accept-Language ──
+  const cfCountry = c.req.raw.headers.get('CF-IPCountry') || ''
+  const acceptLang = c.req.raw.headers.get('Accept-Language') || ''
+  const cookieLang = (() => { const m = (c.req.raw.headers.get('Cookie')||'').match(/adnova_lang=([a-z]{2})/); return m ? m[1] : '' })()
+  const COUNTRY_LANG: Record<string,string> = {
+    FR:'fr',BE:'fr',CH:'fr',SN:'fr',CI:'fr',CM:'fr',DZ:'fr',MA:'fr',TN:'fr',LU:'fr',MC:'fr',ML:'fr',BF:'fr',
+    ES:'es',MX:'es',AR:'es',CO:'es',PE:'es',CL:'es',VE:'es',EC:'es',BO:'es',PY:'es',UY:'es',CR:'es',
+    PA:'es',DO:'es',GT:'es',HN:'es',NI:'es',SV:'es',CU:'es',
+    DE:'de',AT:'de',LI:'de',
+    BR:'pt',PT:'pt',AO:'pt',MZ:'pt',CV:'pt',GW:'pt',
+    SA:'ar',AE:'ar',EG:'ar',IQ:'ar',JO:'ar',KW:'ar',LB:'ar',LY:'ar',OM:'ar',QA:'ar',SD:'ar',SY:'ar',YE:'ar',BH:'ar',
+  }
+  const supported = ['en','fr','es','de','pt','ar']
+  let lang = 'en'
+  if (cookieLang && supported.includes(cookieLang)) { lang = cookieLang }
+  else if (cfCountry && COUNTRY_LANG[cfCountry.toUpperCase()]) { lang = COUNTRY_LANG[cfCountry.toUpperCase()] }
+  else { const h = acceptLang.split(',').map((l:string)=>l.split(';')[0].trim().substring(0,2).toLowerCase()).find((l:string)=>supported.includes(l)); if(h) lang=h }
+
+  const isRTL = lang === 'ar'
+
+  // ── Landing i18n strings ──
+  const T: Record<string, Record<string,string>> = {
+    en: {
+      hero_tag: 'AI Engine v2.0 — Live · 2,412 brands',
+      hero_h1a: 'Your ads, on',
+      hero_h1b: 'full autopilot.',
+      hero_sub: 'AdNova AI watches your campaigns <strong class="text-slate-200 font-semibold">every 15 minutes</strong>, scales winners +10% when ROAS &gt; 3.5×, kills creatives with CTR &lt; 0.8%, and generates replacements — <em class="text-slate-300">automatically.</em>',
+      cta_primary: 'Start Free — No credit card',
+      cta_demo: 'Watch 90s Demo',
+      nav_usecases: 'Use Cases', nav_features: 'Features', nav_demo: 'Demo', nav_pricing: 'Pricing', nav_results: 'Results',
+      nav_signin: 'Sign In', nav_trial: 'Start Free Trial',
+    },
+    fr: {
+      hero_tag: 'Moteur IA v2.0 — Live · 2 412 marques',
+      hero_h1a: 'Vos pubs, en',
+      hero_h1b: 'pilote automatique.',
+      hero_sub: 'AdNova AI surveille vos campagnes <strong class="text-slate-200 font-semibold">toutes les 15 minutes</strong>, booste les gagnants +10% quand le ROAS &gt; 3,5×, coupe les créas CTR &lt; 0,8% et génère des remplacements — <em class="text-slate-300">automatiquement.</em>',
+      cta_primary: 'Commencer gratuitement',
+      cta_demo: 'Voir la démo 90s',
+      nav_usecases: 'Cas d\'usage', nav_features: 'Fonctions', nav_demo: 'Démo', nav_pricing: 'Tarifs', nav_results: 'Résultats',
+      nav_signin: 'Connexion', nav_trial: 'Essai gratuit',
+    },
+    es: {
+      hero_tag: 'Motor IA v2.0 — Live · 2.412 marcas',
+      hero_h1a: 'Tus anuncios, en',
+      hero_h1b: 'piloto automático.',
+      hero_sub: 'AdNova AI vigila tus campañas <strong class="text-slate-200 font-semibold">cada 15 minutos</strong>, escala ganadores +10% cuando ROAS &gt; 3,5×, elimina creativos con CTR &lt; 0,8% y genera reemplazos — <em class="text-slate-300">automáticamente.</em>',
+      cta_primary: 'Empieza gratis',
+      cta_demo: 'Ver demo 90s',
+      nav_usecases: 'Casos de uso', nav_features: 'Funciones', nav_demo: 'Demo', nav_pricing: 'Precios', nav_results: 'Resultados',
+      nav_signin: 'Entrar', nav_trial: 'Prueba gratuita',
+    },
+    de: {
+      hero_tag: 'KI-Engine v2.0 — Live · 2.412 Marken',
+      hero_h1a: 'Deine Ads, auf',
+      hero_h1b: 'Autopilot.',
+      hero_sub: 'AdNova AI überwacht deine Kampagnen <strong class="text-slate-200 font-semibold">alle 15 Minuten</strong>, skaliert Gewinner +10% bei ROAS &gt; 3,5×, stoppt Creatives mit CTR &lt; 0,8% und generiert Ersatz — <em class="text-slate-300">automatisch.</em>',
+      cta_primary: 'Kostenlos starten',
+      cta_demo: '90s Demo ansehen',
+      nav_usecases: 'Anwendungsfälle', nav_features: 'Funktionen', nav_demo: 'Demo', nav_pricing: 'Preise', nav_results: 'Ergebnisse',
+      nav_signin: 'Anmelden', nav_trial: 'Kostenlos testen',
+    },
+    pt: {
+      hero_tag: 'Motor IA v2.0 — Live · 2.412 marcas',
+      hero_h1a: 'Os seus anúncios, no',
+      hero_h1b: 'piloto automático.',
+      hero_sub: 'AdNova AI monitoriza as suas campanhas <strong class="text-slate-200 font-semibold">a cada 15 minutos</strong>, escala vencedores +10% quando ROAS &gt; 3,5×, elimina criativos com CTR &lt; 0,8% e gera substitutos — <em class="text-slate-300">automaticamente.</em>',
+      cta_primary: 'Começar grátis',
+      cta_demo: 'Ver demo 90s',
+      nav_usecases: 'Casos de uso', nav_features: 'Funções', nav_demo: 'Demo', nav_pricing: 'Preços', nav_results: 'Resultados',
+      nav_signin: 'Entrar', nav_trial: 'Teste gratuito',
+    },
+    ar: {
+      hero_tag: 'محرك الذكاء v2.0 — مباشر · 2,412 علامة',
+      hero_h1a: 'إعلاناتك، على',
+      hero_h1b: 'الطيار الآلي.',
+      hero_sub: 'يراقب AdNova AI حملاتك <strong class="text-slate-200 font-semibold">كل 15 دقيقة</strong>، يُضاعف الفائزين +10% عند ROAS &gt; 3.5×، يوقف الإبداعات ذات CTR &lt; 0.8% ويولّد بدائل — <em class="text-slate-300">تلقائياً.</em>',
+      cta_primary: 'ابدأ مجاناً',
+      cta_demo: 'شاهد العرض',
+      nav_usecases: 'حالات الاستخدام', nav_features: 'الميزات', nav_demo: 'عرض', nav_pricing: 'الأسعار', nav_results: 'النتائج',
+      nav_signin: 'تسجيل الدخول', nav_trial: 'تجربة مجانية',
+    },
+  }
+  const L = T[lang] || T['en']
+
   return c.html(`<!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="${lang}" dir="${isRTL ? 'rtl' : 'ltr'}" class="dark">
 <head>
   <!-- ═══ SEO PRIMARY ═══════════════════════════════════════════════════════ -->
   <meta charset="UTF-8"/>
@@ -137,11 +227,14 @@ export const renderLanding = (c: Context) => {
   </script>
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <!-- Performance: preconnect to external origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="dns-prefetch" href="https://randomuser.me"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com" defer><\/script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script>
     tailwind.config = {
       darkMode:'class',
@@ -709,8 +802,8 @@ export const renderLanding = (c: Context) => {
       #stats .grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
 
       /* ── Section headings — scale down ── */
-      section h2.text-4xl,
-      section h2.md\:text-6xl { font-size: clamp(22px, 7vw, 34px) !important; }
+      section h2.text-2xl,
+      section h2.md\:text-4xl { font-size: clamp(16px, 5vw, 22px) !important; }
 
       /* ── Comparison table — horizontal scroll ── */
       .overflow-x-auto table { min-width: 520px; }
@@ -768,17 +861,26 @@ export const renderLanding = (c: Context) => {
     </a>
 
     <div class="hidden md:flex items-center gap-5">
-      <a href="#use-cases" class="nav-link text-sm font-medium">Use Cases</a>
-      <a href="#features" class="nav-link text-sm font-medium">Features</a>
-      <a href="#demo" class="nav-link text-sm font-medium">Demo</a>
-      <a href="#pricing" class="nav-link text-sm font-medium">Pricing</a>
-      <a href="#case-studies" class="nav-link text-sm font-medium">Results</a>
+      <a href="#use-cases" class="nav-link text-sm font-medium">${L.nav_usecases}</a>
+      <a href="#features" class="nav-link text-sm font-medium">${L.nav_features}</a>
+      <a href="#demo" class="nav-link text-sm font-medium">${L.nav_demo}</a>
+      <a href="#pricing" class="nav-link text-sm font-medium">${L.nav_pricing}</a>
+      <a href="#case-studies" class="nav-link text-sm font-medium">${L.nav_results}</a>
     </div>
 
     <div class="hidden md:flex items-center gap-3">
-      <a href="/login" class="btn-ghost text-sm text-slate-300 font-medium px-4 py-2 rounded-xl" onclick="trackEvent('nav_signin')">Sign In</a>
+      <!-- Lang selector -->
+      <select onchange="document.cookie='adnova_lang='+this.value+';path=/;max-age=31536000';location.reload()" class="text-xs bg-transparent text-slate-400 border border-white/10 rounded-lg px-2 py-1.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-500 hover:border-white/20 transition-colors" aria-label="Language">
+        <option value="en" ${lang==='en'?'selected':''}>🇺🇸 EN</option>
+        <option value="fr" ${lang==='fr'?'selected':''}>🇫🇷 FR</option>
+        <option value="es" ${lang==='es'?'selected':''}>🇪🇸 ES</option>
+        <option value="de" ${lang==='de'?'selected':''}>🇩🇪 DE</option>
+        <option value="pt" ${lang==='pt'?'selected':''}>🇧🇷 PT</option>
+        <option value="ar" ${lang==='ar'?'selected':''}>🇸🇦 AR</option>
+      </select>
+      <a href="/login" class="btn-ghost text-sm text-slate-300 font-medium px-4 py-2 rounded-xl" onclick="trackEvent('nav_signin')">${L.nav_signin}</a>
       <a href="/register" class="btn-primary text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 ripple-btn" onclick="trackEvent('nav_trial_cta')">
-        <i class="fas fa-rocket text-xs"></i> Start Free Trial
+        <i class="fas fa-rocket text-xs"></i> ${L.nav_trial}
       </a>
     </div>
 
@@ -830,18 +932,18 @@ export const renderLanding = (c: Context) => {
             <div class="ai-dot blink"></div>
             <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
           </div>
-          <span class="text-xs font-bold text-slate-300 tracking-wide">AI Engine v2.0 — Live · 2,412 brands</span>
+          <span class="text-xs font-bold text-slate-300 tracking-wide">${L.hero_tag}</span>
           <span class="text-xs bg-gradient-to-r from-brand-500/30 to-purple-500/30 text-brand-300 px-2.5 py-1 rounded-full font-black border border-brand-500/25 flex-shrink-0">94.2% acc.</span>
         </div>
 
         <!-- Headline — left aligned, large -->
         <h1 class="font-black leading-[1.05] tracking-tight mb-4 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,42px)">
-          <span class="text-white">Your ads, on </span><span class="hero-text">full autopilot.</span>
+          <span class="text-white">${L.hero_h1a} </span><span class="hero-text">${L.hero_h1b}</span>
         </h1>
 
         <!-- Sub headline -->
         <p class="text-xs sm:text-sm text-slate-400 mb-6 leading-relaxed text-left" style="font-weight:300;max-width:420px">
-          AdNova AI watches your campaigns <strong class="text-slate-200 font-semibold">every 15 minutes</strong>, scales winners +10% when ROAS &gt; 3.5×, kills creatives with CTR &lt; 0.8%, and generates replacements — <em class="text-slate-300">automatically.</em>
+          ${L.hero_sub}
         </p>
 
         <!-- Proof point chips — horizontal row -->
@@ -861,13 +963,13 @@ export const renderLanding = (c: Context) => {
         <div class="flex flex-row items-center gap-3 mb-8 flex-wrap">
           <a href="/register" class="btn-primary text-white font-black px-6 rounded-xl text-sm flex items-center gap-2 group relative overflow-hidden ripple-btn" style="padding-top:12px;padding-bottom:12px" onclick="trackEvent('hero_cta_primary')">
             <i class="fas fa-rocket text-sm group-hover:rotate-12 transition-transform"></i>
-            Start Free — No credit card
+            ${L.cta_primary}
           </a>
           <a href="#demo" class="btn-ghost text-slate-300 font-semibold px-5 py-3 rounded-xl text-sm flex items-center gap-2 group" onclick="trackEvent('hero_cta_demo')">
             <div class="w-7 h-7 rounded-lg flex items-center justify-center group-hover:bg-brand-500/35 transition-colors" style="background:rgba(99,102,241,0.18)">
               <i class="fas fa-play text-brand-400 text-xs ml-0.5"></i>
             </div>
-            Watch 90s Demo
+            ${L.cta_demo}
           </a>
         </div>
 
@@ -1019,7 +1121,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-chart-bar text-brand-400"></i> Verified Platform Impact</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Numbers that <span class="glow-text-2">don't lie</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-xl mx-auto">Aggregated from 2,412 live brands — updated daily. <a href="#case-studies" class="text-brand-400 hover:text-brand-300 transition-colors">See individual case studies →</a></p>
@@ -1048,7 +1150,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8">
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-lightbulb text-brand-400"></i> Real Use Cases</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
         See exactly what <span class="glow-text">AdNova does</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-2xl mx-auto">Not "AI magic" — concrete actions your campaigns get, every day.</p>
@@ -1229,7 +1331,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10">
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-calculator text-brand-400"></i> ROI Simulator</div>
-      <h2 class="font-black text-4xl md:text-5xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Your numbers, <span class="glow-text">your results</span>
       </h2>
       <p class="text-slate-500 text-base max-w-xl mx-auto">Enter your current ad spend and ROAS — see what AdNova AI would deliver in 30 days.</p>
@@ -1302,7 +1404,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8">
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-brain text-brand-400"></i> AI-Powered Modules</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         6 AI engines, <span class="glow-text">zero manual work</span>
       </h2>
       <p class="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed">Each module runs independently, 24/7, making hundreds of micro-decisions that compound into massive performance gains.</p>
@@ -1333,7 +1435,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10">
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-play text-brand-400"></i> 90-Second Walkthrough</div>
-      <h2 class="font-black text-4xl md:text-5xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Watch AdNova work <span class="glow-text-2">live</span>
       </h2>
       <p class="text-slate-500">Click play to see the full autonomous loop in action</p>
@@ -1409,7 +1511,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-gears text-brand-400"></i> How It Works</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Live in <span class="glow-text-2">18 minutes</span>
       </h2>
       <p class="text-slate-500 text-lg mt-3 max-w-xl mx-auto">Real setup time from 2,412 clients. Median: 18 min. Fastest: 4 min. No code, no CSV, no headache.</p>
@@ -1430,7 +1532,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8">
     <div class="text-center mb-12 fade-up">
       <div class="section-label mb-4"><i class="fas fa-trophy text-brand-400"></i> Verified Case Studies</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
         Real brands, <span class="glow-text">real numbers</span>
       </h2>
       <p class="text-slate-500 text-lg max-w-xl mx-auto">Verified by third-party audits. No cherry-picking — these are median results.</p>
@@ -1502,7 +1604,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8">
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-star text-brand-400"></i> Customer Stories</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Brands that <span class="glow-text">outperform</span>
       </h2>
       <p class="text-slate-500 text-lg mt-3">4.9/5 on G2 · 847 verified reviews</p>
@@ -1534,7 +1636,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-tags text-brand-400"></i> Transparent Pricing</div>
-      <h2 class="font-black text-4xl md:text-6xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
         Pay as you <span class="glow-text">grow</span>
       </h2>
       <p class="text-slate-500 text-base max-w-xl mx-auto">Full AI engine on every plan. No setup fees. No % of ad spend taken. No hidden costs.</p>
@@ -1574,7 +1676,7 @@ export const renderLanding = (c: Context) => {
   <div class="max-w-4xl mx-auto px-5 md:px-8">
     <div class="text-center mb-10 fade-up">
       <div class="section-label mb-4"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
-      <h2 class="font-black text-4xl md:text-5xl text-white" style="font-family:'Space Grotesk',sans-serif">
+      <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Honest <span class="glow-text-2">answers</span>
       </h2>
     </div>
@@ -1606,8 +1708,8 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <div class="section-label mb-4 mx-auto w-fit"><i class="fas fa-rocket text-brand-400"></i> Start today</div>
-    <h2 class="font-black text-5xl md:text-7xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif;line-height:1.0">
-      Your competition<br/><span class="hero-text">is already using AI.</span>
+    <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif;line-height:1.1">
+      Your competition <span class="hero-text">is already using AI.</span>
     </h2>
     <p class="text-slate-400 text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
       Join <strong class="text-white">2,412 brands</strong> using AdNova AI to outperform — with <strong class="text-white">zero</strong> extra headcount.
@@ -2054,7 +2156,7 @@ function startDemoWalkthrough() {
       else s.className = 'demo-step-indicator';
     });
     demoIdx++;
-  }, 1200);
+  }, 2800);
   trackEvent('demo_started');
 }
 

@@ -66,6 +66,10 @@ app.use('*', async (c, next) => {
   if (url.includes('/api/') && c.req.method === 'GET') {
     c.res.headers.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60')
   }
+  // Security headers for all responses
+  c.res.headers.set('X-Frame-Options', 'SAMEORIGIN')
+  c.res.headers.set('X-Content-Type-Options', 'nosniff')
+  c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
 })
 
 // ─── Favicon ──────────────────────────────────────────────────────────────
