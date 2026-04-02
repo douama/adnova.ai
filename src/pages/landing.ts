@@ -828,6 +828,10 @@ export const renderLanding = (c: Context) => {
       /* ── Orbs — hide heavy orbs on mobile ── */
       .orb-3, .orb-4 { display: none !important; }
 
+      /* ── FAQ+CTA 2-col → 1-col on mobile ── */
+      #faq-cta .grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+      #faq-cta h2 { font-size: clamp(22px, 6vw, 34px) !important; }
+
       /* ── Footer ── */
       footer .grid { grid-template-columns: 1fr 1fr !important; }
 
@@ -1691,67 +1695,149 @@ export const renderLanding = (c: Context) => {
 </section>
 
 <!-- ════════════════════════════════════════════════════════════
-     FAQ
+     FAQ + CTA — 2-COLUMN HERO STYLE (image 2 design)
 ════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.72),rgba(3,5,18,0.82))">
-  <div class="max-w-4xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
-        Honest <span class="glow-text-2">answers</span>
-      </h2>
-    </div>
-    <div class="space-y-3 fade-up" id="faq">
-      ${faqItem('How fast will I see results?', 'Most clients see measurable ROAS improvement within 72 hours. The AI begins making autonomous decisions within the first 15 minutes after connection. Median time to first positive ROI on subscription cost: 11 days.')}
-      ${faqItem('What exactly does "autonomous" mean?', 'The AI makes budget, bidding, creative, and audience decisions without requiring your approval for each action. You set the rules (ROAS floor, max spend, creative approval on/off), and the AI operates within them 24/7. You can pause any module instantly.')}
-      ${faqItem('Does it work with small budgets?', 'Yes. The Starter plan is designed for $1K–$10K/month ad spend. The AI has fewer data points at low spend, so results are slightly slower — typically 2–4 weeks vs 72h for larger accounts. Most small accounts see +40–60% ROAS improvement in month 1.')}
-      ${faqItem('How is this different from Meta Advantage+ or Google Performance Max?', 'Advantage+ and PMax are single-platform, single-campaign optimization tools. AdNova AI works across 9 platforms simultaneously, kills bad creatives before any platform&#39;s algorithm catches it, generates new creatives, and provides a unified view of all your ad spend in one place.')}
-      ${faqItem('Is my ad account data secure?', 'We use OAuth — we never store your ad account passwords. Access tokens are encrypted at rest (AES-256) and in transit (TLS 1.3). We are SOC2 Type II certified and GDPR compliant. You can revoke access at any time from your ad platform.')}
-      ${faqItem('What happens if the AI makes a bad decision?', 'Every AI action is logged with its reasoning. You can review and undo any decision within 24 hours. Our kill-switch pauses all autonomous actions globally in one click. In 18 months of production, 99.1% of AI decisions resulted in positive or neutral outcomes.')}
-    </div>
-  </div>
-</section>
+<section class="relative overflow-hidden py-8 md:py-14" id="faq-cta"
+  style="background:linear-gradient(160deg,rgba(3,5,16,0.98) 0%,rgba(10,8,30,0.99) 100%)">
 
-<!-- ════════════════════════════════════════════════════════════
-     CTA FINAL
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden">
-  <div class="absolute inset-0" style="background:radial-gradient(ellipse 100% 70% at 50% 50%,rgba(79,70,229,0.15),transparent 70%)"></div>
-  <div class="absolute inset-0 grid-lines opacity-25"></div>
-  <div class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(99,102,241,0.5),rgba(168,85,247,0.5),transparent)"></div>
+  <!-- Background orbs -->
+  <div style="position:absolute;width:520px;height:520px;background:radial-gradient(circle,rgba(99,102,241,0.13) 0%,transparent 70%);top:-80px;left:-120px;filter:blur(80px);pointer-events:none"></div>
+  <div style="position:absolute;width:480px;height:480px;background:radial-gradient(circle,rgba(168,85,247,0.10) 0%,transparent 70%);bottom:-60px;right:-80px;filter:blur(90px);pointer-events:none"></div>
+  <div class="absolute inset-0 grid-lines opacity-20 pointer-events-none"></div>
+  <div class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(99,102,241,0.4),rgba(168,85,247,0.4),transparent)"></div>
 
-  <div class="max-w-4xl mx-auto px-5 md:px-8 text-center relative z-10 fade-up">
-    <div class="relative inline-block mb-5">
-      <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-brand-500 via-purple-600 to-pink-600 flex items-center justify-center mx-auto shadow-2xl spin-slow">
-        <i class="fas fa-bolt text-white text-3xl"></i>
+  <div class="max-w-7xl mx-auto px-5 md:px-10 relative z-10">
+
+    <!-- ── 2-column grid ── -->
+    <div class="grid grid-cols-1 lg:grid-cols-[52%_48%] gap-8 xl:gap-14 items-start">
+
+      <!-- ══ LEFT — FAQ accordion ══ -->
+      <div class="fade-up">
+        <div class="mb-6">
+          <div class="section-label mb-3 inline-flex"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
+          <h2 class="font-black text-2xl md:text-4xl text-white mb-2" style="font-family:'Space Grotesk',sans-serif">
+            Honest <span class="glow-text-2">answers</span>
+          </h2>
+          <p class="text-slate-500 text-sm">Everything you want to know before you start.</p>
+        </div>
+
+        <div class="space-y-2" id="faq">
+          ${faqItem('How fast will I see results?', 'Most clients see measurable ROAS improvement within 72 hours. The AI begins making autonomous decisions within the first 15 minutes after connection. Median time to first positive ROI on subscription cost: 11 days.')}
+          ${faqItem('What exactly does "autonomous" mean?', 'The AI makes budget, bidding, creative, and audience decisions without requiring your approval for each action. You set the rules (ROAS floor, max spend, creative approval on/off), and the AI operates within them 24/7. You can pause any module instantly.')}
+          ${faqItem('Does it work with small budgets?', 'Yes. The Starter plan is designed for $1K–$10K/month ad spend. The AI has fewer data points at low spend, so results are slightly slower — typically 2–4 weeks vs 72h for larger accounts. Most small accounts see +40–60% ROAS improvement in month 1.')}
+          ${faqItem('How is this different from Meta Advantage+ or Google Performance Max?', 'Advantage+ and PMax are single-platform, single-campaign optimization tools. AdNova AI works across 9 platforms simultaneously, kills bad creatives before any platform&#39;s algorithm catches it, generates new creatives, and provides a unified view of all your ad spend in one place.')}
+          ${faqItem('Is my ad account data secure?', 'We use OAuth — we never store your ad account passwords. Access tokens are encrypted at rest (AES-256) and in transit (TLS 1.3). We are SOC2 Type II certified and GDPR compliant. You can revoke access at any time from your ad platform.')}
+          ${faqItem('What happens if the AI makes a bad decision?', 'Every AI action is logged with its reasoning. You can review and undo any decision within 24 hours. Our kill-switch pauses all autonomous actions globally in one click. In 18 months of production, 99.1% of AI decisions resulted in positive or neutral outcomes.')}
+        </div>
       </div>
-      <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-500 to-pink-600 blur-3xl opacity-50 w-24 h-24 mx-auto"></div>
-    </div>
 
-    <div class="section-label mb-4 mx-auto w-fit"><i class="fas fa-rocket text-brand-400"></i> Start today</div>
-    <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif;line-height:1.1">
-      Your competition <span class="hero-text">is already using AI.</span>
-    </h2>
-    <p class="text-slate-400 text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
-      Join <strong class="text-white">2,412 brands</strong> using AdNova AI to outperform — with <strong class="text-white">zero</strong> extra headcount.
-    </p>
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
-      <a href="/register" class="btn-primary text-white font-black px-14 rounded-2xl text-lg flex items-center gap-3 group w-full sm:w-auto justify-center relative overflow-hidden ripple-btn" style="padding-top:20px;padding-bottom:20px" onclick="trackEvent('footer_cta_primary')">
-        <i class="fas fa-bolt group-hover:rotate-12 transition-transform"></i>
-        Start Free — 14 Days
-      </a>
-      <a href="/login" class="btn-ghost text-slate-300 font-semibold px-10 py-5 rounded-2xl text-base w-full sm:w-auto text-center">
-        Already have an account →
-      </a>
-    </div>
-    <p class="text-slate-600 text-sm mt-5 flex items-center justify-center gap-5 flex-wrap">
-      <span><i class="fas fa-shield-halved text-emerald-500 mr-1.5"></i> No credit card required</span>
-      <span><i class="fas fa-xmark text-slate-500 mr-1.5"></i> Cancel anytime</span>
-      <span><i class="fas fa-clock text-brand-500 mr-1.5"></i> Setup in 18 minutes</span>
-      <span><i class="fas fa-lock text-slate-500 mr-1.5"></i> SOC2 + GDPR</span>
-    </p>
+      <!-- ══ RIGHT — CTA hero panel ══ -->
+      <div class="fade-up flex flex-col" style="transition-delay:.12s">
+
+        <!-- Glass card wrapping the whole CTA -->
+        <div class="glass-neo rounded-3xl overflow-hidden relative"
+          style="background:linear-gradient(145deg,rgba(255,255,255,0.055) 0%,rgba(99,102,241,0.04) 100%);border-top-color:rgba(255,255,255,0.22)">
+
+          <!-- Inner prismatic top accent -->
+          <div style="height:2px;background:linear-gradient(90deg,rgba(99,102,241,0.8),rgba(168,85,247,0.9),rgba(236,72,153,0.7),rgba(6,182,212,0.6));"></div>
+
+          <div class="p-6 md:p-8">
+
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-6 border" style="border-color:rgba(99,102,241,0.25)">
+              <div class="relative flex-shrink-0">
+                <div class="ai-dot blink"></div>
+                <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
+              </div>
+              <span class="text-xs font-bold text-slate-300 tracking-wide">2,412 brands already inside</span>
+              <span class="text-xs bg-gradient-to-r from-brand-500/30 to-purple-500/30 text-brand-300 px-2 py-0.5 rounded-full font-black border border-brand-500/25">LIVE</span>
+            </div>
+
+            <!-- Headline — big like image 2 -->
+            <h2 class="font-black leading-[1.05] tracking-tight mb-4 text-left"
+              style="font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4vw,52px)">
+              <span class="text-white">Your competition </span><span class="hero-text">is already using AI.</span>
+            </h2>
+
+            <!-- Sub -->
+            <p class="text-sm text-slate-400 mb-6 leading-relaxed" style="max-width:400px">
+              Join <strong class="text-white font-semibold">2,412 brands</strong> using AdNova AI to outperform — with <strong class="text-white font-semibold">zero</strong> extra headcount.
+            </p>
+
+            <!-- Proof chips — same style as hero image 2 -->
+            <div class="flex flex-wrap gap-2 mb-7">
+              <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3 py-1.5 rounded-full">
+                <i class="fas fa-check-circle text-emerald-400 text-xs"></i> ROAS boost: <strong class="text-white ml-1">+128%</strong>
+              </span>
+              <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3 py-1.5 rounded-full">
+                <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Setup: <strong class="text-white ml-1">18 min</strong>
+              </span>
+              <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3 py-1.5 rounded-full">
+                <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Waste cut: <strong class="text-white ml-1">−73%</strong>
+              </span>
+            </div>
+
+            <!-- CTA buttons — row, style image 2 -->
+            <div class="flex flex-row items-center gap-3 mb-6 flex-wrap">
+              <a href="/register" class="btn-primary text-white font-black px-7 rounded-xl text-sm flex items-center gap-2 group relative overflow-hidden ripple-btn" style="padding-top:14px;padding-bottom:14px" onclick="trackEvent('faq_cta_primary')">
+                <i class="fas fa-bolt text-sm group-hover:rotate-12 transition-transform"></i>
+                Start Free — 14 Days
+              </a>
+              <a href="/login" class="btn-ghost text-slate-300 font-semibold px-5 py-3.5 rounded-xl text-sm flex items-center gap-2 group" onclick="trackEvent('faq_cta_secondary')">
+                Already have an account →
+              </a>
+            </div>
+
+            <!-- Trust row -->
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
+              <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-emerald-600"></i> No credit card</span>
+              <span class="flex items-center gap-1.5"><i class="fas fa-xmark text-slate-600"></i> Cancel anytime</span>
+              <span class="flex items-center gap-1.5"><i class="fas fa-clock text-brand-600"></i> 18 min setup</span>
+              <span class="flex items-center gap-1.5"><i class="fas fa-lock text-slate-600"></i> SOC2 · GDPR</span>
+            </div>
+          </div>
+
+          <!-- Mini live stats strip at the bottom of the card -->
+          <div class="px-6 py-3 flex items-center gap-4 flex-wrap border-t" style="background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.06)">
+            <div class="flex items-center gap-1.5 text-xs">
+              <i class="fas fa-brain text-brand-400 text-xs"></i>
+              <span class="font-black text-slate-200" id="faq-decisions">487K</span>
+              <span class="text-slate-500">decisions/hr</span>
+            </div>
+            <span class="text-white/10 hidden sm:block">|</span>
+            <div class="flex items-center gap-1.5 text-xs">
+              <i class="fas fa-chart-line text-emerald-400 text-xs"></i>
+              <span class="font-black text-emerald-400">4.82x</span>
+              <span class="text-slate-500">avg ROAS</span>
+            </div>
+            <span class="text-white/10 hidden md:block">|</span>
+            <div class="hidden md:flex items-center gap-1.5 text-xs">
+              <i class="fas fa-star text-amber-400 text-xs"></i>
+              <span class="font-black text-amber-400">4.9/5</span>
+              <span class="text-slate-500">from 847 reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini social proof row under the card -->
+        <div class="mt-4 flex items-center gap-3 px-1">
+          <div class="flex -space-x-2 flex-shrink-0">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-7 h-7 rounded-full border-2 object-cover" style="border-color:rgba(99,102,241,0.5)" loading="lazy"/>
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-7 h-7 rounded-full border-2 object-cover" style="border-color:rgba(99,102,241,0.5)" loading="lazy"/>
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-7 h-7 rounded-full border-2 object-cover" style="border-color:rgba(99,102,241,0.5)" loading="lazy"/>
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-black text-brand-300" style="background:rgba(99,102,241,0.2);border:2px solid rgba(99,102,241,0.5)">+2K</div>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">
+            <span class="text-slate-300 font-semibold">2,412 brands</span> joined this week ·
+            <span class="text-emerald-400 font-semibold">↑ 23%</span> vs last week
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /2-col grid -->
   </div>
 </section>
+
 
 <!-- ════════════════════════════════════════════════════════════
      FOOTER
