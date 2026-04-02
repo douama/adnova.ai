@@ -29,6 +29,13 @@ import { renderAutomation } from './pages/automation'
 import { renderSettings } from './pages/settings'
 import { renderRegister } from './pages/register'
 import { renderLanding } from './pages/landing'
+import { renderTerms } from './pages/terms'
+import { renderPrivacy } from './pages/privacy'
+import { renderAbout } from './pages/about'
+import { renderCustomers } from './pages/customers'
+import { renderBlog, renderBlogArticle, BLOG_ARTICLES } from './pages/blog'
+import { renderCareers } from './pages/careers'
+import { renderPressKit } from './pages/press-kit'
 
 // ─── Super Admin imports ───────────────────────────────────────────────────
 import { adminRoutes } from './admin/routes/admin'
@@ -199,6 +206,12 @@ app.use('/api/*', async (c, next) => {
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/sitemap.xml', (c) => {
   const now = new Date().toISOString().split('T')[0]
+  const blogUrls = BLOG_ARTICLES.map(a => `  <url>
+    <loc>https://adnova.ai/blog/${a.slug}</loc>
+    <lastmod>${a.date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`).join('\n')
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
@@ -240,7 +253,16 @@ app.get('/sitemap.xml', (c) => {
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!-- ══ Sitemap index image ══ -->
+  <!-- ══ Pages marketing ══ -->
+  <url><loc>https://adnova.ai/about</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://adnova.ai/customers</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://adnova.ai/blog</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.80</priority></url>
+  <url><loc>https://adnova.ai/careers</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://adnova.ai/press-kit</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://adnova.ai/terms</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://adnova.ai/privacy</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <!-- ══ Articles de blog ══ -->
+${blogUrls}
 </urlset>`
   return c.body(xml, 200, {
     'Content-Type': 'application/xml; charset=UTF-8',
@@ -254,6 +276,14 @@ app.get('/robots.txt', (c) => {
 Allow: /
 Allow: /register
 Allow: /login
+Allow: /about
+Allow: /customers
+Allow: /blog
+Allow: /blog/
+Allow: /careers
+Allow: /press-kit
+Allow: /terms
+Allow: /privacy
 Disallow: /admin
 Disallow: /admin/
 Disallow: /api/
@@ -372,6 +402,16 @@ app.post('/api/track', async (c) => {
 app.get('/', renderLanding)
 app.get('/login', renderLogin)
 app.get('/register', renderRegister)
+
+// ─── Public Marketing Pages ────────────────────────────────────────────────
+app.get('/terms',      (c) => c.html(renderTerms()))
+app.get('/privacy',    (c) => c.html(renderPrivacy()))
+app.get('/about',      (c) => c.html(renderAbout()))
+app.get('/customers',  (c) => c.html(renderCustomers()))
+app.get('/blog',       (c) => c.html(renderBlog()))
+app.get('/blog/:slug', (c) => c.html(renderBlogArticle(c.req.param('slug'))))
+app.get('/careers',    (c) => c.html(renderCareers()))
+app.get('/press-kit',  (c) => c.html(renderPressKit()))
 
 app.get('/dashboard', renderDashboard)
 app.get('/campaigns',  (c) => c.html(renderCampaigns(detectLang(c.req.raw))))
