@@ -201,213 +201,501 @@ export const renderLanding = (c: Context) => {
   }
   const L = T[lang] || T['en']
 
+  // ── SEO: localized title & description ──
+  const seoTitle: Record<string,string> = {
+    en: 'AdNova AI — Autonomous Ad Intelligence | 4.82x ROAS Guaranteed',
+    fr: 'AdNova AI — Intelligence Publicitaire Autonome | ROAS 4,82× Garanti',
+    es: 'AdNova AI — Inteligencia Publicitaria Autónoma | ROAS 4.82x Garantizado',
+    de: 'AdNova AI — Autonome Werbe-KI | 4,82x ROAS Garantiert',
+    pt: 'AdNova AI — Inteligência Publicitária Autónoma | ROAS 4,82x Garantido',
+    ar: 'AdNova AI — ذكاء إعلاني مستقل | ضمان ROAS 4.82×',
+  }
+  const seoDesc: Record<string,string> = {
+    en: 'AdNova AI manages your ads across 9 platforms autonomously. AI scales winners +10%, kills creatives with CTR<0.8%, generates replacements 24/7. Average ROAS: 4.82x. Free 14-day trial, no credit card.',
+    fr: 'AdNova AI gère vos publicités sur 9 plateformes de façon autonome. L\'IA booste les gagnants +10%, coupe les créas CTR<0,8% et génère des remplacements 24h/24. ROAS moyen: 4,82×. Essai gratuit 14 jours.',
+    es: 'AdNova AI gestiona tus anuncios en 9 plataformas de forma autónoma. La IA escala ganadores +10%, pausa creativos con CTR<0.8% y genera reemplazos 24/7. ROAS promedio: 4.82x. Prueba gratuita 14 días.',
+    de: 'AdNova AI verwaltet deine Ads auf 9 Plattformen autonom. KI skaliert Gewinner +10%, stoppt Creatives mit CTR<0.8% und generiert Ersatz 24/7. Durchschnittlicher ROAS: 4,82x. 14 Tage kostenlos testen.',
+    pt: 'AdNova AI gere os seus anúncios em 9 plataformas de forma autónoma. A IA escala vencedores +10%, elimina criativos com CTR<0.8% e gera substitutos 24/7. ROAS médio: 4,82x. Teste gratuito 14 dias.',
+    ar: 'AdNova AI تدير إعلاناتك على 9 منصات بشكل مستقل. الذكاء الاصطناعي يُضاعف الفائزين +10%، يوقف الإعلانات ذات CTR<0.8% ويولّد بدائل 24/7. متوسط ROAS: 4.82×. تجربة مجانية 14 يوماً.',
+  }
+  const titleStr = seoTitle[lang] || seoTitle['en']
+  const descStr  = seoDesc[lang]  || seoDesc['en']
+
   return c.html(`<!DOCTYPE html>
 <html lang="${lang}" dir="${isRTL ? 'rtl' : 'ltr'}" class="dark">
 <head>
-  <!-- ═══ SEO PRIMARY ═══════════════════════════════════════════════════════ -->
+  <!-- ═══ CRITICAL: charset + viewport — parsed before any other resource ══ -->
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AdNova AI — Autonomous Ad Intelligence | 4.82x ROAS Guaranteed</title>
-  <meta name="description" content="AdNova AI manages your ads across 9 platforms autonomously. Our AI scales winners, kills losers, generates creatives and reallocates budgets 24/7. Average client ROAS: 4.82x. Try free for 14 days."/>
-  <meta name="keywords" content="AI advertising platform, autonomous ad optimization, ROAS improvement, Facebook ads automation, Google ads AI, TikTok advertising, ad creative generation, programmatic advertising AI"/>
-  <link rel="canonical" href="https://adnova.ai/"/>
-  <meta name="robots" content="index, follow"/>
-  <meta name="author" content="AdNova AI"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 
-  <!-- ═══ OPEN GRAPH ════════════════════════════════════════════════════════ -->
+  <!-- ═══ SEO PRIMAIRE — titre et description localisés ═══════════════════ -->
+  <title>${titleStr}</title>
+  <meta name="description" content="${descStr}"/>
+  <meta name="keywords" content="AI advertising platform, autonomous ad optimization, ROAS improvement, Facebook ads AI, Google ads automation, TikTok advertising AI, ad creative generation, programmatic advertising, AI marketing tool, ad spend optimization, ROAS 4x, autonomous campaigns, adnova ai, adnova, ai ads, roas garantie, plateforme publicité IA, KI Werbeplattform, plataforma publicidad IA"/>
+  <link rel="canonical" href="https://adnova.ai/"/>
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
+  <meta name="author" content="AdNova AI"/>
+  <meta name="application-name" content="AdNova AI"/>
+  <meta name="generator" content="AdNova AI v2.0"/>
+  <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: dark)"/>
+  <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: light)"/>
+  <meta name="color-scheme" content="dark"/>
+  <meta name="rating" content="general"/>
+  <meta name="revisit-after" content="3 days"/>
+  <meta name="language" content="${lang}"/>
+  <meta name="geo.region" content="${lang === 'fr' ? 'FR' : lang === 'es' ? 'ES' : lang === 'de' ? 'DE' : lang === 'pt' ? 'BR' : lang === 'ar' ? 'SA' : 'US'}"/>
+
+  <!-- ═══ HREFLANG — SEO multilingue complet ═══════════════════════════════ -->
+  <link rel="alternate" hreflang="en" href="https://adnova.ai/"/>
+  <link rel="alternate" hreflang="en-US" href="https://adnova.ai/"/>
+  <link rel="alternate" hreflang="en-GB" href="https://adnova.ai/"/>
+  <link rel="alternate" hreflang="fr" href="https://adnova.ai/?lang=fr"/>
+  <link rel="alternate" hreflang="fr-FR" href="https://adnova.ai/?lang=fr"/>
+  <link rel="alternate" hreflang="fr-BE" href="https://adnova.ai/?lang=fr"/>
+  <link rel="alternate" hreflang="fr-CA" href="https://adnova.ai/?lang=fr"/>
+  <link rel="alternate" hreflang="es" href="https://adnova.ai/?lang=es"/>
+  <link rel="alternate" hreflang="es-ES" href="https://adnova.ai/?lang=es"/>
+  <link rel="alternate" hreflang="es-MX" href="https://adnova.ai/?lang=es"/>
+  <link rel="alternate" hreflang="de" href="https://adnova.ai/?lang=de"/>
+  <link rel="alternate" hreflang="de-DE" href="https://adnova.ai/?lang=de"/>
+  <link rel="alternate" hreflang="de-AT" href="https://adnova.ai/?lang=de"/>
+  <link rel="alternate" hreflang="pt" href="https://adnova.ai/?lang=pt"/>
+  <link rel="alternate" hreflang="pt-BR" href="https://adnova.ai/?lang=pt"/>
+  <link rel="alternate" hreflang="ar" href="https://adnova.ai/?lang=ar"/>
+  <link rel="alternate" hreflang="x-default" href="https://adnova.ai/"/>
+
+  <!-- ═══ OPEN GRAPH — Facebook, LinkedIn, Slack, WhatsApp ═════════════════ -->
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://adnova.ai/"/>
-  <meta property="og:title" content="AdNova AI — Your Ads on Autopilot. 4.82x ROAS Average."/>
-  <meta property="og:description" content="2,412 brands trust AdNova AI to autonomously optimize ads across 9 platforms. Connect in 3 min, watch ROAS climb."/>
+  <meta property="og:title" content="AdNova AI — Your Ads on Full Autopilot. 4.82x ROAS."/>
+  <meta property="og:description" content="2,412 brands trust AdNova AI to autonomously optimize ads across 9 platforms. Connect in 18 min, watch ROAS climb to 4.82x average. Free 14-day trial."/>
   <meta property="og:image" content="https://adnova.ai/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:type" content="image/png"/>
+  <meta property="og:image:alt" content="AdNova AI — Autonomous Advertising Platform Dashboard showing 4.82x ROAS"/>
   <meta property="og:site_name" content="AdNova AI"/>
+  <meta property="og:locale" content="${lang === 'fr' ? 'fr_FR' : lang === 'es' ? 'es_ES' : lang === 'de' ? 'de_DE' : lang === 'pt' ? 'pt_BR' : lang === 'ar' ? 'ar_SA' : 'en_US'}"/>
+  <meta property="og:locale:alternate" content="en_US"/>
+  <meta property="og:locale:alternate" content="fr_FR"/>
+  <meta property="article:publisher" content="https://www.facebook.com/AdNovaAI"/>
 
-  <!-- ═══ TWITTER CARD ═════════════════════════════════════════════════════ -->
+  <!-- ═══ TWITTER / X CARD — summary_large_image ══════════════════════════ -->
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:site" content="@AdNovaAI"/>
-  <meta name="twitter:title" content="AdNova AI — Autonomous Advertising Intelligence"/>
-  <meta name="twitter:description" content="AI that scales winners, kills losers, generates creatives — 24/7. Average ROAS: 4.82x across 2,412 brands."/>
+  <meta name="twitter:creator" content="@AdNovaAI"/>
+  <meta name="twitter:title" content="AdNova AI — 4.82x ROAS on Autopilot"/>
+  <meta name="twitter:description" content="AI that scales winners, kills losers, generates creatives — 24/7. Join 2,412 brands averaging 4.82x ROAS. Free 14-day trial. No credit card."/>
   <meta name="twitter:image" content="https://adnova.ai/twitter-card.png"/>
+  <meta name="twitter:image:alt" content="AdNova AI Platform — 4.82x ROAS Dashboard"/>
+  <meta name="twitter:label1" content="Average ROAS"/>
+  <meta name="twitter:data1" content="4.82x"/>
+  <meta name="twitter:label2" content="Active Brands"/>
+  <meta name="twitter:data2" content="2,412"/>
 
-  <!-- ═══ SCHEMA.ORG ════════════════════════════════════════════════════════ -->
+  <!-- ═══ SCHEMA.ORG COMPLET — Rich Snippets Google (étoiles, prix, FAQ) ══ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "AdNova AI",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "Autonomous advertising intelligence platform that optimizes ad campaigns across 9 platforms using machine learning.",
-    "offers": [
-      {"@type":"Offer","name":"Starter","price":"299","priceCurrency":"USD"},
-      {"@type":"Offer","name":"Growth","price":"799","priceCurrency":"USD"},
-      {"@type":"Offer","name":"Enterprise","price":"0","description":"Custom pricing"}
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "847",
-      "bestRating": "5"
-    },
-    "publisher": {"@type":"Organization","name":"AdNova AI","url":"https://adnova.ai"}
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://adnova.ai/#org",
+        "name": "AdNova AI",
+        "url": "https://adnova.ai",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://adnova.ai/#logo",
+          "url": "https://adnova.ai/favicon.svg",
+          "width": 512,
+          "height": 512,
+          "caption": "AdNova AI Logo"
+        },
+        "image": {"@id": "https://adnova.ai/#logo"},
+        "description": "Autonomous advertising intelligence platform. AI manages ads across 9 platforms — 24/7 optimization, creative generation, ROAS maximization.",
+        "foundingDate": "2024",
+        "numberOfEmployees": {"@type": "QuantitativeValue", "value": 50},
+        "areaServed": "Worldwide",
+        "sameAs": [
+          "https://twitter.com/AdNovaAI",
+          "https://linkedin.com/company/adnova-ai",
+          "https://github.com/adnova-ai",
+          "https://www.youtube.com/@AdNovaAI"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "availableLanguage": ["English", "French", "Spanish", "German", "Portuguese", "Arabic"]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://adnova.ai/#software",
+        "name": "AdNova AI",
+        "alternateName": ["AdNova", "AdNova AI Platform", "AdNova Autonomous Advertising"],
+        "url": "https://adnova.ai/",
+        "applicationCategory": "BusinessApplication",
+        "applicationSubCategory": "AdvertisingPlatform",
+        "operatingSystem": "Web Browser, iOS, Android",
+        "browserRequirements": "Requires JavaScript. Chrome 90+, Firefox 88+, Safari 14+, Edge 90+",
+        "description": "Autonomous advertising intelligence platform. AI optimizes ad campaigns across 9 platforms — scales winners +10%, kills underperformers, generates creatives 24/7. Average ROAS: 4.82x.",
+        "featureList": [
+          "AI Budget Optimization",
+          "Autonomous Creative Generation",
+          "Audience Intelligence & Lookalike Builder",
+          "Cross-Platform Management (9 platforms)",
+          "ROAS Optimization & Guarantee",
+          "A/B Testing Automation",
+          "Real-time Campaign Monitoring",
+          "Predictive Analytics"
+        ],
+        "screenshot": "https://adnova.ai/screenshot.png",
+        "softwareVersion": "2.0",
+        "softwareHelp": {"@type": "CreativeWork", "url": "https://adnova.ai/docs"},
+        "releaseNotes": "https://adnova.ai/changelog",
+        "isAccessibleForFree": false,
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Starter Plan",
+            "description": "Up to \\$10K ad spend/month, 2 platforms, 10 campaigns, 2 team members, 50 AI creatives/month",
+            "price": "299",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2027-12-31",
+            "availability": "https://schema.org/InStock",
+            "url": "https://adnova.ai/register?plan=starter",
+            "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14}
+          },
+          {
+            "@type": "Offer",
+            "name": "Growth Plan",
+            "description": "Up to \\$100K ad spend/month, all 9 platforms, 50 campaigns, 10 team members, 500 AI creatives/month",
+            "price": "799",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2027-12-31",
+            "availability": "https://schema.org/InStock",
+            "url": "https://adnova.ai/register?plan=growth"
+          },
+          {
+            "@type": "Offer",
+            "name": "Enterprise Plan",
+            "description": "Unlimited campaigns, unlimited ad spend, all platforms, custom AI models, dedicated CSM",
+            "availability": "https://schema.org/OnlineOnly",
+            "url": "https://adnova.ai/register?plan=enterprise"
+          }
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "847",
+          "bestRating": "5",
+          "worstRating": "1",
+          "ratingCount": "847"
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+            "author": {"@type": "Person", "name": "Marie Leconte"},
+            "reviewBody": "Our ROAS went from 1.8x to 4.9x in 3 weeks. The AI kills bad creatives automatically — incredible time saver.",
+            "datePublished": "2026-01-15"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+            "author": {"@type": "Person", "name": "James Okafor"},
+            "reviewBody": "Connected our 6 ad accounts in under 20 minutes. ROAS improvement was visible in 48 hours. Best ad platform investment ever.",
+            "datePublished": "2026-02-03"
+          }
+        ],
+        "publisher": {"@id": "https://adnova.ai/#org"}
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://adnova.ai/#website",
+        "url": "https://adnova.ai/",
+        "name": "AdNova AI",
+        "description": "Autonomous Advertising Intelligence Platform — 4.82x ROAS",
+        "publisher": {"@id": "https://adnova.ai/#org"},
+        "inLanguage": ["en", "fr", "es", "de", "pt", "ar"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {"@type": "EntryPoint", "urlTemplate": "https://adnova.ai/search?q={search_term_string}"},
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://adnova.ai/#webpage",
+        "url": "https://adnova.ai/",
+        "name": "${titleStr}",
+        "description": "${descStr}",
+        "isPartOf": {"@id": "https://adnova.ai/#website"},
+        "about": {"@id": "https://adnova.ai/#software"},
+        "inLanguage": "${lang}",
+        "datePublished": "2024-01-01",
+        "dateModified": "${new Date().toISOString().split('T')[0]}",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "AdNova AI", "item": "https://adnova.ai/"}
+          ]
+        },
+        "primaryImageOfPage": {"@type": "ImageObject", "url": "https://adnova.ai/og-image.png"}
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://adnova.ai/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How fast will I see ROAS improvement with AdNova AI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Most clients see measurable ROAS improvement within 72 hours. The median first ROI milestone is reached in 11 days. Month 1 average: +40-60% ROAS improvement. Our AI checks campaigns every 15 minutes and acts immediately."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What ad platforms does AdNova AI support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "AdNova AI supports 9 major ad platforms: Facebook Ads, Google Ads, Instagram Ads, TikTok Ads, LinkedIn Ads, YouTube Ads, Pinterest Ads, X (Twitter) Ads, and Snapchat Ads. Enterprise clients can request custom integrations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does AdNova AI work with small ad budgets?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The Starter plan is designed for budgets from $1,000 to $10,000/month. You can expect 40-60% ROAS improvement in the first month regardless of budget size."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my ad account data secure with AdNova AI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely. We use OAuth 2.0 for all platform connections (we never store your passwords), AES-256 encryption at rest, TLS 1.3 in transit. AdNova AI is SOC2 Type II certified and fully GDPR compliant."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does AdNova AI's autonomous optimization work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "AdNova AI's engine checks every campaign every 15 minutes. When ROAS > 3.5x, it automatically scales budget +10%. When CTR < 0.8%, it pauses the creative and generates AI replacements. When a platform's CPM rises, it reallocates budget to better-performing channels — all without human intervention."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the free trial and is a credit card required?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "AdNova AI offers a free 14-day trial with full access to all features. No credit card is required to start your trial. You can upgrade or cancel at any time during or after the trial."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 
+  <!-- ═══ PWA + ICONS ═══════════════════════════════════════════════════════ -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-  <!-- Performance: preconnect to external origins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin/>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="shortcut icon" href="/favicon.svg"/>
+  <link rel="apple-touch-icon" href="/favicon.svg"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="msapplication-TileColor" content="#6366f1"/>
+  <meta name="msapplication-config" content="/browserconfig.xml"/>
+
+  <!-- ═══ PERFORMANCE: Resource hints (critical, non-blocking) ════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous"/>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin="anonymous"/>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com"/>
   <link rel="dns-prefetch" href="https://randomuser.me"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- ═══ FONTS: Chargement non-bloquant avec font-display:swap ══════════ -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'"/>
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/></noscript>
+
+  <!-- ═══ FONT AWESOME: totalement différé — n'est PAS render-blocking ════ -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/></noscript>
+
+  <!-- ═══ TAILWIND CDN: defer + config inline avant chargement ════════════ -->
+  <script>window.tailwind={config:{darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],display:['Space Grotesk','Inter','sans-serif']},colors:{brand:{50:'#f0f4ff',100:'#e0e9ff',200:'#c7d7fe',300:'#a5bbfc',400:'#8194f8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'},neon:{purple:'#a855f7',blue:'#3b82f6',pink:'#ec4899',cyan:'#06b6d4',green:'#10b981'}}}}}}</script>
   <script src="https://cdn.tailwindcss.com" defer><\/script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/>
-  <script>
-    tailwind.config = {
-      darkMode:'class',
-      theme:{extend:{
-        fontFamily:{sans:['Inter','system-ui','sans-serif'],display:['Space Grotesk','Inter','sans-serif']},
-        colors:{
-          brand:{50:'#f0f4ff',100:'#e0e9ff',200:'#c7d7fe',300:'#a5bbfc',400:'#8194f8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'},
-          neon:{purple:'#a855f7',blue:'#3b82f6',pink:'#ec4899',cyan:'#06b6d4',green:'#10b981'}
-        }
-      }}
-    }
-  </script>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
+    /* ══ CRITICAL CSS — rendu immédiat (above the fold) ══ */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --glow-purple:rgba(99,102,241,0.5);--glow-pink:rgba(236,72,153,0.4);--glow-cyan:rgba(6,182,212,0.35);
+      /* Liquid Glass color tokens */
+      --glow-purple:rgba(99,102,241,0.55);
+      --glow-pink:rgba(236,72,153,0.42);
+      --glow-cyan:rgba(6,182,212,0.38);
+      --glow-green:rgba(16,185,129,0.4);
       --bg-deep:#030512;
-      --lg-bg:rgba(255,255,255,0.045);
+      /* Liquid Glass core variables */
+      --lg-bg:rgba(255,255,255,0.048);
+      --lg-bg-hover:rgba(255,255,255,0.075);
       --lg-border:rgba(255,255,255,0.13);
-      --lg-border-top:rgba(255,255,255,0.22);
-      --lg-shadow:0 8px 32px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.12),inset 0 -1px 0 rgba(0,0,0,0.2);
-      --lg-blur:saturate(1.9) blur(22px);
+      --lg-border-top:rgba(255,255,255,0.24);
+      --lg-border-hover:rgba(99,102,241,0.38);
+      --lg-shadow:0 8px 32px rgba(0,0,0,0.58),inset 0 1px 0 rgba(255,255,255,0.13),inset 0 -1px 0 rgba(0,0,0,0.22);
+      --lg-shadow-hover:0 24px 60px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.16);
+      --lg-blur:saturate(2) blur(24px);
+      --lg-blur-heavy:saturate(2.2) blur(36px);
+      /* Prism spectrum — top highlight line */
+      --prism-line:linear-gradient(90deg,transparent 0%,rgba(168,85,247,0.85) 15%,rgba(99,102,241,0.95) 35%,rgba(6,182,212,0.75) 55%,rgba(236,72,153,0.65) 75%,rgba(249,115,22,0.5) 90%,transparent 100%);
+      /* Font stacks */
+      --font-sans:'Inter','system-ui',sans-serif;
+      --font-display:'Space Grotesk','Inter',sans-serif;
     }
-    ::-webkit-scrollbar{width:4px}
-    ::-webkit-scrollbar-track{background:var(--bg-deep)}
-    ::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.4);border-radius:3px}
-    ::-webkit-scrollbar-thumb:hover{background:#6366f1}
-    html{scroll-behavior:smooth}
-    body{background:var(--bg-deep);font-family:'Inter',sans-serif;overflow-x:hidden;color:#e2e8f0}
+    /* ─ Scrollbar — thin liquid glass ─ */
+    ::-webkit-scrollbar{width:4px;height:4px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(168,85,247,0.4));border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#6366f1,#a855f7)}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+    body{background:var(--bg-deep);font-family:var(--font-sans);overflow-x:hidden;color:#e2e8f0;min-height:100dvh}
 
-    /* ══ DEEP BACKGROUND — 5-stop radial scene ══ */
-    body::after{content:'';position:fixed;inset:0;z-index:-2;
+    /* ══ DEEP BACKGROUND — scène atmosphérique 6 couches ══ */
+    body::after{
+      content:'';position:fixed;inset:0;z-index:-2;
       background:
-        radial-gradient(ellipse 80% 70% at 10% 0%,rgba(79,70,229,0.22) 0%,transparent 60%),
-        radial-gradient(ellipse 60% 55% at 90% 30%,rgba(168,85,247,0.16) 0%,transparent 55%),
-        radial-gradient(ellipse 50% 40% at 50% 90%,rgba(6,182,212,0.10) 0%,transparent 50%),
-        radial-gradient(ellipse 100% 80% at 50% 50%,rgba(3,5,18,1) 40%,transparent 100%),
+        radial-gradient(ellipse 80% 65% at 8% -5%,rgba(79,70,229,0.26) 0%,transparent 58%),
+        radial-gradient(ellipse 65% 55% at 92% 28%,rgba(168,85,247,0.19) 0%,transparent 52%),
+        radial-gradient(ellipse 55% 45% at 50% 95%,rgba(6,182,212,0.12) 0%,transparent 48%),
+        radial-gradient(ellipse 40% 35% at 15% 75%,rgba(236,72,153,0.08) 0%,transparent 45%),
+        radial-gradient(ellipse 100% 80% at 50% 50%,rgba(3,5,18,1) 38%,transparent 100%),
         #030512;
-      pointer-events:none}
+      pointer-events:none;will-change:transform;
+    }
 
-    /* ── Noise texture ── */
-    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+    /* ── Texture de bruit subtil — donne de la profondeur ── */
+    body::before{
+      content:'';position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+      pointer-events:none;z-index:0;opacity:.45;mix-blend-mode:overlay;
+    }
 
     /* ── Cyber grid ── */
     .grid-lines{background-image:linear-gradient(rgba(99,102,241,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.05) 1px,transparent 1px);background-size:60px 60px}
     .grid-lines-fine{background-image:linear-gradient(rgba(99,102,241,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.025) 1px,transparent 1px);background-size:20px 20px}
 
-    /* ══ LIQUID GLASS — Core system ══
-       Inspired by Apple visionOS / iOS 26 liquid glass
-       Key: asymmetric gradient + prism top border + shimmer reflex + deep blur
-    */
+    /* ════════════════════════════════════════════════════════
+       LIQUID GLASS SYSTEM — inspiré d'Apple visionOS / iOS 26
+       Principes : gradient asymétrique + ligne prisme top
+       + réfraction interne + blur saturé profond
+    ════════════════════════════════════════════════════════ */
 
-    /* Base glass — lightweight */
+    /* ── Verre de base — badges, chips, éléments UI légers ── */
     .glass{
-      background:linear-gradient(145deg,rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.02) 100%);
+      background:linear-gradient(145deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.022) 100%);
       backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);
       border:1px solid var(--lg-border);
       border-top-color:var(--lg-border-top);
       box-shadow:var(--lg-shadow);
       position:relative;
     }
+    /* Reflet lumineux interne en diagonale */
     .glass::before{
       content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-      background:linear-gradient(105deg,rgba(255,255,255,0.07) 0%,transparent 40%,transparent 60%,rgba(255,255,255,0.03) 100%);
+      background:linear-gradient(108deg,rgba(255,255,255,0.075) 0%,rgba(255,255,255,0.03) 35%,transparent 55%,rgba(255,255,255,0.025) 100%);
     }
 
-    /* XL glass — hero badges, big panels */
+    /* ── Verre XL — badges hero, grandes panneaux ── */
     .glass-xl{
-      background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.015) 100%);
-      backdrop-filter:saturate(2) blur(32px);-webkit-backdrop-filter:saturate(2) blur(32px);
-      border:1px solid rgba(255,255,255,0.14);
-      border-top-color:rgba(255,255,255,0.26);
-      box-shadow:0 12px 40px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.15),inset 0 -1px 0 rgba(0,0,0,0.25);
+      background:linear-gradient(135deg,rgba(255,255,255,0.065) 0%,rgba(255,255,255,0.018) 60%,rgba(99,102,241,0.025) 100%);
+      backdrop-filter:var(--lg-blur-heavy);-webkit-backdrop-filter:var(--lg-blur-heavy);
+      border:1px solid rgba(255,255,255,0.15);
+      border-top-color:rgba(255,255,255,0.28);
+      box-shadow:0 14px 48px rgba(0,0,0,0.62),inset 0 1px 0 rgba(255,255,255,0.16),inset 0 -1px 0 rgba(0,0,0,0.28),0 0 0 0.5px rgba(255,255,255,0.04);
       position:relative;overflow:hidden;
     }
+    /* Ligne prisme spectrale complète */
     .glass-xl::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1px;border-radius:inherit;
-      background:linear-gradient(90deg,transparent 0%,rgba(168,85,247,0.8) 20%,rgba(99,102,241,0.9) 40%,rgba(6,182,212,0.7) 60%,rgba(236,72,153,0.6) 80%,transparent 100%);
+      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;border-radius:inherit;
+      background:var(--prism-line);
+    }
+    /* Réfraction interne diagonale animée */
+    .glass-xl::after{
+      content:'';position:absolute;top:-40%;left:-50%;width:40%;height:180%;
+      background:linear-gradient(110deg,transparent,rgba(255,255,255,0.055),transparent);
+      transform:skewX(-18deg);animation:lg-sweep 10s ease-in-out infinite 2s;pointer-events:none;
     }
 
-    /* Card glass — feature cards, stats */
+    /* ── Verre carte — feature cards, stat cards ── */
     .glass-card{
-      background:linear-gradient(145deg,rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.018) 60%,rgba(99,102,241,0.03) 100%);
-      backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px);
+      background:linear-gradient(148deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.02) 55%,rgba(99,102,241,0.032) 100%);
+      backdrop-filter:saturate(1.9) blur(22px);-webkit-backdrop-filter:saturate(1.9) blur(22px);
       border:1px solid rgba(255,255,255,0.10);
-      border-top-color:rgba(255,255,255,0.20);
-      box-shadow:0 4px 24px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.10);
-      transition:all .4s cubic-bezier(.25,.8,.25,1);
+      border-top-color:rgba(255,255,255,0.22);
+      box-shadow:0 6px 28px rgba(0,0,0,0.48),inset 0 1px 0 rgba(255,255,255,0.11),0 0 0 0.5px rgba(255,255,255,0.03);
+      transition:all .45s cubic-bezier(.22,.8,.22,1);
       position:relative;overflow:hidden;
     }
-    /* Prism top line */
+    /* Ligne prisme top — apparaît au hover */
     .glass-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent 5%,rgba(99,102,241,0.6) 30%,rgba(168,85,247,0.7) 50%,rgba(6,182,212,0.5) 70%,transparent 95%);
-      opacity:0;transition:opacity .35s ease;
+      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+      background:var(--prism-line);
+      opacity:0;transition:opacity .4s ease;
     }
-    /* Internal shimmer reflex */
+    /* Shimmer reflex interne — sweep au hover */
     .glass-card::after{
-      content:'';position:absolute;top:-40%;left:-60%;width:60%;height:180%;
-      background:linear-gradient(105deg,transparent,rgba(255,255,255,0.06),transparent);
-      transform:skewX(-15deg);transition:left .6s ease;pointer-events:none;
+      content:'';position:absolute;top:-45%;left:-70%;width:55%;height:190%;
+      background:linear-gradient(108deg,transparent,rgba(255,255,255,0.065),transparent);
+      transform:skewX(-15deg);transition:left .7s cubic-bezier(.22,.8,.22,1);pointer-events:none;
     }
     .glass-card:hover::before{opacity:1}
-    .glass-card:hover::after{left:120%}
+    .glass-card:hover::after{left:130%}
     .glass-card:hover{
-      background:linear-gradient(145deg,rgba(255,255,255,0.08) 0%,rgba(99,102,241,0.06) 100%);
-      border-color:rgba(99,102,241,0.35);
-      border-top-color:rgba(168,85,247,0.5);
-      transform:translateY(-6px) scale(1.005);
+      background:linear-gradient(148deg,rgba(255,255,255,0.088) 0%,rgba(99,102,241,0.065) 100%);
+      border-color:rgba(99,102,241,0.38);
+      border-top-color:rgba(168,85,247,0.55);
+      transform:translateY(-7px) scale(1.006);
       box-shadow:
-        0 30px 60px rgba(0,0,0,.6),
-        0 0 0 1px rgba(99,102,241,0.12),
-        inset 0 1px 0 rgba(255,255,255,0.14),
-        0 0 40px rgba(99,102,241,0.08);
+        0 32px 64px rgba(0,0,0,.62),
+        0 0 0 1px rgba(99,102,241,0.14),
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        0 0 48px rgba(99,102,241,0.09);
     }
 
-    /* Neo glass — ROI calc, panels, modals */
+    /* ── Verre Neo — panneaux, ROI calc, formulaires ── */
     .glass-neo{
-      background:linear-gradient(160deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.025) 50%,rgba(99,102,241,0.04) 100%);
-      backdrop-filter:saturate(2) blur(28px);-webkit-backdrop-filter:saturate(2) blur(28px);
-      border:1px solid rgba(255,255,255,0.12);
-      border-top-color:rgba(255,255,255,0.24);
-      border-left-color:rgba(255,255,255,0.16);
+      background:linear-gradient(162deg,rgba(255,255,255,0.062) 0%,rgba(255,255,255,0.026) 48%,rgba(99,102,241,0.042) 100%);
+      backdrop-filter:saturate(2.1) blur(30px);-webkit-backdrop-filter:saturate(2.1) blur(30px);
+      border:1px solid rgba(255,255,255,0.13);
+      border-top-color:rgba(255,255,255,0.26);
+      border-left-color:rgba(255,255,255,0.17);
       box-shadow:
-        0 20px 60px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.14),
-        inset 1px 0 0 rgba(255,255,255,0.06),
-        inset 0 -1px 0 rgba(0,0,0,0.2);
+        0 22px 65px rgba(0,0,0,0.52),
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        inset 1px 0 0 rgba(255,255,255,0.07),
+        inset 0 -1px 0 rgba(0,0,0,0.22),
+        0 0 0 0.5px rgba(255,255,255,0.04);
       position:relative;overflow:hidden;
     }
-    /* Prism spectrum line on top */
+    /* Ligne prisme spectrale */
     .glass-neo::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(99,102,241,0.7) 20%,rgba(168,85,247,0.8) 40%,rgba(6,182,212,0.6) 60%,rgba(236,72,153,0.5) 80%,transparent);
+      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+      background:var(--prism-line);
     }
-    /* Diagonal light refraction */
+    /* Réfraction lumineuse diagonale animée */
     .glass-neo::after{
-      content:'';position:absolute;top:-50%;left:-30%;width:30%;height:200%;
-      background:linear-gradient(110deg,transparent,rgba(255,255,255,0.04),transparent);
-      transform:skewX(-15deg);animation:lg-sweep 8s ease-in-out infinite;pointer-events:none;
+      content:'';position:absolute;top:-55%;left:-35%;width:32%;height:210%;
+      background:linear-gradient(112deg,transparent,rgba(255,255,255,0.042),transparent);
+      transform:skewX(-15deg);animation:lg-sweep 9s ease-in-out infinite 1s;pointer-events:none;
     }
 
-    /* ── LG animations ── */
-    @keyframes lg-sweep{0%,100%{left:-30%;opacity:1}50%{left:120%;opacity:.6}}
-    @keyframes lg-orb-pulse{0%,100%{transform:scale(1);opacity:.25}50%{transform:scale(1.15);opacity:.45}}
+    /* ── Animations Liquid Glass ── */
+    @keyframes lg-sweep{0%,100%{left:-35%;opacity:0.9}50%{left:125%;opacity:0.5}}
+    @keyframes lg-orb-pulse{0%,100%{transform:scale(1);opacity:.28}50%{transform:scale(1.18);opacity:.48}}
     @keyframes lg-prism{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @keyframes lg-glow-pulse{0%,100%{opacity:.6;filter:blur(40px)}50%{opacity:.85;filter:blur(50px)}}
 
     /* ── Gradient text ── */
     .glow-text{background:linear-gradient(135deg,#818cf8 0%,#a855f7 40%,#ec4899 70%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -415,19 +703,45 @@ export const renderLanding = (c: Context) => {
     .glow-text-3{background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .glow-text-orange{background:linear-gradient(135deg,#f97316 0%,#ef4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .hero-text{
-      background:linear-gradient(135deg,#fff 0%,#c7d2fe 25%,#a78bfa 55%,#ec4899 85%,#f97316 100%);
-      background-size:200% 200%;
-      animation:lg-prism 6s ease infinite;
+      background:linear-gradient(135deg,#fff 0%,#c7d2fe 18%,#a78bfa 42%,#ec4899 72%,#f97316 90%,#fbbf24 100%);
+      background-size:250% 250%;
+      animation:lg-prism 7s ease infinite;
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:drop-shadow(0 0 20px rgba(168,85,247,0.18));
     }
 
-    /* ── Liquid Glass Orbs — deep atmospheric ── */
-    .orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;will-change:transform}
-    .orb-1{width:1000px;height:1000px;background:radial-gradient(circle,rgba(79,70,229,0.28) 0%,rgba(99,102,241,0.12) 40%,transparent 70%);top:-300px;left:-400px;animation:orb-float 16s ease-in-out infinite}
-    .orb-2{width:800px;height:800px;background:radial-gradient(circle,rgba(168,85,247,0.22) 0%,rgba(139,92,246,0.1) 40%,transparent 70%);top:300px;right:-300px;animation:orb-float 20s ease-in-out infinite reverse}
-    .orb-3{width:700px;height:700px;background:radial-gradient(circle,rgba(6,182,212,0.15) 0%,rgba(14,165,233,0.07) 40%,transparent 70%);bottom:200px;left:25%;animation:orb-float 13s ease-in-out infinite 3s}
-    .orb-4{width:500px;height:500px;background:radial-gradient(circle,rgba(236,72,153,0.12) 0%,transparent 70%);top:60%;right:5%;animation:orb-float 17s ease-in-out infinite 7s}
-    @keyframes orb-float{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(40px,-60px) scale(1.06)}50%{transform:translate(-20px,30px) scale(.95)}75%{transform:translate(60px,20px) scale(1.04)}}
+    /* ── Orbes atmosphériques Liquid Glass — profondeur cinématique ── */
+    .orb{position:absolute;border-radius:50%;pointer-events:none;will-change:transform;transform-origin:center}
+    .orb-1{
+      width:1100px;height:1100px;
+      background:radial-gradient(circle at 40% 40%,rgba(79,70,229,0.32) 0%,rgba(99,102,241,0.15) 38%,transparent 68%);
+      top:-380px;left:-450px;filter:blur(90px);
+      animation:orb-float 18s ease-in-out infinite;
+    }
+    .orb-2{
+      width:900px;height:900px;
+      background:radial-gradient(circle at 60% 35%,rgba(168,85,247,0.26) 0%,rgba(139,92,246,0.12) 42%,transparent 68%);
+      top:250px;right:-350px;filter:blur(80px);
+      animation:orb-float 22s ease-in-out infinite reverse;
+    }
+    .orb-3{
+      width:750px;height:750px;
+      background:radial-gradient(circle at 50% 50%,rgba(6,182,212,0.18) 0%,rgba(14,165,233,0.08) 42%,transparent 68%);
+      bottom:150px;left:22%;filter:blur(85px);
+      animation:orb-float 15s ease-in-out infinite 2.5s;
+    }
+    .orb-4{
+      width:550px;height:550px;
+      background:radial-gradient(circle at 50% 50%,rgba(236,72,153,0.15) 0%,rgba(249,115,22,0.06) 45%,transparent 70%);
+      top:58%;right:4%;filter:blur(70px);
+      animation:orb-float 19s ease-in-out infinite 6s;
+    }
+    @keyframes orb-float{
+      0%,100%{transform:translate(0,0) scale(1)}
+      20%{transform:translate(35px,-55px) scale(1.07)}
+      45%{transform:translate(-25px,28px) scale(0.94)}
+      70%{transform:translate(50px,18px) scale(1.05)}
+    }
 
     /* ── Animations ── */
     .fade-up{opacity:0;transform:translateY(28px) scale(0.99);transition:opacity .85s cubic-bezier(.25,.8,.25,1),transform .85s cubic-bezier(.25,.8,.25,1)}
@@ -464,95 +778,129 @@ export const renderLanding = (c: Context) => {
     @keyframes neon-pulse{0%,100%{text-shadow:0 0 5px rgba(99,102,241,0.5)}50%{text-shadow:0 0 20px rgba(99,102,241,0.9),0 0 40px rgba(168,85,247,0.4)}}
     @keyframes lg-float-card{0%,100%{transform:translateY(0) rotateX(0deg)}50%{transform:translateY(-8px) rotateX(1deg)}}
 
-    /* ── Navbar — liquid glass nav ── */
+    /* ── Navbar — liquid glass avec flou profond ── */
     .nav-blur{
-      backdrop-filter:saturate(2) blur(30px);-webkit-backdrop-filter:saturate(2) blur(30px);
-      background:linear-gradient(180deg,rgba(3,5,18,0.82) 0%,rgba(3,5,18,0.72) 100%);
-      border-bottom:1px solid rgba(255,255,255,0.08);
-      border-bottom-color:rgba(255,255,255,0.06);
-      box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 -1px 0 rgba(99,102,241,0.07);
+      backdrop-filter:saturate(2.2) blur(32px);-webkit-backdrop-filter:saturate(2.2) blur(32px);
+      background:linear-gradient(180deg,rgba(3,5,18,0.84) 0%,rgba(3,5,18,0.74) 100%);
+      border-bottom:1px solid rgba(255,255,255,0.07);
+      box-shadow:0 1px 0 rgba(255,255,255,0.04),0 4px 30px rgba(0,0,0,0.45),inset 0 -1px 0 rgba(99,102,241,0.08);
     }
-    .nav-link{position:relative;transition:color .25s ease;color:#94a3b8}
-    .nav-link::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);transition:width .35s ease;border-radius:2px}
-    .nav-link:hover::after,.nav-link.active::after{width:100%}
-    .nav-link:hover{color:#c7d2fe}
+    .nav-link{
+      position:relative;transition:color .25s ease;color:#94a3b8;
+      letter-spacing:0.01em;
+    }
+    .nav-link::after{
+      content:'';position:absolute;bottom:-4px;left:50%;right:50%;height:1.5px;
+      background:var(--prism-line);
+      transition:left .35s cubic-bezier(.22,.8,.22,1),right .35s cubic-bezier(.22,.8,.22,1);
+      border-radius:2px;
+    }
+    .nav-link:hover::after{left:0;right:0}
+    .nav-link.active::after{left:0;right:0}
+    .nav-link:hover,.nav-link.active{color:#c7d2fe}
 
-    /* ── Buttons — liquid glass primary ── */
+    /* ── Bouton primaire — dégradé animé Liquid Glass ── */
     .btn-primary{
-      background:linear-gradient(135deg,#4338ca 0%,#6d28d9 40%,#7c3aed 70%,#a855f7 100%);
+      background:linear-gradient(135deg,#4338ca 0%,#6d28d9 35%,#7c3aed 65%,#a855f7 100%);
       background-size:200% 200%;
-      animation:gradient-x 4s ease infinite;
-      transition:all .3s cubic-bezier(.25,.8,.25,1);
+      animation:gradient-x 4.5s ease infinite;
+      transition:transform .28s cubic-bezier(.22,.8,.22,1),box-shadow .28s ease;
       box-shadow:
-        0 4px 30px rgba(99,102,241,0.55),
-        inset 0 1px 0 rgba(255,255,255,0.20),
-        inset 0 -1px 0 rgba(0,0,0,0.15);
+        0 5px 32px rgba(99,102,241,0.58),
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -1px 0 rgba(0,0,0,0.18);
     }
     .btn-primary:hover{
-      transform:translateY(-2px) scale(1.02);
+      transform:translateY(-2px) scale(1.025);
       box-shadow:
-        0 12px 45px rgba(99,102,241,0.75),
-        0 0 0 1px rgba(168,85,247,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.25);
+        0 14px 50px rgba(99,102,241,0.78),
+        0 0 0 1.5px rgba(168,85,247,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        0 0 60px rgba(99,102,241,0.15);
     }
-    .btn-primary:active{transform:translateY(0px) scale(0.98)}
+    .btn-primary:active{transform:translateY(0) scale(0.975);transition-duration:.1s}
+    .btn-primary:focus-visible{outline:2px solid #a855f7;outline-offset:3px}
+
+    /* ── Bouton ghost — verre transparent avec reflets ── */
     .btn-ghost{
-      background:linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.12);
-      border-top-color:rgba(255,255,255,0.2);
-      backdrop-filter:blur(12px);
-      box-shadow:0 2px 12px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.08);
-      transition:all .3s ease;
+      background:linear-gradient(148deg,rgba(255,255,255,0.058),rgba(255,255,255,0.022));
+      border:1px solid rgba(255,255,255,0.13);
+      border-top-color:rgba(255,255,255,0.22);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      box-shadow:0 2px 14px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.09);
+      transition:all .3s cubic-bezier(.22,.8,.22,1);
+      position:relative;overflow:hidden;
     }
+    .btn-ghost::after{
+      content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.055),transparent);
+      transform:skewX(-18deg);transition:left .5s ease;pointer-events:none;
+    }
+    .btn-ghost:hover::after{left:150%}
     .btn-ghost:hover{
-      background:linear-gradient(145deg,rgba(99,102,241,0.12),rgba(99,102,241,0.05));
-      border-color:rgba(99,102,241,0.4);
-      transform:translateY(-1px);
-      box-shadow:0 6px 20px rgba(99,102,241,0.2),inset 0 1px 0 rgba(255,255,255,0.12);
+      background:linear-gradient(148deg,rgba(99,102,241,0.13),rgba(99,102,241,0.052));
+      border-color:rgba(99,102,241,0.42);border-top-color:rgba(168,85,247,0.45);
+      transform:translateY(-1.5px);
+      box-shadow:0 7px 22px rgba(99,102,241,0.22),inset 0 1px 0 rgba(255,255,255,0.13);
     }
+    .btn-ghost:focus-visible{outline:2px solid #6366f1;outline-offset:3px}
+
     .btn-outline-brand{
-      border:1px solid rgba(99,102,241,0.45);
-      border-top-color:rgba(168,85,247,0.5);
+      border:1px solid rgba(99,102,241,0.48);
+      border-top-color:rgba(168,85,247,0.52);
       color:#a5b4fc;
-      background:linear-gradient(145deg,rgba(99,102,241,0.06),rgba(99,102,241,0.02));
-      backdrop-filter:blur(10px);
+      background:linear-gradient(148deg,rgba(99,102,241,0.065),rgba(99,102,241,0.022));
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
       transition:all .3s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.07),0 0 20px rgba(99,102,241,0.06);
     }
     .btn-outline-brand:hover{
-      background:linear-gradient(145deg,rgba(99,102,241,0.14),rgba(99,102,241,0.06));
-      border-color:#6366f1;color:#c7d2fe;
-      box-shadow:0 6px 20px rgba(99,102,241,0.25);
+      background:linear-gradient(148deg,rgba(99,102,241,0.16),rgba(99,102,241,0.065));
+      border-color:#6366f1;border-top-color:#a855f7;color:#c7d2fe;
+      box-shadow:0 6px 22px rgba(99,102,241,0.28),0 0 35px rgba(99,102,241,0.08);
     }
-    .btn-cyan{background:linear-gradient(135deg,#0891b2,#06b6d4);transition:all .3s ease;box-shadow:0 4px 20px rgba(6,182,212,0.4)}
-    .btn-cyan:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(6,182,212,0.6)}
+    .btn-cyan{
+      background:linear-gradient(135deg,#0891b2 0%,#06b6d4 60%,#22d3ee 100%);
+      transition:all .3s ease;
+      box-shadow:0 4px 22px rgba(6,182,212,0.42),inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .btn-cyan:hover{
+      transform:translateY(-2px);
+      box-shadow:0 9px 32px rgba(6,182,212,0.62),0 0 50px rgba(6,182,212,0.12);
+    }
 
     /* ── Micro-feedback ripple ── */
     .ripple-btn{position:relative;overflow:hidden}
     .ripple-btn::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,0.18);width:0;height:0;top:50%;left:50%;transform:translate(-50%,-50%);transition:width .45s ease,height .45s ease,opacity .45s ease;opacity:0}
     .ripple-btn:active::after{width:220px;height:220px;opacity:0}
 
-    /* ── Stat cards — liquid glass ── */
+    /* ── Stat cards — liquid glass avec reflets ── */
     .stat-card{
-      background:linear-gradient(145deg,rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.018) 60%,rgba(99,102,241,0.04) 100%);
-      backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px);
+      background:linear-gradient(148deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.02) 55%,rgba(99,102,241,0.038) 100%);
+      backdrop-filter:saturate(1.9) blur(22px);-webkit-backdrop-filter:saturate(1.9) blur(22px);
       border:1px solid rgba(255,255,255,0.10);
-      border-top-color:rgba(255,255,255,0.22);
-      box-shadow:0 4px 24px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.10);
-      transition:all .4s cubic-bezier(.25,.8,.25,1);
+      border-top-color:rgba(255,255,255,0.23);
+      box-shadow:0 6px 28px rgba(0,0,0,0.48),inset 0 1px 0 rgba(255,255,255,0.11),0 0 0 0.5px rgba(255,255,255,0.03);
+      transition:all .42s cubic-bezier(.22,.8,.22,1);
       position:relative;overflow:hidden;
     }
+    /* Ligne prisme top — apparaît au hover */
     .stat-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(99,102,241,0.5),rgba(168,85,247,0.6),rgba(6,182,212,0.4),transparent);
-      opacity:0;transition:opacity .3s ease;
+      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+      background:var(--prism-line);
+      opacity:0;transition:opacity .35s ease;
     }
-    .stat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 55%,rgba(99,102,241,0.05));pointer-events:none}
+    /* Overlay interne dégradé diagonal */
+    .stat-card::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(138deg,transparent 50%,rgba(99,102,241,0.045));
+      pointer-events:none;
+    }
     .stat-card:hover{
-      background:linear-gradient(145deg,rgba(99,102,241,0.1) 0%,rgba(255,255,255,0.04) 100%);
-      border-color:rgba(99,102,241,0.3);border-top-color:rgba(168,85,247,0.45);
-      transform:translateY(-5px) scale(1.01);
-      box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 35px rgba(99,102,241,0.1);
+      background:linear-gradient(148deg,rgba(99,102,241,0.11) 0%,rgba(255,255,255,0.042) 100%);
+      border-color:rgba(99,102,241,0.32);border-top-color:rgba(168,85,247,0.48);
+      transform:translateY(-6px) scale(1.012);
+      box-shadow:0 28px 52px rgba(0,0,0,.58),0 0 40px rgba(99,102,241,0.11),inset 0 1px 0 rgba(255,255,255,0.14);
     }
     .stat-card:hover::before{opacity:1}
 
@@ -561,52 +909,63 @@ export const renderLanding = (c: Context) => {
     .feat-icon-glow{position:absolute;inset:-6px;border-radius:22px;opacity:0;filter:blur(14px);transition:opacity .35s ease}
     .glass-card:hover .feat-icon-glow{opacity:.7}
 
-    /* ── Pricing — liquid glass cards ── */
+    /* ── Plan cards — liquid glass pricing ── */
     .plan-card{
-      background:linear-gradient(155deg,rgba(255,255,255,0.055) 0%,rgba(255,255,255,0.018) 50%,rgba(3,5,18,0.2) 100%);
-      backdrop-filter:saturate(1.8) blur(24px);-webkit-backdrop-filter:saturate(1.8) blur(24px);
-      border:1px solid rgba(255,255,255,0.10);
-      border-top-color:rgba(255,255,255,0.20);
-      box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.10);
-      transition:all .45s cubic-bezier(.25,.8,.25,1);
+      background:linear-gradient(158deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.02) 48%,rgba(3,5,18,0.22) 100%);
+      backdrop-filter:saturate(1.9) blur(26px);-webkit-backdrop-filter:saturate(1.9) blur(26px);
+      border:1px solid rgba(255,255,255,0.11);
+      border-top-color:rgba(255,255,255,0.22);
+      box-shadow:0 10px 36px rgba(0,0,0,0.52),inset 0 1px 0 rgba(255,255,255,0.11),0 0 0 0.5px rgba(255,255,255,0.03);
+      transition:all .48s cubic-bezier(.22,.8,.22,1);
       position:relative;overflow:hidden;
     }
-    /* Shimmer sweep */
+    /* Shimmer sweep — horizontal refraction */
     .plan-card::after{
-      content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);
-      transition:left .75s ease;pointer-events:none;
+      content:'';position:absolute;top:0;left:-110%;width:60%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.055),transparent);
+      transition:left .85s cubic-bezier(.22,.8,.22,1);pointer-events:none;
     }
-    .plan-card:hover::after{left:160%}
+    .plan-card:hover::after{left:165%}
     .plan-card:hover{
-      transform:translateY(-12px) scale(1.01);
-      box-shadow:0 40px 80px rgba(0,0,0,.65),0 0 60px rgba(99,102,241,0.08);
-      border-color:rgba(99,102,241,0.25);
-      border-top-color:rgba(168,85,247,0.35);
+      transform:translateY(-14px) scale(1.012);
+      box-shadow:0 45px 90px rgba(0,0,0,.68),0 0 70px rgba(99,102,241,0.09),inset 0 1px 0 rgba(255,255,255,0.14);
+      border-color:rgba(99,102,241,0.28);
+      border-top-color:rgba(168,85,247,0.38);
     }
     .plan-card.popular{
-      border-color:rgba(249,115,22,0.5);
-      border-top-color:rgba(249,115,22,0.75);
-      background:linear-gradient(155deg,rgba(249,115,22,0.07) 0%,rgba(255,255,255,0.03) 50%,rgba(3,5,18,0.15) 100%);
+      border-color:rgba(249,115,22,0.52);
+      border-top-color:rgba(249,115,22,0.78);
+      background:linear-gradient(158deg,rgba(249,115,22,0.075) 0%,rgba(255,255,255,0.03) 48%,rgba(3,5,18,0.18) 100%);
+      box-shadow:0 10px 36px rgba(0,0,0,0.52),0 0 30px rgba(249,115,22,0.08),inset 0 1px 0 rgba(249,115,22,0.12);
     }
-    .plan-card.popular::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,#f97316,#ef4444,#a855f7,transparent)}
+    .plan-card.popular::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,#f97316 25%,#ef4444 45%,#a855f7 75%,transparent);
+    }
 
-    /* ── Testimonials — liquid glass ── */
+    /* ── Testimonials — liquid glass avec guillemet décoratif ── */
     .testi-card{
-      background:linear-gradient(145deg,rgba(255,255,255,0.045) 0%,rgba(255,255,255,0.015) 100%);
-      backdrop-filter:saturate(1.7) blur(18px);-webkit-backdrop-filter:saturate(1.7) blur(18px);
+      background:linear-gradient(148deg,rgba(255,255,255,0.048) 0%,rgba(255,255,255,0.016) 100%);
+      backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px);
       border:1px solid rgba(255,255,255,0.09);
-      border-top-color:rgba(255,255,255,0.18);
-      box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.08);
-      transition:all .35s ease;position:relative;overflow:hidden;
+      border-top-color:rgba(255,255,255,0.19);
+      box-shadow:0 5px 26px rgba(0,0,0,0.42),inset 0 1px 0 rgba(255,255,255,0.085),0 0 0 0.5px rgba(255,255,255,0.025);
+      transition:all .38s cubic-bezier(.22,.8,.22,1);
+      position:relative;overflow:hidden;
     }
     .testi-card:hover{
-      background:linear-gradient(145deg,rgba(99,102,241,0.07) 0%,rgba(255,255,255,0.03) 100%);
-      border-color:rgba(99,102,241,0.25);border-top-color:rgba(168,85,247,0.4);
-      transform:translateY(-5px);
-      box-shadow:0 24px 48px rgba(0,0,0,0.55),0 0 30px rgba(99,102,241,0.08);
+      background:linear-gradient(148deg,rgba(99,102,241,0.075) 0%,rgba(255,255,255,0.032) 100%);
+      border-color:rgba(99,102,241,0.28);border-top-color:rgba(168,85,247,0.42);
+      transform:translateY(-6px);
+      box-shadow:0 28px 54px rgba(0,0,0,0.58),0 0 35px rgba(99,102,241,0.09),inset 0 1px 0 rgba(255,255,255,0.1);
     }
-    .testi-card::before{content:'\\201C';position:absolute;top:-10px;left:16px;font-size:120px;color:rgba(99,102,241,0.07);line-height:1;font-family:Georgia,serif;pointer-events:none}
+    .testi-card::before{
+      content:'\u201C';position:absolute;top:-8px;left:14px;
+      font-size:130px;color:rgba(99,102,241,0.075);
+      line-height:1;font-family:Georgia,serif;pointer-events:none;
+      background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(168,85,247,0.06));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
 
     /* ── Demo screen ── */
     .demo-screen{
@@ -748,8 +1107,16 @@ export const renderLanding = (c: Context) => {
     /* ── Plan perk ── */
     .plan-perk{display:flex;align-items:center;gap:8px;font-size:13px;color:#64748b}
 
-    /* ── Scroll Progress Bar — liquid glass ── */
-    #scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f97316);z-index:9999;width:0%;transition:width 0.1s linear;box-shadow:0 0 8px rgba(99,102,241,0.6)}
+    /* ── Barre de progression scroll — spectre lumineux ── */
+    #scroll-progress{
+      position:fixed;top:0;left:0;height:2.5px;
+      background:linear-gradient(90deg,#6366f1 0%,#8b5cf6 25%,#a855f7 50%,#ec4899 75%,#f97316 100%);
+      background-size:200% 100%;
+      animation:gradient-x 3s ease infinite;
+      z-index:9999;width:0%;
+      transition:width 0.08s linear;
+      box-shadow:0 0 10px rgba(99,102,241,0.7),0 0 20px rgba(168,85,247,0.35);
+    }
 
     /* ── Hero badge — liquid glass ── */
     #hero-badge{background:linear-gradient(135deg,rgba(255,255,255,0.07) 0%,rgba(99,102,241,0.06) 100%);backdrop-filter:saturate(2) blur(20px)}
@@ -2018,31 +2385,45 @@ export const renderLanding = (c: Context) => {
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-// TRACKING — Lightweight analytics event system
+// PERFORMANCE: marque le premier rendu pour mesure LCP
+// ═══════════════════════════════════════════════════════════════
+if (typeof performance !== 'undefined' && performance.mark) {
+  performance.mark('adnova-start');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TRACKING — Système d'analytics ultra-léger (< 1 KB)
 // ═══════════════════════════════════════════════════════════════
 const _track = [];
 let _sessionStart = Date.now();
 let _scrollDepth = 0;
 
 function trackEvent(name, props) {
-  const ev = { event: name, ts: Date.now() - _sessionStart, ...props };
-  _track.push(ev);
-  // Send to analytics endpoint (non-blocking)
-  if (typeof navigator.sendBeacon === 'function') {
-    try { navigator.sendBeacon('/api/track', JSON.stringify(ev)); } catch(e) {}
-  }
+  try {
+    const ev = { event: name, ts: Date.now() - _sessionStart, url: location.pathname, ...props };
+    _track.push(ev);
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/track', JSON.stringify(ev));
+    }
+  } catch(e) {}
 }
 
-// Scroll depth tracking
+// Scroll depth + progress bar — passif, optimisé RAF
+let _scrollTicking = false;
+const _progressBar = document.getElementById('scroll-progress');
 window.addEventListener('scroll', () => {
-  const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-  if (pct > _scrollDepth) {
-    _scrollDepth = pct;
-    if ([25, 50, 75, 90].includes(pct)) trackEvent('scroll_depth', { pct });
-  }
-  // Scroll progress bar
-  const bar = document.getElementById('scroll-progress');
-  if (bar) bar.style.width = pct + '%';
+  if (_scrollTicking) return;
+  _scrollTicking = true;
+  requestAnimationFrame(() => {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const pct = maxScroll > 0 ? Math.round((window.scrollY / maxScroll) * 100) : 0;
+    if (_progressBar) _progressBar.style.width = Math.min(pct, 100) + '%';
+    if (pct > _scrollDepth) {
+      _scrollDepth = pct;
+      if ([25, 50, 75, 90].includes(pct)) trackEvent('scroll_depth', { pct });
+    }
+    _scrollTicking = false;
+  });
 }, { passive: true });
 
 // Time on page tracking
@@ -2051,32 +2432,54 @@ window.addEventListener('beforeunload', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════
-// INTERSECTION OBSERVER (fade-up + fade-in)
+// INTERSECTION OBSERVER — animations fade-up/fade-in
+// Optimisé: rootMargin négatif pour déclencher plus tôt
 // ═══════════════════════════════════════════════════════════════
-const observer = new IntersectionObserver(entries => {
+const _observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
-      observer.unobserve(e.target);
+      _observer.unobserve(e.target);
     }
   });
-}, { threshold: .07, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.fade-up, .fade-in').forEach(el => observer.observe(el));
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+// Utilise requestIdleCallback si disponible pour ne pas bloquer le rendu
+const scheduleObserve = typeof requestIdleCallback !== 'undefined'
+  ? (fn) => requestIdleCallback(fn, { timeout: 500 })
+  : (fn) => setTimeout(fn, 50);
+
+scheduleObserve(() => {
+  document.querySelectorAll('.fade-up, .fade-in').forEach(el => _observer.observe(el));
+});
 
 // ═══════════════════════════════════════════════════════════════
-// NAVBAR scroll effect
+// NAVBAR — effet liquid glass au scroll (RAF optimisé)
 // ═══════════════════════════════════════════════════════════════
-const navbar = document.getElementById('navbar');
+const _navbar = document.getElementById('navbar');
+let _navTicking = false;
+let _navScrolled = false;
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    navbar.style.background = 'linear-gradient(180deg,rgba(3,5,18,0.94) 0%,rgba(3,5,18,0.88) 100%)';
-    navbar.style.boxShadow = '0 4px 40px rgba(0,0,0,0.6),0 1px 0 rgba(99,102,241,0.1),inset 0 -1px 0 rgba(99,102,241,0.06)';
-    navbar.style.backdropFilter = 'saturate(2) blur(32px)';
-  } else {
-    navbar.style.background = 'linear-gradient(180deg,rgba(3,5,18,0.82) 0%,rgba(3,5,18,0.72) 100%)';
-    navbar.style.boxShadow = 'none';
-    navbar.style.backdropFilter = 'saturate(2) blur(30px)';
-  }
+  if (_navTicking) return;
+  _navTicking = true;
+  requestAnimationFrame(() => {
+    const scrolled = window.scrollY > 50;
+    if (scrolled !== _navScrolled && _navbar) {
+      _navScrolled = scrolled;
+      if (scrolled) {
+        _navbar.style.background = 'linear-gradient(180deg,rgba(3,5,18,0.96) 0%,rgba(3,5,18,0.90) 100%)';
+        _navbar.style.boxShadow = '0 4px 44px rgba(0,0,0,0.65),0 1px 0 rgba(99,102,241,0.12),inset 0 -1px 0 rgba(99,102,241,0.07)';
+        _navbar.style.backdropFilter = 'saturate(2.2) blur(36px)';
+        _navbar.style.borderBottomColor = 'rgba(99,102,241,0.1)';
+      } else {
+        _navbar.style.background = 'linear-gradient(180deg,rgba(3,5,18,0.84) 0%,rgba(3,5,18,0.74) 100%)';
+        _navbar.style.boxShadow = '';
+        _navbar.style.backdropFilter = 'saturate(2.2) blur(32px)';
+        _navbar.style.borderBottomColor = '';
+      }
+    }
+    _navTicking = false;
+  });
 }, { passive: true });
 
 // ═══════════════════════════════════════════════════════════════
@@ -2331,13 +2734,50 @@ document.addEventListener('click', e => {
   }
 });
 
-// Init ROI on load
-window.addEventListener('load', () => {
+// ═══════════════════════════════════════════════════════════════
+// INIT — différé après paint pour ne pas bloquer LCP/FCP
+// ═══════════════════════════════════════════════════════════════
+function _initPage() {
+  // ROI calc
   calcROI();
-  // Animate hero badge
+
+  // Hero badge fade-in
   const badge = document.getElementById('hero-badge');
-  if (badge) { badge.style.opacity = '0'; setTimeout(() => { badge.style.transition = 'opacity .8s ease'; badge.style.opacity = '1'; }, 200); }
-});
+  if (badge) {
+    badge.style.opacity = '0';
+    setTimeout(() => { badge.style.transition = 'opacity .85s ease'; badge.style.opacity = '1'; }, 150);
+  }
+
+  // Lazy load images below the fold
+  if ('IntersectionObserver' in window) {
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    const imgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const img = e.target;
+          if (img.dataset.src) { img.src = img.dataset.src; }
+          imgObserver.unobserve(img);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    lazyImages.forEach(img => imgObserver.observe(img));
+  }
+
+  // Performance mark
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('adnova-interactive');
+    if (performance.measure) {
+      try { performance.measure('adnova-init', 'adnova-start', 'adnova-interactive'); } catch(e) {}
+    }
+  }
+}
+
+// Utilise requestIdleCallback pour ne pas impacter le LCP
+if (document.readyState === 'complete') {
+  scheduleObserve(_initPage);
+} else {
+  window.addEventListener('load', () => scheduleObserve(_initPage), { once: true });
+}
 </script>
 </body>
 </html>`)

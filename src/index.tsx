@@ -47,161 +47,392 @@ import { renderAdminBilling } from './admin/pages/billing'
 // ─── i18n detection ────────────────────────────────────────────────────────
 import { detectLang } from './lib/i18n'
 
+// ═══════════════════════════════════════════════════════════════════════════
+// RATE LIMITER — in-memory sliding window (per IP, resets on Worker restart)
+// ═══════════════════════════════════════════════════════════════════════════
+const rateMap = new Map<string, { count: number; reset: number }>()
+
+function getRateKey(c: any): string {
+  return (
+    c.req.raw.headers.get('CF-Connecting-IP') ||
+    c.req.raw.headers.get('X-Forwarded-For')?.split(',')[0]?.trim() ||
+    'unknown'
+  )
+}
+
+function checkRateLimit(ip: string, limit: number, windowMs: number): boolean {
+  const now = Date.now()
+  const entry = rateMap.get(ip)
+  if (!entry || now > entry.reset) {
+    rateMap.set(ip, { count: 1, reset: now + windowMs })
+    // Cleanup old entries periodically (keep map small)
+    if (rateMap.size > 5000) {
+      for (const [k, v] of rateMap) { if (now > v.reset) rateMap.delete(k) }
+    }
+    return true
+  }
+  if (entry.count >= limit) return false
+  entry.count++
+  return true
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECURITY HEADERS — Production-grade
+// ═══════════════════════════════════════════════════════════════════════════
+const SECURITY_HEADERS: Record<string, string> = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=(), usb=(), serial=()',
+  'X-XSS-Protection': '1; mode=block',
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+  'Cross-Origin-Resource-Policy': 'same-origin',
+  'Cross-Origin-Embedder-Policy': 'unsafe-none',
+  'X-DNS-Prefetch-Control': 'on',
+  'Timing-Allow-Origin': 'https://adnova.ai',
+  'NEL': '{"report_to":"default","max_age":31536000,"include_subdomains":true}',
+}
+
+// CSP — Tailwind CDN + Google Fonts + FA + inline styles + connect analytics
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com",
+  "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net data:",
+  "img-src 'self' data: blob: https: http: https://randomuser.me",
+  "connect-src 'self' https://www.google-analytics.com https://vitals.vercel-insights.com https://cdn.tailwindcss.com https://fonts.googleapis.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://adnova.ai",
+  "upgrade-insecure-requests",
+  "block-all-mixed-content",
+].join('; ')
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HONO APP
+// ═══════════════════════════════════════════════════════════════════════════
 const app = new Hono()
 
-// Middleware (must be registered before routes)
-app.use('*', logger())
-app.use('/api/*', cors())
-app.use('/admin/api/*', cors())
+// ─── CORS — restricted to own origin for API ──────────────────────────────
+app.use('/api/*', cors({
+  origin: ['https://adnova.ai', 'https://www.adnova.ai'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposeHeaders: ['X-RateLimit-Remaining'],
+  maxAge: 600,
+  credentials: true,
+}))
+app.use('/admin/api/*', cors({
+  origin: ['https://adnova.ai', 'https://www.adnova.ai'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 600,
+  credentials: true,
+}))
 
-// ─── Performance: cache headers + security ────────────────────────────────
+app.use('*', logger())
+
+// ─── Security + Cache headers middleware ──────────────────────────────────
 app.use('*', async (c, next) => {
   await next()
-  // Guard: don't touch headers on 204/205 (no-content responses)
   const status = c.res.status
   if (status === 204 || status === 205) return
-
   try {
+    // Security headers on every response
+    for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
+      c.res.headers.set(k, v)
+    }
+    // CSP only on HTML responses
+    const ct = c.res.headers.get('Content-Type') || ''
+    if (ct.includes('text/html')) {
+      c.res.headers.set('Content-Security-Policy', CSP)
+    }
+    // Cache policy
     const url = c.req.url
-    // Cache static assets aggressively
-    if (url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.ico')) {
-      c.res.headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800')
+    if (url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.ico') || url.endsWith('.webp')) {
+      c.res.headers.set('Cache-Control', 'public, max-age=604800, stale-while-revalidate=2592000')
+    } else if (url.includes('/api/') && c.req.method === 'GET' && !url.includes('/api/track') && !url.includes('/api/lang')) {
+      c.res.headers.set('Cache-Control', 'public, max-age=10, stale-while-revalidate=30')
+    } else if (url === '/' || url.endsWith('/')) {
+      c.res.headers.set('Cache-Control', 'public, max-age=30, stale-while-revalidate=300')
     }
-    // Cache GET API responses briefly (not /api/track)
-    if (url.includes('/api/') && c.req.method === 'GET' && !url.includes('/api/track')) {
-      c.res.headers.set('Cache-Control', 'public, max-age=15, stale-while-revalidate=60')
-    }
-    // Security headers for all responses
-    c.res.headers.set('X-Frame-Options', 'SAMEORIGIN')
-    c.res.headers.set('X-Content-Type-Options', 'nosniff')
-    c.res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  } catch (_) { /* headers already sent — ignore */ }
+  } catch (_) { /* already finalized */ }
 })
 
-// ─── Health check ─────────────────────────────────────────────────────────
-app.get('/health', (c) => c.json({ status: 'ok', version: '2.0', ts: Date.now() }))
+// ─── Rate limiting middleware ─────────────────────────────────────────────
+// Auth routes: 20 req/min; API routes: 120 req/min; Landing: 300 req/min
+app.use('/api/auth/*', async (c, next) => {
+  const ip = getRateKey(c)
+  if (!checkRateLimit(`auth:${ip}`, 20, 60_000)) {
+    return c.json({ error: 'Too many requests. Please wait 60s.' }, 429)
+  }
+  await next()
+})
+app.use('/api/*', async (c, next) => {
+  if (c.req.path === '/api/track') { await next(); return }
+  const ip = getRateKey(c)
+  if (!checkRateLimit(`api:${ip}`, 120, 60_000)) {
+    return c.json({ error: 'Rate limit exceeded.' }, 429)
+  }
+  await next()
+})
+app.use('/admin/api/*', async (c, next) => {
+  const ip = getRateKey(c)
+  if (!checkRateLimit(`admin:${ip}`, 60, 60_000)) {
+    return c.json({ error: 'Rate limit exceeded.' }, 429)
+  }
+  await next()
+})
+
+// ─── Input size limit (prevent body flooding) ────────────────────────────
+app.use('/api/*', async (c, next) => {
+  const cl = parseInt(c.req.header('Content-Length') || '0', 10)
+  if (cl > 512_000) {
+    return c.json({ error: 'Request body too large (max 512 KB).' }, 413)
+  }
+  await next()
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SEO ROUTES — sitemap.xml, robots.txt, manifest
+// ═══════════════════════════════════════════════════════════════════════════
+app.get('/sitemap.xml', (c) => {
+  const now = new Date().toISOString().split('T')[0]
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- ══ Landing page — priorité maximale, multilingue ══ -->
+  <url>
+    <loc>https://adnova.ai/</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://adnova.ai/"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://adnova.ai/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://adnova.ai/?lang=fr"/>
+    <xhtml:link rel="alternate" hreflang="fr-FR" href="https://adnova.ai/?lang=fr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://adnova.ai/?lang=es"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://adnova.ai/?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://adnova.ai/?lang=pt"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://adnova.ai/?lang=ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://adnova.ai/"/>
+    <image:image>
+      <image:loc>https://adnova.ai/og-image.png</image:loc>
+      <image:title>AdNova AI — Autonomous Advertising Intelligence Dashboard</image:title>
+      <image:caption>4.82x average ROAS across 2,412 active brands</image:caption>
+    </image:image>
+  </url>
+  <!-- ══ Inscription — priorité très haute (conversion) ══ -->
+  <url>
+    <loc>https://adnova.ai/register</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://adnova.ai/register"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://adnova.ai/register"/>
+  </url>
+  <!-- ══ Connexion ══ -->
+  <url>
+    <loc>https://adnova.ai/login</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- ══ Sitemap index image ══ -->
+</urlset>`
+  return c.body(xml, 200, {
+    'Content-Type': 'application/xml; charset=UTF-8',
+    'Cache-Control': 'public, max-age=43200, stale-while-revalidate=86400',
+    'X-Robots-Tag': 'noindex',
+  })
+})
+
+app.get('/robots.txt', (c) => {
+  const txt = `User-agent: *
+Allow: /
+Allow: /register
+Allow: /login
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /campaigns
+Disallow: /analytics
+Disallow: /creatives
+Disallow: /ai-engine
+Disallow: /billing
+Disallow: /settings
+Disallow: /audiences
+Disallow: /automation
+Disallow: /platforms
+
+# Sitemap
+Sitemap: https://adnova.ai/sitemap.xml
+
+# Crawl-delay for respectful bots
+Crawl-delay: 1`
+  return c.body(txt, 200, {
+    'Content-Type': 'text/plain; charset=UTF-8',
+    'Cache-Control': 'public, max-age=86400',
+  })
+})
+
+app.get('/manifest.json', (c) => {
+  return c.json({
+    name: 'AdNova AI — Autonomous Advertising Intelligence',
+    short_name: 'AdNova AI',
+    description: 'AI manages your ads across 9 platforms autonomously. Average ROAS: 4.82x. Free 14-day trial.',
+    start_url: '/?utm_source=pwa',
+    scope: '/',
+    display: 'standalone',
+    display_override: ['standalone', 'minimal-ui', 'browser'],
+    background_color: '#030512',
+    theme_color: '#6366f1',
+    orientation: 'any',
+    lang: 'en-US',
+    dir: 'ltr',
+    icons: [
+      { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+    ],
+    screenshots: [
+      {
+        src: '/screenshot.png',
+        sizes: '1280x720',
+        type: 'image/png',
+        form_factor: 'wide',
+        label: 'AdNova AI Dashboard — 4.82x ROAS'
+      }
+    ],
+    categories: ['business', 'productivity', 'finance'],
+    related_applications: [],
+    prefer_related_applications: false,
+    shortcuts: [
+      { name: 'Dashboard', short_name: 'Dashboard', description: 'View your ad performance', url: '/dashboard?utm_source=pwa-shortcut', icons: [{ src: '/favicon.svg', sizes: 'any' }] },
+      { name: 'Start Free Trial', short_name: 'Free Trial', description: 'Start your 14-day free trial', url: '/register?utm_source=pwa-shortcut', icons: [{ src: '/favicon.svg', sizes: 'any' }] }
+    ],
+    share_target: {
+      action: '/share',
+      method: 'GET',
+      params: { title: 'title', text: 'text', url: 'url' }
+    }
+  }, 200, { 'Cache-Control': 'public, max-age=86400' })
+})
+
+// ─── browserconfig.xml — Windows tiles ───────────────────────────────────────
+app.get('/browserconfig.xml', (c) => {
+  const xml = `<?xml version="1.0" encoding="utf-8"?><browserconfig><msapplication><tile><square150x150logo src="/favicon.svg"/><TileColor>#6366f1</TileColor></tile></msapplication></browserconfig>`
+  return c.body(xml, 200, { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' })
+})
 
 // ─── Favicon ──────────────────────────────────────────────────────────────
 app.get('/favicon.ico', (c) => c.redirect('/favicon.svg', 301))
 app.get('/favicon.svg', (c) => {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366f1"/><stop offset="100%" style="stop-color:#8b5cf6"/></linearGradient></defs>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="50%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+  </defs>
   <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <path d="M16 8 L10 22 L16 18 L22 22 Z" fill="white"/>
+  <path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/>
+  <path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/>
 </svg>`
-  return c.body(svg, 200, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'max-age=86400' })
+  return c.body(svg, 200, {
+    'Content-Type': 'image/svg+xml',
+    'Cache-Control': 'public, max-age=604800',
+  })
 })
+
+// ─── Health check ─────────────────────────────────────────────────────────
+app.get('/health', (c) => c.json({
+  status: 'ok', version: '2.0',
+  ts: Date.now(), uptime: process.uptime?.() ?? 0,
+}))
 
 // ─── Language detection API ────────────────────────────────────────────────
 app.get('/api/lang', (c) => {
   const lang = detectLang(c.req.raw)
   const country = c.req.raw.headers.get('CF-IPCountry') || 'US'
-  return c.json({ lang, country })
+  return c.json({ lang, country }, 200, { 'Cache-Control': 'private, max-age=300' })
 })
 
-// ─── Analytics tracking endpoint (replaces missing /api/track) ─────────────
-// Accepts sendBeacon POST from frontend — always returns 204 No Content
+// ─── Analytics tracking — 204 No Content (never logs errors) ─────────────
 app.post('/api/track', async (c) => {
-  try {
-    // Silently consume the body to drain the stream (required by Hono/Workers)
-    await c.req.text()
-  } catch (_) { /* ignore */ }
+  try { await c.req.text() } catch (_) {}
   return new Response(null, { status: 204 })
 })
 
-// ─── Landing & Auth Pages ──────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGE ROUTES
+// ═══════════════════════════════════════════════════════════════════════════
 app.get('/', renderLanding)
 app.get('/login', renderLogin)
 app.get('/register', renderRegister)
 
-// ─── Dashboard Pages (with i18n) ───────────────────────────────────────────
 app.get('/dashboard', renderDashboard)
-app.get('/campaigns', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderCampaigns(lang))
-})
-app.get('/creatives', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderCreatives(lang))
-})
-app.get('/analytics', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderAnalytics(lang))
-})
-app.get('/ai-engine', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderAIEngine(lang))
-})
-app.get('/platforms', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderPlatforms(lang))
-})
-app.get('/billing', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderBilling(lang))
-})
-app.get('/audiences', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderAudiences(lang))
-})
-app.get('/automation', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderAutomation(lang))
-})
-app.get('/settings', (c) => {
-  const lang = detectLang(c.req.raw)
-  return c.html(renderSettings(lang))
-})
+app.get('/campaigns',  (c) => c.html(renderCampaigns(detectLang(c.req.raw))))
+app.get('/creatives',  (c) => c.html(renderCreatives(detectLang(c.req.raw))))
+app.get('/analytics',  (c) => c.html(renderAnalytics(detectLang(c.req.raw))))
+app.get('/ai-engine',  (c) => c.html(renderAIEngine(detectLang(c.req.raw))))
+app.get('/platforms',  (c) => c.html(renderPlatforms(detectLang(c.req.raw))))
+app.get('/billing',    (c) => c.html(renderBilling(detectLang(c.req.raw))))
+app.get('/audiences',  (c) => c.html(renderAudiences(detectLang(c.req.raw))))
+app.get('/automation', (c) => c.html(renderAutomation(detectLang(c.req.raw))))
+app.get('/settings',   (c) => c.html(renderSettings(detectLang(c.req.raw))))
 
-// ─── API Routes ────────────────────────────────────────────────────────────
-app.route('/api/auth', authRoutes)
-app.route('/api/dashboard', dashboardRoutes)
-app.route('/api/campaigns', campaignRoutes)
-app.route('/api/creatives', creativeRoutes)
-app.route('/api/analytics', analyticsRoutes)
-app.route('/api/ai', aiRoutes)
-app.route('/api/platforms', platformRoutes)
-app.route('/api/billing', billingRoutes)
-app.route('/api/tenants', tenantRoutes)
-app.route('/api/audiences', audienceRoutes)
+// ═══════════════════════════════════════════════════════════════════════════
+// API ROUTES
+// ═══════════════════════════════════════════════════════════════════════════
+app.route('/api/auth',       authRoutes)
+app.route('/api/dashboard',  dashboardRoutes)
+app.route('/api/campaigns',  campaignRoutes)
+app.route('/api/creatives',  creativeRoutes)
+app.route('/api/analytics',  analyticsRoutes)
+app.route('/api/ai',         aiRoutes)
+app.route('/api/platforms',  platformRoutes)
+app.route('/api/billing',    billingRoutes)
+app.route('/api/tenants',    tenantRoutes)
+app.route('/api/audiences',  audienceRoutes)
 app.route('/api/automation', automationRoutes)
 
 // ─── Super Admin Pages ─────────────────────────────────────────────────────
-app.get('/admin/login', renderAdminLogin)
-app.get('/admin', renderAdminDashboard)
-app.get('/admin/tenants', renderAdminTenants)
-app.get('/admin/users', renderAdminUsers)
-app.get('/admin/revenue', renderAdminRevenue)
+app.get('/admin/login',      renderAdminLogin)
+app.get('/admin',            renderAdminDashboard)
+app.get('/admin/tenants',    renderAdminTenants)
+app.get('/admin/users',      renderAdminUsers)
+app.get('/admin/revenue',    renderAdminRevenue)
 app.get('/admin/ai-monitor', renderAdminAIMonitor)
-app.get('/admin/logs', renderAdminLogs)
-app.get('/admin/security', renderAdminSecurity)
-app.get('/admin/config', renderAdminConfig)
-app.get('/admin/plans', renderAdminPlans)
-app.get('/admin/billing', renderAdminBilling)
+app.get('/admin/logs',       renderAdminLogs)
+app.get('/admin/security',   renderAdminSecurity)
+app.get('/admin/config',     renderAdminConfig)
+app.get('/admin/plans',      renderAdminPlans)
+app.get('/admin/billing',    renderAdminBilling)
 
-// Redirects for admin shortlinks
-app.get('/admin/campaigns', (c) => c.redirect('/admin', 302))
-app.get('/admin/creatives', (c) => c.redirect('/admin', 302))
-app.get('/admin/platforms', (c) => c.redirect('/admin/config', 302))
+app.get('/admin/campaigns',  (c) => c.redirect('/admin', 302))
+app.get('/admin/creatives',  (c) => c.redirect('/admin', 302))
+app.get('/admin/platforms',  (c) => c.redirect('/admin/config', 302))
 
-// ─── Super Admin API Routes ────────────────────────────────────────────────
 app.route('/admin/api', adminRoutes)
 
-// ─── Global error handler ─────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// ERROR HANDLERS
+// ═══════════════════════════════════════════════════════════════════════════
 app.onError((err, c) => {
-  console.error('[AdNova Error]', err.message, c.req.url)
+  console.error('[AdNova]', c.req.method, c.req.path, err.message)
   if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/admin/api/')) {
-    return c.json({ error: 'Internal server error', message: err.message }, 500)
+    return c.json({ error: 'Internal server error' }, 500)
   }
-  return c.html(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error — AdNova AI</title></head><body style="background:#030512;color:#e2e8f0;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0"><div style="text-align:center"><h1 style="font-size:2rem;color:#6366f1;margin-bottom:1rem">AdNova AI</h1><p style="color:#64748b;margin-bottom:1.5rem">Something went wrong on our end.</p><a href="/" style="background:#6366f1;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600">Return to homepage</a></div></body></html>`, 500)
+  return c.html(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Error — AdNova AI</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#030512;color:#e2e8f0;font-family:Inter,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}.card{text-align:center;padding:2rem;max-width:400px}h1{color:#6366f1;font-size:1.8rem;margin-bottom:.75rem}p{color:#64748b;margin-bottom:1.5rem}a{background:#6366f1;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block}</style></head><body><div class="card"><h1>AdNova AI</h1><p>Something went wrong on our end. Our team has been notified.</p><a href="/">← Back to home</a></div></body></html>`, 500)
 })
 
-// ─── 404 handler ──────────────────────────────────────────────────────────
 app.notFound((c) => {
   if (c.req.path.startsWith('/api/') || c.req.path.startsWith('/admin/api/')) {
-    return c.json({ error: 'Route not found', path: c.req.path }, 404)
+    return c.json({ error: 'Not found', path: c.req.path }, 404)
   }
-  // Redirect unknown pages to home
   return c.redirect('/', 302)
 })
 
