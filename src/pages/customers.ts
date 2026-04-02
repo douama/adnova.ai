@@ -21,6 +21,7 @@ export function renderCustomers(): string {
       quote: 'We went from struggling with Facebook ads to having AdNova\'s AI manage $45K/month across 6 platforms. Our ROAS tripled in 3 months. It\'s like having a team of 10 specialists working 24/7.',
       author: 'Rachel Kim',
       authorRole: 'Head of Growth',
+      authorPhoto: 'https://sspark.genspark.ai/cfimages?u1=Hqi%2FSZRsgMbWQ%2BUtzeILNT4w0T%2FwcjUyW1k98CMI5%2BtLiDneLrLuE8o5SodVgKuTFIyzyLiXm4FvI38x%2B05vCJbQXEDytO7LpmjAp8qPSYBPwJtSWL%2B7AF0QHXYpMVLkEQn%2B4g9yUi3R8JwEThL8rw%3D%3D&u2=RTWQkdbVNoA3E0hp&width=2000',
       platforms: ['Facebook', 'Instagram', 'Google', 'Pinterest'],
       challenge: 'BrightLeaf was spending 25 hours/week managing campaigns manually with inconsistent results. High customer acquisition costs were limiting growth.',
       solution: 'Deployed AdNova AI across all platforms, enabling autonomous bid management and creative rotation. AI identified TikTok as an underutilized channel.',
@@ -39,6 +40,7 @@ export function renderCustomers(): string {
       quote: 'AdNova AI transformed our B2B paid search strategy. The AI discovered intent signals we never would have found manually, cutting our cost per trial by 60% while tripling pipeline volume.',
       author: 'David Osei',
       authorRole: 'VP Marketing',
+      authorPhoto: 'https://sspark.genspark.ai/cfimages?u1=bZUTvtgumvMsNoPSa7UGz0pd12t7rDoyoFrqkPLl9zL%2B%2BJ6RK1nHgATkuPQpYnYVL9qa6NVt%2B6c8eNzbkNhrkMHLE4UaScF2z9QJu%2FZHkY6pO0CuSBjTgl%2F8ESCOe0Nt&u2=fSpXzKjiigJ2uSbm&width=2048',
       platforms: ['Google', 'LinkedIn', 'Facebook'],
       challenge: 'High competition in B2B SaaS space drove CPCs up. Manual bidding couldn\'t keep pace with competitor bidding changes in real time.',
       solution: 'AI autonomous bidding with competitive signal detection. LinkedIn audience builder found perfect lookalike audiences from their top 20% customers.',
@@ -57,6 +59,7 @@ export function renderCustomers(): string {
       quote: 'As a French luxury brand, targeting precision is everything. AdNova\'s AI understood the nuance — premium audiences, the right creative at the right moment. Q4 was our best quarter ever.',
       author: 'Isabelle Fontaine',
       authorRole: 'Digital Director',
+      authorPhoto: 'https://sspark.genspark.ai/cfimages?u1=c5iQ%2FWl%2FefjHAQT%2Fi3dAkhhLEdkl7o%2B%2BtNoOTJgn0S4eH2UlfLkJRTahqhHK%2FZQUm3eI0xk4tuijaZNMEfSVCzC6uQeo0rLpBB7KE2XHGn3ZxrVC6ZEanIR44ysjrYua3RleTy5XmkgjeJfV0wCOYgmB3mwoA3skGnhKT2qr46ZmP835VSrm8Pk0NbjTay7pZyduXu%2BB5Pqopo1sZk6nI9eRynmUOmhEJSrJTGBlR8eycckq4O1Eg3zkX8vLl8iT&u2=5gvo1MoGlEcI0EXA&width=383',
       platforms: ['Instagram', 'Facebook', 'Pinterest', 'TikTok'],
       challenge: 'Luxury fashion requires surgical targeting. Broad campaigns were diluting the brand and wasting spend on non-luxury audiences.',
       solution: 'AI-built lookalike audiences from highest-LTV customers. Creative rotation optimized for luxury aesthetic. Excluded price-sensitive segments automatically.',
@@ -75,6 +78,7 @@ export function renderCustomers(): string {
       quote: 'We had zero online advertising experience. AdNova AI handled everything — from campaign structure to creative testing. 6 months later, online is now 40% of our total revenue.',
       author: 'Mike Torrance',
       authorRole: 'CEO',
+      authorPhoto: 'https://sspark.genspark.ai/cfimages?u1=VuV0ipWF83Hy2eLYc6CjCoxSy22W5vk0IXOrhz0LpDuICX0aOyV1XdW7rB8jOFTlCS1pmFyF%2F%2Brt7lacg0Cy7uKts0XizaoZ4EAMA1HhSPhWQluSfwp7JhK2Sx%2FSY%2FJu&u2=dFe7CSIFgEPDx7EG&width=2048',
       platforms: ['Google', 'Facebook', 'Instagram', 'Amazon'],
       challenge: 'Traditional brick-and-mortar retailer with no digital advertising expertise. Needed to build online revenue stream without dedicated marketing team.',
       solution: 'Full-funnel AI campaign build-out. AI handled prospecting and retargeting automatically. Product feed optimization for Shopping campaigns on Google and Amazon.',
@@ -93,6 +97,7 @@ export function renderCustomers(): string {
       quote: 'Education is a competitive space. AdNova AI\'s real-time optimization keeps us profitable even as CPCs fluctuate wildly. We scaled from 800 to 2,800 new students/month with the same budget.',
       author: 'Sarah Chen',
       authorRole: 'Growth Lead',
+      authorPhoto: 'https://sspark.genspark.ai/cfimages?u1=zZ%2FIUSj6OTpX2OXvw0TiuF8%2F%2BTN3tbu%2B%2FRFMIRz1exSPk2CH2pK18q6jObMtNfr0HKMG2pyK0gbo%2FPXDLUn%2BZzOXLWQXoLhSPcKjE3aPgqLWvjB1mwEzXJXP3njClw%3D%3D&u2=1efxJo7Az702%2Fb7V&width=1920',
       platforms: ['Facebook', 'Google', 'TikTok', 'Snapchat'],
       challenge: 'CPC volatility in education made manual bidding unsustainable. Creative fatigue was a constant issue — needing fresh ads weekly.',
       solution: 'AI Creative Studio generated 50 variations weekly. Automated A/B testing identified winners in 48 hours. Budget shifted automatically to top performers.',
@@ -111,6 +116,7 @@ export function renderCustomers(): string {
       quote: 'Managing 23 clinic locations across Google ads used to take our team 30 hours/week. AdNova AI does it in the background. Appointment volume doubled while we actually reduced our ad spend.',
       author: 'Dr. James Park',
       authorRole: 'Marketing Director',
+      authorPhoto: 'https://sspark.genspark.ai/cfimages?u1=4EQLd1LXOFwFFKCB%2FNGndiBd42TtyMCDoS6WJMP4VFYKxmGVC1RGpNz1w%2BRNfi78vTc%2BAgfuTTw0GwK4zDo9aeCFZq76bjl25BDSab6aeTBjW%2FnFreiIh%2ByirpYopf23XyA4VZTJIPqPuz04Tyn9h0xj%2Fn0fBKKeZFNid4rqxjtBTEZlIaDj&u2=jAieaqTihMIRdAnv&width=1707',
       platforms: ['Google', 'Facebook'],
       challenge: 'Healthcare advertising requires compliance and local targeting precision. Managing campaigns for 23 locations manually was consuming the entire marketing team.',
       solution: 'AI built location-specific campaigns for all 23 clinics. Automated bid adjustments based on appointment capacity and local competition. HIPAA-compliant creative.',
@@ -119,12 +125,42 @@ export function renderCustomers(): string {
   ]
 
   const testimonials = [
-    { name: 'Alex Turner', role: 'CMO', company: 'Volta Electric', text: 'The AI found a TikTok audience we never would have discovered manually. That single insight drove 40% of our Q3 revenue.', roas: '6.2×', avatar: 'AT' },
-    { name: 'Maria Santos', role: 'Founder', company: 'Botanika', text: 'Finally, I can focus on building my brand instead of obsessing over bid adjustments. AdNova handles everything perfectly.', roas: '8.1×', avatar: 'MS' },
-    { name: 'Thomas Weber', role: 'Head of PPC', company: 'AutoParts Pro', text: 'We run 300+ campaigns. Before AdNova, we had a team of 5 managing this. Now 2 people oversee everything and results are 3× better.', roas: '5.4×', avatar: 'TW' },
-    { name: 'Jennifer Liu', role: 'Growth Manager', company: 'CloudBase App', text: 'The lookalike audience builder is scary good. It identified customer patterns our data team couldn\'t find in months.', roas: '4.9×', avatar: 'JL' },
-    { name: 'Raj Patel', role: 'CEO', company: 'SpiceCraft Foods', text: 'From ₹5L to ₹50L monthly revenue in 8 months. The AI handles Indian market nuances incredibly well across all platforms.', roas: '7.3×', avatar: 'RP' },
-    { name: 'Emma Nielsen', role: 'Digital Director', company: 'Scandi Home', text: 'We tested 3 other AI ad tools. None came close to AdNova\'s autonomous decision-making quality. The 72-hour ROAS improvement claim is real.', roas: '9.8×', avatar: 'EN' },
+    {
+      name: 'Alex Turner', role: 'CMO', company: 'Volta Electric',
+      text: 'The AI found a TikTok audience we never would have discovered manually. That single insight drove 40% of our Q3 revenue.',
+      roas: '6.2×', avatar: 'AT',
+      photo: 'https://sspark.genspark.ai/cfimages?u1=NsKzGYFrgQ6MANpA6rKStvfubO1RHS5WlmKKcc7yrERzQI6%2BE36TqjGMywzn7WlsQnCQmFCvccF3TXwrvU6MezYWXZwOn3DIe35b3x8GU2pFeRVZePwpfIQNLluQlly4&u2=YePKoutZxOZ2HjQr&width=768'
+    },
+    {
+      name: 'Maria Santos', role: 'Founder', company: 'Botanika',
+      text: 'Finally, I can focus on building my brand instead of obsessing over bid adjustments. AdNova handles everything perfectly.',
+      roas: '8.1×', avatar: 'MS',
+      photo: 'https://sspark.genspark.ai/cfimages?u1=6mOxsm26vGwoZQfVsBOVBS4pWOn5dQOrx%2BpLPWGbDZnrGIg%2BVk7zWzlEUu9XnleQDGxDp2VwLKj7WGe8qPET0Krnji3n6rfOGBhmG35qevAxP0eKnXKd9aZQ6jdJiKmvaPHDOV6%2FVTk%3D&u2=9HwoXI2cfybKYzz2&width=2560'
+    },
+    {
+      name: 'Thomas Weber', role: 'Head of PPC', company: 'AutoParts Pro',
+      text: 'We run 300+ campaigns. Before AdNova, we had a team of 5 managing this. Now 2 people oversee everything and results are 3× better.',
+      roas: '5.4×', avatar: 'TW',
+      photo: 'https://sspark.genspark.ai/cfimages?u1=hL1ickNS%2FpdC8%2FbmNC2SD6yUquQiMfSFHNX5pRcea%2Bxz0YHAxHa7mtCU8UqpKGPgg7LJzRKDXgZmwS6r9MBCpb4DqOirHVFueW2S4G71XSNHiSeO4WPQBEIl3U7DXqum&u2=xfnlEoDATrntVP%2Fu&width=768'
+    },
+    {
+      name: 'Jennifer Liu', role: 'Growth Manager', company: 'CloudBase App',
+      text: 'The lookalike audience builder is scary good. It identified customer patterns our data team couldn\'t find in months.',
+      roas: '4.9×', avatar: 'JL',
+      photo: 'https://sspark.genspark.ai/cfimages?u1=yVR%2FncT3vuhS7j8dYaExtk24SUVWQ3EAULyxU%2FgC51lo7dt84WwI%2BZD%2FE%2FpJKwChOSVlBKoqZHFsMnUXmFPWEYC0eHaaXIgzlmP09Bb4DhyquGIeV%2FMZ1zIFCJmJM%2FLIHLJM4wjl9q4Qo7%2B5QC3lhQtsskFa%2B2djAYBRbk%2B%2Fi0zavlLqe0Y2Be%2B6Xx1202k02cBqo60clMSHE2vfpzG5fe2WyQG2cPagSGOzH%2F0Zn35GEK0UuelFjmPz1YcbRkXgHmRZjlXX%2FPsu0SIa%2BLaycHOoCiyeud6XR2fu1CV9iK2SLvr5Lyauhlsi8pmdKH3BgilEogk2jEJqOjBLFsfK9PnPm7Dv&u2=BXrCQB1uFNi5XH28&width=1129'
+    },
+    {
+      name: 'Raj Patel', role: 'CEO', company: 'SpiceCraft Foods',
+      text: 'From ₹5L to ₹50L monthly revenue in 8 months. The AI handles Indian market nuances incredibly well across all platforms.',
+      roas: '7.3×', avatar: 'RP',
+      photo: 'https://sspark.genspark.ai/cfimages?u1=UcnG92rMDyyENTsdQbxYgX7QxJAKCxjp00h%2FW39IQbG2e0GlQ0rbFxpoXvp2glvWQvT7LhwUeG13wVaE3NESDQ0O%2FsBAwJki7lx7G8FGKk%2FPr7jUrGLO9qn9Qk%2BI1LjW&u2=1sBDm5%2B7%2FdoTCvap&width=2048'
+    },
+    {
+      name: 'Emma Nielsen', role: 'Digital Director', company: 'Scandi Home',
+      text: 'We tested 3 other AI ad tools. None came close to AdNova\'s autonomous decision-making quality. The 72-hour ROAS improvement claim is real.',
+      roas: '9.8×', avatar: 'EN',
+      photo: 'https://sspark.genspark.ai/cfimages?u1=bjVlNl7La3dm7Dt19qBjt78dwKYpNR5PjSSrJOvmwEZJbn0XNrsG5n%2B%2BcyOLN9U1ZWFiMscCy9ge010uCmefZaZPg1qGBCMgh58aT9BoagKIYwxK8CGWHxxmdgBce3GZJY3sYU%2FO5BGMdJ2Or2rN70JA1UYEYCQX0D650kEXeYXV4A7Era7lajGLN8e0D70qHOwMxApheDrFVuopihzN%2FidiVGWB5IPNPsJrlQwK0miCVl%2BetrBo419Mdvw9QlsOooass%2BoCcZNNjtrv%2FGt9RAX1%2BAkS6tfmBH8vRg%3D%3D&u2=oU11jZl5GXuyaEQM&width=2000'
+    },
   ]
 
   return `${head}
@@ -218,7 +254,9 @@ export function renderCustomers(): string {
             <blockquote class="glass p-5 rounded-2xl border-l-4 border-${cs.color}-500">
               <p class="text-slate-200 italic leading-relaxed mb-3">"${cs.quote}"</p>
               <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-${cs.color}-500/30 flex items-center justify-center text-${cs.color}-400 text-xs font-bold">${cs.author.split(' ').map(n => n[0]).join('')}</div>
+                <div class="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 bg-${cs.color}-500/30">
+                  ${(cs as any).authorPhoto ? `<img src="${(cs as any).authorPhoto}" alt="${cs.author}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'flex items-center justify-center w-full h-full text-xs font-bold text-${cs.color}-400\'>${cs.author.split(' ').map((n: string) => n[0]).join('')}</div>'">` : `<div class="flex items-center justify-center w-full h-full text-xs font-bold text-${cs.color}-400">${cs.author.split(' ').map((n: string) => n[0]).join('')}</div>`}
+                </div>
                 <div><div class="text-white text-sm font-medium">${cs.author}</div><div class="text-slate-500 text-xs">${cs.authorRole}, ${cs.company}</div></div>
               </div>
             </blockquote>
@@ -258,14 +296,16 @@ export function renderCustomers(): string {
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
       ${testimonials.map(t => `
-      <div class="glass-card rounded-2xl p-5">
+      <div class="glass-card rounded-2xl p-5 flex flex-col">
         <div class="flex items-center gap-1 mb-3">
           ${Array(5).fill('<i class="fas fa-star text-amber-400 text-xs"></i>').join('')}
           <span class="ml-auto text-indigo-400 font-bold text-sm">${t.roas} ROAS</span>
         </div>
-        <p class="text-slate-300 text-sm leading-relaxed mb-4">"${t.text}"</p>
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">${t.avatar}</div>
+        <p class="text-slate-300 text-sm leading-relaxed mb-4 flex-grow">"${t.text}"</p>
+        <div class="flex items-center gap-3 pt-3 border-t border-white/5">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600">
+            ${(t as any).photo ? `<img src="${(t as any).photo}" alt="${t.name}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('flex','items-center','justify-center');this.parentElement.innerHTML='<span class=\'text-white text-xs font-bold\'>${t.avatar}</span>'">` : `<div class="w-full h-full flex items-center justify-center text-white text-xs font-bold">${t.avatar}</div>`}
+          </div>
           <div>
             <div class="text-white font-medium text-sm">${t.name}</div>
             <div class="text-slate-500 text-xs">${t.role}, ${t.company}</div>
