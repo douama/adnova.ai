@@ -7,7 +7,7 @@ export const renderDashboard = (c: Context) => {
 
   const content = `
   <!-- KPI Cards Row — data loaded via API -->
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="kpi-grid">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4" id="kpi-grid">
     ${kpiCard('id-spend', t(lang,'total_spend'), '$124,850', '+18.4%', 'fa-dollar-sign', 'from-brand-500 to-purple-600', t(lang,'this_month'))}
     ${kpiCard('id-roas', t(lang,'roas'), '4.82x', '+0.6x', 'fa-chart-line', 'from-emerald-500 to-teal-600', 'Revenue per dollar')}
     ${kpiCard('id-campaigns', t(lang,'active_campaigns'), '47', '+3', 'fa-bullhorn', 'from-blue-500 to-cyan-600', '12 scaling · 35 running')}
@@ -15,7 +15,7 @@ export const renderDashboard = (c: Context) => {
   </div>
 
   <!-- Charts Row -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
     <!-- Main Revenue Chart -->
     <div class="lg:col-span-2 glass rounded-2xl p-5">
       <div class="flex items-center justify-between mb-4">
@@ -58,7 +58,7 @@ export const renderDashboard = (c: Context) => {
   </div>
 
   <!-- AI Actions + Platform Status Row -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
     <!-- AI Recent Actions -->
     <div class="lg:col-span-2 glass rounded-2xl p-5">
       <div class="flex items-center justify-between mb-4">
@@ -102,7 +102,7 @@ export const renderDashboard = (c: Context) => {
   </div>
 
   <!-- Top Campaigns Table -->
-  <div class="glass rounded-2xl p-5 mb-6">
+  <div class="glass rounded-2xl p-5 mb-4">
     <div class="flex items-center justify-between mb-4">
       <div>
         <h3 class="font-bold text-white">Top Performing ${t(lang,'campaigns')}</h3>

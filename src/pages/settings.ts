@@ -21,7 +21,7 @@ export function renderSettings(lang: Lang = 'en'): string {
     <p class="text-sm text-slate-500 mt-1">Manage your workspace, ad platforms, team and preferences</p>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
     <!-- Settings Nav -->
     <div class="glass rounded-2xl p-3 h-fit sticky top-20">
       <nav class="space-y-1" id="settings-nav">
@@ -123,7 +123,7 @@ export function renderSettings(lang: Lang = 'en'): string {
               <p class="text-xs text-slate-500">Personal account settings</p>
             </div>
           </div>
-          <div class="flex items-center gap-6 mb-6">
+          <div class="flex items-center gap-4 mb-4">
             <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center text-2xl font-black text-white">JD</div>
             <div>
               <button class="glass hover:bg-white/10 text-sm text-slate-300 px-4 py-2 rounded-xl transition-all mb-2 block">Upload Photo</button>

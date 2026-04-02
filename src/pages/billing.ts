@@ -4,7 +4,7 @@ import { type Lang } from '../lib/i18n'
 
 export function renderBilling(lang: Lang = 'en'): string {
   const content = `
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
     <!-- Current Plan -->
     <div class="lg:col-span-2 glass rounded-2xl p-6" style="border:1px solid rgba(99,102,241,0.3)">
       <div class="flex items-start justify-between mb-4 flex-wrap gap-3">

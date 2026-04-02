@@ -470,6 +470,51 @@ export function shell(
       .sidebar-desktop { transform: translateX(${isRTL ? '100%' : '-100%'}); transition: transform 0.35s cubic-bezier(0.23,1,0.32,1); }
       .sidebar-desktop.open { transform: translateX(0); }
       .main-content { margin-${isRTL ? 'right' : 'left'}: 0 !important; }
+
+      /* Compact topbar */
+      header.h-14 { height: 52px; padding-left: 12px; padding-right: 12px; }
+
+      /* Main padding — tighter on mobile */
+      main#main-content { padding: 12px !important; }
+
+      /* KPI grids — 2 cols on mobile */
+      .grid.grid-cols-2.lg\\:grid-cols-4 { grid-template-columns: repeat(2,1fr) !important; gap: 8px !important; }
+      .grid.grid-cols-1.lg\\:grid-cols-3 { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .grid.grid-cols-1.lg\\:grid-cols-2 { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .grid.grid-cols-1.md\\:grid-cols-2 { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .grid.grid-cols-1.md\\:grid-cols-3 { grid-template-columns: 1fr !important; gap: 10px !important; }
+
+      /* Cards — reduce inner padding */
+      .glass.rounded-2xl.p-5 { padding: 12px !important; }
+      .glass.rounded-2xl.p-6 { padding: 12px !important; }
+
+      /* Tables — horizontal scroll */
+      .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+      table { min-width: 480px; }
+
+      /* Notification panel — full width */
+      #notifications-panel { width: 100vw; left: 0; right: 0; }
+
+      /* AI status modal */
+      #ai-status-modal > div { width: calc(100vw - 32px) !important; max-width: 100% !important; }
+
+      /* Sidebar logo — compact */
+      .sidebar-desktop .p-5 { padding: 14px !important; }
+
+      /* Hide sidebar tagline on small screens */
+      .sidebar-desktop .text-xs[style*="rgba(148"] { display: none; }
+
+      /* Bottom nav active state */
+      #bottom-nav a.text-brand-400 { background: rgba(99,102,241,0.12); }
+
+      /* Reduce mb-6 in content */
+      .mb-6 { margin-bottom: 10px; }
+    }
+
+    /* Extra-small ≤ 380px */
+    @media (max-width: 380px) {
+      .grid.grid-cols-2.lg\\:grid-cols-4 { grid-template-columns: 1fr !important; }
+      main#main-content { padding: 8px !important; }
     }
     .sidebar-overlay {
       display: none; position: fixed; inset: 0;
@@ -602,8 +647,32 @@ export function shell(
     </div>
   </aside>
 
+  <!-- ── Bottom Navigation (mobile only) ── -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-2" style="background:rgba(3,5,13,0.96);backdrop-filter:saturate(1.8) blur(20px);border-top:1px solid rgba(255,255,255,0.07);" id="bottom-nav">
+    <a href="/dashboard" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${activePage==='dashboard'?'text-brand-400':'text-slate-500 hover:text-slate-300'}">
+      <i class="fas fa-chart-line text-base"></i>
+      <span class="text-[10px] font-medium">Dashboard</span>
+    </a>
+    <a href="/campaigns" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${activePage==='campaigns'?'text-brand-400':'text-slate-500 hover:text-slate-300'}">
+      <i class="fas fa-bullhorn text-base"></i>
+      <span class="text-[10px] font-medium">Campaigns</span>
+    </a>
+    <a href="/creatives" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${activePage==='creatives'?'text-brand-400':'text-slate-500 hover:text-slate-300'}">
+      <i class="fas fa-wand-magic-sparkles text-base"></i>
+      <span class="text-[10px] font-medium">Creatives</span>
+    </a>
+    <a href="/analytics" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${activePage==='analytics'?'text-brand-400':'text-slate-500 hover:text-slate-300'}">
+      <i class="fas fa-chart-bar text-base"></i>
+      <span class="text-[10px] font-medium">Analytics</span>
+    </a>
+    <button onclick="openSidebar()" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all text-slate-500 hover:text-slate-300">
+      <i class="fas fa-bars text-base"></i>
+      <span class="text-[10px] font-medium">More</span>
+    </button>
+  </nav>
+
   <!-- Main Content -->
-  <div class="main-content ${isRTL ? 'mr-64' : 'ml-64'} flex-1 flex flex-col min-h-screen">
+  <div class="main-content ${isRTL ? 'mr-64' : 'ml-64'} flex-1 flex flex-col min-h-screen pb-16 md:pb-0">
     <!-- Top Bar -->
     <header class="h-14 topbar-bg border-b flex items-center justify-between px-4 md:px-6 sticky top-0 z-30" style="border-color:rgba(255,255,255,0.05);">
       <div class="flex items-center gap-3">

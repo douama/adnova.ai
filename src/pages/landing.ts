@@ -830,6 +830,27 @@ export const renderLanding = (c: Context) => {
 
       /* ── Footer ── */
       footer .grid { grid-template-columns: 1fr 1fr !important; }
+
+      /* ── Compact sections on mobile ── */
+      section.py-8 { padding-top: 28px !important; padding-bottom: 28px !important; }
+      .section-label { font-size: 10px !important; padding: 4px 12px !important; margin-bottom: 8px !important; }
+      .testi-card { padding: 14px !important; }
+      .plan-card, .glass-neo { padding: 14px !important; }
+
+      /* ── Proof chips compact ── */
+      #hero .glass.px-3\\.5.py-2 { padding: 5px 10px !important; font-size: 10px !important; }
+
+      /* ── Trust line ── */
+      #hero .flex.items-center.gap-4.text-xs { font-size: 10px !important; gap: 8px !important; }
+
+      /* ── Neon divider ── */
+      .neon-line { display: none; }
+
+      /* ── Stats grid 2×2 ── */
+      .grid.grid-cols-2.md\\:grid-cols-4 { gap: 8px !important; }
+
+      /* ── Feature cards 1 col ── */
+      .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3 { grid-template-columns: 1fr !important; gap: 8px !important; }
     }
 
     /* ── Extra small (≤ 380px) ── */
@@ -918,10 +939,10 @@ export const renderLanding = (c: Context) => {
 
   <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/20 to-transparent scanline pointer-events-none"></div>
 
-  <div class="max-w-7xl mx-auto px-5 md:px-10 py-4 md:py-6 relative z-10 w-full">
+  <div class="max-w-7xl mx-auto px-5 md:px-10 py-3 md:py-5 relative z-10 w-full">
 
     <!-- ─ 2-column grid ─ -->
-    <div class="grid grid-cols-1 lg:grid-cols-[44%_56%] gap-8 xl:gap-12 items-center">
+    <div class="grid grid-cols-1 lg:grid-cols-[44%_56%] gap-5 xl:gap-5 items-center">
 
       <!-- ══ LEFT COLUMN — marketing copy ══ -->
       <div class="flex flex-col items-start fade-up">
@@ -1101,7 +1122,7 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      PLATFORM TICKER
 ════════════════════════════════════════════════════════════ -->
-<div class="py-6 overflow-hidden relative" id="platforms" style="background:linear-gradient(180deg,rgba(3,5,18,0.85),rgba(4,7,22,0.9));border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px)">
+<div class="py-3 overflow-hidden relative" id="platforms" style="background:linear-gradient(180deg,rgba(3,5,18,0.85),rgba(4,7,22,0.9));border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px)">
   <div class="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style="background:linear-gradient(90deg,rgba(2,5,16,0.95),transparent)"></div>
   <div class="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style="background:linear-gradient(-90deg,rgba(2,5,16,0.95),transparent)"></div>
   <div class="ticker-inner gap-4">
@@ -1116,15 +1137,15 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      STATS — REAL NUMBERS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden">
+<section class="py-8 relative overflow-hidden">
   <div class="absolute inset-0 grid-lines-fine opacity-50"></div>
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-10 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-chart-bar text-brand-400"></i> Verified Platform Impact</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Numbers that <span class="glow-text-2">don't lie</span>
       </h2>
-      <p class="text-slate-500 text-lg max-w-xl mx-auto">Aggregated from 2,412 live brands — updated daily. <a href="#case-studies" class="text-brand-400 hover:text-brand-300 transition-colors">See individual case studies →</a></p>
+      <p class="text-slate-500 text-sm max-w-xl mx-auto">Aggregated from 2,412 live brands — updated daily. <a href="#case-studies" class="text-brand-400 hover:text-brand-300 transition-colors">See individual case studies →</a></p>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
       ${bigStat('$2.1B+', 'Ad Spend Managed', 'fa-dollar-sign', 'from-brand-500 to-purple-600', 'Every dollar tracked & optimized in real-time')}
@@ -1146,14 +1167,14 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      USE CASES — CONCRETS avec démos
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative" id="use-cases">
+<section class="py-8 relative" id="use-cases">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-12 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-lightbulb text-brand-400"></i> Real Use Cases</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
         See exactly what <span class="glow-text">AdNova does</span>
       </h2>
-      <p class="text-slate-500 text-lg max-w-2xl mx-auto">Not "AI magic" — concrete actions your campaigns get, every day.</p>
+      <p class="text-slate-500 text-sm max-w-2xl mx-auto">Not "AI magic" — concrete actions your campaigns get, every day.</p>
     </div>
 
     <!-- Use case tabs -->
@@ -1174,7 +1195,7 @@ export const renderLanding = (c: Context) => {
 
     <!-- Use case panels -->
     <div id="uc-scale" class="uc-panel fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
         <div>
           <div class="section-label mb-4 w-fit" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#6ee7b7"><i class="fas fa-arrow-trend-up"></i> Auto-Scaling Engine</div>
           <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Scales winners before you even wake up</h3>
@@ -1214,7 +1235,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <div id="uc-kill" class="uc-panel hidden fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
         <div>
           <div class="section-label mb-4 w-fit" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5"><i class="fas fa-scissors"></i> Creative Killer</div>
           <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Stops budget drain before you notice</h3>
@@ -1250,7 +1271,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <div id="uc-generate" class="uc-panel hidden fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
         <div>
           <div class="section-label mb-4 w-fit" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#d8b4fe"><i class="fas fa-wand-magic-sparkles"></i> AI Creative Generator</div>
           <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Fresh creatives, zero effort</h3>
@@ -1284,7 +1305,7 @@ export const renderLanding = (c: Context) => {
     </div>
 
     <div id="uc-audience" class="uc-panel hidden fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
         <div>
           <div class="section-label mb-4 w-fit" style="background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3);color:#67e8f9"><i class="fas fa-users"></i> Audience Intelligence</div>
           <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Finds your best customers before they find you</h3>
@@ -1325,16 +1346,16 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      INTERACTIVE SIMULATOR — ROI CALCULATOR
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.75),rgba(3,5,18,0.85));backdrop-filter:blur(2px)" id="demo">
+<section class="py-8 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.75),rgba(3,5,18,0.85));backdrop-filter:blur(2px)" id="demo">
   <div class="absolute inset-0 grid-lines opacity-40"></div>
   <div class="absolute inset-0" style="background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(99,102,241,0.07),transparent)"></div>
   <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-10 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-calculator text-brand-400"></i> ROI Simulator</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Your numbers, <span class="glow-text">your results</span>
       </h2>
-      <p class="text-slate-500 text-base max-w-xl mx-auto">Enter your current ad spend and ROAS — see what AdNova AI would deliver in 30 days.</p>
+      <p class="text-slate-500 text-sm max-w-xl mx-auto">Enter your current ad spend and ROAS — see what AdNova AI would deliver in 30 days.</p>
     </div>
 
     <div class="glass-neo rounded-3xl p-6 md:p-8 fade-up" id="roi-calc">
@@ -1400,14 +1421,14 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      FEATURES — AI MODULES
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative" id="features">
+<section class="py-8 relative" id="features">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-12 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-brain text-brand-400"></i> AI-Powered Modules</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         6 AI engines, <span class="glow-text">zero manual work</span>
       </h2>
-      <p class="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed">Each module runs independently, 24/7, making hundreds of micro-decisions that compound into massive performance gains.</p>
+      <p class="text-slate-500 text-sm max-w-2xl mx-auto leading-relaxed">Each module runs independently, 24/7, making hundreds of micro-decisions that compound into massive performance gains.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -1430,10 +1451,10 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      LIVE AI DEMO — animated walkthrough
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.75),rgba(3,5,18,0.8));backdrop-filter:blur(2px)">
+<section class="py-8 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.75),rgba(3,5,18,0.8));backdrop-filter:blur(2px)">
   <div class="absolute inset-0 grid-lines opacity-30"></div>
   <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-10 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-play text-brand-400"></i> 90-Second Walkthrough</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
         Watch AdNova work <span class="glow-text-2">live</span>
@@ -1506,17 +1527,17 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      HOW IT WORKS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden">
+<section class="py-8 relative overflow-hidden">
   <div class="absolute inset-0 grid-lines-fine opacity-40"></div>
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-12 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-gears text-brand-400"></i> How It Works</div>
       <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Live in <span class="glow-text-2">18 minutes</span>
       </h2>
       <p class="text-slate-500 text-lg mt-3 max-w-xl mx-auto">Real setup time from 2,412 clients. Median: 18 min. Fastest: 4 min. No code, no CSV, no headache.</p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 relative">
       <div class="hidden md:block absolute top-16 left-1/3 right-1/3 h-px" style="background:linear-gradient(90deg,rgba(99,102,241,0.6),rgba(168,85,247,0.6));box-shadow:0 0 8px rgba(99,102,241,0.4)"></div>
       ${howStep('01','Connect Platforms','Link your ad accounts with OAuth in one click — no API keys, no CSV exports. Facebook, Google, TikTok and 6 more connect in seconds.','plug','brand','rgba(99,102,241,0.12)')}
       ${howStep('02','Set Your Guardrails','Define max budget, min ROAS threshold, creative approval on/off, scale increment. The AI operates only within your rules.','sliders','purple','rgba(168,85,247,0.12)')}
@@ -1528,17 +1549,17 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      CASE STUDIES — PREUVES CONCRÈTES
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative" style="background:linear-gradient(180deg,rgba(3,5,18,0.65),rgba(4,7,22,0.75))" id="case-studies">
+<section class="py-8 relative" style="background:linear-gradient(180deg,rgba(3,5,18,0.65),rgba(4,7,22,0.75))" id="case-studies">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-12 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-trophy text-brand-400"></i> Verified Case Studies</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
         Real brands, <span class="glow-text">real numbers</span>
       </h2>
-      <p class="text-slate-500 text-lg max-w-xl mx-auto">Verified by third-party audits. No cherry-picking — these are median results.</p>
+      <p class="text-slate-500 text-sm max-w-xl mx-auto">Verified by third-party audits. No cherry-picking — these are median results.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-5">
       ${caseStudyCard(
         'E-commerce — Fashion',
         'TechnoTrend Paris',
@@ -1600,9 +1621,9 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      TESTIMONIALS
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16" id="testimonials">
+<section class="py-8" id="testimonials">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-10 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-star text-brand-400"></i> Customer Stories</div>
       <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Brands that <span class="glow-text">outperform</span>
@@ -1630,16 +1651,16 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      PRICING
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden" id="pricing">
+<section class="py-8 relative overflow-hidden" id="pricing">
   <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 60% at 50% 80%,rgba(99,102,241,0.09),transparent)"></div>
   <div class="absolute inset-0 grid-lines-fine opacity-40"></div>
   <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-10 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-tags text-brand-400"></i> Transparent Pricing</div>
       <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
         Pay as you <span class="glow-text">grow</span>
       </h2>
-      <p class="text-slate-500 text-base max-w-xl mx-auto">Full AI engine on every plan. No setup fees. No % of ad spend taken. No hidden costs.</p>
+      <p class="text-slate-500 text-sm max-w-xl mx-auto">Full AI engine on every plan. No setup fees. No % of ad spend taken. No hidden costs.</p>
       <div class="inline-flex items-center gap-2 glass-neo px-4 py-3 rounded-2xl mt-4">
         <button id="btn-monthly" onclick="setFreq('monthly')" class="text-sm font-bold px-5 py-2 rounded-xl transition-all bg-brand-600/25 text-brand-300 border border-brand-500/20">Monthly</button>
         <button id="btn-annual" onclick="setFreq('annual')" class="text-sm font-bold px-5 py-2 rounded-xl transition-all text-slate-500 hover:text-slate-300">
@@ -1672,9 +1693,9 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      FAQ
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.72),rgba(3,5,18,0.82))">
+<section class="py-8 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.72),rgba(3,5,18,0.82))">
   <div class="max-w-4xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-10 fade-up">
+    <div class="text-center mb-5 fade-up">
       <div class="section-label mb-4"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
       <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
         Honest <span class="glow-text-2">answers</span>
@@ -1694,7 +1715,7 @@ export const renderLanding = (c: Context) => {
 <!-- ════════════════════════════════════════════════════════════
      CTA FINAL
 ════════════════════════════════════════════════════════════ -->
-<section class="py-16 relative overflow-hidden">
+<section class="py-8 relative overflow-hidden">
   <div class="absolute inset-0" style="background:radial-gradient(ellipse 100% 70% at 50% 50%,rgba(79,70,229,0.15),transparent 70%)"></div>
   <div class="absolute inset-0 grid-lines opacity-25"></div>
   <div class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(99,102,241,0.5),rgba(168,85,247,0.5),transparent)"></div>
