@@ -2871,11 +2871,13 @@ function miniMetric(val: string, label: string, icon: string, color: string): st
 
 function featureCard(icon: string, gradient: string, glowColor: string, title: string, desc: string, metric: string, color: string): string {
   return `<div class="glass-card rounded-2xl p-5 fade-up group holo-card">
-    <div class="feat-icon bg-gradient-to-br ${gradient} mb-4 relative">
-      <div class="feat-icon-glow" style="background:${glowColor}"></div>
-      <i class="fas ${icon} text-white text-xl relative z-10"></i>
+    <div class="flex items-start gap-4 mb-4">
+      <div class="feat-icon bg-gradient-to-br ${gradient} relative flex-shrink-0">
+        <div class="feat-icon-glow" style="background:${glowColor}"></div>
+        <i class="fas ${icon} text-white text-xl relative z-10"></i>
+      </div>
+      <h3 class="font-black text-white text-lg leading-tight pt-2">${title}</h3>
     </div>
-    <h3 class="font-black text-white text-base mb-3">${title}</h3>
     <p class="text-sm text-slate-500 leading-relaxed mb-4">${desc}</p>
     <div class="flex items-center gap-2">
       <span class="metric-badge" style="background:${glowColor.replace('0.45','0.12')};border:1px solid ${glowColor.replace('0.45','0.25')};color:${color}">
