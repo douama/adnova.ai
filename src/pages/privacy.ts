@@ -16,7 +16,7 @@ export function renderPrivacy(): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2" aria-label="AdNova AI Home">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="flex items-center gap-4">
@@ -30,8 +30,8 @@ export function renderPrivacy(): string {
 <main class="max-w-4xl mx-auto px-6 pt-28 pb-24">
   <!-- Header -->
   <div class="mb-12">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-indigo-300 border border-indigo-500/20 mb-6">
-      <i class="fas fa-shield-alt text-indigo-400"></i>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-slate-300 border border-slate-500/20 mb-6">
+      <i class="fas fa-shield-alt text-slate-400"></i>
       Privacy First
     </div>
     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
@@ -41,29 +41,29 @@ export function renderPrivacy(): string {
 
     <!-- Compliance Badges -->
     <div class="flex flex-wrap gap-3 mt-6">
-      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400"><i class="fas fa-check-circle"></i> GDPR Compliant</span>
-      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400"><i class="fas fa-check-circle"></i> CCPA Compliant</span>
-      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 border border-indigo-500/30 text-indigo-400"><i class="fas fa-check-circle"></i> SOC 2 Type II</span>
-      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-500/10 border border-purple-500/30 text-purple-400"><i class="fas fa-lock"></i> AES-256 Encryption</span>
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-500/10 border border-brand-500/30 text-brand-400"><i class="fas fa-check-circle"></i> GDPR Compliant</span>
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-500/10 border border-slate-500/30 text-slate-400"><i class="fas fa-check-circle"></i> CCPA Compliant</span>
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-500/10 border border-slate-500/30 text-slate-400"><i class="fas fa-check-circle"></i> SOC 2 Type II</span>
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-500/10 border border-brand-500/30 text-brand-400"><i class="fas fa-lock"></i> AES-256 Encryption</span>
     </div>
   </div>
 
   <!-- Summary Card -->
-  <div class="glass-card rounded-2xl p-6 mb-10 border border-indigo-500/20">
-    <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-indigo-400"></i> Privacy at a Glance</h2>
+  <div class="glass-card rounded-2xl p-6 mb-10 border border-slate-500/20">
+    <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-slate-400"></i> Privacy at a Glance</h2>
     <div class="grid md:grid-cols-2 gap-4 text-sm">
-      <div class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">We <strong class="text-white">never sell</strong> your personal data to third parties.</span></div>
-      <div class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">You can <strong class="text-white">delete your data</strong> at any time by contacting us.</span></div>
-      <div class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">All data is <strong class="text-white">encrypted</strong> with AES-256 at rest and TLS 1.3 in transit.</span></div>
-      <div class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">We collect <strong class="text-white">only what's necessary</strong> to provide the Service.</span></div>
-      <div class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">Ad Platform data is <strong class="text-white">never shared</strong> with competitors.</span></div>
-      <div class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">EU users have full <strong class="text-white">GDPR rights</strong> including data portability.</span></div>
+      <div class="flex gap-3"><i class="fas fa-check text-brand-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">We <strong class="text-white">never sell</strong> your personal data to third parties.</span></div>
+      <div class="flex gap-3"><i class="fas fa-check text-brand-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">You can <strong class="text-white">delete your data</strong> at any time by contacting us.</span></div>
+      <div class="flex gap-3"><i class="fas fa-check text-brand-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">All data is <strong class="text-white">encrypted</strong> with AES-256 at rest and TLS 1.3 in transit.</span></div>
+      <div class="flex gap-3"><i class="fas fa-check text-brand-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">We collect <strong class="text-white">only what's necessary</strong> to provide the Service.</span></div>
+      <div class="flex gap-3"><i class="fas fa-check text-brand-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">Ad Platform data is <strong class="text-white">never shared</strong> with competitors.</span></div>
+      <div class="flex gap-3"><i class="fas fa-check text-brand-400 mt-0.5 flex-shrink-0"></i><span class="text-slate-300">EU users have full <strong class="text-white">GDPR rights</strong> including data portability.</span></div>
     </div>
   </div>
 
   <!-- TOC -->
   <div class="glass-card rounded-2xl p-6 mb-10">
-    <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><i class="fas fa-list text-indigo-400"></i> Table of Contents</h2>
+    <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><i class="fas fa-list text-slate-400"></i> Table of Contents</h2>
     <ol class="grid md:grid-cols-2 gap-2 text-sm">
       ${[
         ['1', 'Who We Are'],
@@ -81,7 +81,7 @@ export function renderPrivacy(): string {
         ['13', 'Children\'s Privacy'],
         ['14', 'Changes to This Policy'],
         ['15', 'Contact & DPO'],
-      ].map(([n, t]) => `<li><a href="#p-section-${n}" class="text-indigo-400 hover:text-indigo-300 transition-colors">${n}. ${t}</a></li>`).join('')}
+      ].map(([n, t]) => `<li><a href="#p-section-${n}" class="text-slate-400 hover:text-slate-300 transition-colors">${n}. ${t}</a></li>`).join('')}
     </ol>
   </div>
 
@@ -94,7 +94,7 @@ export function renderPrivacy(): string {
       <div class="glass p-4 rounded-xl">
         <p class="text-sm"><strong class="text-white">Data Controller:</strong> AdNova AI, Inc.<br>
         <strong class="text-white">Address:</strong> 251 Little Falls Drive, Wilmington, DE 19808, USA<br>
-        <strong class="text-white">DPO Email:</strong> <a href="mailto:privacy@adnova.ai" class="text-indigo-400 hover:underline">privacy@adnova.ai</a></p>
+        <strong class="text-white">DPO Email:</strong> <a href="mailto:privacy@adnova.ai" class="text-slate-400 hover:underline">privacy@adnova.ai</a></p>
       </div>
     </section>
 
@@ -131,12 +131,12 @@ export function renderPrivacy(): string {
       <p class="mb-4">We use the information we collect for the following purposes:</p>
       <div class="space-y-4">
         ${[
-          ['fas fa-cogs', 'indigo', 'Service Delivery', 'To provide, maintain, and improve the AdNova AI platform, including AI-powered optimization, campaign management, and reporting.'],
-          ['fas fa-bell', 'purple', 'Communications', 'To send service notifications, billing receipts, security alerts, and support responses. Marketing emails are sent only with your consent.'],
-          ['fas fa-chart-line', 'cyan', 'Analytics & Improvement', 'To analyze usage patterns, improve AI model performance, and develop new features. Data is aggregated and anonymized where possible.'],
-          ['fas fa-shield-alt', 'emerald', 'Security & Fraud Prevention', 'To detect, investigate, and prevent fraudulent transactions, abuse, and security incidents.'],
-          ['fas fa-balance-scale', 'amber', 'Legal Compliance', 'To comply with legal obligations, respond to lawful requests from authorities, and enforce our Terms of Service.'],
-          ['fas fa-sync', 'rose', 'AI Model Training', 'Aggregated, anonymized performance data may be used to improve our AI optimization algorithms. No individual advertiser data is identifiable.'],
+          ['fas fa-cogs', 'slate', 'Service Delivery', 'To provide, maintain, and improve the AdNova AI platform, including AI-powered optimization, campaign management, and reporting.'],
+          ['fas fa-bell', 'brand', 'Communications', 'To send service notifications, billing receipts, security alerts, and support responses. Marketing emails are sent only with your consent.'],
+          ['fas fa-chart-line', 'slate', 'Analytics & Improvement', 'To analyze usage patterns, improve AI model performance, and develop new features. Data is aggregated and anonymized where possible.'],
+          ['fas fa-shield-alt', 'brand', 'Security & Fraud Prevention', 'To detect, investigate, and prevent fraudulent transactions, abuse, and security incidents.'],
+          ['fas fa-balance-scale', 'brand', 'Legal Compliance', 'To comply with legal obligations, respond to lawful requests from authorities, and enforce our Terms of Service.'],
+          ['fas fa-sync', 'brand', 'AI Model Training', 'Aggregated, anonymized performance data may be used to improve our AI optimization algorithms. No individual advertiser data is identifiable.'],
         ].map(([icon, color, title, desc]) => `
         <div class="flex gap-4 glass-card rounded-xl p-4">
           <div class="w-9 h-9 rounded-lg bg-${color}-500/15 flex items-center justify-center flex-shrink-0">
@@ -201,11 +201,11 @@ export function renderPrivacy(): string {
           ['fa-cookie-bite', 'Cookies', 'Manage cookie preferences via our cookie banner.'],
         ].map(([icon, title, desc]) => `
         <div class="glass p-4 rounded-xl flex gap-3">
-          <i class="fas ${icon} text-indigo-400 mt-0.5 flex-shrink-0"></i>
+          <i class="fas ${icon} text-slate-400 mt-0.5 flex-shrink-0"></i>
           <div><div class="text-white font-medium text-sm mb-1">${title}</div><p class="text-slate-400 text-xs">${desc}</p></div>
         </div>`).join('')}
       </div>
-      <p class="mt-4 text-sm">To exercise any of these rights, email <a href="mailto:privacy@adnova.ai" class="text-indigo-400 hover:underline">privacy@adnova.ai</a>. We respond to requests within 30 days.</p>
+      <p class="mt-4 text-sm">To exercise any of these rights, email <a href="mailto:privacy@adnova.ai" class="text-slate-400 hover:underline">privacy@adnova.ai</a>. We respond to requests within 30 days.</p>
     </section>
 
     <section id="p-section-8">
@@ -217,7 +217,7 @@ export function renderPrivacy(): string {
         <li><strong class="text-white">Right Not to be Subject to Automated Decisions:</strong> Request human review of significant automated decisions that affect you.</li>
         <li><strong class="text-white">Right to Lodge a Complaint:</strong> File a complaint with your local supervisory authority (e.g., CNIL in France, ICO in UK, BfDI in Germany).</li>
       </ul>
-      <p>Our EU representative for GDPR purposes can be contacted at: <a href="mailto:gdpr@adnova.ai" class="text-indigo-400 hover:underline">gdpr@adnova.ai</a></p>
+      <p>Our EU representative for GDPR purposes can be contacted at: <a href="mailto:gdpr@adnova.ai" class="text-slate-400 hover:underline">gdpr@adnova.ai</a></p>
     </section>
 
     <section id="p-section-9">
@@ -230,7 +230,7 @@ export function renderPrivacy(): string {
         <li><strong class="text-white">Right to Non-Discrimination:</strong> We will not discriminate against you for exercising your CCPA rights.</li>
         <li><strong class="text-white">Right to Correct:</strong> Request correction of inaccurate personal information.</li>
       </ul>
-      <p>To submit a CCPA request, email <a href="mailto:privacy@adnova.ai" class="text-indigo-400 hover:underline">privacy@adnova.ai</a> with subject "CCPA Request." We will respond within 45 days.</p>
+      <p>To submit a CCPA request, email <a href="mailto:privacy@adnova.ai" class="text-slate-400 hover:underline">privacy@adnova.ai</a> with subject "CCPA Request." We will respond within 45 days.</p>
     </section>
 
     <section id="p-section-10">
@@ -268,7 +268,7 @@ export function renderPrivacy(): string {
           ['fa-bell', 'Breach Notification', 'GDPR-compliant breach notification within 72 hours of detection to authorities; 30 days to affected users.'],
         ].map(([icon, title, desc]) => `
         <div class="glass p-4 rounded-xl">
-          <div class="flex items-center gap-2 mb-2"><i class="fas ${icon} text-emerald-400 text-sm"></i><span class="text-white font-medium text-sm">${title}</span></div>
+          <div class="flex items-center gap-2 mb-2"><i class="fas ${icon} text-brand-400 text-sm"></i><span class="text-white font-medium text-sm">${title}</span></div>
           <p class="text-slate-400 text-xs">${desc}</p>
         </div>`).join('')}
       </div>
@@ -287,7 +287,7 @@ export function renderPrivacy(): string {
 
     <section id="p-section-13">
       <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-3"><span class="section-num">13</span> Children's Privacy</h2>
-      <p>The Service is not directed to individuals under the age of 16. We do not knowingly collect personal information from children under 16. If you become aware that a child has provided us with personal information, please contact us at <a href="mailto:privacy@adnova.ai" class="text-indigo-400 hover:underline">privacy@adnova.ai</a> and we will take steps to delete such information.</p>
+      <p>The Service is not directed to individuals under the age of 16. We do not knowingly collect personal information from children under 16. If you become aware that a child has provided us with personal information, please contact us at <a href="mailto:privacy@adnova.ai" class="text-slate-400 hover:underline">privacy@adnova.ai</a> and we will take steps to delete such information.</p>
     </section>
 
     <section id="p-section-14">
@@ -306,19 +306,19 @@ export function renderPrivacy(): string {
       <p class="mb-6">For privacy questions, requests, or concerns, contact our Data Protection Officer:</p>
       <div class="glass-card rounded-xl p-6 grid md:grid-cols-3 gap-6">
         <div class="text-center">
-          <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-2"><i class="fas fa-user-shield text-indigo-400"></i></div>
+          <div class="w-10 h-10 rounded-full bg-slate-500/20 flex items-center justify-center mx-auto mb-2"><i class="fas fa-user-shield text-slate-400"></i></div>
           <div class="text-white font-medium text-sm mb-1">Data Protection Officer</div>
-          <a href="mailto:privacy@adnova.ai" class="text-indigo-400 hover:underline text-sm">privacy@adnova.ai</a>
+          <a href="mailto:privacy@adnova.ai" class="text-slate-400 hover:underline text-sm">privacy@adnova.ai</a>
         </div>
         <div class="text-center">
-          <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2"><i class="fas fa-globe-europe text-purple-400"></i></div>
+          <div class="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center mx-auto mb-2"><i class="fas fa-globe-europe text-brand-400"></i></div>
           <div class="text-white font-medium text-sm mb-1">GDPR Requests</div>
-          <a href="mailto:gdpr@adnova.ai" class="text-indigo-400 hover:underline text-sm">gdpr@adnova.ai</a>
+          <a href="mailto:gdpr@adnova.ai" class="text-slate-400 hover:underline text-sm">gdpr@adnova.ai</a>
         </div>
         <div class="text-center">
-          <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-2"><i class="fas fa-flag-usa text-amber-400"></i></div>
+          <div class="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center mx-auto mb-2"><i class="fas fa-flag-usa text-brand-400"></i></div>
           <div class="text-white font-medium text-sm mb-1">CCPA Requests</div>
-          <a href="mailto:privacy@adnova.ai" class="text-indigo-400 hover:underline text-sm">privacy@adnova.ai</a>
+          <a href="mailto:privacy@adnova.ai" class="text-slate-400 hover:underline text-sm">privacy@adnova.ai</a>
         </div>
       </div>
       <p class="mt-4 text-sm text-slate-400">Response time: Within 30 days for most requests. Complex requests may take up to 90 days with notice.</p>
@@ -330,8 +330,8 @@ export function renderPrivacy(): string {
   <div class="mt-16 pt-10 border-t border-white/10">
     <h3 class="text-white font-semibold mb-4">Related Documents</h3>
     <div class="flex flex-wrap gap-3">
-      <a href="/terms" class="glass px-4 py-2 rounded-lg text-indigo-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-file-contract"></i> Terms of Service</a>
-      <a href="/" class="glass px-4 py-2 rounded-lg text-indigo-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-home"></i> Back to Home</a>
+      <a href="/terms" class="glass px-4 py-2 rounded-lg text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-file-contract"></i> Terms of Service</a>
+      <a href="/" class="glass px-4 py-2 rounded-lg text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-home"></i> Back to Home</a>
       <a href="/register" class="btn-primary px-4 py-2 rounded-lg text-white text-sm font-semibold flex items-center gap-2"><i class="fas fa-rocket"></i> Start Free Trial</a>
     </div>
   </div>
@@ -339,14 +339,14 @@ export function renderPrivacy(): string {
 
 <!-- FOOTER MINIMAL -->
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. All rights reserved. · <a href="/privacy" class="text-indigo-400">Privacy Policy</a> · <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms of Service</a></p>
+  <p>© 2026 AdNova AI, Inc. All rights reserved. · <a href="/privacy" class="text-slate-400">Privacy Policy</a> · <a href="/terms" class="hover:text-slate-400 transition-colors">Terms of Service</a></p>
 </footer>
 
 <style>
 .page-bg-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:-1}
 .orb-1{width:600px;height:600px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(99,102,241,0.12),transparent 70%)}
 .orb-2{width:400px;height:400px;bottom:0;left:-100px;background:radial-gradient(circle,rgba(168,85,247,0.08),transparent 70%)}
-.section-num{width:2rem;height:2rem;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:white;flex-shrink:0}
+.section-num{width:2rem;height:2rem;background:linear-gradient(135deg,#FF4D00,#a855f7);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:white;flex-shrink:0}
 section{scroll-margin-top:80px}
 table{border-collapse:collapse;width:100%}
 </style>

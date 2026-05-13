@@ -10,7 +10,7 @@ export const renderAdminSecurity = (c: Context) => {
       <p class="text-xs text-slate-500 mt-0.5">Surveillance en temps réel — Dernière analyse: aujourd'hui 06:00</p>
     </div>
     <div class="flex items-center gap-2">
-      <span class="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+      <span class="flex items-center gap-1.5 text-xs text-brand-400 bg-brand-500/10 px-3 py-1.5 rounded-lg border border-brand-500/20">
         <i class="fas fa-shield-check"></i> Système sécurisé
       </span>
     </div>
@@ -18,16 +18,16 @@ export const renderAdminSecurity = (c: Context) => {
 
   <!-- Security Stats -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    ${secStat('Tentatives échouées (24h)', '47', 'amber', 'fa-user-xmark')}
-    ${secStat('IPs bloquées', '128', 'red', 'fa-ban')}
-    ${secStat('Sessions actives', '1,284', 'emerald', 'fa-users')}
-    ${secStat('Adoption 2FA', '68.4%', 'blue', 'fa-lock')}
+    ${secStat('Tentatives échouées (24h)', '47', 'brand', 'fa-user-xmark')}
+    ${secStat('IPs bloquées', '128', 'slate', 'fa-ban')}
+    ${secStat('Sessions actives', '1,284', 'brand', 'fa-users')}
+    ${secStat('Adoption 2FA', '68.4%', 'slate', 'fa-lock')}
   </div>
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     ${secStat('Blocages WAF (24h)', '1,847', 'orange', 'fa-shield-halved')}
-    ${secStat('Vulnérabilités', '0', 'emerald', 'fa-bug')}
-    ${secStat('SSL expire', '257 jours', 'blue', 'fa-certificate')}
-    ${secStat('Activités suspectes', '3', 'red', 'fa-triangle-exclamation')}
+    ${secStat('Vulnérabilités', '0', 'brand', 'fa-bug')}
+    ${secStat('SSL expire', '257 jours', 'slate', 'fa-certificate')}
+    ${secStat('Activités suspectes', '3', 'slate', 'fa-triangle-exclamation')}
   </div>
 
   <!-- Main Grid -->
@@ -53,7 +53,7 @@ export const renderAdminSecurity = (c: Context) => {
     <div class="glass rounded-2xl p-5">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-bold text-white">Sessions Actives (Top)</h3>
-        <button class="text-xs text-red-400 bg-red-500/10 px-3 py-1.5 rounded-lg hover:bg-red-500/15 transition-all border border-red-500/20">
+        <button class="text-xs text-slate-400 bg-slate-500/10 px-3 py-1.5 rounded-lg hover:bg-slate-500/15 transition-all border border-slate-500/20">
           <i class="fas fa-power-off mr-1"></i> Tout déconnecter
         </button>
       </div>
@@ -71,12 +71,12 @@ export const renderAdminSecurity = (c: Context) => {
   <div class="glass rounded-2xl p-5 mb-6">
     <h3 class="font-bold text-white mb-4">Événements Sécurité Récents</h3>
     <div class="space-y-2">
-      ${secEvent('fa-user-xmark', 'red', 'Tentative de connexion échouée (3/3) — IP bloquée automatiquement', '185.234.12.44', '09:32:11')}
+      ${secEvent('fa-user-xmark', 'slate', 'Tentative de connexion échouée (3/3) — IP bloquée automatiquement', '185.234.12.44', '09:32:11')}
       ${secEvent('fa-shield-halved', 'orange', 'WAF a bloqué 847 requêtes malformées en 1 heure', 'API Gateway', '09:15:00')}
-      ${secEvent('fa-lock', 'blue', 'Super Admin — connexion réussie + 2FA validé', 'superadmin@adnova.ai', '08:42:00')}
-      ${secEvent('fa-ban', 'red', 'Compte SpamCo suspendu pour activité frauduleuse', 'Admin action', '07:18:44')}
-      ${secEvent('fa-certificate', 'emerald', 'Certificat SSL renouvelé avec succès — validité +365j', 'system', '06:00:00')}
-      ${secEvent('fa-database', 'blue', 'Backup chiffré AES-256 complété — 284GB', 'system', '05:48:21')}
+      ${secEvent('fa-lock', 'slate', 'Super Admin — connexion réussie + 2FA validé', 'superadmin@adnova.ai', '08:42:00')}
+      ${secEvent('fa-ban', 'slate', 'Compte SpamCo suspendu pour activité frauduleuse', 'Admin action', '07:18:44')}
+      ${secEvent('fa-certificate', 'brand', 'Certificat SSL renouvelé avec succès — validité +365j', 'system', '06:00:00')}
+      ${secEvent('fa-database', 'slate', 'Backup chiffré AES-256 complété — 284GB', 'system', '05:48:21')}
     </div>
   </div>
 
@@ -116,12 +116,12 @@ export const renderAdminSecurity = (c: Context) => {
   <!-- Block IP Modal -->
   <div id="block-ip-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="glass rounded-2xl p-6 w-full max-w-md border border-orange-500/20">
-      <h3 class="font-bold text-white mb-4"><i class="fas fa-ban text-red-400 mr-2"></i>Bloquer une IP</h3>
+      <h3 class="font-bold text-white mb-4"><i class="fas fa-ban text-slate-400 mr-2"></i>Bloquer une IP</h3>
       <input placeholder="Adresse IP (ex: 192.168.1.1)" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 mb-3 outline-none border border-white/10 focus:border-orange-500/50" id="block-ip-input"/>
       <input placeholder="Raison" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 mb-4 outline-none border border-white/10 focus:border-orange-500/50"/>
       <div class="flex gap-3">
         <button onclick="hideBlockIP()" class="flex-1 glass py-2.5 rounded-xl text-sm text-slate-400 hover:bg-white/5 transition-all">Annuler</button>
-        <button onclick="blockIP()" class="flex-1 bg-gradient-to-r from-red-600 to-orange-500 py-2.5 rounded-xl text-sm text-white font-bold hover:opacity-90 transition-all">
+        <button onclick="blockIP()" class="flex-1 bg-gradient-to-r from-slate-600 to-orange-500 py-2.5 rounded-xl text-sm text-white font-bold hover:opacity-90 transition-all">
           <i class="fas fa-ban mr-1"></i> Bloquer
         </button>
       </div>
@@ -153,7 +153,7 @@ function secStat(label: string, value: string, color: string, icon: string): str
 }
 
 function ipBlock(ip: string, reason: string, type: string, severity: string, date: string): string {
-  const c = severity === 'rouge' ? 'red' : 'amber'
+  const c = severity === 'rouge' ? 'slate' : 'brand'
   return `<div class="flex items-center justify-between p-3 glass rounded-xl hover:bg-white/3 transition-all">
     <div class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-lg bg-${c}-500/15 flex items-center justify-center">
@@ -166,7 +166,7 @@ function ipBlock(ip: string, reason: string, type: string, severity: string, dat
     </div>
     <div class="flex items-center gap-3">
       <span class="text-xs text-slate-700">${date}</span>
-      <button class="text-xs text-emerald-400 hover:text-emerald-300 transition-all" title="Débloquer">
+      <button class="text-xs text-brand-400 hover:text-brand-300 transition-all" title="Débloquer">
         <i class="fas fa-unlock"></i>
       </button>
     </div>
@@ -176,7 +176,7 @@ function ipBlock(ip: string, reason: string, type: string, severity: string, dat
 function sessionRow(user: string, tenant: string, ip: string, location: string, duration: string): string {
   return `<div class="flex items-center justify-between p-3 glass rounded-xl hover:bg-white/3 transition-all">
     <div class="flex items-center gap-3">
-      <div class="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500/30 to-red-500/30 flex items-center justify-center text-xs font-bold text-orange-300">
+      <div class="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500/30 to-slate-500/30 flex items-center justify-center text-xs font-bold text-orange-300">
         ${user.charAt(0)}
       </div>
       <div>
@@ -186,8 +186,8 @@ function sessionRow(user: string, tenant: string, ip: string, location: string, 
     </div>
     <div class="flex items-center gap-3">
       <span class="text-xs font-mono text-slate-600">${ip}</span>
-      <span class="text-xs text-emerald-400">${duration}</span>
-      <button class="text-xs text-red-400 hover:text-red-300 transition-all" title="Déconnecter">
+      <span class="text-xs text-brand-400">${duration}</span>
+      <button class="text-xs text-slate-400 hover:text-slate-300 transition-all" title="Déconnecter">
         <i class="fas fa-power-off"></i>
       </button>
     </div>

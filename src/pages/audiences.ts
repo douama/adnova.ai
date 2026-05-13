@@ -26,7 +26,7 @@ export function renderAudiences(lang: Lang = 'en'): string {
         <option value="TikTok">TikTok</option>
       </select>
     </div>
-    <button onclick="openAudienceModal()" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 hover:opacity-90 transition-all">
+    <button onclick="openAudienceModal()" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 hover:opacity-90 transition-all">
       <i class="fas fa-plus"></i> New Audience
     </button>
   </div>
@@ -34,19 +34,19 @@ export function renderAudiences(lang: Lang = 'en'): string {
   <!-- Stats -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
     ${audStat('47', 'Total Audiences', 'fa-users', 'brand')}
-    ${audStat('12.4M', 'Total Reach', 'fa-globe', 'emerald')}
-    ${audStat('84.2%', 'Avg Match Rate', 'fa-bullseye', 'blue')}
-    ${audStat('3.2x', 'Lookalike CTR Lift', 'fa-chart-line', 'purple')}
+    ${audStat('12.4M', 'Total Reach', 'fa-globe', 'brand')}
+    ${audStat('84.2%', 'Avg Match Rate', 'fa-bullseye', 'slate')}
+    ${audStat('3.2x', 'Lookalike CTR Lift', 'fa-chart-line', 'brand')}
   </div>
 
   <!-- Audience Cards Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-5" id="audiences-grid">
-    ${audienceCard('top-converters-1', 'Top Converters Lookalike 1%', 'Lookalike', '1.2M', '88%', 'emerald', 'Built from 1,200 highest-LTV customers. Best for conversion campaigns.', ['Facebook','Instagram'], '4.8x ROAS avg')}
-    ${audienceCard('cart-abandon', 'Retargeting — Cart Abandon', 'Retargeting', '45,200', '97%', 'blue', 'Users who added to cart in last 30 days. High purchase intent.', ['Facebook','Google'], '7.2x ROAS avg')}
-    ${audienceCard('fashion-interest', 'Interest: Fashion Shoppers', 'Interest', '3.4M', '71%', 'purple', 'AI-curated interest cluster for fashion-conscious 18-35 females.', ['Facebook','Instagram','TikTok'], '3.1x ROAS avg')}
-    ${audienceCard('top-converters-3', 'Top Converters Lookalike 3%', 'Lookalike', '3.6M', '82%', 'cyan', 'Broader expansion from top converter seed. Good for scale.', ['Facebook','Instagram'], '3.8x ROAS avg')}
-    ${audienceCard('website-14d', 'Website Visitors 14d', 'Retargeting', '128,400', '95%', 'amber', 'All website visitors last 14 days. Great for brand recall.', ['Facebook','Google'], '5.1x ROAS avg')}
-    ${audienceCard('competitor', 'Competitor Audience', 'Intent', '820K', '64%', 'rose', 'Users engaging with competitor brands. High-intent switching.', ['TikTok','Snapchat'], '2.8x ROAS avg')}
+    ${audienceCard('top-converters-1', 'Top Converters Lookalike 1%', 'Lookalike', '1.2M', '88%', 'brand', 'Built from 1,200 highest-LTV customers. Best for conversion campaigns.', ['Facebook','Instagram'], '4.8x ROAS avg')}
+    ${audienceCard('cart-abandon', 'Retargeting — Cart Abandon', 'Retargeting', '45,200', '97%', 'slate', 'Users who added to cart in last 30 days. High purchase intent.', ['Facebook','Google'], '7.2x ROAS avg')}
+    ${audienceCard('fashion-interest', 'Interest: Fashion Shoppers', 'Interest', '3.4M', '71%', 'brand', 'AI-curated interest cluster for fashion-conscious 18-35 females.', ['Facebook','Instagram','TikTok'], '3.1x ROAS avg')}
+    ${audienceCard('top-converters-3', 'Top Converters Lookalike 3%', 'Lookalike', '3.6M', '82%', 'slate', 'Broader expansion from top converter seed. Good for scale.', ['Facebook','Instagram'], '3.8x ROAS avg')}
+    ${audienceCard('website-14d', 'Website Visitors 14d', 'Retargeting', '128,400', '95%', 'brand', 'All website visitors last 14 days. Great for brand recall.', ['Facebook','Google'], '5.1x ROAS avg')}
+    ${audienceCard('competitor', 'Competitor Audience', 'Intent', '820K', '64%', 'brand', 'Users engaging with competitor brands. High-intent switching.', ['TikTok','Snapchat'], '2.8x ROAS avg')}
   </div>
 
   <!-- AI Audience Insights -->
@@ -61,27 +61,27 @@ export function renderAudiences(lang: Lang = 'en'): string {
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
       <div class="glass rounded-xl p-3 border border-brand-500/10">
         <div class="flex items-center gap-2 mb-1.5">
-          <i class="fas fa-trophy text-amber-400 text-xs"></i>
+          <i class="fas fa-trophy text-brand-400 text-xs"></i>
           <span class="text-xs font-semibold text-white">Predicted Best Audience</span>
         </div>
-        <p class="text-xs text-slate-400 leading-relaxed">Cibler <span class="text-brand-400 font-semibold">Fashion Shoppers F18-34 + 1% Lookalike</span> pour votre prochaine campagne. ROAS estimé: <span class="text-emerald-400 font-bold">4.9x</span></p>
+        <p class="text-xs text-slate-400 leading-relaxed">Cibler <span class="text-brand-400 font-semibold">Fashion Shoppers F18-34 + 1% Lookalike</span> pour votre prochaine campagne. ROAS estimé: <span class="text-brand-400 font-bold">4.9x</span></p>
         <button onclick="useAudienceInCampaign('Fashion Shoppers F18-34')" class="mt-2 text-xs text-brand-400 hover:text-brand-300 font-semibold">Utiliser dans une campagne →</button>
       </div>
-      <div class="glass rounded-xl p-3 border border-amber-500/10">
+      <div class="glass rounded-xl p-3 border border-brand-500/10">
         <div class="flex items-center gap-2 mb-1.5">
-          <i class="fas fa-triangle-exclamation text-amber-400 text-xs"></i>
+          <i class="fas fa-triangle-exclamation text-brand-400 text-xs"></i>
           <span class="text-xs font-semibold text-white">Saturation Alert</span>
         </div>
-        <p class="text-xs text-slate-400 leading-relaxed">Audience Retargeting à fréquence <span class="text-amber-400 font-semibold">4.2x</span>. Expansion vers 3% lookalike recommandée sous 48h.</p>
-        <button onclick="expandAudience('Retargeting Cart Abandon')" class="mt-2 text-xs text-amber-400 hover:text-amber-300 font-semibold">Expand maintenant →</button>
+        <p class="text-xs text-slate-400 leading-relaxed">Audience Retargeting à fréquence <span class="text-brand-400 font-semibold">4.2x</span>. Expansion vers 3% lookalike recommandée sous 48h.</p>
+        <button onclick="expandAudience('Retargeting Cart Abandon')" class="mt-2 text-xs text-brand-400 hover:text-brand-300 font-semibold">Expand maintenant →</button>
       </div>
-      <div class="glass rounded-xl p-3 border border-emerald-500/10">
+      <div class="glass rounded-xl p-3 border border-brand-500/10">
         <div class="flex items-center gap-2 mb-1.5">
-          <i class="fas fa-bolt text-emerald-400 text-xs"></i>
+          <i class="fas fa-bolt text-brand-400 text-xs"></i>
           <span class="text-xs font-semibold text-white">New Opportunity</span>
         </div>
-        <p class="text-xs text-slate-400 leading-relaxed">AI identifié <span class="text-emerald-400 font-semibold">2.1M utilisateurs TikTok</span> non-ciblés. CPA estimé: <span class="text-emerald-400 font-bold">$8.20</span></p>
-        <button onclick="openAudienceModal('tiktok-opportunity')" class="mt-2 text-xs text-emerald-400 hover:text-emerald-300 font-semibold">Créer l'audience →</button>
+        <p class="text-xs text-slate-400 leading-relaxed">AI identifié <span class="text-brand-400 font-semibold">2.1M utilisateurs TikTok</span> non-ciblés. CPA estimé: <span class="text-brand-400 font-bold">$8.20</span></p>
+        <button onclick="openAudienceModal('tiktok-opportunity')" class="mt-2 text-xs text-brand-400 hover:text-brand-300 font-semibold">Créer l'audience →</button>
       </div>
     </div>
   </div>
@@ -145,7 +145,7 @@ export function renderAudiences(lang: Lang = 'en'): string {
           <div class="flex flex-wrap gap-2" id="aud-platforms">
             ${['Facebook','Google','Instagram','TikTok','LinkedIn','YouTube','Snapchat'].map(p => `
             <label class="flex items-center gap-1.5 cursor-pointer glass px-3 py-1.5 rounded-xl hover:bg-white/10 transition-all">
-              <input type="checkbox" name="aud-platform" value="${p}" class="w-3 h-3 rounded accent-indigo-500"/>
+              <input type="checkbox" name="aud-platform" value="${p}" class="w-3 h-3 rounded accent-slate-500"/>
               <span class="text-xs text-slate-300">${p}</span>
             </label>`).join('')}
           </div>
@@ -163,7 +163,7 @@ export function renderAudiences(lang: Lang = 'en'): string {
         </div>
         <div class="flex gap-2 pt-1">
           <button onclick="closeAudienceModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm transition-all">Annuler</button>
-          <button onclick="saveAudience()" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all">
+          <button onclick="saveAudience()" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all">
             <i class="fas fa-save mr-1.5"></i> Créer l'audience
           </button>
         </div>
@@ -173,9 +173,9 @@ export function renderAudiences(lang: Lang = 'en'): string {
 
   <!-- ── Use in Campaign Modal ── -->
   <div id="use-campaign-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-md" style="border:1px solid rgba(16,185,129,0.3)">
+    <div class="glass rounded-2xl w-full max-w-md" style="border:1px solid rgba(255,77,0,0.3)">
       <div class="p-4 border-b border-white/10 flex items-center justify-between">
-        <h2 class="font-bold text-white flex items-center gap-2"><i class="fas fa-bullhorn text-emerald-400"></i> Utiliser dans une campagne</h2>
+        <h2 class="font-bold text-white flex items-center gap-2"><i class="fas fa-bullhorn text-brand-400"></i> Utiliser dans une campagne</h2>
         <button onclick="closeUseCampaignModal()" class="text-slate-500 hover:text-slate-300"><i class="fas fa-times"></i></button>
       </div>
       <div class="p-4 space-y-3">
@@ -197,7 +197,7 @@ export function renderAudiences(lang: Lang = 'en'): string {
         </div>
         <div class="flex gap-2 pt-1">
           <button onclick="closeUseCampaignModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm">Annuler</button>
-          <button onclick="confirmUseCampaign()" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90">
+          <button onclick="confirmUseCampaign()" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90">
             <i class="fas fa-check mr-1.5"></i> Ajouter à la campagne
           </button>
         </div>
@@ -246,14 +246,14 @@ export function renderAudiences(lang: Lang = 'en'): string {
       if (!platforms.length) { showToast('Sélectionnez au moins une plateforme', 'error'); return; }
       // Add new card to grid
       const grid = document.getElementById('audiences-grid')
-      const colors = {Lookalike:'emerald', Retargeting:'blue', Interest:'purple', Intent:'rose', Custom:'cyan'}
+      const colors = {Lookalike:'brand', Retargeting:'slate', Interest:'brand', Intent:'brand', Custom:'slate'}
       const color = colors[type] || 'brand'
       const id = 'aud-' + Date.now()
       const html = \`<div class="glass rounded-2xl p-4 card-hover audience-card" id="\${id}"
         data-name="\${name.toLowerCase()}" data-type="\${type}" data-platforms="\${platforms.join(',')}">
         <div class="flex items-start justify-between mb-2">
           <span class="text-xs px-2 py-0.5 rounded-full bg-\${color}-500/20 text-\${color}-400 font-semibold">\${type}</span>
-          <span class="text-xs text-emerald-400 font-bold">Nouveau</span>
+          <span class="text-xs text-brand-400 font-bold">Nouveau</span>
         </div>
         <h3 class="font-bold text-white text-sm mb-1">\${name}</h3>
         <p class="text-xs text-slate-500 mb-2">\${document.getElementById('aud-desc').value || 'Audience créée manuellement'}</p>
@@ -326,7 +326,7 @@ export function renderAudiences(lang: Lang = 'en'): string {
 
     // ── Toast ─────────────────────────────────────────────────────────────────
     function showToast(msg, type = 'success') {
-      const colors = { success: 'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', error: 'bg-red-500/20 border-red-500/30 text-red-300', info: 'bg-brand-500/20 border-brand-500/30 text-brand-300' }
+      const colors = { success: 'bg-brand-500/20 border-brand-500/30 text-brand-300', error: 'bg-slate-500/20 border-slate-500/30 text-slate-300', info: 'bg-brand-500/20 border-brand-500/30 text-brand-300' }
       const t = document.createElement('div')
       t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl shadow-2xl ' + (colors[type] || colors.success)
       t.textContent = msg
@@ -353,7 +353,7 @@ function audienceCard(id: string, name: string, type: string, size: string, matc
     data-name="${name.toLowerCase()}" data-type="${type}" data-platforms="${platforms.join(',')}">
     <div class="flex items-start justify-between mb-2">
       <span class="text-xs px-2 py-0.5 rounded-full bg-${color}-500/20 text-${color}-400 font-semibold">${type}</span>
-      <span class="text-xs text-emerald-400 font-bold">${roas}</span>
+      <span class="text-xs text-brand-400 font-bold">${roas}</span>
     </div>
     <h3 class="font-bold text-white text-sm mb-1">${name}</h3>
     <p class="text-xs text-slate-500 mb-3 leading-relaxed">${desc}</p>
@@ -372,7 +372,7 @@ function audienceCard(id: string, name: string, type: string, size: string, matc
         <button onclick="editAudience('${id}')" class="w-7 h-7 glass hover:bg-white/10 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 transition-all">
           <i class="fas fa-pencil text-xs"></i>
         </button>
-        <button onclick="deleteAudience('${id}','${name}')" class="w-7 h-7 glass hover:bg-red-500/10 rounded-lg flex items-center justify-center text-slate-500 hover:text-red-400 transition-all">
+        <button onclick="deleteAudience('${id}','${name}')" class="w-7 h-7 glass hover:bg-slate-500/10 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-400 transition-all">
           <i class="fas fa-trash text-xs"></i>
         </button>
       </div>

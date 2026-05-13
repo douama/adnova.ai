@@ -8,10 +8,10 @@ export const renderDashboard = (c: Context) => {
   const content = `
   <!-- KPI Cards Row — data loaded via API -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4" id="kpi-grid">
-    ${kpiCard('id-spend', t(lang,'total_spend'), '$124,850', '+18.4%', 'fa-dollar-sign', 'from-brand-500 to-purple-600', t(lang,'this_month'))}
-    ${kpiCard('id-roas', t(lang,'roas'), '4.82x', '+0.6x', 'fa-chart-line', 'from-emerald-500 to-teal-600', 'Revenue per dollar')}
-    ${kpiCard('id-campaigns', t(lang,'active_campaigns'), '47', '+3', 'fa-bullhorn', 'from-blue-500 to-cyan-600', '12 scaling · 35 running')}
-    ${kpiCard('id-conversions', t(lang,'conversions'), '8,294', '+22.1%', 'fa-check-circle', 'from-amber-500 to-orange-600', 'Last 30 days')}
+    ${kpiCard('id-spend', t(lang,'total_spend'), '$124,850', '+18.4%', 'fa-dollar-sign', 'from-brand-600 to-brand-400', t(lang,'this_month'))}
+    ${kpiCard('id-roas', t(lang,'roas'), '4.82x', '+0.6x', 'fa-chart-line', 'from-brand-500 to-brand-600', 'Revenue per dollar')}
+    ${kpiCard('id-campaigns', t(lang,'active_campaigns'), '47', '+3', 'fa-bullhorn', 'from-slate-500 to-slate-600', '12 scaling · 35 running')}
+    ${kpiCard('id-conversions', t(lang,'conversions'), '8,294', '+22.1%', 'fa-check-circle', 'from-brand-500 to-orange-600', 'Last 30 days')}
   </div>
 
   <!-- Charts Row -->
@@ -46,13 +46,13 @@ export const renderDashboard = (c: Context) => {
         <canvas id="platformChart"></canvas>
       </div>
       <div class="space-y-2 mt-4" id="platform-legend">
-        ${platformLegend('Facebook', '28%', '#1877F2')}
-        ${platformLegend('Google', '23%', '#4285F4')}
-        ${platformLegend('Instagram', '16%', '#E1306C')}
-        ${platformLegend('TikTok', '10%', '#ff0050')}
-        ${platformLegend('LinkedIn', '6%', '#0077b5')}
-        ${platformLegend('YouTube', '8%', '#ff0000')}
-        ${platformLegend('Others', '9%', '#94a3b8')}
+        ${platformLegend('Facebook', '28%', '#A8A8A8')}
+        ${platformLegend('Google', '23%', '#A8A8A8')}
+        ${platformLegend('Instagram', '16%', '#A8A8A8')}
+        ${platformLegend('TikTok', '10%', '#A8A8A8')}
+        ${platformLegend('LinkedIn', '6%', '#A8A8A8')}
+        ${platformLegend('YouTube', '8%', '#A8A8A8')}
+        ${platformLegend('Others', '9%', '#7A7A7A')}
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@ export const renderDashboard = (c: Context) => {
     <div class="lg:col-span-2 glass rounded-2xl p-5">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-600 to-brand-400 flex items-center justify-center">
             <i class="fas fa-brain text-white text-xs"></i>
           </div>
           <div>
@@ -74,12 +74,12 @@ export const renderDashboard = (c: Context) => {
         <span class="badge-live text-xs px-2 py-1 rounded-full font-semibold">LIVE</span>
       </div>
       <div class="space-y-2" id="ai-feed">
-        ${aiAction('arrow-trend-up', 'emerald', '"Summer Collection" budget scaled +10% — ROAS hit 5.2x', '2m ago', 'Scale')}
-        ${aiAction('scissors', 'red', 'Killed 2 TikTok creatives — CTR 0.31% below 0.8% threshold', '8m ago', 'Kill')}
-        ${aiAction('wand-magic-sparkles', 'purple', 'Generated 4 new AI video variants for "Product Launch"', '15m ago', 'Create')}
-        ${aiAction('bullseye', 'blue', 'Expanded Facebook lookalike from 1% to 3% — reach +2.1M', '23m ago', 'Audience')}
-        ${aiAction('dollar-sign', 'amber', 'Reallocated $1,200 from FB to Google — predicted +23% ROAS', '31m ago', 'Budget')}
-        ${aiAction('chart-line', 'cyan', 'A/B test: Creative B wins with 34% better CTR', '45m ago', 'Test')}
+        ${aiAction('arrow-trend-up', 'brand', '"Summer Collection" budget scaled +10% — ROAS hit 5.2x', '2m ago', 'Scale')}
+        ${aiAction('scissors', 'slate', 'Killed 2 TikTok creatives — CTR 0.31% below 0.8% threshold', '8m ago', 'Kill')}
+        ${aiAction('wand-magic-sparkles', 'brand', 'Generated 4 new AI video variants for "Product Launch"', '15m ago', 'Create')}
+        ${aiAction('bullseye', 'slate', 'Expanded Facebook lookalike from 1% to 3% — reach +2.1M', '23m ago', 'Audience')}
+        ${aiAction('dollar-sign', 'brand', 'Reallocated $1,200 from FB to Google — predicted +23% ROAS', '31m ago', 'Budget')}
+        ${aiAction('chart-line', 'slate', 'A/B test: Creative B wins with 34% better CTR', '45m ago', 'Test')}
       </div>
     </div>
 
@@ -87,13 +87,13 @@ export const renderDashboard = (c: Context) => {
     <div class="glass rounded-2xl p-5">
       <h3 class="font-bold text-white mb-4">${t(lang,'platforms')} ${t(lang,'status')}</h3>
       <div class="space-y-2" id="platform-status-list">
-        ${platformStatus('Facebook Ads', 'fab fa-facebook-f', '#1877F2', true, '$42,350', '4.1x')}
-        ${platformStatus('Google Ads', 'fab fa-google', '#4285F4', true, '$35,100', '5.2x')}
-        ${platformStatus('Instagram', 'fab fa-instagram', '#E1306C', true, '$25,200', '3.8x')}
+        ${platformStatus('Facebook Ads', 'fab fa-facebook-f', '#A8A8A8', true, '$42,350', '4.1x')}
+        ${platformStatus('Google Ads', 'fab fa-google', '#A8A8A8', true, '$35,100', '5.2x')}
+        ${platformStatus('Instagram', 'fab fa-instagram', '#A8A8A8', true, '$25,200', '3.8x')}
         ${platformStatus('TikTok', 'fab fa-tiktok', '#010101', true, '$15,400', '4.6x')}
-        ${platformStatus('LinkedIn', 'fab fa-linkedin-in', '#0077b5', true, '$8,920', '3.3x')}
-        ${platformStatus('YouTube', 'fab fa-youtube', '#ff0000', true, '$11,750', '3.9x')}
-        ${platformStatus('Snapchat', 'fab fa-snapchat', '#FFFC00', false, '$6,800', '2.1x')}
+        ${platformStatus('LinkedIn', 'fab fa-linkedin-in', '#A8A8A8', true, '$8,920', '3.3x')}
+        ${platformStatus('YouTube', 'fab fa-youtube', '#A8A8A8', true, '$11,750', '3.9x')}
+        ${platformStatus('Snapchat', 'fab fa-snapchat', '#A8A8A8', false, '$6,800', '2.1x')}
       </div>
       <button onclick="window.location.href='/platforms'" class="w-full mt-3 glass hover:bg-white/10 text-slate-400 text-xs py-2 rounded-lg transition-all">
         ${t(lang,'configure')} Platforms →
@@ -172,10 +172,10 @@ export const renderDashboard = (c: Context) => {
         <span class="text-xs glass px-2 py-1 rounded-full text-slate-400">Every 72h</span>
       </div>
       <div class="space-y-3">
-        ${scaleItem('Summer Collection', '$18,420', '$20,262', 38, 'in 38h', 'emerald')}
-        ${scaleItem('Product Launch Q3', '$14,200', '$15,620', 52, 'in 52h', 'blue')}
-        ${scaleItem('Brand Awareness', '$9,800', '$10,780', 16, 'in 16h', 'purple')}
-        ${scaleItem('Retargeting Pro', '$7,350', '$8,085', 28, 'in 28h', 'amber')}
+        ${scaleItem('Summer Collection', '$18,420', '$20,262', 38, 'in 38h', 'brand')}
+        ${scaleItem('Product Launch Q3', '$14,200', '$15,620', 52, 'in 52h', 'slate')}
+        ${scaleItem('Brand Awareness', '$9,800', '$10,780', 16, 'in 16h', 'brand')}
+        ${scaleItem('Retargeting Pro', '$7,350', '$8,085', 28, 'in 28h', 'brand')}
       </div>
       <div class="glass rounded-xl p-3 mt-4 flex items-center gap-3">
         <i class="fas fa-info-circle text-brand-400"></i>
@@ -185,9 +185,9 @@ export const renderDashboard = (c: Context) => {
   </div>
 
   <style>
-    .chart-tab { color: #64748b; }
-    .chart-tab:hover { background: rgba(99,102,241,0.1); color: #818cf8; }
-    .active-tab { background: rgba(99,102,241,0.2) !important; color: #a5b4fc !important; }
+    .chart-tab { color: #6B6B8E; }
+    .chart-tab:hover { background: rgba(255,77,0,0.10); color: #FF8042; }
+    .active-tab { background: rgba(255,77,0,0.20) !important; color: #FFA876 !important; }
   </style>
 
   <script>
@@ -196,8 +196,8 @@ export const renderDashboard = (c: Context) => {
     const isDark = document.documentElement.classList.contains('dark');
     return {
       grid: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)',
-      text: isDark ? '#64748b' : '#94a3b8',
-      legendText: isDark ? '#94a3b8' : '#475569',
+      text: isDark ? '#7A7A7A' : '#7A7A7A',
+      legendText: isDark ? '#7A7A7A' : '#7A7A7A',
     };
   }
 
@@ -235,14 +235,14 @@ export const renderDashboard = (c: Context) => {
           {
             label: 'Revenue',
             data: CHART_DATA['30d'].rev,
-            borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.1)',
-            fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#6366f1', borderWidth: 2
+            borderColor: '#FF4D00', backgroundColor: 'rgba(255,77,0,0.12)',
+            fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#FF4D00', borderWidth: 2
           },
           {
             label: 'Ad Spend',
             data: CHART_DATA['30d'].spend,
-            borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.05)',
-            fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#8b5cf6', borderWidth: 2,
+            borderColor: '#FF6B2B', backgroundColor: 'rgba(255,107,43,0.05)',
+            fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#FF6B2B', borderWidth: 2,
             borderDash: [5,3]
           }
         ]
@@ -264,7 +264,7 @@ export const renderDashboard = (c: Context) => {
         labels: ['Facebook','Google','Instagram','TikTok','LinkedIn','YouTube','Others'],
         datasets: [{
           data: [28, 23, 16, 10, 6, 8, 9],
-          backgroundColor: ['#1877F2','#4285F4','#E1306C','#ff0050','#0077b5','#ff0000','#94a3b8'],
+          backgroundColor: ['#A8A8A8','#A8A8A8','#A8A8A8','#A8A8A8','#A8A8A8','#A8A8A8','#7A7A7A'],
           borderWidth: 0, hoverOffset: 6
         }]
       },
@@ -326,12 +326,12 @@ export const renderDashboard = (c: Context) => {
 
   // ── Live AI Feed ─────────────────────────────────────────────────────────
   const feedItems = [
-    { icon: 'arrow-trend-up', color: 'emerald', text: 'Scaling "Holiday Sale" +10% — ROAS threshold met', action: 'Scale' },
-    { icon: 'brain', color: 'purple', text: 'Model updated with 2,840 new conversion signals', action: 'Learn' },
-    { icon: 'users', color: 'blue', text: 'New lookalike audience — 1.8M high-intent prospects', action: 'Audience' },
-    { icon: 'scissors', color: 'red', text: 'Paused 1 creative — CTR dropped below 0.8%', action: 'Kill' },
-    { icon: 'dollar-sign', color: 'amber', text: 'Budget reallocation: TikTok → LinkedIn +$800', action: 'Budget' },
-    { icon: 'wand-magic-sparkles', color: 'pink', text: 'Generated 3 Pinterest video variants — A/B test active', action: 'Create' },
+    { icon: 'arrow-trend-up', color: 'brand', text: 'Scaling "Holiday Sale" +10% — ROAS threshold met', action: 'Scale' },
+    { icon: 'brain', color: 'brand', text: 'Model updated with 2,840 new conversion signals', action: 'Learn' },
+    { icon: 'users', color: 'slate', text: 'New lookalike audience — 1.8M high-intent prospects', action: 'Audience' },
+    { icon: 'scissors', color: 'slate', text: 'Paused 1 creative — CTR dropped below 0.8%', action: 'Kill' },
+    { icon: 'dollar-sign', color: 'brand', text: 'Budget reallocation: TikTok → LinkedIn +$800', action: 'Budget' },
+    { icon: 'wand-magic-sparkles', color: 'brand', text: 'Generated 3 Pinterest video variants — A/B test active', action: 'Create' },
   ];
   let feedIdx = 0;
   setInterval(() => {
@@ -387,7 +387,7 @@ function kpiCard(id: string, label: string, value: string, change: string, icon:
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg">
         <i class="fas ${icon} text-white text-sm"></i>
       </div>
-      <span class="text-xs font-bold px-2 py-1 rounded-full ${isPos ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}">
+      <span class="text-xs font-bold px-2 py-1 rounded-full ${isPos ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-500/20 text-slate-400'}">
         ${change}
       </span>
     </div>
@@ -436,7 +436,7 @@ function platformStatus(name: string, icon: string, color: string, connected: bo
 function campaignRow(name: string, icons: string[], status: string, spend: string, revenue: string, roas: string, ctr: string, scale: string): string {
   const statusClass = status === 'scaling' ? 'badge-scaling' : status === 'live' ? 'badge-live' : status === 'paused' ? 'badge-paused' : 'badge-draft'
   const roasNum = parseFloat(roas)
-  const roasColor = roasNum >= 4.5 ? 'text-emerald-400' : roasNum >= 3.5 ? 'text-blue-400' : 'text-amber-400'
+  const roasColor = roasNum >= 4.5 ? 'text-brand-400' : roasNum >= 3.5 ? 'text-slate-400' : 'text-brand-400'
   return `<tr class="border-b border-white/5 hover:bg-white/[0.02] transition-all cursor-pointer table-row" onclick="window.location.href='/campaigns'">
     <td class="py-3 font-medium text-slate-200 whitespace-nowrap">${name}</td>
     <td class="py-3">
@@ -452,10 +452,10 @@ function campaignRow(name: string, icons: string[], status: string, spend: strin
 }
 
 function creativeRow(name: string, type: string, ctr: string, score: number, winning: boolean): string {
-  const color = score >= 80 ? 'emerald' : score >= 50 ? 'amber' : 'red'
+  const color = score >= 80 ? 'brand' : score >= 50 ? 'brand' : 'slate'
   return `<div class="flex items-center gap-3">
-    <div class="w-8 h-8 rounded-lg ${type.includes('Video') ? 'bg-purple-500/20' : 'bg-blue-500/20'} flex items-center justify-center flex-shrink-0">
-      <i class="fas ${type.includes('Video') ? 'fa-video' : 'fa-image'} text-xs ${type.includes('Video') ? 'text-purple-400' : 'text-blue-400'}"></i>
+    <div class="w-8 h-8 rounded-lg ${type.includes('Video') ? 'bg-brand-500/20' : 'bg-slate-500/20'} flex items-center justify-center flex-shrink-0">
+      <i class="fas ${type.includes('Video') ? 'fa-video' : 'fa-image'} text-xs ${type.includes('Video') ? 'text-brand-400' : 'text-slate-400'}"></i>
     </div>
     <div class="flex-1 min-w-0">
       <div class="text-xs font-semibold text-slate-300 truncate">${name}</div>
@@ -466,7 +466,7 @@ function creativeRow(name: string, type: string, ctr: string, score: number, win
         <div class="progress-fill bg-${color}-500" style="width:${score}%"></div>
       </div>
       <span class="text-xs font-bold text-${color}-400 w-8 text-right">${score}%</span>
-      ${winning ? '<i class="fas fa-crown text-amber-400 text-xs"></i>' : '<i class="fas fa-skull text-red-500/40 text-xs"></i>'}
+      ${winning ? '<i class="fas fa-crown text-brand-400 text-xs"></i>' : '<i class="fas fa-skull text-slate-500/40 text-xs"></i>'}
     </div>
   </div>`
 }

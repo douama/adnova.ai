@@ -27,7 +27,7 @@ export function renderBilling(lang: Lang = 'en'): string {
         ${usageItem('Active Campaigns', '47', '∞', 40)}
       </div>
       <div class="flex flex-wrap gap-3">
-        <button onclick="openUpgradeModal()" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-lg">
+        <button onclick="openUpgradeModal()" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-lg">
           <i class="fas fa-arrow-up"></i> Upgrade to Enterprise
         </button>
         <button onclick="openManageModal()" class="glass hover:bg-white/10 text-slate-300 px-5 py-2.5 rounded-xl text-sm transition-all flex items-center gap-2">
@@ -45,16 +45,16 @@ export function renderBilling(lang: Lang = 'en'): string {
         <i class="fas fa-chart-bar text-brand-400 text-sm"></i> This Month
       </h3>
       <div class="space-y-3">
-        ${billingStat('AI Creatives Generated', '142', 'fa-wand-magic-sparkles', 'purple')}
+        ${billingStat('AI Creatives Generated', '142', 'fa-wand-magic-sparkles', 'brand')}
         ${billingStat('AI Decisions Made', '12,847', 'fa-brain', 'brand')}
-        ${billingStat('Campaigns Managed', '47', 'fa-bullhorn', 'emerald')}
-        ${billingStat('Budget Optimizations', '384', 'fa-dollar-sign', 'amber')}
-        ${billingStat('Audiences Built', '12', 'fa-users', 'blue')}
+        ${billingStat('Campaigns Managed', '47', 'fa-bullhorn', 'brand')}
+        ${billingStat('Budget Optimizations', '384', 'fa-dollar-sign', 'brand')}
+        ${billingStat('Audiences Built', '12', 'fa-users', 'slate')}
       </div>
       <div class="mt-4 pt-4 border-t border-white/5">
         <div class="flex items-center justify-between text-xs">
           <span class="text-slate-500">Monthly Value Generated</span>
-          <span class="text-emerald-400 font-bold text-base">$601K</span>
+          <span class="text-brand-400 font-bold text-base">$601K</span>
         </div>
       </div>
     </div>
@@ -66,13 +66,13 @@ export function renderBilling(lang: Lang = 'en'): string {
       <h3 class="font-bold text-white">Plan Comparison</h3>
       <div class="glass rounded-xl p-1 flex gap-1">
         <button onclick="setBillingCycle('monthly', this)" id="cycle-monthly" class="text-xs px-3 py-1.5 rounded-lg transition-all bg-brand-600 text-white font-semibold">Monthly</button>
-        <button onclick="setBillingCycle('annual', this)" id="cycle-annual" class="text-xs px-3 py-1.5 rounded-lg transition-all text-slate-400">Annual <span class="text-emerald-400">-20%</span></button>
+        <button onclick="setBillingCycle('annual', this)" id="cycle-annual" class="text-xs px-3 py-1.5 rounded-lg transition-all text-slate-400">Annual <span class="text-brand-400">-20%</span></button>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       ${planCard('Starter', 299, false, 'from-slate-500 to-slate-600', ['$50K ad spend/mo', '5 active campaigns', '2 users', 'AI creative gen', 'Basic automation', 'Email support'])}
-      ${planCard('Growth', 799, true, 'from-brand-500 to-purple-600', ['$200K ad spend/mo', 'Unlimited campaigns', '10 users', 'Advanced AI engine', 'Full automation', 'Priority support', 'White-label reports', 'API access'])}
-      ${planCard('Enterprise', 0, false, 'from-amber-500 to-orange-600', ['Unlimited spend', 'Dedicated AI instance', 'Unlimited users', 'Custom integrations', 'SLA guarantee', 'Dedicated CSM', 'On-premise option'])}
+      ${planCard('Growth', 799, true, 'from-brand-500 to-brand-600', ['$200K ad spend/mo', 'Unlimited campaigns', '10 users', 'Advanced AI engine', 'Full automation', 'Priority support', 'White-label reports', 'API access'])}
+      ${planCard('Enterprise', 0, false, 'from-brand-500 to-orange-600', ['Unlimited spend', 'Dedicated AI instance', 'Unlimited users', 'Custom integrations', 'SLA guarantee', 'Dedicated CSM', 'On-premise option'])}
     </div>
   </div>
 
@@ -87,16 +87,16 @@ export function renderBilling(lang: Lang = 'en'): string {
     <div class="space-y-3">
       <div class="glass rounded-xl p-4 flex items-center justify-between border border-brand-500/20">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-7 rounded bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center text-white text-xs font-bold">VISA</div>
+          <div class="w-10 h-7 rounded bg-gradient-to-r from-slate-600 to-slate-800 flex items-center justify-center text-white text-xs font-bold">VISA</div>
           <div>
             <div class="text-sm text-white font-semibold">•••• •••• •••• 4242</div>
             <div class="text-xs text-slate-500">Expires 12/2027 · Default</div>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400">Default</span>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-400">Default</span>
           <button class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-white/10 transition-all">
-            <i class="fas fa-trash text-red-400 text-xs"></i>
+            <i class="fas fa-trash text-slate-400 text-xs"></i>
           </button>
         </div>
       </div>
@@ -135,10 +135,10 @@ export function renderBilling(lang: Lang = 'en'): string {
 
   <!-- Upgrade to Enterprise Modal -->
   <div id="upgrade-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-lg animate-fadeIn" style="border:1px solid rgba(245,158,11,0.3)">
+    <div class="glass rounded-2xl w-full max-w-lg animate-fadeIn" style="border:1px solid rgba(255,107,43,0.3)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-orange-600 flex items-center justify-center">
             <i class="fas fa-crown text-white text-sm"></i>
           </div>
           <h2 class="font-bold text-white">Upgrade to Enterprise</h2>
@@ -146,7 +146,7 @@ export function renderBilling(lang: Lang = 'en'): string {
         <button onclick="closeUpgradeModal()" class="text-slate-500 hover:text-slate-300 w-8 h-8 glass rounded-lg flex items-center justify-center"><i class="fas fa-times"></i></button>
       </div>
       <div class="p-5 space-y-4">
-        <div class="glass rounded-xl p-4 border border-amber-500/20">
+        <div class="glass rounded-xl p-4 border border-brand-500/20">
           <div class="text-center mb-4">
             <div class="text-3xl font-black text-white mb-1">Enterprise</div>
             <div class="text-slate-400 text-sm">Custom pricing · Tailored to your needs</div>
@@ -165,15 +165,15 @@ export function renderBilling(lang: Lang = 'en'): string {
         <div class="glass rounded-xl p-4">
           <h3 class="text-xs font-semibold text-slate-400 mb-3">Get in Touch</h3>
           <div class="space-y-3">
-            <input type="text" placeholder="Your name" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-amber-500 transition-all"/>
-            <input type="email" placeholder="Work email" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-amber-500 transition-all"/>
-            <input type="text" placeholder="Monthly ad spend (approx.)" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-amber-500 transition-all"/>
-            <textarea placeholder="Tell us about your needs..." rows="2" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-amber-500 transition-all resize-none"></textarea>
+            <input type="text" placeholder="Your name" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all"/>
+            <input type="email" placeholder="Work email" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all"/>
+            <input type="text" placeholder="Monthly ad spend (approx.)" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all"/>
+            <textarea placeholder="Tell us about your needs..." rows="2" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all resize-none"></textarea>
           </div>
         </div>
         <div class="flex gap-3">
           <button onclick="closeUpgradeModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm">Cancel</button>
-          <button onclick="submitUpgrade()" class="flex-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:opacity-90 text-white py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2">
+          <button onclick="submitUpgrade()" class="flex-1 bg-gradient-to-r from-brand-500 to-orange-600 hover:opacity-90 text-white py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2">
             <i class="fas fa-paper-plane"></i> Request Demo
           </button>
         </div>
@@ -186,7 +186,7 @@ export function renderBilling(lang: Lang = 'en'): string {
     <div class="glass rounded-2xl w-full max-w-md animate-fadeIn" style="border:1px solid rgba(99,102,241,0.3)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
             <i class="fas fa-gear text-white text-sm"></i>
           </div>
           <h2 class="font-bold text-white">Manage Subscription</h2>
@@ -207,13 +207,13 @@ export function renderBilling(lang: Lang = 'en'): string {
           </div>
         </div>
         <div class="space-y-2">
-          <button onclick="switchToAnnual()" class="w-full glass hover:bg-emerald-500/10 text-emerald-400 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 border border-emerald-500/20">
+          <button onclick="switchToAnnual()" class="w-full glass hover:bg-brand-500/10 text-brand-400 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 border border-brand-500/20">
             <i class="fas fa-calendar-check"></i> Switch to Annual (Save 20% = $1,918/yr)
           </button>
-          <button onclick="pauseSubscription()" class="w-full glass hover:bg-amber-500/10 text-amber-400 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 border border-amber-500/20">
+          <button onclick="pauseSubscription()" class="w-full glass hover:bg-brand-500/10 text-brand-400 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 border border-brand-500/20">
             <i class="fas fa-pause"></i> Pause Subscription
           </button>
-          <button onclick="cancelSubscription()" class="w-full glass hover:bg-red-500/10 text-red-400 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 border border-red-500/20">
+          <button onclick="cancelSubscription()" class="w-full glass hover:bg-slate-500/10 text-slate-400 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 border border-slate-500/20">
             <i class="fas fa-times-circle"></i> Cancel Subscription
           </button>
         </div>
@@ -227,7 +227,7 @@ export function renderBilling(lang: Lang = 'en'): string {
     <div class="glass rounded-2xl w-full max-w-md animate-fadeIn" style="border:1px solid rgba(99,102,241,0.3)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
             <i class="fas fa-credit-card text-white text-sm"></i>
           </div>
           <h2 class="font-bold text-white">Payment Method</h2>
@@ -256,12 +256,12 @@ export function renderBilling(lang: Lang = 'en'): string {
           </div>
         </div>
         <div class="flex items-center gap-2 text-xs text-slate-500">
-          <i class="fas fa-lock text-emerald-400"></i>
+          <i class="fas fa-lock text-brand-400"></i>
           <span>Secured by Stripe · 256-bit SSL encryption</span>
         </div>
         <div class="flex gap-3">
           <button onclick="closePaymentModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm">Cancel</button>
-          <button onclick="savePaymentMethod()" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Save Card</button>
+          <button onclick="savePaymentMethod()" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Save Card</button>
         </div>
       </div>
     </div>
@@ -305,27 +305,27 @@ export function renderBilling(lang: Lang = 'en'): string {
   // ── Actions ────────────────────────────────────────────────────────────────
   function submitUpgrade() {
     closeUpgradeModal();
-    showBillingToast('Enterprise request sent! Our team will contact you within 24h', 'amber');
+    showBillingToast('Enterprise request sent! Our team will contact you within 24h', 'brand');
   }
 
   function switchToAnnual() {
     closeManageModal();
-    showBillingToast('Switched to annual billing — saving $1,918/year starting next cycle', 'emerald');
+    showBillingToast('Switched to annual billing — saving $1,918/year starting next cycle', 'brand');
   }
 
   function pauseSubscription() {
     closeManageModal();
-    showBillingToast('Subscription paused — resumes automatically in 30 days', 'amber');
+    showBillingToast('Subscription paused — resumes automatically in 30 days', 'brand');
   }
 
   function cancelSubscription() {
     closeManageModal();
-    showBillingToast('Cancellation request submitted — active until Apr 1, 2026', 'red');
+    showBillingToast('Cancellation request submitted — active until Apr 1, 2026', 'slate');
   }
 
   function savePaymentMethod() {
     closePaymentModal();
-    showBillingToast('Payment method added successfully', 'emerald');
+    showBillingToast('Payment method added successfully', 'brand');
   }
 
   // ── Invoice PDF download ───────────────────────────────────────────────────
@@ -336,34 +336,34 @@ export function renderBilling(lang: Lang = 'en'): string {
 <html><head><title>Invoice \${id}</title>
 <style>
   body{font-family:sans-serif;padding:40px;color:#1e293b;max-width:600px;margin:0 auto}
-  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;border-bottom:2px solid #6366f1;padding-bottom:20px}
-  .brand{font-size:24px;font-weight:900;color:#6366f1}
-  .invoice-badge{background:#6366f110;color:#6366f1;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;border-bottom:2px solid #FF4D00;padding-bottom:20px}
+  .brand{font-size:24px;font-weight:900;color:#FF4D00}
+  .invoice-badge{background:#FF4D0010;color:#FF4D00;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
   table{width:100%;border-collapse:collapse;margin:20px 0}
   th,td{padding:12px;text-align:left;border-bottom:1px solid #e2e8f0}
-  th{background:#f8fafc;font-size:12px;color:#64748b;text-transform:uppercase}
-  .total{font-size:20px;font-weight:900;color:#6366f1}
-  .footer{margin-top:40px;font-size:11px;color:#94a3b8;text-align:center}
+  th{background:#f8fafc;font-size:12px;color:#7A7A7A;text-transform:uppercase}
+  .total{font-size:20px;font-weight:900;color:#FF4D00}
+  .footer{margin-top:40px;font-size:11px;color:#7A7A7A;text-align:center}
 </style></head>
 <body>
 <div class="header">
-  <div><div class="brand">AdNova AI</div><div style="font-size:12px;color:#64748b">adnova.ai · support@adnova.ai</div></div>
+  <div><div class="brand">AdNova AI</div><div style="font-size:12px;color:#7A7A7A">adnova.ai · support@adnova.ai</div></div>
   <div class="invoice-badge">INVOICE \${id.toUpperCase()}</div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:30px">
-  <div><div style="font-size:12px;color:#64748b;margin-bottom:4px">Bill To</div><div style="font-weight:600">Acme Corp</div><div style="font-size:12px;color:#64748b">john@acmecorp.com</div></div>
-  <div style="text-align:right"><div style="font-size:12px;color:#64748b;margin-bottom:4px">Invoice Date</div><div style="font-weight:600">\${date}</div><div style="font-size:12px;color:#64748b">Due: Immediate</div></div>
+  <div><div style="font-size:12px;color:#7A7A7A;margin-bottom:4px">Bill To</div><div style="font-weight:600">Acme Corp</div><div style="font-size:12px;color:#7A7A7A">john@acmecorp.com</div></div>
+  <div style="text-align:right"><div style="font-size:12px;color:#7A7A7A;margin-bottom:4px">Invoice Date</div><div style="font-weight:600">\${date}</div><div style="font-size:12px;color:#7A7A7A">Due: Immediate</div></div>
 </div>
 <table>
   <thead><tr><th>Description</th><th style="text-align:right">Amount</th></tr></thead>
   <tbody>
-    <tr><td>Growth Plan — Monthly Subscription<br><span style="font-size:11px;color:#64748b">Unlimited campaigns, AI engine, priority support</span></td><td style="text-align:right;font-weight:600">\${amount}</td></tr>
+    <tr><td>Growth Plan — Monthly Subscription<br><span style="font-size:11px;color:#7A7A7A">Unlimited campaigns, AI engine, priority support</span></td><td style="text-align:right;font-weight:600">\${amount}</td></tr>
   </tbody>
 </table>
-<div style="text-align:right;border-top:2px solid #6366f1;padding-top:12px">
-  <div style="font-size:12px;color:#64748b">Total</div>
+<div style="text-align:right;border-top:2px solid #FF4D00;padding-top:12px">
+  <div style="font-size:12px;color:#7A7A7A">Total</div>
   <div class="total">\${amount}</div>
-  <div style="font-size:12px;color:#10b981;margin-top:4px">✓ Paid</div>
+  <div style="font-size:12px;color:#FF4D00;margin-top:4px">✓ Paid</div>
 </div>
 <div class="footer">Thank you for using AdNova AI · adnova.ai</div>
 </body></html>\`);
@@ -378,10 +378,10 @@ export function renderBilling(lang: Lang = 'en'): string {
 
   // ── Toast ──────────────────────────────────────────────────────────────────
   function showBillingToast(msg, color='brand') {
-    const colors = { brand:'bg-brand-500/90', emerald:'bg-emerald-500/90', amber:'bg-amber-500/90', red:'bg-red-500/90' };
+    const colors = { brand:'bg-brand-500/90', emerald:'bg-brand-500/90', amber:'bg-brand-500/90', red:'bg-slate-500/90' };
     const t = document.createElement('div');
     t.className = \`\${colors[color]||colors.brand} text-white text-xs px-4 py-3 rounded-xl shadow-xl backdrop-blur-sm pointer-events-auto flex items-center gap-2 animate-fadeIn\`;
-    t.innerHTML = \`<i class="fas fa-\${color==='red'?'exclamation-circle':color==='amber'?'clock':'check-circle'}"></i> \${msg}\`;
+    t.innerHTML = \`<i class="fas fa-\${color==='slate'?'exclamation-circle':color==='brand'?'clock':'check-circle'}"></i> \${msg}\`;
     const container = document.getElementById('billing-toast');
     container.appendChild(t);
     setTimeout(() => t.remove(), 4000);
@@ -399,7 +399,7 @@ export function renderBilling(lang: Lang = 'en'): string {
 }
 
 function usageItem(label: string, used: string, max: string, pct: number): string {
-  const color = pct >= 90 ? 'red' : pct >= 70 ? 'amber' : 'brand'
+  const color = pct >= 90 ? 'slate' : pct >= 70 ? 'brand' : 'brand'
   return `<div class="glass rounded-xl p-3">
     <div class="flex items-center justify-between mb-1.5">
       <span class="text-xs text-slate-500">${label}</span>
@@ -423,7 +423,7 @@ function billingStat(label: string, value: string, icon: string, color: string):
 function planCard(name: string, price: number, current: boolean, gradient: string, features: string[]): string {
   const priceDisplay = price === 0 ? 'Custom' : `$${price}`
   return `<div class="glass rounded-xl p-5 ${current ? 'border border-brand-500/40' : ''} relative overflow-hidden">
-    ${current ? '<div class="absolute top-0 right-0 bg-gradient-to-l from-brand-500 to-purple-600 text-white text-xs px-3 py-1 rounded-bl-xl font-bold">CURRENT</div>' : ''}
+    ${current ? '<div class="absolute top-0 right-0 bg-gradient-to-l from-brand-500 to-brand-600 text-white text-xs px-3 py-1 rounded-bl-xl font-bold">CURRENT</div>' : ''}
     <div class="flex items-center gap-2 mb-3">
       <div class="w-7 h-7 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center">
         <i class="fas ${name === 'Enterprise' ? 'fa-crown' : name === 'Growth' ? 'fa-bolt' : 'fa-star'} text-white text-xs"></i>
@@ -436,11 +436,11 @@ function planCard(name: string, price: number, current: boolean, gradient: strin
     </div>
     <ul class="space-y-1.5 mb-4">
       ${features.map(f => `<li class="flex items-center gap-2 text-xs text-slate-400">
-        <i class="fas fa-check text-emerald-400 text-xs flex-shrink-0"></i>${f}
+        <i class="fas fa-check text-brand-400 text-xs flex-shrink-0"></i>${f}
       </li>`).join('')}
     </ul>
     ${!current ? `<button onclick="${price === 0 ? 'openUpgradeModal()' : 'showBillingToast(\'Plan change requested\', \'brand\')'}" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2.5 rounded-xl transition-all font-medium">
-      ${price === 0 ? '<i class="fas fa-crown mr-1 text-amber-400"></i> Contact Sales' : price > 799 ? '<i class="fas fa-arrow-up mr-1"></i> Upgrade' : '<i class="fas fa-arrow-down mr-1"></i> Downgrade'}
+      ${price === 0 ? '<i class="fas fa-crown mr-1 text-brand-400"></i> Contact Sales' : price > 799 ? '<i class="fas fa-arrow-up mr-1"></i> Upgrade' : '<i class="fas fa-arrow-down mr-1"></i> Downgrade'}
     </button>` : ''}
   </div>`
 }
@@ -461,6 +461,6 @@ function invoiceRow(id: string, date: string, desc: string, amount: string, stat
 
 function upgradeFeature(text: string): string {
   return `<div class="flex items-center gap-2 text-xs text-slate-300">
-    <i class="fas fa-check text-amber-400 flex-shrink-0"></i>${text}
+    <i class="fas fa-check text-brand-400 flex-shrink-0"></i>${text}
   </div>`
 }

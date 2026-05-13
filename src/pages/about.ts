@@ -8,21 +8,21 @@ export function renderAbout(): string {
   })
 
   const team = [
-    { name: 'Marcus Chen', role: 'CEO & Co-Founder', bio: 'Former VP Engineering at Meta Ads. Built AI bidding systems managing $2B+ in annual ad spend. Stanford CS PhD.', avatar: 'MC', color: 'indigo', twitter: '@marcuschen', linkedin: 'linkedin.com/in/marcuschen' },
-    { name: 'Priya Nair', role: 'CTO & Co-Founder', bio: 'Ex-Google Brain researcher. Led ML infrastructure for Google Smart Campaigns. 12 patents in ad optimization. MIT PhD.', avatar: 'PN', color: 'purple', twitter: '@priyanair', linkedin: 'linkedin.com/in/priyanair' },
-    { name: 'Sofia Rossi', role: 'CPO', bio: 'Previously Head of Product at HubSpot Marketing Hub. Scaled product from 0 to 10M users. Forbes 30 Under 30.', avatar: 'SR', color: 'pink', twitter: '@sofiarossi', linkedin: 'linkedin.com/in/sofiarossi' },
-    { name: 'James Okafor', role: 'VP Sales', bio: '15 years in adtech sales. Built revenue teams at The Trade Desk and Criteo. $50M+ ARR closed in career.', avatar: 'JO', color: 'cyan', twitter: '@jamesokafor', linkedin: 'linkedin.com/in/jamesokafor' },
-    { name: 'Aisha Yamamoto', role: 'Head of AI Research', bio: 'PhD in Reinforcement Learning from Carnegie Mellon. Published 23 papers on multi-armed bandits and dynamic pricing.', avatar: 'AY', color: 'amber', twitter: '@aishayamamoto', linkedin: 'linkedin.com/in/aishayamamoto' },
-    { name: 'Luca Ferretti', role: 'VP Engineering', bio: 'Former Staff Engineer at Stripe. Built distributed systems handling 10M+ API calls/second. Open source contributor.', avatar: 'LF', color: 'emerald', twitter: '@lucaferretti', linkedin: 'linkedin.com/in/lucaferretti' },
+    { name: 'Marcus Chen', role: 'CEO & Co-Founder', bio: 'Former VP Engineering at Meta Ads. Built AI bidding systems managing $2B+ in annual ad spend. Stanford CS PhD.', avatar: 'MC', color: 'slate', twitter: '@marcuschen', linkedin: 'linkedin.com/in/marcuschen' },
+    { name: 'Priya Nair', role: 'CTO & Co-Founder', bio: 'Ex-Google Brain researcher. Led ML infrastructure for Google Smart Campaigns. 12 patents in ad optimization. MIT PhD.', avatar: 'PN', color: 'brand', twitter: '@priyanair', linkedin: 'linkedin.com/in/priyanair' },
+    { name: 'Sofia Rossi', role: 'CPO', bio: 'Previously Head of Product at HubSpot Marketing Hub. Scaled product from 0 to 10M users. Forbes 30 Under 30.', avatar: 'SR', color: 'brand', twitter: '@sofiarossi', linkedin: 'linkedin.com/in/sofiarossi' },
+    { name: 'James Okafor', role: 'VP Sales', bio: '15 years in adtech sales. Built revenue teams at The Trade Desk and Criteo. $50M+ ARR closed in career.', avatar: 'JO', color: 'slate', twitter: '@jamesokafor', linkedin: 'linkedin.com/in/jamesokafor' },
+    { name: 'Aisha Yamamoto', role: 'Head of AI Research', bio: 'PhD in Reinforcement Learning from Carnegie Mellon. Published 23 papers on multi-armed bandits and dynamic pricing.', avatar: 'AY', color: 'brand', twitter: '@aishayamamoto', linkedin: 'linkedin.com/in/aishayamamoto' },
+    { name: 'Luca Ferretti', role: 'VP Engineering', bio: 'Former Staff Engineer at Stripe. Built distributed systems handling 10M+ API calls/second. Open source contributor.', avatar: 'LF', color: 'brand', twitter: '@lucaferretti', linkedin: 'linkedin.com/in/lucaferretti' },
   ]
 
   const values = [
-    { icon: 'fa-brain', color: 'indigo', title: 'AI-First', desc: 'Every decision, feature, and workflow is designed with artificial intelligence at its core. We don\'t just add AI — it\'s in our DNA.' },
-    { icon: 'fa-handshake', color: 'purple', title: 'Customer Obsession', desc: 'Our customers\' growth is our growth. We measure our success by the ROAS improvements and time savings we deliver.' },
-    { icon: 'fa-chart-line', color: 'cyan', title: 'Radical Transparency', desc: 'We show exactly what our AI is doing and why. No black boxes. Full audit trails. You always know what\'s happening with your budget.' },
-    { icon: 'fa-shield-alt', color: 'emerald', title: 'Security & Privacy', desc: 'Advertising data is sensitive. We treat your data like it\'s our own — with enterprise-grade security and strict privacy controls.' },
-    { icon: 'fa-globe', color: 'amber', title: 'Global Mindset', desc: 'Built for businesses everywhere. Our platform works across 9 platforms, 150+ countries, and 6 languages natively.' },
-    { icon: 'fa-rocket', color: 'rose', title: 'Move Fast, Ship Quality', desc: 'We deploy improvements daily. But never at the expense of quality or stability — your campaigns are always running.' },
+    { icon: 'fa-brain', color: 'slate', title: 'AI-First', desc: 'Every decision, feature, and workflow is designed with artificial intelligence at its core. We don\'t just add AI — it\'s in our DNA.' },
+    { icon: 'fa-handshake', color: 'brand', title: 'Customer Obsession', desc: 'Our customers\' growth is our growth. We measure our success by the ROAS improvements and time savings we deliver.' },
+    { icon: 'fa-chart-line', color: 'slate', title: 'Radical Transparency', desc: 'We show exactly what our AI is doing and why. No black boxes. Full audit trails. You always know what\'s happening with your budget.' },
+    { icon: 'fa-shield-alt', color: 'brand', title: 'Security & Privacy', desc: 'Advertising data is sensitive. We treat your data like it\'s our own — with enterprise-grade security and strict privacy controls.' },
+    { icon: 'fa-globe', color: 'brand', title: 'Global Mindset', desc: 'Built for businesses everywhere. Our platform works across 9 platforms, 150+ countries, and 6 languages natively.' },
+    { icon: 'fa-rocket', color: 'brand', title: 'Move Fast, Ship Quality', desc: 'We deploy improvements daily. But never at the expense of quality or stability — your campaigns are always running.' },
   ]
 
   const milestones = [
@@ -50,7 +50,7 @@ export function renderAbout(): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="hidden md:flex items-center gap-6">
@@ -69,8 +69,8 @@ export function renderAbout(): string {
 <!-- HERO -->
 <section class="pt-32 pb-20 px-6 text-center relative overflow-hidden">
   <div class="max-w-4xl mx-auto">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-indigo-300 border border-indigo-500/20 mb-8">
-      <i class="fas fa-building text-indigo-400"></i>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-slate-300 border border-slate-500/20 mb-8">
+      <i class="fas fa-building text-slate-400"></i>
       Founded 2023 · San Francisco, CA
     </div>
     <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight" style="font-family:'Space Grotesk',sans-serif">
@@ -107,8 +107,8 @@ export function renderAbout(): string {
 <section class="py-20 px-6">
   <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
     <div>
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-purple-300 border border-purple-500/20 mb-6">
-        <i class="fas fa-bullseye text-purple-400"></i>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-brand-300 border border-brand-500/20 mb-6">
+        <i class="fas fa-bullseye text-brand-400"></i>
         Our Mission
       </div>
       <h2 class="text-4xl font-bold text-white mb-6 leading-tight" style="font-family:'Space Grotesk',sans-serif">
@@ -120,17 +120,17 @@ export function renderAbout(): string {
       <p class="text-slate-300 leading-relaxed mb-6">
         We built AdNova AI to level the playing field. Our platform brings enterprise-grade AI to businesses of all sizes — from the $1,000/month startup to the $100K/month enterprise — at a fraction of the cost of hiring an in-house team.
       </p>
-      <div class="glass p-4 rounded-xl border border-indigo-500/20">
-        <p class="text-indigo-300 italic text-sm">"The AI that was previously only available to companies with $10M+ marketing budgets is now accessible to any business willing to compete."</p>
+      <div class="glass p-4 rounded-xl border border-slate-500/20">
+        <p class="text-slate-300 italic text-sm">"The AI that was previously only available to companies with $10M+ marketing budgets is now accessible to any business willing to compete."</p>
         <p class="text-slate-500 text-xs mt-2">— Marcus Chen, CEO & Co-Founder</p>
       </div>
     </div>
     <div class="space-y-4">
       ${[
-        ['fa-clock', 'cyan', '18 hours/week saved', 'Our customers reclaim an average of 18 hours per week previously spent on manual campaign management.'],
-        ['fa-chart-bar', 'indigo', '+128% ROAS improvement', 'Customers see an average ROAS boost of 128% in the first 90 days — often measurable within 72 hours.'],
-        ['fa-trash-alt', 'rose', '73% less wasted spend', 'AI eliminates the guesswork that causes budget waste on underperforming placements and audiences.'],
-        ['fa-expand-arrows-alt', 'emerald', '9 platforms, one dashboard', 'Manage your entire advertising ecosystem from a single, unified intelligence platform.'],
+        ['fa-clock', 'slate', '18 hours/week saved', 'Our customers reclaim an average of 18 hours per week previously spent on manual campaign management.'],
+        ['fa-chart-bar', 'slate', '+128% ROAS improvement', 'Customers see an average ROAS boost of 128% in the first 90 days — often measurable within 72 hours.'],
+        ['fa-trash-alt', 'brand', '73% less wasted spend', 'AI eliminates the guesswork that causes budget waste on underperforming placements and audiences.'],
+        ['fa-expand-arrows-alt', 'brand', '9 platforms, one dashboard', 'Manage your entire advertising ecosystem from a single, unified intelligence platform.'],
       ].map(([icon, color, title, desc]) => `
       <div class="glass-card rounded-2xl p-5 flex gap-4">
         <div class="w-10 h-10 rounded-xl bg-${color}-500/15 flex items-center justify-center flex-shrink-0">
@@ -149,8 +149,8 @@ export function renderAbout(): string {
 <section class="py-20 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-14">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-cyan-300 border border-cyan-500/20 mb-6">
-        <i class="fas fa-heart text-cyan-400"></i>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-slate-300 border border-slate-500/20 mb-6">
+        <i class="fas fa-heart text-slate-400"></i>
         Our Values
       </div>
       <h2 class="text-4xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">What we believe in</h2>
@@ -173,8 +173,8 @@ export function renderAbout(): string {
 <section class="py-20 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-14">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-amber-300 border border-amber-500/20 mb-6">
-        <i class="fas fa-users text-amber-400"></i>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-brand-300 border border-brand-500/20 mb-6">
+        <i class="fas fa-users text-brand-400"></i>
         The Team
       </div>
       <h2 class="text-4xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Built by adtech veterans</h2>
@@ -184,7 +184,7 @@ export function renderAbout(): string {
       ${team.map(m => `
       <div class="glass-card rounded-2xl p-6 group">
         <div class="flex items-start gap-4 mb-4">
-          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-${m.color}-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-${m.color}-500 to-brand-600 flex items-center justify-center flex-shrink-0">
             <span class="text-white font-bold text-lg">${m.avatar}</span>
           </div>
           <div>
@@ -209,21 +209,21 @@ export function renderAbout(): string {
 <section class="py-20 px-6 border-t border-white/5">
   <div class="max-w-3xl mx-auto">
     <div class="text-center mb-14">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-emerald-300 border border-emerald-500/20 mb-6">
-        <i class="fas fa-history text-emerald-400"></i>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-brand-300 border border-brand-500/20 mb-6">
+        <i class="fas fa-history text-brand-400"></i>
         Our Journey
       </div>
       <h2 class="text-4xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">From idea to industry leader</h2>
     </div>
     <div class="relative">
-      <div class="absolute left-16 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/50 via-purple-500/30 to-transparent"></div>
+      <div class="absolute left-16 top-0 bottom-0 w-px bg-gradient-to-b from-slate-500/50 via-brand-500/30 to-transparent"></div>
       <div class="space-y-6">
         ${milestones.map((m, i) => `
         <div class="flex gap-6 group">
           <div class="w-14 flex-shrink-0 text-right">
-            <span class="text-xs font-medium ${i < 4 ? 'text-slate-500' : i < 8 ? 'text-slate-400' : 'text-indigo-400'} whitespace-nowrap">${m.year}</span>
+            <span class="text-xs font-medium ${i < 4 ? 'text-slate-500' : i < 8 ? 'text-slate-400' : 'text-slate-400'} whitespace-nowrap">${m.year}</span>
           </div>
-          <div class="w-4 h-4 rounded-full ${i < 4 ? 'bg-slate-600' : i < 8 ? 'bg-purple-500' : 'bg-indigo-400'} border-2 border-slate-900 flex-shrink-0 mt-0.5 transition-transform group-hover:scale-125"></div>
+          <div class="w-4 h-4 rounded-full ${i < 4 ? 'bg-slate-600' : i < 8 ? 'bg-brand-500' : 'bg-slate-400'} border-2 border-slate-900 flex-shrink-0 mt-0.5 transition-transform group-hover:scale-125"></div>
           <p class="text-slate-300 text-sm leading-relaxed pb-4">${m.event}</p>
         </div>`).join('')}
       </div>
@@ -234,18 +234,18 @@ export function renderAbout(): string {
 <!-- INVESTORS -->
 <section class="py-20 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-purple-300 border border-purple-500/20 mb-6">
-      <i class="fas fa-dollar-sign text-purple-400"></i>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-brand-300 border border-brand-500/20 mb-6">
+      <i class="fas fa-dollar-sign text-brand-400"></i>
       Backed By The Best
     </div>
     <h2 class="text-4xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">$67.2M raised to date</h2>
     <p class="text-slate-400 mb-12 max-w-xl mx-auto">Backed by world-class investors who share our vision of AI-democratized advertising.</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
       ${[
-        ['Sequoia Capital', 'Seed Lead', 'indigo'],
-        ['Andreessen Horowitz', 'Series A', 'purple'],
-        ['Bessemer Venture', 'Series A', 'cyan'],
-        ['Tiger Global', 'Series B Lead', 'amber'],
+        ['Sequoia Capital', 'Seed Lead', 'slate'],
+        ['Andreessen Horowitz', 'Series A', 'brand'],
+        ['Bessemer Venture', 'Series A', 'slate'],
+        ['Tiger Global', 'Series B Lead', 'brand'],
       ].map(([name, round, color]) => `
       <div class="glass-card rounded-xl p-5 text-center">
         <div class="w-10 h-10 rounded-lg bg-${color}-500/15 flex items-center justify-center mx-auto mb-3">
@@ -273,7 +273,7 @@ export function renderAbout(): string {
 
 <!-- FOOTER -->
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. All rights reserved. · <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a> · <a href="/press-kit" class="hover:text-indigo-400 transition-colors">Press Kit</a></p>
+  <p>© 2026 AdNova AI, Inc. All rights reserved. · <a href="/privacy" class="hover:text-slate-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-slate-400 transition-colors">Terms</a> · <a href="/press-kit" class="hover:text-slate-400 transition-colors">Press Kit</a></p>
 </footer>
 
 <style>

@@ -1,53 +1,55 @@
 import type { Context } from 'hono'
 
-// ── Shared plan definitions (source of truth) ───────────────────────────────
+// ─── Shared plan definitions (source of truth, also imported by admin) ─────
+// Pricing model: Starter $49 / Pro $149 / Agency $499 / Enterprise custom.
+// `adSpend`, `color`, `colorName` are kept for admin/pages/plans.ts backward-compat.
 export const PLANS = [
   {
     id: 'starter',
     name: 'Starter',
-    price: 299,
+    price: 49,
     period: 'month',
-    color: '#6366f1',
-    colorName: 'indigo',
+    color: '#0A0A0A',
+    colorName: 'ink',
     popular: false,
-    cta: 'Start Free Trial',
-    adSpend: '$10K',
+    cta: 'Start free trial',
+    summary: '3 ad accounts · 20 creatives/mo',
+    adSpend: '$5K',
     campaigns: 10,
     platforms: 2,
     users: 2,
-    creatives: 50,
+    creatives: 20,
+    adAccounts: 3,
     features: [
-      '10 active campaigns',
-      'Up to $10K ad spend/month',
-      '2 platforms (Facebook + Google)',
-      '2 team members',
-      '50 AI creatives/month',
-      'Basic AI auto-optimization',
-      'Standard analytics dashboard',
-      'Email support (48h)',
+      '3 connected ad accounts',
+      '20 AI creatives / month',
+      '2 platforms (Meta + Google)',
+      'Basic analytics dashboard',
+      'Standard AI optimization',
+      'Email support',
     ],
   },
   {
-    id: 'growth',
-    name: 'Growth',
-    price: 799,
+    id: 'pro',
+    name: 'Pro',
+    price: 149,
     period: 'month',
-    color: '#f97316',
-    colorName: 'orange',
+    color: '#FF4D00',
+    colorName: 'signal',
     popular: true,
-    cta: 'Start Free Trial',
-    adSpend: '$100K',
+    cta: 'Start free trial',
+    summary: '15 ad accounts · 100 creatives/mo',
+    adSpend: '$50K',
     campaigns: 50,
     platforms: 9,
     users: 10,
-    creatives: 500,
+    creatives: 100,
+    adAccounts: 15,
     features: [
-      '50 active campaigns',
-      'Up to $100K ad spend/month',
-      'All 9 ad platforms',
-      '10 team members',
-      '500 AI creatives/month',
-      'Full AI engine (UGC video included)',
+      '15 connected ad accounts',
+      '100 AI creatives / month',
+      'All 9 platforms',
+      'Full AI engine (UGC video incl.)',
       'A/B testing automation',
       'Lookalike audience builder',
       'Advanced analytics + reports',
@@ -55,3106 +57,1245 @@ export const PLANS = [
     ],
   },
   {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 0,
-    period: '',
-    color: '#10b981',
-    colorName: 'emerald',
+    id: 'agency',
+    name: 'Agency',
+    price: 499,
+    period: 'month',
+    color: '#0A0A0A',
+    colorName: 'ink',
     popular: false,
-    cta: 'Contact Sales',
+    cta: 'Start free trial',
+    summary: 'Unlimited · White-label · API',
     adSpend: 'Unlimited',
     campaigns: 999,
     platforms: 9,
     users: 999,
     creatives: 999,
+    adAccounts: 999,
     features: [
-      'Unlimited campaigns',
-      'Unlimited ad spend',
+      'Unlimited ad accounts',
+      'Unlimited AI creatives',
       'All platforms + custom integrations',
       'Unlimited team members',
-      'Unlimited AI creatives',
-      'Custom AI models trained on your data',
-      'Dedicated Customer Success Manager',
-      '99.9% SLA guarantee',
       'White-label solution',
       'Private API access',
+      'Dedicated CSM + custom reports',
+    ],
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: 0,
+    period: '',
+    color: '#0A0A0A',
+    colorName: 'ink',
+    popular: false,
+    cta: 'Contact sales',
+    summary: 'SLA · Dedicated · Custom agents',
+    adSpend: 'Custom',
+    campaigns: 9999,
+    platforms: 9,
+    users: 9999,
+    creatives: 9999,
+    adAccounts: 9999,
+    features: [
+      'Custom volume + 99.9% SLA',
+      'Custom AI agents on your data',
+      'Dedicated support team',
+      'SSO + advanced security',
+      'On-premise deployment option',
+      'Quarterly business reviews',
     ],
   },
 ]
 
-export const renderLanding = (c: Context) => {
-  // ── Performance: HTML cache 60s + stale 5min ──
-  c.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
-  c.header('X-Content-Type-Options', 'nosniff')
-  c.header('Vary', 'Accept-Language, CF-IPCountry')
-
-  // ── Language detection via IP / Accept-Language ──
-  const cfCountry = (c.req.raw.headers.get('CF-IPCountry') || '').toUpperCase()
-  const acceptLang = c.req.raw.headers.get('Accept-Language') || ''
-  const cookieLang = (() => { const m = (c.req.raw.headers.get('Cookie')||'').match(/adnova_lang=([a-z]{2})/); return m ? m[1] : '' })()
-  const COUNTRY_LANG: Record<string,string> = {
-    // French
-    FR:'fr',BE:'fr',CH:'fr',SN:'fr',CI:'fr',CM:'fr',DZ:'fr',MA:'fr',TN:'fr',LU:'fr',MC:'fr',ML:'fr',BF:'fr',
-    NE:'fr',TD:'fr',RW:'fr',BI:'fr',DJ:'fr',MG:'fr',
-    // Spanish
-    ES:'es',MX:'es',AR:'es',CO:'es',PE:'es',CL:'es',VE:'es',EC:'es',BO:'es',PY:'es',UY:'es',CR:'es',
-    PA:'es',DO:'es',GT:'es',HN:'es',NI:'es',SV:'es',CU:'es',PR:'es',
-    // German
-    DE:'de',AT:'de',LI:'de',
-    // Portuguese
-    BR:'pt',PT:'pt',AO:'pt',MZ:'pt',CV:'pt',GW:'pt',ST:'pt',
-    // Arabic
-    SA:'ar',AE:'ar',EG:'ar',IQ:'ar',JO:'ar',KW:'ar',LB:'ar',LY:'ar',OM:'ar',QA:'ar',SD:'ar',SY:'ar',YE:'ar',BH:'ar',
-    MR:'ar',PS:'ar',
-    // English (bilingual countries fall back to Accept-Language)
-    US:'en',GB:'en',AU:'en',NZ:'en',ZA:'en',IE:'en',IN:'en',SG:'en',PH:'en',
-    NG:'en',GH:'en',KE:'en',ZW:'en',CA:'en',JM:'en',TT:'en',BB:'en',
-  }
-  const bilingualCountries = new Set(['CA','BE','CH','LU','SG','IN','ZA'])
-  const supported = ['en','fr','es','de','pt','ar']
-  // Parse Accept-Language with q-value weighting
-  const parsedLang = (() => {
-    if (!acceptLang) return ''
-    const entries = acceptLang.split(',').map((e:string) => {
-      const [l, q] = e.trim().split(';q=')
-      return { code: l.trim().substring(0,2).toLowerCase(), q: q ? parseFloat(q) : 1.0 }
-    }).sort((a,b) => b.q - a.q)
-    for (const {code} of entries) { if (supported.includes(code)) return code }
-    return ''
-  })()
-  let lang = 'en'
-  if (cookieLang && supported.includes(cookieLang)) {
-    lang = cookieLang
-  } else if (bilingualCountries.has(cfCountry) && parsedLang) {
-    lang = parsedLang
-  } else if (parsedLang) {
-    lang = parsedLang
-  } else if (cfCountry && COUNTRY_LANG[cfCountry]) {
-    lang = COUNTRY_LANG[cfCountry]
-  }
-
-  const isRTL = lang === 'ar'
-
-  // ── Landing i18n strings ──
-  const T: Record<string, Record<string,string>> = {
-    en: {
-      hero_tag: 'AI Engine v2.0 — Live · 2,412 brands',
-      hero_h1a: 'Your ads, on',
-      hero_h1b: 'full autopilot.',
-      hero_sub: 'AdNova AI watches your campaigns <strong class="text-slate-200 font-semibold">every 15 minutes</strong>, scales winners +10% when ROAS &gt; 3.5×, kills creatives with CTR &lt; 0.8%, and generates replacements — <em class="text-slate-300">automatically.</em>',
-      cta_primary: 'Start Free — No credit card',
-      cta_demo: 'Watch 90s Demo',
-      nav_usecases: 'Use Cases', nav_features: 'Features', nav_demo: 'Demo', nav_pricing: 'Pricing', nav_results: 'Results',
-      nav_signin: 'Sign In', nav_trial: 'Start Free Trial',
-    },
-    fr: {
-      hero_tag: 'Moteur IA v2.0 — Live · 2 412 marques',
-      hero_h1a: 'Vos pubs, en',
-      hero_h1b: 'pilote automatique.',
-      hero_sub: 'AdNova AI surveille vos campagnes <strong class="text-slate-200 font-semibold">toutes les 15 minutes</strong>, booste les gagnants +10% quand le ROAS &gt; 3,5×, coupe les créas CTR &lt; 0,8% et génère des remplacements — <em class="text-slate-300">automatiquement.</em>',
-      cta_primary: 'Commencer gratuitement',
-      cta_demo: 'Voir la démo 90s',
-      nav_usecases: 'Cas d\'usage', nav_features: 'Fonctions', nav_demo: 'Démo', nav_pricing: 'Tarifs', nav_results: 'Résultats',
-      nav_signin: 'Connexion', nav_trial: 'Essai gratuit',
-    },
-    es: {
-      hero_tag: 'Motor IA v2.0 — Live · 2.412 marcas',
-      hero_h1a: 'Tus anuncios, en',
-      hero_h1b: 'piloto automático.',
-      hero_sub: 'AdNova AI vigila tus campañas <strong class="text-slate-200 font-semibold">cada 15 minutos</strong>, escala ganadores +10% cuando ROAS &gt; 3,5×, elimina creativos con CTR &lt; 0,8% y genera reemplazos — <em class="text-slate-300">automáticamente.</em>',
-      cta_primary: 'Empieza gratis',
-      cta_demo: 'Ver demo 90s',
-      nav_usecases: 'Casos de uso', nav_features: 'Funciones', nav_demo: 'Demo', nav_pricing: 'Precios', nav_results: 'Resultados',
-      nav_signin: 'Entrar', nav_trial: 'Prueba gratuita',
-    },
-    de: {
-      hero_tag: 'KI-Engine v2.0 — Live · 2.412 Marken',
-      hero_h1a: 'Deine Ads, auf',
-      hero_h1b: 'Autopilot.',
-      hero_sub: 'AdNova AI überwacht deine Kampagnen <strong class="text-slate-200 font-semibold">alle 15 Minuten</strong>, skaliert Gewinner +10% bei ROAS &gt; 3,5×, stoppt Creatives mit CTR &lt; 0,8% und generiert Ersatz — <em class="text-slate-300">automatisch.</em>',
-      cta_primary: 'Kostenlos starten',
-      cta_demo: '90s Demo ansehen',
-      nav_usecases: 'Anwendungsfälle', nav_features: 'Funktionen', nav_demo: 'Demo', nav_pricing: 'Preise', nav_results: 'Ergebnisse',
-      nav_signin: 'Anmelden', nav_trial: 'Kostenlos testen',
-    },
-    pt: {
-      hero_tag: 'Motor IA v2.0 — Live · 2.412 marcas',
-      hero_h1a: 'Os seus anúncios, no',
-      hero_h1b: 'piloto automático.',
-      hero_sub: 'AdNova AI monitoriza as suas campanhas <strong class="text-slate-200 font-semibold">a cada 15 minutos</strong>, escala vencedores +10% quando ROAS &gt; 3,5×, elimina criativos com CTR &lt; 0,8% e gera substitutos — <em class="text-slate-300">automaticamente.</em>',
-      cta_primary: 'Começar grátis',
-      cta_demo: 'Ver demo 90s',
-      nav_usecases: 'Casos de uso', nav_features: 'Funções', nav_demo: 'Demo', nav_pricing: 'Preços', nav_results: 'Resultados',
-      nav_signin: 'Entrar', nav_trial: 'Teste gratuito',
-    },
-    ar: {
-      hero_tag: 'محرك الذكاء v2.0 — مباشر · 2,412 علامة',
-      hero_h1a: 'إعلاناتك، على',
-      hero_h1b: 'الطيار الآلي.',
-      hero_sub: 'يراقب AdNova AI حملاتك <strong class="text-slate-200 font-semibold">كل 15 دقيقة</strong>، يُضاعف الفائزين +10% عند ROAS &gt; 3.5×، يوقف الإبداعات ذات CTR &lt; 0.8% ويولّد بدائل — <em class="text-slate-300">تلقائياً.</em>',
-      cta_primary: 'ابدأ مجاناً',
-      cta_demo: 'شاهد العرض',
-      nav_usecases: 'حالات الاستخدام', nav_features: 'الميزات', nav_demo: 'عرض', nav_pricing: 'الأسعار', nav_results: 'النتائج',
-      nav_signin: 'تسجيل الدخول', nav_trial: 'تجربة مجانية',
-    },
-  }
-  const L = T[lang] || T['en']
-
-  // ── SEO: localized title & description ──
-  const seoTitle: Record<string,string> = {
-    en: 'AdNova AI — Autonomous Ad Intelligence | 4.82x ROAS Guaranteed',
-    fr: 'AdNova AI — Intelligence Publicitaire Autonome | ROAS 4,82× Garanti',
-    es: 'AdNova AI — Inteligencia Publicitaria Autónoma | ROAS 4.82x Garantizado',
-    de: 'AdNova AI — Autonome Werbe-KI | 4,82x ROAS Garantiert',
-    pt: 'AdNova AI — Inteligência Publicitária Autónoma | ROAS 4,82x Garantido',
-    ar: 'AdNova AI — ذكاء إعلاني مستقل | ضمان ROAS 4.82×',
-  }
-  const seoDesc: Record<string,string> = {
-    en: 'AdNova AI manages your ads across 9 platforms autonomously. AI scales winners +10%, kills creatives with CTR<0.8%, generates replacements 24/7. Average ROAS: 4.82x. Free 14-day trial, no credit card.',
-    fr: 'AdNova AI gère vos publicités sur 9 plateformes de façon autonome. L\'IA booste les gagnants +10%, coupe les créas CTR<0,8% et génère des remplacements 24h/24. ROAS moyen: 4,82×. Essai gratuit 14 jours.',
-    es: 'AdNova AI gestiona tus anuncios en 9 plataformas de forma autónoma. La IA escala ganadores +10%, pausa creativos con CTR<0.8% y genera reemplazos 24/7. ROAS promedio: 4.82x. Prueba gratuita 14 días.',
-    de: 'AdNova AI verwaltet deine Ads auf 9 Plattformen autonom. KI skaliert Gewinner +10%, stoppt Creatives mit CTR<0.8% und generiert Ersatz 24/7. Durchschnittlicher ROAS: 4,82x. 14 Tage kostenlos testen.',
-    pt: 'AdNova AI gere os seus anúncios em 9 plataformas de forma autónoma. A IA escala vencedores +10%, elimina criativos com CTR<0.8% e gera substitutos 24/7. ROAS médio: 4,82x. Teste gratuito 14 dias.',
-    ar: 'AdNova AI تدير إعلاناتك على 9 منصات بشكل مستقل. الذكاء الاصطناعي يُضاعف الفائزين +10%، يوقف الإعلانات ذات CTR<0.8% ويولّد بدائل 24/7. متوسط ROAS: 4.82×. تجربة مجانية 14 يوماً.',
-  }
-  const titleStr = seoTitle[lang] || seoTitle['en']
-  const descStr  = seoDesc[lang]  || seoDesc['en']
-
-  return c.html(`<!DOCTYPE html>
-<html lang="${lang}" dir="${isRTL ? 'rtl' : 'ltr'}" class="dark">
-<head>
-  <!-- ═══ CRITICAL: charset + viewport — parsed before any other resource ══ -->
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-
-  <!-- ═══ SEO PRIMAIRE — titre et description localisés ═══════════════════ -->
-  <title>${titleStr}</title>
-  <meta name="description" content="${descStr}"/>
-  <meta name="keywords" content="AI advertising platform, autonomous ad optimization, ROAS improvement, Facebook ads AI, Google ads automation, TikTok advertising AI, ad creative generation, programmatic advertising, AI marketing tool, ad spend optimization, ROAS 4x, autonomous campaigns, adnova ai, adnova, ai ads, roas garantie, plateforme publicité IA, KI Werbeplattform, plataforma publicidad IA"/>
-  <link rel="canonical" href="https://adnova.ai/"/>
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
-  <meta name="author" content="AdNova AI"/>
-  <meta name="application-name" content="AdNova AI"/>
-  <meta name="generator" content="AdNova AI v2.0"/>
-  <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: dark)"/>
-  <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: light)"/>
-  <meta name="color-scheme" content="dark"/>
-  <meta name="rating" content="general"/>
-  <meta name="revisit-after" content="3 days"/>
-  <meta name="language" content="${lang}"/>
-  <meta name="geo.region" content="${lang === 'fr' ? 'FR' : lang === 'es' ? 'ES' : lang === 'de' ? 'DE' : lang === 'pt' ? 'BR' : lang === 'ar' ? 'SA' : 'US'}"/>
-
-  <!-- ═══ HREFLANG — SEO multilingue complet ═══════════════════════════════ -->
-  <link rel="alternate" hreflang="en" href="https://adnova.ai/"/>
-  <link rel="alternate" hreflang="en-US" href="https://adnova.ai/"/>
-  <link rel="alternate" hreflang="en-GB" href="https://adnova.ai/"/>
-  <link rel="alternate" hreflang="fr" href="https://adnova.ai/?lang=fr"/>
-  <link rel="alternate" hreflang="fr-FR" href="https://adnova.ai/?lang=fr"/>
-  <link rel="alternate" hreflang="fr-BE" href="https://adnova.ai/?lang=fr"/>
-  <link rel="alternate" hreflang="fr-CA" href="https://adnova.ai/?lang=fr"/>
-  <link rel="alternate" hreflang="es" href="https://adnova.ai/?lang=es"/>
-  <link rel="alternate" hreflang="es-ES" href="https://adnova.ai/?lang=es"/>
-  <link rel="alternate" hreflang="es-MX" href="https://adnova.ai/?lang=es"/>
-  <link rel="alternate" hreflang="de" href="https://adnova.ai/?lang=de"/>
-  <link rel="alternate" hreflang="de-DE" href="https://adnova.ai/?lang=de"/>
-  <link rel="alternate" hreflang="de-AT" href="https://adnova.ai/?lang=de"/>
-  <link rel="alternate" hreflang="pt" href="https://adnova.ai/?lang=pt"/>
-  <link rel="alternate" hreflang="pt-BR" href="https://adnova.ai/?lang=pt"/>
-  <link rel="alternate" hreflang="ar" href="https://adnova.ai/?lang=ar"/>
-  <link rel="alternate" hreflang="x-default" href="https://adnova.ai/"/>
-
-  <!-- ═══ OPEN GRAPH — Facebook, LinkedIn, Slack, WhatsApp ═════════════════ -->
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://adnova.ai/"/>
-  <meta property="og:title" content="AdNova AI — Your Ads on Full Autopilot. 4.82x ROAS."/>
-  <meta property="og:description" content="2,412 brands trust AdNova AI to autonomously optimize ads across 9 platforms. Connect in 18 min, watch ROAS climb to 4.82x average. Free 14-day trial."/>
-  <meta property="og:image" content="https://adnova.ai/og-image.png"/>
-  <meta property="og:image:width" content="1200"/>
-  <meta property="og:image:height" content="630"/>
-  <meta property="og:image:type" content="image/png"/>
-  <meta property="og:image:alt" content="AdNova AI — Autonomous Advertising Platform Dashboard showing 4.82x ROAS"/>
-  <meta property="og:site_name" content="AdNova AI"/>
-  <meta property="og:locale" content="${lang === 'fr' ? 'fr_FR' : lang === 'es' ? 'es_ES' : lang === 'de' ? 'de_DE' : lang === 'pt' ? 'pt_BR' : lang === 'ar' ? 'ar_SA' : 'en_US'}"/>
-  <meta property="og:locale:alternate" content="en_US"/>
-  <meta property="og:locale:alternate" content="fr_FR"/>
-  <meta property="article:publisher" content="https://www.facebook.com/AdNovaAI"/>
-
-  <!-- ═══ TWITTER / X CARD — summary_large_image ══════════════════════════ -->
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:site" content="@AdNovaAI"/>
-  <meta name="twitter:creator" content="@AdNovaAI"/>
-  <meta name="twitter:title" content="AdNova AI — 4.82x ROAS on Autopilot"/>
-  <meta name="twitter:description" content="AI that scales winners, kills losers, generates creatives — 24/7. Join 2,412 brands averaging 4.82x ROAS. Free 14-day trial. No credit card."/>
-  <meta name="twitter:image" content="https://adnova.ai/twitter-card.png"/>
-  <meta name="twitter:image:alt" content="AdNova AI Platform — 4.82x ROAS Dashboard"/>
-  <meta name="twitter:label1" content="Average ROAS"/>
-  <meta name="twitter:data1" content="4.82x"/>
-  <meta name="twitter:label2" content="Active Brands"/>
-  <meta name="twitter:data2" content="2,412"/>
-
-  <!-- ═══ SCHEMA.ORG COMPLET — Rich Snippets Google (étoiles, prix, FAQ) ══ -->
-  <script type="application/ld+json">
+// ─── Testimonials data + marquee renderer ─────────────────────────────────
+const TESTIMONIALS = [
   {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://adnova.ai/#org",
-        "name": "AdNova AI",
-        "url": "https://adnova.ai",
-        "logo": {
-          "@type": "ImageObject",
-          "@id": "https://adnova.ai/#logo",
-          "url": "https://adnova.ai/favicon.svg",
-          "width": 512,
-          "height": 512,
-          "caption": "AdNova AI Logo"
-        },
-        "image": {"@id": "https://adnova.ai/#logo"},
-        "description": "Autonomous advertising intelligence platform. AI manages ads across 9 platforms — 24/7 optimization, creative generation, ROAS maximization.",
-        "foundingDate": "2024",
-        "numberOfEmployees": {"@type": "QuantitativeValue", "value": 50},
-        "areaServed": "Worldwide",
-        "sameAs": [
-          "https://twitter.com/AdNovaAI",
-          "https://linkedin.com/company/adnova-ai",
-          "https://github.com/adnova-ai",
-          "https://www.youtube.com/@AdNovaAI"
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer support",
-          "availableLanguage": ["English", "French", "Spanish", "German", "Portuguese", "Arabic"]
-        }
-      },
-      {
-        "@type": "SoftwareApplication",
-        "@id": "https://adnova.ai/#software",
-        "name": "AdNova AI",
-        "alternateName": ["AdNova", "AdNova AI Platform", "AdNova Autonomous Advertising"],
-        "url": "https://adnova.ai/",
-        "applicationCategory": "BusinessApplication",
-        "applicationSubCategory": "AdvertisingPlatform",
-        "operatingSystem": "Web Browser, iOS, Android",
-        "browserRequirements": "Requires JavaScript. Chrome 90+, Firefox 88+, Safari 14+, Edge 90+",
-        "description": "Autonomous advertising intelligence platform. AI optimizes ad campaigns across 9 platforms — scales winners +10%, kills underperformers, generates creatives 24/7. Average ROAS: 4.82x.",
-        "featureList": [
-          "AI Budget Optimization",
-          "Autonomous Creative Generation",
-          "Audience Intelligence & Lookalike Builder",
-          "Cross-Platform Management (9 platforms)",
-          "ROAS Optimization & Guarantee",
-          "A/B Testing Automation",
-          "Real-time Campaign Monitoring",
-          "Predictive Analytics"
-        ],
-        "screenshot": "https://adnova.ai/screenshot.png",
-        "softwareVersion": "2.0",
-        "softwareHelp": {"@type": "CreativeWork", "url": "https://adnova.ai/docs"},
-        "releaseNotes": "https://adnova.ai/changelog",
-        "isAccessibleForFree": false,
-        "offers": [
-          {
-            "@type": "Offer",
-            "name": "Starter Plan",
-            "description": "Up to \\$10K ad spend/month, 2 platforms, 10 campaigns, 2 team members, 50 AI creatives/month",
-            "price": "299",
-            "priceCurrency": "USD",
-            "priceValidUntil": "2027-12-31",
-            "availability": "https://schema.org/InStock",
-            "url": "https://adnova.ai/register?plan=starter",
-            "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": 14}
-          },
-          {
-            "@type": "Offer",
-            "name": "Growth Plan",
-            "description": "Up to \\$100K ad spend/month, all 9 platforms, 50 campaigns, 10 team members, 500 AI creatives/month",
-            "price": "799",
-            "priceCurrency": "USD",
-            "priceValidUntil": "2027-12-31",
-            "availability": "https://schema.org/InStock",
-            "url": "https://adnova.ai/register?plan=growth"
-          },
-          {
-            "@type": "Offer",
-            "name": "Enterprise Plan",
-            "description": "Unlimited campaigns, unlimited ad spend, all platforms, custom AI models, dedicated CSM",
-            "availability": "https://schema.org/OnlineOnly",
-            "url": "https://adnova.ai/register?plan=enterprise"
-          }
-        ],
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "reviewCount": "847",
-          "bestRating": "5",
-          "worstRating": "1",
-          "ratingCount": "847"
-        },
-        "review": [
-          {
-            "@type": "Review",
-            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-            "author": {"@type": "Person", "name": "Marie Leconte"},
-            "reviewBody": "Our ROAS went from 1.8x to 4.9x in 3 weeks. The AI kills bad creatives automatically — incredible time saver.",
-            "datePublished": "2026-01-15"
-          },
-          {
-            "@type": "Review",
-            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-            "author": {"@type": "Person", "name": "James Okafor"},
-            "reviewBody": "Connected our 6 ad accounts in under 20 minutes. ROAS improvement was visible in 48 hours. Best ad platform investment ever.",
-            "datePublished": "2026-02-03"
-          }
-        ],
-        "publisher": {"@id": "https://adnova.ai/#org"}
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://adnova.ai/#website",
-        "url": "https://adnova.ai/",
-        "name": "AdNova AI",
-        "description": "Autonomous Advertising Intelligence Platform — 4.82x ROAS",
-        "publisher": {"@id": "https://adnova.ai/#org"},
-        "inLanguage": ["en", "fr", "es", "de", "pt", "ar"],
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {"@type": "EntryPoint", "urlTemplate": "https://adnova.ai/search?q={search_term_string}"},
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://adnova.ai/#webpage",
-        "url": "https://adnova.ai/",
-        "name": "${titleStr}",
-        "description": "${descStr}",
-        "isPartOf": {"@id": "https://adnova.ai/#website"},
-        "about": {"@id": "https://adnova.ai/#software"},
-        "inLanguage": "${lang}",
-        "datePublished": "2024-01-01",
-        "dateModified": "${new Date().toISOString().split('T')[0]}",
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "AdNova AI", "item": "https://adnova.ai/"}
-          ]
-        },
-        "primaryImageOfPage": {"@type": "ImageObject", "url": "https://adnova.ai/og-image.png"}
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://adnova.ai/#faq",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How fast will I see ROAS improvement with AdNova AI?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Most clients see measurable ROAS improvement within 72 hours. The median first ROI milestone is reached in 11 days. Month 1 average: +40-60% ROAS improvement. Our AI checks campaigns every 15 minutes and acts immediately."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What ad platforms does AdNova AI support?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "AdNova AI supports 9 major ad platforms: Facebook Ads, Google Ads, Instagram Ads, TikTok Ads, LinkedIn Ads, YouTube Ads, Pinterest Ads, X (Twitter) Ads, and Snapchat Ads. Enterprise clients can request custom integrations."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does AdNova AI work with small ad budgets?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. The Starter plan is designed for budgets from $1,000 to $10,000/month. You can expect 40-60% ROAS improvement in the first month regardless of budget size."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is my ad account data secure with AdNova AI?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Absolutely. We use OAuth 2.0 for all platform connections (we never store your passwords), AES-256 encryption at rest, TLS 1.3 in transit. AdNova AI is SOC2 Type II certified and fully GDPR compliant."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does AdNova AI's autonomous optimization work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "AdNova AI's engine checks every campaign every 15 minutes. When ROAS > 3.5x, it automatically scales budget +10%. When CTR < 0.8%, it pauses the creative and generates AI replacements. When a platform's CPM rises, it reallocates budget to better-performing channels — all without human intervention."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the free trial and is a credit card required?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "AdNova AI offers a free 14-day trial with full access to all features. No credit card is required to start your trial. You can upgrade or cancel at any time during or after the trial."
-            }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-
-  <!-- ═══ PWA + ICONS ═══════════════════════════════════════════════════════ -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-  <link rel="shortcut icon" href="/favicon.svg"/>
-  <link rel="apple-touch-icon" href="/favicon.svg"/>
-  <link rel="manifest" href="/manifest.json"/>
-  <meta name="msapplication-TileColor" content="#6366f1"/>
-  <meta name="msapplication-config" content="/browserconfig.xml"/>
-
-  <!-- ═══ PERFORMANCE: Resource hints (critical, non-blocking) ════════════ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous"/>
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin="anonymous"/>
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com"/>
-  <link rel="dns-prefetch" href="https://randomuser.me"/>
-
-  <!-- ═══ FONTS: Chargement non-bloquant avec font-display:swap ══════════ -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'"/>
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/></noscript>
-
-  <!-- ═══ FONT AWESOME: totalement différé — n'est PAS render-blocking ════ -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
-  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/></noscript>
-
-  <!-- ═══ TAILWIND CDN: defer + config inline avant chargement ════════════ -->
-  <script>window.tailwind={config:{darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],display:['Space Grotesk','Inter','sans-serif']},colors:{brand:{50:'#f0f4ff',100:'#e0e9ff',200:'#c7d7fe',300:'#a5bbfc',400:'#8194f8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'},neon:{purple:'#a855f7',blue:'#3b82f6',pink:'#ec4899',cyan:'#06b6d4',green:'#10b981'}}}}}}</script>
-  <script src="https://cdn.tailwindcss.com" defer><\/script>
-  <style>
-    /* ══ CRITICAL CSS — rendu immédiat (above the fold) ══ */
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      /* Liquid Glass color tokens */
-      --glow-purple:rgba(99,102,241,0.55);
-      --glow-pink:rgba(236,72,153,0.42);
-      --glow-cyan:rgba(6,182,212,0.38);
-      --glow-green:rgba(16,185,129,0.4);
-      --bg-deep:#030512;
-      /* Liquid Glass core variables */
-      --lg-bg:rgba(255,255,255,0.048);
-      --lg-bg-hover:rgba(255,255,255,0.075);
-      --lg-border:rgba(255,255,255,0.13);
-      --lg-border-top:rgba(255,255,255,0.24);
-      --lg-border-hover:rgba(99,102,241,0.38);
-      --lg-shadow:0 8px 32px rgba(0,0,0,0.58),inset 0 1px 0 rgba(255,255,255,0.13),inset 0 -1px 0 rgba(0,0,0,0.22);
-      --lg-shadow-hover:0 24px 60px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.16);
-      --lg-blur:saturate(2) blur(24px);
-      --lg-blur-heavy:saturate(2.2) blur(36px);
-      /* Prism spectrum — top highlight line */
-      --prism-line:linear-gradient(90deg,transparent 0%,rgba(168,85,247,0.85) 15%,rgba(99,102,241,0.95) 35%,rgba(6,182,212,0.75) 55%,rgba(236,72,153,0.65) 75%,rgba(249,115,22,0.5) 90%,transparent 100%);
-      /* Font stacks */
-      --font-sans:'Inter','system-ui',sans-serif;
-      --font-display:'Space Grotesk','Inter',sans-serif;
-    }
-    /* ─ Scrollbar — thin liquid glass ─ */
-    ::-webkit-scrollbar{width:4px;height:4px}
-    ::-webkit-scrollbar-track{background:transparent}
-    ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(168,85,247,0.4));border-radius:4px}
-    ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#6366f1,#a855f7)}
-    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
-    body{background:var(--bg-deep);font-family:var(--font-sans);overflow-x:hidden;color:#e2e8f0;min-height:100dvh}
-
-    /* ══ DEEP BACKGROUND — scène atmosphérique 6 couches ══ */
-    body::after{
-      content:'';position:fixed;inset:0;z-index:-2;
-      background:
-        radial-gradient(ellipse 80% 65% at 8% -5%,rgba(79,70,229,0.26) 0%,transparent 58%),
-        radial-gradient(ellipse 65% 55% at 92% 28%,rgba(168,85,247,0.19) 0%,transparent 52%),
-        radial-gradient(ellipse 55% 45% at 50% 95%,rgba(6,182,212,0.12) 0%,transparent 48%),
-        radial-gradient(ellipse 40% 35% at 15% 75%,rgba(236,72,153,0.08) 0%,transparent 45%),
-        radial-gradient(ellipse 100% 80% at 50% 50%,rgba(3,5,18,1) 38%,transparent 100%),
-        #030512;
-      pointer-events:none;will-change:transform;
-    }
-
-    /* ── Texture de bruit subtil — donne de la profondeur ── */
-    body::before{
-      content:'';position:fixed;inset:0;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
-      pointer-events:none;z-index:0;opacity:.45;mix-blend-mode:overlay;
-    }
-
-    /* ── Cyber grid ── */
-    .grid-lines{background-image:linear-gradient(rgba(99,102,241,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.05) 1px,transparent 1px);background-size:60px 60px}
-    .grid-lines-fine{background-image:linear-gradient(rgba(99,102,241,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.025) 1px,transparent 1px);background-size:20px 20px}
-
-    /* ════════════════════════════════════════════════════════
-       LIQUID GLASS SYSTEM — inspiré d'Apple visionOS / iOS 26
-       Principes : gradient asymétrique + ligne prisme top
-       + réfraction interne + blur saturé profond
-    ════════════════════════════════════════════════════════ */
-
-    /* ── Verre de base — badges, chips, éléments UI légers ── */
-    .glass{
-      background:linear-gradient(145deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.022) 100%);
-      backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);
-      border:1px solid var(--lg-border);
-      border-top-color:var(--lg-border-top);
-      box-shadow:var(--lg-shadow);
-      position:relative;
-    }
-    /* Reflet lumineux interne en diagonale */
-    .glass::before{
-      content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-      background:linear-gradient(108deg,rgba(255,255,255,0.075) 0%,rgba(255,255,255,0.03) 35%,transparent 55%,rgba(255,255,255,0.025) 100%);
-    }
-
-    /* ── Verre XL — badges hero, grandes panneaux ── */
-    .glass-xl{
-      background:linear-gradient(135deg,rgba(255,255,255,0.065) 0%,rgba(255,255,255,0.018) 60%,rgba(99,102,241,0.025) 100%);
-      backdrop-filter:var(--lg-blur-heavy);-webkit-backdrop-filter:var(--lg-blur-heavy);
-      border:1px solid rgba(255,255,255,0.15);
-      border-top-color:rgba(255,255,255,0.28);
-      box-shadow:0 14px 48px rgba(0,0,0,0.62),inset 0 1px 0 rgba(255,255,255,0.16),inset 0 -1px 0 rgba(0,0,0,0.28),0 0 0 0.5px rgba(255,255,255,0.04);
-      position:relative;overflow:hidden;
-    }
-    /* Ligne prisme spectrale complète */
-    .glass-xl::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;border-radius:inherit;
-      background:var(--prism-line);
-    }
-    /* Réfraction interne diagonale animée */
-    .glass-xl::after{
-      content:'';position:absolute;top:-40%;left:-50%;width:40%;height:180%;
-      background:linear-gradient(110deg,transparent,rgba(255,255,255,0.055),transparent);
-      transform:skewX(-18deg);animation:lg-sweep 10s ease-in-out infinite 2s;pointer-events:none;
-    }
-
-    /* ── Verre carte — feature cards, stat cards ── */
-    .glass-card{
-      background:linear-gradient(148deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.02) 55%,rgba(99,102,241,0.032) 100%);
-      backdrop-filter:saturate(1.9) blur(22px);-webkit-backdrop-filter:saturate(1.9) blur(22px);
-      border:1px solid rgba(255,255,255,0.10);
-      border-top-color:rgba(255,255,255,0.22);
-      box-shadow:0 6px 28px rgba(0,0,0,0.48),inset 0 1px 0 rgba(255,255,255,0.11),0 0 0 0.5px rgba(255,255,255,0.03);
-      transition:all .45s cubic-bezier(.22,.8,.22,1);
-      position:relative;overflow:hidden;
-    }
-    /* Ligne prisme top — apparaît au hover */
-    .glass-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-      background:var(--prism-line);
-      opacity:0;transition:opacity .4s ease;
-    }
-    /* Shimmer reflex interne — sweep au hover */
-    .glass-card::after{
-      content:'';position:absolute;top:-45%;left:-70%;width:55%;height:190%;
-      background:linear-gradient(108deg,transparent,rgba(255,255,255,0.065),transparent);
-      transform:skewX(-15deg);transition:left .7s cubic-bezier(.22,.8,.22,1);pointer-events:none;
-    }
-    .glass-card:hover::before{opacity:1}
-    .glass-card:hover::after{left:130%}
-    .glass-card:hover{
-      background:linear-gradient(148deg,rgba(255,255,255,0.088) 0%,rgba(99,102,241,0.065) 100%);
-      border-color:rgba(99,102,241,0.38);
-      border-top-color:rgba(168,85,247,0.55);
-      transform:translateY(-7px) scale(1.006);
-      box-shadow:
-        0 32px 64px rgba(0,0,0,.62),
-        0 0 0 1px rgba(99,102,241,0.14),
-        inset 0 1px 0 rgba(255,255,255,0.15),
-        0 0 48px rgba(99,102,241,0.09);
-    }
-
-    /* ── Verre Neo — panneaux, ROI calc, formulaires ── */
-    .glass-neo{
-      background:linear-gradient(162deg,rgba(255,255,255,0.062) 0%,rgba(255,255,255,0.026) 48%,rgba(99,102,241,0.042) 100%);
-      backdrop-filter:saturate(2.1) blur(30px);-webkit-backdrop-filter:saturate(2.1) blur(30px);
-      border:1px solid rgba(255,255,255,0.13);
-      border-top-color:rgba(255,255,255,0.26);
-      border-left-color:rgba(255,255,255,0.17);
-      box-shadow:
-        0 22px 65px rgba(0,0,0,0.52),
-        inset 0 1px 0 rgba(255,255,255,0.15),
-        inset 1px 0 0 rgba(255,255,255,0.07),
-        inset 0 -1px 0 rgba(0,0,0,0.22),
-        0 0 0 0.5px rgba(255,255,255,0.04);
-      position:relative;overflow:hidden;
-    }
-    /* Ligne prisme spectrale */
-    .glass-neo::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-      background:var(--prism-line);
-    }
-    /* Réfraction lumineuse diagonale animée */
-    .glass-neo::after{
-      content:'';position:absolute;top:-55%;left:-35%;width:32%;height:210%;
-      background:linear-gradient(112deg,transparent,rgba(255,255,255,0.042),transparent);
-      transform:skewX(-15deg);animation:lg-sweep 9s ease-in-out infinite 1s;pointer-events:none;
-    }
-
-    /* ── Animations Liquid Glass ── */
-    @keyframes lg-sweep{0%,100%{left:-35%;opacity:0.9}50%{left:125%;opacity:0.5}}
-    @keyframes lg-orb-pulse{0%,100%{transform:scale(1);opacity:.28}50%{transform:scale(1.18);opacity:.48}}
-    @keyframes lg-prism{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-    @keyframes lg-glow-pulse{0%,100%{opacity:.6;filter:blur(40px)}50%{opacity:.85;filter:blur(50px)}}
-
-    /* ── Gradient text ── */
-    .glow-text{background:linear-gradient(135deg,#818cf8 0%,#a855f7 40%,#ec4899 70%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .glow-text-2{background:linear-gradient(135deg,#06b6d4 0%,#818cf8 50%,#a855f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .glow-text-3{background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .glow-text-orange{background:linear-gradient(135deg,#f97316 0%,#ef4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .hero-text{
-      background:linear-gradient(135deg,#fff 0%,#c7d2fe 18%,#a78bfa 42%,#ec4899 72%,#f97316 90%,#fbbf24 100%);
-      background-size:250% 250%;
-      animation:lg-prism 7s ease infinite;
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-      filter:drop-shadow(0 0 20px rgba(168,85,247,0.18));
-    }
-
-    /* ── Orbes atmosphériques Liquid Glass — profondeur cinématique ── */
-    .orb{position:absolute;border-radius:50%;pointer-events:none;will-change:transform;transform-origin:center}
-    .orb-1{
-      width:1100px;height:1100px;
-      background:radial-gradient(circle at 40% 40%,rgba(79,70,229,0.32) 0%,rgba(99,102,241,0.15) 38%,transparent 68%);
-      top:-380px;left:-450px;filter:blur(90px);
-      animation:orb-float 18s ease-in-out infinite;
-    }
-    .orb-2{
-      width:900px;height:900px;
-      background:radial-gradient(circle at 60% 35%,rgba(168,85,247,0.26) 0%,rgba(139,92,246,0.12) 42%,transparent 68%);
-      top:250px;right:-350px;filter:blur(80px);
-      animation:orb-float 22s ease-in-out infinite reverse;
-    }
-    .orb-3{
-      width:750px;height:750px;
-      background:radial-gradient(circle at 50% 50%,rgba(6,182,212,0.18) 0%,rgba(14,165,233,0.08) 42%,transparent 68%);
-      bottom:150px;left:22%;filter:blur(85px);
-      animation:orb-float 15s ease-in-out infinite 2.5s;
-    }
-    .orb-4{
-      width:550px;height:550px;
-      background:radial-gradient(circle at 50% 50%,rgba(236,72,153,0.15) 0%,rgba(249,115,22,0.06) 45%,transparent 70%);
-      top:58%;right:4%;filter:blur(70px);
-      animation:orb-float 19s ease-in-out infinite 6s;
-    }
-    @keyframes orb-float{
-      0%,100%{transform:translate(0,0) scale(1)}
-      20%{transform:translate(35px,-55px) scale(1.07)}
-      45%{transform:translate(-25px,28px) scale(0.94)}
-      70%{transform:translate(50px,18px) scale(1.05)}
-    }
-
-    /* ── Animations ── */
-    .fade-up{opacity:0;transform:translateY(28px) scale(0.99);transition:opacity .85s cubic-bezier(.25,.8,.25,1),transform .85s cubic-bezier(.25,.8,.25,1)}
-    .fade-up.visible{opacity:1;transform:translateY(0) scale(1)}
-    .fade-in{opacity:0;transition:opacity .7s ease}
-    .fade-in.visible{opacity:1}
-    .fade-up:nth-child(2){transition-delay:.1s}.fade-up:nth-child(3){transition-delay:.2s}.fade-up:nth-child(4){transition-delay:.3s}.fade-up:nth-child(5){transition-delay:.4s}.fade-up:nth-child(6){transition-delay:.5s}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-    .float{animation:float 5.5s ease-in-out infinite}
-    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    .ticker-inner{animation:ticker 32s linear infinite;white-space:nowrap;display:flex;align-items:center;gap:0}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
-    .blink{animation:blink 1.8s ease infinite}
-    @keyframes gradient-x{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-    @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
-    @keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    .spin-slow{animation:spin-slow 22s linear infinite}
-    @keyframes pulse-ring{0%{transform:scale(.85);opacity:.8}100%{transform:scale(2.5);opacity:0}}
-    .pulse-ring{animation:pulse-ring 2.8s cubic-bezier(0,0,.2,1) infinite}
-    @keyframes scanline{0%{top:-10%}100%{top:110%}}
-    .scanline{animation:scanline 4s linear infinite}
-    @keyframes border-glow{
-      0%,100%{box-shadow:0 0 15px rgba(99,102,241,0.3),inset 0 1px 0 rgba(255,255,255,0.1)}
-      50%{box-shadow:0 0 35px rgba(99,102,241,0.6),0 0 70px rgba(168,85,247,0.2),inset 0 1px 0 rgba(255,255,255,0.18)}
-    }
-    .border-glow{animation:border-glow 3.5s ease-in-out infinite}
-    @keyframes count-up{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-    .count-up{animation:count-up .6s ease forwards}
-    @keyframes typewriter{from{width:0}to{width:100%}}
-    @keyframes slide-in-right{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
-    .slide-in-right{animation:slide-in-right .5s ease forwards}
-    @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
-    .pop{animation:pop .3s ease}
-    @keyframes neon-pulse{0%,100%{text-shadow:0 0 5px rgba(99,102,241,0.5)}50%{text-shadow:0 0 20px rgba(99,102,241,0.9),0 0 40px rgba(168,85,247,0.4)}}
-    @keyframes lg-float-card{0%,100%{transform:translateY(0) rotateX(0deg)}50%{transform:translateY(-8px) rotateX(1deg)}}
-
-    /* ── Navbar — liquid glass avec flou profond ── */
-    .nav-blur{
-      backdrop-filter:saturate(2.2) blur(32px);-webkit-backdrop-filter:saturate(2.2) blur(32px);
-      background:linear-gradient(180deg,rgba(3,5,18,0.84) 0%,rgba(3,5,18,0.74) 100%);
-      border-bottom:1px solid rgba(255,255,255,0.07);
-      box-shadow:0 1px 0 rgba(255,255,255,0.04),0 4px 30px rgba(0,0,0,0.45),inset 0 -1px 0 rgba(99,102,241,0.08);
-    }
-    .nav-link{
-      position:relative;transition:color .25s ease;color:#94a3b8;
-      letter-spacing:0.01em;
-    }
-    .nav-link::after{
-      content:'';position:absolute;bottom:-4px;left:50%;right:50%;height:1.5px;
-      background:var(--prism-line);
-      transition:left .35s cubic-bezier(.22,.8,.22,1),right .35s cubic-bezier(.22,.8,.22,1);
-      border-radius:2px;
-    }
-    .nav-link:hover::after{left:0;right:0}
-    .nav-link.active::after{left:0;right:0}
-    .nav-link:hover,.nav-link.active{color:#c7d2fe}
-
-    /* ── Bouton primaire — dégradé animé Liquid Glass ── */
-    .btn-primary{
-      background:linear-gradient(135deg,#4338ca 0%,#6d28d9 35%,#7c3aed 65%,#a855f7 100%);
-      background-size:200% 200%;
-      animation:gradient-x 4.5s ease infinite;
-      transition:transform .28s cubic-bezier(.22,.8,.22,1),box-shadow .28s ease;
-      box-shadow:
-        0 5px 32px rgba(99,102,241,0.58),
-        inset 0 1px 0 rgba(255,255,255,0.22),
-        inset 0 -1px 0 rgba(0,0,0,0.18);
-    }
-    .btn-primary:hover{
-      transform:translateY(-2px) scale(1.025);
-      box-shadow:
-        0 14px 50px rgba(99,102,241,0.78),
-        0 0 0 1.5px rgba(168,85,247,0.32),
-        inset 0 1px 0 rgba(255,255,255,0.28),
-        0 0 60px rgba(99,102,241,0.15);
-    }
-    .btn-primary:active{transform:translateY(0) scale(0.975);transition-duration:.1s}
-    .btn-primary:focus-visible{outline:2px solid #a855f7;outline-offset:3px}
-
-    /* ── Bouton ghost — verre transparent avec reflets ── */
-    .btn-ghost{
-      background:linear-gradient(148deg,rgba(255,255,255,0.058),rgba(255,255,255,0.022));
-      border:1px solid rgba(255,255,255,0.13);
-      border-top-color:rgba(255,255,255,0.22);
-      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-      box-shadow:0 2px 14px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.09);
-      transition:all .3s cubic-bezier(.22,.8,.22,1);
-      position:relative;overflow:hidden;
-    }
-    .btn-ghost::after{
-      content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.055),transparent);
-      transform:skewX(-18deg);transition:left .5s ease;pointer-events:none;
-    }
-    .btn-ghost:hover::after{left:150%}
-    .btn-ghost:hover{
-      background:linear-gradient(148deg,rgba(99,102,241,0.13),rgba(99,102,241,0.052));
-      border-color:rgba(99,102,241,0.42);border-top-color:rgba(168,85,247,0.45);
-      transform:translateY(-1.5px);
-      box-shadow:0 7px 22px rgba(99,102,241,0.22),inset 0 1px 0 rgba(255,255,255,0.13);
-    }
-    .btn-ghost:focus-visible{outline:2px solid #6366f1;outline-offset:3px}
-
-    .btn-outline-brand{
-      border:1px solid rgba(99,102,241,0.48);
-      border-top-color:rgba(168,85,247,0.52);
-      color:#a5b4fc;
-      background:linear-gradient(148deg,rgba(99,102,241,0.065),rgba(99,102,241,0.022));
-      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-      transition:all .3s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.07),0 0 20px rgba(99,102,241,0.06);
-    }
-    .btn-outline-brand:hover{
-      background:linear-gradient(148deg,rgba(99,102,241,0.16),rgba(99,102,241,0.065));
-      border-color:#6366f1;border-top-color:#a855f7;color:#c7d2fe;
-      box-shadow:0 6px 22px rgba(99,102,241,0.28),0 0 35px rgba(99,102,241,0.08);
-    }
-    .btn-cyan{
-      background:linear-gradient(135deg,#0891b2 0%,#06b6d4 60%,#22d3ee 100%);
-      transition:all .3s ease;
-      box-shadow:0 4px 22px rgba(6,182,212,0.42),inset 0 1px 0 rgba(255,255,255,0.15);
-    }
-    .btn-cyan:hover{
-      transform:translateY(-2px);
-      box-shadow:0 9px 32px rgba(6,182,212,0.62),0 0 50px rgba(6,182,212,0.12);
-    }
-
-    /* ── Micro-feedback ripple ── */
-    .ripple-btn{position:relative;overflow:hidden}
-    .ripple-btn::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,0.18);width:0;height:0;top:50%;left:50%;transform:translate(-50%,-50%);transition:width .45s ease,height .45s ease,opacity .45s ease;opacity:0}
-    .ripple-btn:active::after{width:220px;height:220px;opacity:0}
-
-    /* ── Stat cards — liquid glass avec reflets ── */
-    .stat-card{
-      background:linear-gradient(148deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.02) 55%,rgba(99,102,241,0.038) 100%);
-      backdrop-filter:saturate(1.9) blur(22px);-webkit-backdrop-filter:saturate(1.9) blur(22px);
-      border:1px solid rgba(255,255,255,0.10);
-      border-top-color:rgba(255,255,255,0.23);
-      box-shadow:0 6px 28px rgba(0,0,0,0.48),inset 0 1px 0 rgba(255,255,255,0.11),0 0 0 0.5px rgba(255,255,255,0.03);
-      transition:all .42s cubic-bezier(.22,.8,.22,1);
-      position:relative;overflow:hidden;
-    }
-    /* Ligne prisme top — apparaît au hover */
-    .stat-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-      background:var(--prism-line);
-      opacity:0;transition:opacity .35s ease;
-    }
-    /* Overlay interne dégradé diagonal */
-    .stat-card::after{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(138deg,transparent 50%,rgba(99,102,241,0.045));
-      pointer-events:none;
-    }
-    .stat-card:hover{
-      background:linear-gradient(148deg,rgba(99,102,241,0.11) 0%,rgba(255,255,255,0.042) 100%);
-      border-color:rgba(99,102,241,0.32);border-top-color:rgba(168,85,247,0.48);
-      transform:translateY(-6px) scale(1.012);
-      box-shadow:0 28px 52px rgba(0,0,0,.58),0 0 40px rgba(99,102,241,0.11),inset 0 1px 0 rgba(255,255,255,0.14);
-    }
-    .stat-card:hover::before{opacity:1}
-
-    /* ── Feature icon ── */
-    .feat-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 4px 16px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.15)}
-    .feat-icon-glow{position:absolute;inset:-6px;border-radius:22px;opacity:0;filter:blur(14px);transition:opacity .35s ease}
-    .glass-card:hover .feat-icon-glow{opacity:.7}
-
-    /* ── Plan cards — liquid glass pricing ── */
-    .plan-card{
-      background:linear-gradient(158deg,rgba(255,255,255,0.058) 0%,rgba(255,255,255,0.02) 48%,rgba(3,5,18,0.22) 100%);
-      backdrop-filter:saturate(1.9) blur(26px);-webkit-backdrop-filter:saturate(1.9) blur(26px);
-      border:1px solid rgba(255,255,255,0.11);
-      border-top-color:rgba(255,255,255,0.22);
-      box-shadow:0 10px 36px rgba(0,0,0,0.52),inset 0 1px 0 rgba(255,255,255,0.11),0 0 0 0.5px rgba(255,255,255,0.03);
-      transition:all .48s cubic-bezier(.22,.8,.22,1);
-      position:relative;overflow:hidden;
-    }
-    /* Shimmer sweep — horizontal refraction */
-    .plan-card::after{
-      content:'';position:absolute;top:0;left:-110%;width:60%;height:100%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.055),transparent);
-      transition:left .85s cubic-bezier(.22,.8,.22,1);pointer-events:none;
-    }
-    .plan-card:hover::after{left:165%}
-    .plan-card:hover{
-      transform:translateY(-14px) scale(1.012);
-      box-shadow:0 45px 90px rgba(0,0,0,.68),0 0 70px rgba(99,102,241,0.09),inset 0 1px 0 rgba(255,255,255,0.14);
-      border-color:rgba(99,102,241,0.28);
-      border-top-color:rgba(168,85,247,0.38);
-    }
-    .plan-card.popular{
-      border-color:rgba(249,115,22,0.52);
-      border-top-color:rgba(249,115,22,0.78);
-      background:linear-gradient(158deg,rgba(249,115,22,0.075) 0%,rgba(255,255,255,0.03) 48%,rgba(3,5,18,0.18) 100%);
-      box-shadow:0 10px 36px rgba(0,0,0,0.52),0 0 30px rgba(249,115,22,0.08),inset 0 1px 0 rgba(249,115,22,0.12);
-    }
-    .plan-card.popular::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:2px;
-      background:linear-gradient(90deg,transparent,#f97316 25%,#ef4444 45%,#a855f7 75%,transparent);
-    }
-
-    /* ── Testimonials — liquid glass avec guillemet décoratif ── */
-    .testi-card{
-      background:linear-gradient(148deg,rgba(255,255,255,0.048) 0%,rgba(255,255,255,0.016) 100%);
-      backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px);
-      border:1px solid rgba(255,255,255,0.09);
-      border-top-color:rgba(255,255,255,0.19);
-      box-shadow:0 5px 26px rgba(0,0,0,0.42),inset 0 1px 0 rgba(255,255,255,0.085),0 0 0 0.5px rgba(255,255,255,0.025);
-      transition:all .38s cubic-bezier(.22,.8,.22,1);
-      position:relative;overflow:hidden;
-    }
-    .testi-card:hover{
-      background:linear-gradient(148deg,rgba(99,102,241,0.075) 0%,rgba(255,255,255,0.032) 100%);
-      border-color:rgba(99,102,241,0.28);border-top-color:rgba(168,85,247,0.42);
-      transform:translateY(-6px);
-      box-shadow:0 28px 54px rgba(0,0,0,0.58),0 0 35px rgba(99,102,241,0.09),inset 0 1px 0 rgba(255,255,255,0.1);
-    }
-    .testi-card::before{
-      content:'\u201C';position:absolute;top:-8px;left:14px;
-      font-size:130px;color:rgba(99,102,241,0.075);
-      line-height:1;font-family:Georgia,serif;pointer-events:none;
-      background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(168,85,247,0.06));
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-
-    /* ── Demo screen ── */
-    .demo-screen{
-      background:linear-gradient(160deg,rgba(8,12,28,0.97),rgba(15,22,46,0.97));
-      border:1px solid rgba(255,255,255,0.10);
-      border-top-color:rgba(255,255,255,0.18);
-      border-radius:22px;overflow:hidden;
-      box-shadow:
-        0 60px 120px rgba(0,0,0,.88),
-        0 0 0 1px rgba(99,102,241,0.10),
-        inset 0 1px 0 rgba(255,255,255,0.08),
-        0 0 80px rgba(99,102,241,0.05);
-      animation:lg-float-card 7s ease-in-out infinite;
-    }
-    .screen-shimmer{position:absolute;top:0;left:-100%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.04),transparent);animation:shimmer 6s ease-in-out infinite}
-
-    /* ── Section label ── */
-    .section-label{
-      display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:24px;
-      background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(168,85,247,0.06));
-      border:1px solid rgba(99,102,241,0.25);
-      border-top-color:rgba(168,85,247,0.35);
-      backdrop-filter:blur(10px);
-      box-shadow:0 2px 12px rgba(99,102,241,0.1),inset 0 1px 0 rgba(255,255,255,0.06);
-      font-size:11px;font-weight:700;color:#a5b4fc;text-transform:uppercase;letter-spacing:.12em;
-    }
-
-    /* ── AI dot ── */
-    .ai-dot{width:7px;height:7px;border-radius:50%;background:#10b981;display:inline-block;box-shadow:0 0 12px rgba(16,185,129,1)}
-    .ai-dot.blink{animation:blink 1.5s ease infinite}
-
-    /* ── Divider ── */
-    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)}
-    .neon-line{height:1px;background:linear-gradient(90deg,transparent 0%,rgba(99,102,241,0.7) 25%,rgba(168,85,247,0.8) 50%,rgba(236,72,153,0.6) 75%,transparent 100%);box-shadow:0 0 12px rgba(99,102,241,0.3)}
-
-    /* ── Mobile nav ── */
-    #mobile-nav{transition:all .35s cubic-bezier(.25,.8,.25,1);max-height:0;overflow:hidden;opacity:0}
-    #mobile-nav.open{max-height:500px;opacity:1}
-
-    /* ── Orbit ring ── */
-    .orbit-ring{position:absolute;border-radius:50%;border:1px dashed rgba(99,102,241,0.18)}
-
-    /* ── Platform chip — liquid glass ── */
-    .platform-chip{
-      display:flex;align-items:center;gap:10px;padding:8px 18px;
-      background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.09);
-      border-top-color:rgba(255,255,255,0.16);
-      border-radius:999px;flex-shrink:0;cursor:default;
-      backdrop-filter:blur(12px);
-      box-shadow:0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06);
-      transition:all .3s ease;
-    }
-    .platform-chip:hover{
-      background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(99,102,241,0.04));
-      border-color:rgba(99,102,241,0.3);
-      box-shadow:0 4px 16px rgba(99,102,241,0.15),inset 0 1px 0 rgba(255,255,255,0.08);
-      transform:scale(1.04) translateY(-1px);
-    }
-    .platform-logo{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
-
-    /* ── Metric badge — liquid glass ── */
-    .metric-badge{
-      display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;
-      backdrop-filter:blur(8px);
-      box-shadow:0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-
-    /* ── Holo card ── */
-    .holo-card{position:relative;overflow:hidden}
-    .holo-card::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,0.04) 50%,transparent 65%);pointer-events:none}
-
-    /* ── Counter ── */
-    .counter{display:inline-block;transition:all .4s ease}
-
-    /* ── Scroll indicator ── */
-    .scroll-indicator{animation:float 2.5s ease-in-out infinite}
-
-    /* ── Campaign row ── */
-    .campaign-row{transition:all .2s ease}
-    .campaign-row:hover{background:rgba(255,255,255,0.03);border-radius:8px}
-
-    /* ── AI Timeline (simulator) ── */
-    .sim-step{opacity:0;transform:translateY(8px);transition:all .4s ease}
-    .sim-step.active{opacity:1;transform:translateY(0)}
-    .sim-step.done{opacity:.5}
-    .sim-step.done .step-icon{background:rgba(16,185,129,0.2) !important;border-color:rgba(16,185,129,0.4) !important}
-    .sim-step.done .step-icon i{color:#10b981 !important}
-
-    /* ── ROI Calculator — liquid glass inputs ── */
-    .roi-input{
-      background:linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025));
-      border:1px solid rgba(255,255,255,0.12);border-top-color:rgba(255,255,255,0.2);
-      border-radius:12px;padding:10px 16px;color:#fff;font-size:14px;font-weight:600;width:100%;
-      transition:all .2s ease;outline:none;backdrop-filter:blur(10px);
-      box-shadow:0 2px 8px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .roi-input:focus{border-color:rgba(99,102,241,0.55);border-top-color:rgba(168,85,247,0.7);box-shadow:0 0 0 3px rgba(99,102,241,0.12)}
-    .roi-input:hover{border-color:rgba(255,255,255,0.2)}
-    .roi-result{transition:all .5s cubic-bezier(.25,.8,.25,1)}
-
-    /* ── Case study card — liquid glass ── */
-    .case-card{
-      background:linear-gradient(145deg,rgba(255,255,255,0.05) 0%,rgba(255,255,255,0.018) 100%);
-      backdrop-filter:saturate(1.7) blur(20px);-webkit-backdrop-filter:saturate(1.7) blur(20px);
-      border:1px solid rgba(255,255,255,0.09);border-top-color:rgba(255,255,255,0.18);
-      border-radius:20px;
-      box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.07);
-      transition:all .35s ease;position:relative;overflow:hidden;
-    }
-    .case-card:hover{background:linear-gradient(145deg,rgba(99,102,241,0.07) 0%,rgba(255,255,255,0.03) 100%);border-color:rgba(99,102,241,0.3);border-top-color:rgba(168,85,247,0.45);transform:translateY(-6px);box-shadow:0 28px 56px rgba(0,0,0,0.55),0 0 35px rgba(99,102,241,0.09)}
-    .case-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:var(--case-gradient)}
-
-    /* ── Video demo wrapper — liquid glass ── */
-    .video-wrapper{border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.10);border-top-color:rgba(255,255,255,0.18);box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.07)}
-    .video-play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(99,102,241,0.85),rgba(168,85,247,0.85));backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;box-shadow:0 0 40px rgba(99,102,241,0.5),inset 0 1px 0 rgba(255,255,255,0.2)}
-    .video-play-btn:hover{background:linear-gradient(135deg,rgba(99,102,241,1),rgba(168,85,247,1));transform:translate(-50%,-50%) scale(1.12);box-shadow:0 0 70px rgba(99,102,241,0.7)}
-
-    /* ── AI Typing effect ── */
-    .type-cursor::after{content:'|';animation:blink .8s ease infinite;color:#6366f1;margin-left:2px}
-
-    /* ── Step connector ── */
-    .step-connector{flex:1;height:1px;background:linear-gradient(90deg,rgba(99,102,241,0.4),rgba(168,85,247,0.4))}
-
-    /* ── Tooltip — liquid glass ── */
-    .tooltip-wrap{position:relative}
-    .tooltip-wrap .tooltip-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:linear-gradient(145deg,rgba(15,15,32,0.97),rgba(10,10,24,0.97));border:1px solid rgba(99,102,241,0.3);border-top-color:rgba(168,85,247,0.4);border-radius:10px;padding:8px 14px;font-size:11px;color:#c7d2fe;white-space:nowrap;z-index:100;box-shadow:0 10px 30px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);backdrop-filter:blur(16px)}
-    .tooltip-wrap:hover .tooltip-box{display:block}
-
-    /* ── Comparison table ── */
-    .compare-row:hover{background:rgba(255,255,255,0.025)}
-    .compare-check{color:#10b981;font-size:14px}
-    .compare-cross{color:#ef4444;font-size:14px}
-
-    /* ── Cyber border ── */
-    .cyber-border{position:relative}
-    .cyber-border::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,0.5),rgba(168,85,247,0.3),rgba(236,72,153,0.3),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-
-    /* ── Plan perk ── */
-    .plan-perk{display:flex;align-items:center;gap:8px;font-size:13px;color:#64748b}
-
-    /* ── Barre de progression scroll — spectre lumineux ── */
-    #scroll-progress{
-      position:fixed;top:0;left:0;height:2.5px;
-      background:linear-gradient(90deg,#6366f1 0%,#8b5cf6 25%,#a855f7 50%,#ec4899 75%,#f97316 100%);
-      background-size:200% 100%;
-      animation:gradient-x 3s ease infinite;
-      z-index:9999;width:0%;
-      transition:width 0.08s linear;
-      box-shadow:0 0 10px rgba(99,102,241,0.7),0 0 20px rgba(168,85,247,0.35);
-    }
-
-    /* ── Hero badge — liquid glass ── */
-    #hero-badge{background:linear-gradient(135deg,rgba(255,255,255,0.07) 0%,rgba(99,102,241,0.06) 100%);backdrop-filter:saturate(2) blur(20px)}
-
-    /* ════════════════════════════════════════════
-       MOBILE RESPONSIVE — full overrides ≤ 767px
-    ════════════════════════════════════════════ */
-    @media (max-width: 767px) {
-
-      /* ── Navbar ── */
-      nav .hidden.md\:flex { display: none !important; }
-      nav #mobile-menu-btn { display: flex !important; }
-
-      /* ── Hero section ── */
-      #hero { padding-top: 68px; min-height: auto; }
-      #hero .max-w-7xl { padding-left: 16px; padding-right: 16px; padding-top: 24px; padding-bottom: 24px; }
-
-      /* Stack 2 columns to 1 */
-      #hero .grid { grid-template-columns: 1fr !important; gap: 28px !important; }
-
-      /* Badge — smaller on mobile */
-      #hero-badge { padding: 8px 14px !important; gap: 8px !important; }
-      #hero-badge span.text-xs { font-size: 10px !important; }
-
-      /* Headline */
-      #hero h1 { font-size: clamp(20px, 6.5vw, 32px) !important; margin-bottom: 10px !important; }
-
-      /* Sub-headline */
-      #hero p.text-xs { font-size: 11px !important; max-width: 100% !important; margin-bottom: 16px !important; }
-
-      /* Proof chips — horizontal scroll on mobile */
-      #hero .flex.flex-wrap.items-center.gap-2.mb-7 {
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 6px;
-        gap: 8px !important;
-        scrollbar-width: none;
-      }
-      #hero .flex.flex-wrap.items-center.gap-2.mb-7::-webkit-scrollbar { display: none; }
-
-      /* CTA buttons — always on same line, full stretch on very small */
-      #hero .flex.flex-row.items-center.gap-3.mb-8 {
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        width: 100%;
-      }
-      #hero .flex.flex-row.items-center.gap-3.mb-8 a {
-        flex: 1 !important;
-        justify-content: center !important;
-        white-space: nowrap;
-        min-width: 0;
-        text-align: center;
-      }
-
-      /* Trust line — wrap gracefully */
-      #hero .flex.items-center.gap-4 { gap: 10px !important; }
-
-      /* Scroll indicator — hide on mobile */
-      #hero .scroll-indicator { display: none !important; }
-
-      /* LIVE stats pill — horizontal scroll */
-      #hero-live-bar { overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; scrollbar-width: none; }
-      #hero-live-bar::-webkit-scrollbar { display: none; }
-      #hero-live-bar .hidden.sm\:block,
-      #hero-live-bar .hidden.sm\:flex,
-      #hero-live-bar .hidden.md\:flex,
-      #hero-live-bar .hidden.lg\:flex { display: flex !important; }
-
-      /* Dashboard mock — no float animation on mobile (perf) */
-      .demo-screen { animation: none !important; border-radius: 14px !important; }
-      .demo-screen .grid.grid-cols-2.md\:grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
-      .demo-screen .grid.grid-cols-1.md\:grid-cols-2 { grid-template-columns: 1fr !important; gap: 8px !important; }
-      .demo-screen .p-3.md\:p-4 { padding: 10px !important; }
-
-      /* ── Stats section ── */
-      #stats .grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
-
-      /* ── Section headings — scale down ── */
-      section h2.text-2xl,
-      section h2.md\:text-4xl { font-size: clamp(16px, 5vw, 22px) !important; }
-
-      /* ── Comparison table — horizontal scroll ── */
-      .overflow-x-auto table { min-width: 520px; }
-
-      /* ── Pricing cards ── */
-      .grid.md\:grid-cols-3 { grid-template-columns: 1fr !important; max-width: 400px; margin-left: auto; margin-right: auto; }
-
-      /* ── UC tabs — horizontal scroll ── */
-      .flex.flex-wrap.justify-center.gap-2.mb-10 {
-        flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        justify-content: flex-start !important;
-        padding-bottom: 6px;
-        scrollbar-width: none;
-      }
-      .flex.flex-wrap.justify-center.gap-2.mb-10::-webkit-scrollbar { display: none; }
-
-      /* ── How it works — steps ── */
-      .flex.items-center.justify-center.gap-2.flex-wrap { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
-      .step-connector { display: none !important; }
-
-      /* ── Orbs — hide heavy orbs on mobile ── */
-      .orb-3, .orb-4 { display: none !important; }
-
-      /* ── FAQ+CTA 2-col → 1-col on mobile ── */
-      #faq-cta .grid { grid-template-columns: 1fr !important; gap: 24px !important; }
-      #faq-cta h2 { font-size: clamp(22px, 6vw, 34px) !important; }
-
-      /* ── Footer ── */
-      footer .grid { grid-template-columns: 1fr 1fr !important; }
-
-      /* ── Compact sections on mobile ── */
-      section.py-8 { padding-top: 28px !important; padding-bottom: 28px !important; }
-      .section-label { font-size: 10px !important; padding: 4px 12px !important; margin-bottom: 8px !important; }
-      .testi-card { padding: 14px !important; }
-      .plan-card, .glass-neo { padding: 14px !important; }
-
-      /* ── Proof chips compact ── */
-      #hero .glass.px-3\\.5.py-2 { padding: 5px 10px !important; font-size: 10px !important; }
-
-      /* ── Trust line ── */
-      #hero .flex.items-center.gap-4.text-xs { font-size: 10px !important; gap: 8px !important; }
-
-      /* ── Neon divider ── */
-      .neon-line { display: none; }
-
-      /* ── Stats grid 2×2 ── */
-      .grid.grid-cols-2.md\\:grid-cols-4 { gap: 8px !important; }
-
-      /* ── Feature cards 1 col ── */
-      .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3 { grid-template-columns: 1fr !important; gap: 8px !important; }
-    }
-
-    /* ── Extra small (≤ 380px) ── */
-    @media (max-width: 380px) {
-      #hero h1 { font-size: 24px !important; }
-      #hero .flex.flex-row.items-center.gap-3.mb-8 { flex-direction: column !important; }
-      #hero .flex.flex-row.items-center.gap-3.mb-8 a { width: 100% !important; flex: none !important; }
-    }
-  </style>
+    quote: "AdNova went from zero to managing $2M of our monthly Meta spend in two weeks. ROAS jumped from 2.8× to 5.1× in the first month. I haven't opened Ads Manager since.",
+    name: 'Sarah Lin',
+    role: 'Head of Growth, Lemonade',
+    photo: 'https://randomuser.me/api/portraits/women/65.jpg',
+  },
+  {
+    quote: "The UGC generator alone saved us $40K in production costs last quarter. Our TikTok CPM dropped 42% and conversion rate doubled. This is the future of performance marketing.",
+    name: 'Marcus Keller',
+    role: 'CMO, Glossier',
+    photo: 'https://randomuser.me/api/portraits/men/45.jpg',
+  },
+  {
+    quote: "We manage 38 client accounts with a team of 3. AdNova handles the optimization — we focus on strategy. Revenue per head tripled in 6 months. Absolute game changer.",
+    name: 'Amara Diallo',
+    role: 'Founder, Waveform Agency',
+    photo: 'https://randomuser.me/api/portraits/women/27.jpg',
+  },
+  {
+    quote: "We cut Meta CAC by 47% in three months. The auto-budget reallocation alone paid for AdNova's annual contract in the first six weeks. Pricing is almost embarrassing.",
+    name: 'Hiroshi Tanaka',
+    role: 'Performance Marketing Lead, Notion',
+    photo: 'https://randomuser.me/api/portraits/men/52.jpg',
+  },
+  {
+    quote: "What used to take two days — pulling reports, reconciling platforms, writing summaries — now lands in my inbox every Monday at 8am. Done. Better than what we used to write.",
+    name: 'Priya Sharma',
+    role: 'Director of Acquisition, Allbirds',
+    photo: 'https://randomuser.me/api/portraits/women/86.jpg',
+  },
+  {
+    quote: "Tried four other platforms before AdNova. This is the only one where the AI actually feels like a team member, not a feature. ROAS up 38%, headcount unchanged.",
+    name: 'Daniel Costa',
+    role: 'CEO, Patreon',
+    photo: 'https://randomuser.me/api/portraits/men/12.jpg',
+  },
+]
+
+function testimonialsMarqueeHtml(): string {
+  const cardHtml = (t: typeof TESTIMONIALS[number]) => `
+    <article class="testi-card">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-quote">“${t.quote}”</div>
+      <div class="t-who">
+        <img class="t-photo" src="${t.photo}" alt="${t.name}" width="48" height="48" loading="lazy" decoding="async"/>
+        <div>
+          <div class="t-n">${t.name}</div>
+          <div class="t-r">${t.role}</div>
+        </div>
+      </div>
+    </article>`
+  // Duplicate the set so the marquee loops seamlessly (translate -50%).
+  const set = TESTIMONIALS.map(cardHtml).join('')
+  return set + set
+}
+
+// ─── Pricing cards rendered from PLANS (keeps landing ↔ admin in sync) ─────
+function pricingCardsHtml(): string {
+  return PLANS.map((p, i) => {
+    const rd = i > 0 ? ` rd${i}` : ''
+    const featured = p.popular
+    const cardCls = featured ? 'pr-card feat reveal' : 'pr-card reveal'
+    const btnCls = featured ? 'pr-btn prim' : 'pr-btn'
+    const badge = featured ? '<div class="pr-badge">Most Popular</div>' : ''
+    const ctaHref = p.cta === 'Contact sales' ? '/about' : '/register'
+
+    // Annual = 20% off the monthly rate, shown as the per-month equivalent.
+    const monthly = p.price
+    const annual = monthly ? Math.round(monthly * 0.8) : 0
+    const yearlyTotal = annual * 12
+
+    const priceBlock = monthly
+      ? `<div class="pr-row">
+           <span class="pr-dollar">$</span>
+           <span class="pr-amount" data-monthly="${monthly}" data-annual="${annual}">${monthly}</span>
+           <span class="pr-per">/mo</span>
+         </div>
+         <div class="pr-billed" data-monthly-label="Billed monthly" data-annual-label="$${yearlyTotal}/yr · billed annually">Billed monthly</div>`
+      : `<div style="margin-bottom:18px"><span style="font-family:'Geist',system-ui,sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.03em;color:var(--white)">Let's talk</span></div>
+         <div class="pr-billed">Custom contract terms</div>`
+
+    const features = p.features.map(f => `<li><div class="pfc">✓</div>${f}</li>`).join('')
+
+    const buttonLabel = p.cta === 'Contact sales' ? 'Contact sales →' : 'Start free trial'
+
+    return `
+      <div class="${cardCls}${rd}">
+        ${badge}
+        <div class="pr-tier">${p.name}</div>
+        ${priceBlock}
+        <div class="pr-desc">${p.summary ?? ''}</div>
+        <div class="pr-div"></div>
+        <ul class="pr-feats">${features}</ul>
+        <a href="${ctaHref}" style="text-decoration:none;display:block"><button class="${btnCls}">${buttonLabel}</button></a>
+      </div>`
+  }).join('')
+}
+
+// ─── "Beyond Attribution" comparison row helper ────────────────────────────
+function beyondRow(label: string, legacy: boolean, adnova: boolean, legacyNote = '', adnovaNote = ''): string {
+  const yes = '<span class="bt-yes">✓</span>'
+  const no  = '<span class="bt-no">—</span>'
+  const legacyCell = legacy
+    ? `${yes}${legacyNote ? `<span class="bt-note">${legacyNote}</span>` : ''}`
+    : `${no}${legacyNote ? `<span class="bt-note bt-note-dim">${legacyNote}</span>` : ''}`
+  const adnovaCell = adnova
+    ? `${yes}${adnovaNote ? `<span class="bt-note bt-note-on">${adnovaNote}</span>` : ''}`
+    : no
+  return `<div class="bt-row">
+    <div class="bt-feat">${label}</div>
+    <div class="bt-stack">${legacyCell}</div>
+    <div class="bt-adnova">${adnovaCell}</div>
+  </div>`
+}
+
+// ─── Full page ─────────────────────────────────────────────────────────────
+function pageHtml(): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AdNova AI — Autonomous advertising, real results</title>
+<meta name="description" content="AdNova AI runs your campaigns across 9 platforms — generates creatives, optimizes spend, and writes reports while you sleep. 4.82× average ROAS." />
+<meta name="theme-color" content="#FF4D00" />
+<meta property="og:title" content="AdNova AI — Stop guessing. Start scaling." />
+<meta property="og:description" content="Autonomous ad management for modern brands. Built on Claude." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="/favicon.svg" />
+<link rel="canonical" href="https://adnova.ai/" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..900&family=Fraunces:ital,opsz,wght@1,144,300..500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* 3-color palette: white / black / orange (May 2026) */
+  --bg:#000000;--surface:#0A0A0A;--card:#111111;--card2:#1A1A1A;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --orange:#FF4D00;--orange2:#FF6B2B;--orangeGlow:rgba(255,77,0,0.18);
+  --cyan:#FF6B2B;--white:#FFFFFF;--muted:#7A7A7A;--muted2:#A8A8A8;
+  --text:#D4D4D4;--green:#FF4D00;--gold:#FF6B2B;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+body{font-family:'Geist',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;font-feature-settings:"ss01","ss03","cv11";font-optical-sizing:auto;letter-spacing:-0.005em}
+h1,h2,h3,h4,h5{font-family:'Geist',system-ui,sans-serif;font-weight:700;letter-spacing:-0.02em}
+em,.font-serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;font-variation-settings:"opsz" 144}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:66px;background:rgba(8,8,15,0.8);backdrop-filter:blur(28px);border-bottom:1px solid var(--border);transition:background 0.3s}
+nav.scrolled{background:rgba(8,8,15,0.97)}
+.logo{font-family:'Geist',system-ui,sans-serif;font-weight:800;font-size:20px;color:var(--white);letter-spacing:-0.5px;cursor:pointer;text-decoration:none}
+.logo span{color:var(--orange)}
+.nav-links{display:flex;gap:34px}
+.nav-links a{color:var(--muted2);text-decoration:none;font-size:14px;transition:color 0.2s}
+.nav-links a:hover{color:var(--white)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.btn-ghost{padding:8px 18px;border:1px solid var(--border2);border-radius:8px;color:var(--muted2);font-size:14px;background:transparent;cursor:pointer;transition:all 0.2s;text-decoration:none;font-family:'Geist',system-ui,sans-serif}
+.btn-ghost:hover{color:var(--white);border-color:rgba(255,255,255,0.25)}
+.btn-nav{padding:9px 22px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Geist',system-ui,sans-serif;background:var(--orange);color:#fff;transition:all 0.25s;text-decoration:none}
+.btn-nav:hover{background:var(--orange2);box-shadow:0 6px 24px rgba(255,77,0,0.35);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 24px 60px;position:relative;overflow:hidden}
+.hero-mesh{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 800px 500px at 50% -5%,rgba(255,77,0,0.11),transparent 70%),radial-gradient(ellipse 500px 300px at 15% 70%,rgba(0,212,255,0.04),transparent 65%),radial-gradient(ellipse 400px 250px at 85% 60%,rgba(255,77,0,0.05),transparent 60%)}
+.hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:70px 70px;mask-image:radial-gradient(ellipse 75% 60% at 50% 30%,black 20%,transparent 100%)}
+.hero-inner{position:relative;z-index:1;max-width:960px;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border-radius:100px;border:1px solid rgba(255,77,0,0.25);background:rgba(255,77,0,0.06);font-size:12px;color:var(--orange2);font-weight:500;margin-bottom:40px;letter-spacing:0.04em;text-transform:uppercase}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,77,0,0.4)}70%{opacity:0.7;box-shadow:0 0 0 8px rgba(255,77,0,0)}}
+.hero h1{font-size:clamp(54px,8.4vw,108px);font-weight:800;line-height:0.94;letter-spacing:-0.045em;margin-bottom:30px}
+.hero h1 .line-white{display:block;color:var(--white)}
+.hero h1 .line-serif{display:block;font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;color:var(--orange);font-size:clamp(60px,9vw,118px);letter-spacing:-0.025em;font-variation-settings:"opsz" 144;line-height:0.92}
+.hero-sub{font-size:clamp(17px,1.9vw,21px);color:var(--muted2);font-weight:400;max-width:540px;line-height:1.65;margin:0 auto 48px;letter-spacing:-0.005em}
+.hero-sub strong{color:var(--white);font-weight:500}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.btn-hero{padding:15px 34px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:'Geist',system-ui,sans-serif;background:var(--orange);color:#fff;transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-hero:hover{background:var(--orange2);box-shadow:0 12px 48px rgba(255,77,0,0.4);transform:translateY(-2px)}
+.btn-hero-ghost{padding:15px 30px;border-radius:10px;font-size:15px;cursor:pointer;border:1px solid var(--border2);background:rgba(255,255,255,0.03);color:var(--text);transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:'Geist',system-ui,sans-serif}
+.btn-hero-ghost:hover{border-color:rgba(255,255,255,0.25);color:var(--white);background:rgba(255,255,255,0.06)}
+.hero-trust{font-size:12px;color:var(--muted);letter-spacing:0.04em;margin-bottom:14px}
+.hero-vs{margin-bottom:60px}
+.hero-vs a{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--orange2);font-weight:600;letter-spacing:-0.005em;border-bottom:1px solid rgba(255,107,43,0.25);padding-bottom:2px;transition:all 0.25s;text-decoration:none}
+.hero-vs a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.hero-vs-arr{transition:transform 0.25s}
+.hero-vs a:hover .hero-vs-arr{transform:translateX(4px)}
+.play-tri{display:inline-block;width:0;height:0;border-style:solid;border-width:6px 0 6px 9px;border-color:transparent transparent transparent var(--orange);margin-right:2px;vertical-align:middle}
+.play-dur{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:100px;background:rgba(255,77,0,0.10);color:var(--orange);font-size:11px;font-weight:700;letter-spacing:0.04em}
+
+/* HERO VIDEO MODAL */
+.hv-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.85);backdrop-filter:blur(20px) saturate(1.4);display:none;align-items:center;justify-content:center;padding:30px;animation:hvFade 0.3s ease}
+.hv-modal.open{display:flex}
+@keyframes hvFade{from{opacity:0}to{opacity:1}}
+.hv-shell{width:100%;max-width:1080px;display:flex;flex-direction:column;gap:14px}
+.hv-close{position:absolute;top:24px;right:28px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:#fff;font-size:18px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.hv-close:hover{background:rgba(255,77,0,0.20);border-color:var(--orange);transform:rotate(90deg)}
+.hv-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,rgba(255,77,0,0.08),rgba(8,8,15,0.85));border:1px solid rgba(255,77,0,0.25);box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 60px rgba(255,77,0,0.15)}
+.hv-video{width:100%;height:100%;object-fit:cover;background:#08080F;display:block}
+/* Fallback shown only when <video> tag has no playable source */
+.hv-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;pointer-events:none}
+.hv-fallback > *{pointer-events:auto}
+.hv-video[src]:not([src=""]) ~ .hv-fallback,.hv-video:not([src=""]) ~ .hv-fallback{display:none}
+.hv-fb-icon{font-size:54px;margin-bottom:14px;opacity:0.85}
+.hv-fallback h3{font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.02em;margin-bottom:8px}
+.hv-fallback p{color:var(--muted2);font-size:14px;max-width:420px;line-height:1.6;margin-bottom:18px}
+.hv-fb-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:var(--orange);color:#fff;font-weight:700;font-size:14px;text-decoration:none;transition:all 0.25s}
+.hv-fb-cta:hover{background:var(--orange2);box-shadow:0 12px 36px rgba(255,77,0,0.4);transform:translateY(-2px)}
+.hv-fb-script{margin-top:22px;color:var(--muted);font-size:11px;letter-spacing:0.02em;max-width:560px}
+.hv-fb-script code{background:rgba(255,77,0,0.10);color:var(--orange);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono','Menlo',monospace;font-size:10.5px}
+.hv-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;color:var(--muted);font-size:11px;letter-spacing:0.02em;padding:0 8px}
+.hv-meta span{position:relative;padding-right:0}
+@media(max-width:700px){.hv-modal{padding:14px}.hv-close{top:14px;right:18px;width:36px;height:36px}.hv-meta{display:none}.hv-fallback{padding:24px}.hv-fallback h3{font-size:18px}}
+
+/* Live decision feed — under the dashboard preview */
+.decisions-rail{position:relative;z-index:2;max-width:1180px;margin:46px auto 0;padding:0 24px}
+.decisions-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.decisions-title{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);letter-spacing:0.04em;text-transform:uppercase;font-weight:600}
+.decisions-title .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:blink 1.6s ease infinite}
+.decisions-cta{font-size:12px;color:var(--muted);letter-spacing:0.04em}
+.decisions-feed{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;list-style:none;padding:0;margin:0}
+@media(max-width:900px){.decisions-feed{grid-template-columns:1fr}}
+.decisions-feed li{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0.015) 50%,rgba(255,255,255,0.03) 100%);backdrop-filter:blur(14px) saturate(1.4);border:1px solid rgba(255,255,255,0.08);border-top-color:rgba(255,255,255,0.16);position:relative;overflow:hidden;animation:decFade 0.5s ease}
+.decisions-feed li::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;border-radius:2px 0 0 2px}
+.decisions-feed li.dec-scale::before{background:var(--green);box-shadow:0 0 14px var(--green)}
+.decisions-feed li.dec-kill::before{background:#7A7A7A;box-shadow:0 0 14px rgba(122,122,122,0.7)}
+.decisions-feed li.dec-create::before{background:var(--orange);box-shadow:0 0 14px var(--orange)}
+.decisions-feed li.dec-budget::before{background:#A8A8A8;box-shadow:0 0 14px rgba(168,168,168,0.6)}
+.dec-icon{width:32px;height:32px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.dec-scale .dec-icon{background:rgba(255,77,0,0.15);color:var(--green)}
+.dec-kill .dec-icon{background:rgba(122,122,122,0.15);color:#7A7A7A}
+.dec-create .dec-icon{background:rgba(255,77,0,0.15);color:var(--orange2)}
+.dec-budget .dec-icon{background:rgba(168,168,168,0.15);color:#A8A8A8}
+.dec-body{flex:1;min-width:0}
+.dec-action{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;display:inline-block;margin-bottom:4px}
+.dec-scale .dec-action{color:var(--green)}
+.dec-kill .dec-action{color:#7A7A7A}
+.dec-create .dec-action{color:var(--orange2)}
+.dec-budget .dec-action{color:#A8A8A8}
+.dec-text{font-size:13px;color:var(--white);font-weight:500;line-height:1.45;letter-spacing:-0.005em}
+.dec-meta{font-size:11px;color:var(--muted);margin-top:5px;font-variant-numeric:tabular-nums}
+@keyframes decFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* DASHBOARD FRAME */
+.dash-preview{position:relative;z-index:1;max-width:920px;margin:0 auto;width:100%}
+.dash-glow{position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:700px;height:130px;z-index:0;background:radial-gradient(ellipse,rgba(255,77,0,0.14),transparent 70%);filter:blur(30px)}
+.dash-frame{position:relative;z-index:1;border-radius:18px;border:1px solid var(--border2);background:var(--surface);overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.06)}
+.dash-titlebar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.d-dots{display:flex;gap:6px}.d-dot{width:11px;height:11px;border-radius:50%}
+.d1{background:#FF5F57}.d2{background:#FEBC2E}.d3{background:#28C840}
+.d-url{flex:1;max-width:240px;margin:0 auto;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:5px 14px;font-size:11px;color:var(--muted2);text-align:center}
+.dash-body{padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.dash-kpi{background:var(--card2);border-radius:10px;padding:14px 16px;border:1px solid var(--border)}
+.kpi-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.kpi-v{font-family:'Geist',system-ui,sans-serif;font-size:24px;font-weight:800;letter-spacing:-0.02em;color:var(--white)}
+.kpi-c{font-size:11px;margin-top:4px}.up{color:var(--green)}.dn{color:#FF4466}
+.dash-chart{margin:0 20px 20px;background:var(--card2);border-radius:10px;padding:16px 20px;border:1px solid var(--border)}
+.ch-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ch-title{font-size:12px;font-weight:600;color:var(--text)}
+.ch-leg{display:flex;gap:14px}
+.leg{font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:5px}
+.leg-dot{width:6px;height:6px;border-radius:50%}
+.bars{display:flex;align-items:flex-end;gap:5px;height:70px}
+.bg{flex:1;display:flex;gap:2px;align-items:flex-end}
+.b{border-radius:3px 3px 0 0}.ba{background:var(--orange);opacity:0.85}.bb{background:rgba(0,212,255,0.45)}
+
+/* FLOATING CARDS */
+.float-card{position:absolute;background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:14px 18px;box-shadow:0 20px 60px rgba(0,0,0,0.5);z-index:10}
+.fc-l{left:-148px;top:25%;animation:flt 4s ease-in-out infinite}
+.fc-r{right:-128px;top:15%;animation:flt 5s ease-in-out infinite -1.5s}
+.fc-b{right:-110px;bottom:8%;animation:flt 4.5s ease-in-out infinite -3s}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fc-t{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.fc-v{font-family:'Geist',system-ui,sans-serif;font-size:22px;font-weight:800;color:var(--white)}
+.fc-s{font-size:11px;color:var(--green);margin-top:3px}
+.live-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);font-size:10px;color:var(--green);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+.ld{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pd 1.5s infinite}
+@keyframes pd{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;background:var(--surface)}
+.ticker-inner{display:flex;white-space:nowrap;animation:tkr 28s linear infinite}
+@keyframes tkr{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{display:inline-flex;align-items:center;gap:10px;padding:0 32px;font-size:13px;color:var(--muted)}
+.ti b{color:var(--white);font-weight:600}.ti-sep{color:rgba(255,255,255,0.15);font-size:18px}
+
+/* STATS */
+/* ── BEYOND ATTRIBUTION ─────────────────────────────────────────── */
+.beyond-sec{padding:80px 52px 30px;max-width:1200px;margin:0 auto}
+.beyond-wrap{margin-top:40px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(180deg,rgba(255,77,0,0.025) 0%,rgba(255,255,255,0.012) 100%);overflow:hidden}
+.beyond-table{display:flex;flex-direction:column}
+.bt-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;align-items:center;padding:18px 26px;border-bottom:1px solid var(--border)}
+.bt-row:last-child{border-bottom:none}
+.bt-row.bt-head{background:rgba(255,77,0,0.04);padding:22px 26px;border-bottom:1px solid rgba(255,77,0,0.18)}
+.bt-feat{font-size:14px;color:var(--text);font-weight:500;letter-spacing:-0.005em}
+.bt-head .bt-feat{font-size:11px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:0.12em}
+.bt-stack,.bt-adnova{font-size:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bt-head .bt-stack,.bt-head .bt-adnova{font-size:13px;font-weight:700;color:var(--white);flex-direction:column;align-items:flex-start;gap:2px}
+.bt-head .bt-adnova{color:var(--orange)}
+.bt-sub{font-size:10px;color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0.02em}
+.bt-yes{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(255,77,0,0.14);color:var(--green);font-weight:700;font-size:12px;border:1px solid rgba(255,77,0,0.30);flex-shrink:0}
+.bt-adnova .bt-yes{background:rgba(255,77,0,0.16);color:var(--orange);border-color:rgba(255,77,0,0.34)}
+.bt-no{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;color:var(--muted);font-weight:600;font-size:14px;flex-shrink:0}
+.bt-note{font-size:12px;color:var(--muted2);letter-spacing:-0.005em}
+.bt-note-dim{color:var(--muted)}
+.bt-note-on{color:var(--orange2);font-weight:600}
+.bt-row:hover{background:rgba(255,77,0,0.025)}
+.bt-row.bt-head:hover{background:rgba(255,77,0,0.04)}
+
+.beyond-foot{display:grid;grid-template-columns:1.7fr 1fr;gap:30px;padding:30px 26px;border-top:1px solid var(--border);align-items:center;background:rgba(255,77,0,0.025)}
+.beyond-quote{display:flex;gap:14px;align-items:flex-start}
+.bq-mark{font-family:'Fraunces',Georgia,serif;font-size:54px;color:var(--orange);line-height:0.7;font-style:italic}
+.beyond-quote p{font-size:14px;color:var(--text);line-height:1.65;letter-spacing:-0.005em;margin-bottom:6px}
+.bq-att{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:0.02em}
+.beyond-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;border:1px solid var(--orange);background:rgba(255,77,0,0.06);color:var(--orange);font-size:13px;font-weight:600;letter-spacing:-0.005em;transition:all 0.25s;justify-self:end;text-decoration:none}
+.beyond-cta:hover{background:var(--orange);color:#fff;box-shadow:0 8px 24px rgba(255,77,0,0.35)}
+.beyond-cta span{transition:transform 0.25s}
+.beyond-cta:hover span{transform:translateX(4px)}
+
+@media(max-width:900px){
+  .beyond-sec{padding:60px 24px 20px}
+  .bt-row{grid-template-columns:1fr;gap:8px;padding:14px 18px}
+  .bt-row.bt-head{display:none}
+  .bt-feat{font-weight:700;color:var(--white);font-size:13px}
+  .bt-stack::before{content:'Legacy stack: ';color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px;width:100%}
+  .bt-adnova::before{content:'AdNova: ';color:var(--orange);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:4px;width:100%}
+  .beyond-foot{grid-template-columns:1fr;gap:20px;padding:24px 18px}
+  .beyond-cta{justify-self:start}
+}
+
+.stats-sec{padding:80px 52px;max-width:1200px;margin:0 auto}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:var(--border)}
+.stat-block{background:var(--surface);padding:48px 32px;text-align:center;transition:background 0.3s;cursor:default}
+.stat-block:hover{background:var(--card)}
+.stat-num{font-family:'Geist',system-ui,sans-serif;font-size:54px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:10px;background:linear-gradient(135deg,var(--white),var(--muted2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-num .hi{background:linear-gradient(135deg,var(--orange),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-lbl{font-size:13px;color:var(--muted)}
+
+/* SECTION HEADER */
+.sec-head{text-align:center;margin-bottom:72px}
+.sec-tag{display:inline-block;padding:5px 14px;border-radius:100px;border:1px solid rgba(255,77,0,0.25);background:rgba(255,77,0,0.06);font-size:11px;color:var(--orange2);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:22px}
+.sec-head h2{font-size:clamp(36px,5.2vw,64px);font-weight:800;letter-spacing:-0.04em;line-height:1.02;margin-bottom:20px}
+.sec-head h2 em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;color:var(--orange);letter-spacing:-0.025em;font-variation-settings:"opsz" 144}
+.sec-head p{font-size:18px;color:var(--muted2);max-width:540px;margin:0 auto;line-height:1.65;font-weight:400;letter-spacing:-0.005em}
+
+/* FEATURES */
+.feat-sec{padding:80px 52px;max-width:1200px;margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat-card{padding:36px;border-radius:18px;background:var(--surface);border:1px solid var(--border);transition:all 0.35s;position:relative;overflow:hidden;cursor:default}
+.feat-card::before{content:'';position:absolute;inset:0;border-radius:18px;background:linear-gradient(135deg,rgba(255,77,0,0.06),transparent 60%);opacity:0;transition:opacity 0.35s}
+.feat-card:hover{border-color:rgba(255,77,0,0.25);transform:translateY(-6px);box-shadow:0 24px 80px rgba(0,0,0,0.4)}
+.feat-card:hover::before{opacity:1}
+.feat-icon{width:52px;height:52px;border-radius:14px;background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.15);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:24px;position:relative;z-index:1}
+.feat-card h3{font-size:20px;font-weight:700;margin-bottom:12px;letter-spacing:-0.022em;position:relative;z-index:1}
+.feat-card p{font-size:15px;color:var(--muted2);line-height:1.65;font-weight:400;position:relative;z-index:1;letter-spacing:-0.003em}
+.feat-lnk{display:inline-flex;align-items:center;gap:6px;margin-top:22px;font-size:13px;color:var(--orange2);font-weight:500;text-decoration:none;position:relative;z-index:1;transition:gap 0.2s}
+.feat-card:hover .feat-lnk{gap:10px}
+
+/* HOW IT WORKS */
+.hiw-sec{padding:100px 52px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.hiw-inner{max-width:1200px;margin:0 auto}
+.hiw-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:72px}
+.hiw-step{background:var(--card);padding:48px 40px;position:relative;transition:background 0.3s}
+.hiw-step:hover{background:var(--card2)}
+.step-bg-num{font-family:'Geist',system-ui,sans-serif;font-size:80px;font-weight:800;letter-spacing:-0.05em;line-height:1;color:rgba(255,255,255,0.04);position:absolute;top:20px;right:20px}
+.step-icon{width:56px;height:56px;border-radius:14px;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:28px}
+.step-lbl{font-size:11px;color:var(--orange2);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
+.hiw-step h3{font-size:26px;font-weight:700;letter-spacing:-0.028em;margin-bottom:14px}
+.hiw-step p{font-size:15px;color:var(--muted2);line-height:1.65;font-weight:400;letter-spacing:-0.003em}
+
+/* PLATFORMS */
+.plat-sec{padding:80px 52px;max-width:1200px;margin:0 auto}
+.plat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:64px}
+.plat-card{padding:28px 16px;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-align:center;transition:all 0.3s;cursor:pointer}
+.plat-card:hover{border-color:rgba(255,77,0,0.3);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.plat-logo{width:48px;height:48px;border-radius:13px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+.plat-logo svg{width:26px;height:26px;display:block}
+.plat-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.plat-sub{font-size:10px;color:var(--muted)}
+.plat-ok{display:inline-flex;align-items:center;gap:3px;margin-top:8px;padding:2px 8px;border-radius:100px;background:rgba(255,77,0,0.1);font-size:9px;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+
+/* CREATIVES */
+.cr-sec{padding:100px 52px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cr-inner{max-width:1200px;margin:0 auto}
+.cr-layout{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;margin-top:72px}
+.cr-frame{border-radius:18px;border:1px solid var(--border2);background:var(--card);overflow:hidden}
+.cr-header{padding:12px 18px;border-bottom:1px solid var(--border);background:var(--card2);display:flex;align-items:center;gap:10px}
+.cr-dots{display:flex;gap:5px}.cr-dot{width:9px;height:9px;border-radius:50%}
+.cr-title-bar{font-size:12px;color:var(--muted2);margin-left:8px}
+.cr-body{padding:20px}
+.cr-prompt{background:rgba(255,77,0,0.04);border:1px solid rgba(255,77,0,0.15);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+.cr-pl{font-size:10px;color:var(--orange2);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px}
+.cr-pt{font-size:13px;color:var(--text);line-height:1.6}
+.cr-params{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.cr-param{padding:4px 12px;border-radius:100px;border:1px solid var(--border2);font-size:11px;color:var(--muted2);background:var(--card2)}
+.cr-status{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:12px;color:var(--muted2);margin-bottom:16px}
+.cr-spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--orange);border-radius:50%;animation:spin 0.9s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cr-results{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cr-img{border-radius:8px;aspect-ratio:1;border:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer;transition:border-color 0.25s,transform 0.25s}
+.cr-img:hover{border-color:rgba(255,77,0,0.45);transform:translateY(-2px)}
+.cr-img-tag{position:absolute;top:8px;left:8px;z-index:2;padding:3px 8px;border-radius:100px;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);color:#fff;font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.10)}
+.cr-img-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.30) 0%,rgba(0,0,0,0.75) 100%);opacity:0;transition:opacity 0.2s;display:flex;align-items:flex-end;justify-content:flex-start;padding:12px;font-size:13px;color:#fff;font-weight:700;letter-spacing:-0.005em}
+.cr-img:hover .cr-img-ov{opacity:1}
+.cr-info h3{font-size:clamp(30px,3.2vw,46px);font-weight:800;letter-spacing:-0.035em;line-height:1.05;margin-bottom:20px}
+.cr-info h3 em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;color:var(--orange);letter-spacing:-0.025em;font-variation-settings:"opsz" 144}
+.cr-info p{font-size:16px;color:var(--muted2);line-height:1.65;margin-bottom:32px;font-weight:400;letter-spacing:-0.005em}
+.cr-types{display:flex;flex-direction:column;gap:12px}
+.cr-type{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:12px;border:1px solid var(--border);background:var(--card2);transition:all 0.25s;cursor:pointer}
+.cr-type:hover,.cr-type.active{border-color:rgba(255,77,0,0.3);background:rgba(255,77,0,0.05)}
+.cr-type-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,77,0,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cr-type h4{font-size:14px;font-weight:600;margin-bottom:2px}
+.cr-type p{font-size:12px;color:var(--muted2)}
+
+/* AGENTS */
+.ag-sec{padding:100px 52px;max-width:1200px;margin:0 auto}
+.ag-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:72px}
+.ag-visual{position:relative;height:340px}
+.ag-orb{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FF8C42);display:flex;align-items:center;justify-content:center;font-size:42px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 70px rgba(255,77,0,0.3);animation:orb 3.5s ease-in-out infinite;z-index:2}
+@keyframes orb{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-54%) scale(1.04)}}
+.ag-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,77,0,0.18);animation:rp 3s ease-in-out infinite}
+.ag-ring.r1{width:150px;height:150px}
+.ag-ring.r2{width:200px;height:200px;animation-delay:0.5s;border-color:rgba(255,77,0,0.08)}
+@keyframes rp{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
+.ag-node{position:absolute;background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:14px 18px;z-index:3;box-shadow:0 10px 40px rgba(0,0,0,0.4);min-width:158px}
+.ag-node.n1{top:0;left:0}.ag-node.n2{top:0;right:0}
+.ag-node.n3{bottom:0;left:0}.ag-node.n4{bottom:0;right:0}
+.ag-ni{font-size:20px;margin-bottom:6px}
+.ag-node h5{font-size:13px;font-weight:700;margin-bottom:2px}
+.ag-node p{font-size:11px;color:var(--muted2)}
+.ag-info h3{font-size:clamp(30px,3.2vw,48px);font-weight:800;letter-spacing:-0.035em;line-height:1.05;margin-bottom:20px}
+.ag-info h3 em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;color:var(--orange);letter-spacing:-0.025em;font-variation-settings:"opsz" 144}
+.ag-info p{font-size:16px;color:var(--muted2);line-height:1.65;margin-bottom:36px;font-weight:400;letter-spacing:-0.005em}
+.ag-list{display:flex;flex-direction:column;gap:14px}
+.ag-item{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;border-radius:12px;border:1px solid var(--border);background:var(--surface);transition:all 0.25s}
+.ag-item:hover{border-color:rgba(255,77,0,0.2);background:rgba(255,77,0,0.02)}
+.ag-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,77,0,0.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ag-item h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.ag-item p{font-size:13px;color:var(--muted2);line-height:1.55}
+
+/* PRICING */
+.pr-sec{padding:100px 52px;background:var(--surface);border-top:1px solid var(--border)}
+.pr-inner{max-width:1160px;margin:0 auto}
+.pr-toggle{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:56px;margin-top:16px}
+.pr-tl{font-size:14px;color:var(--muted2)}
+.toggle-sw{width:44px;height:24px;background:var(--card2);border-radius:100px;border:1px solid var(--border2);cursor:pointer;position:relative;transition:background 0.3s}
+.toggle-sw.on{background:var(--orange)}
+.toggle-kn{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.3s}
+.toggle-sw.on .toggle-kn{transform:translateX(20px)}
+.pr-save{padding:3px 10px;border-radius:100px;background:rgba(255,77,0,0.1);font-size:11px;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+.pr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pr-card{border-radius:20px;padding:36px 28px;border:1px solid var(--border);background:var(--card);transition:transform 0.3s;position:relative}
+.pr-card:hover{transform:translateY(-6px)}
+.pr-card.feat{border-color:rgba(255,77,0,0.35);background:linear-gradient(160deg,rgba(255,77,0,0.06),var(--card));box-shadow:0 0 60px rgba(255,77,0,0.07)}
+.pr-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);padding:5px 18px;background:var(--orange);border-radius:100px;font-size:11px;font-weight:700;color:#fff;font-family:'Geist',system-ui,sans-serif;text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap}
+.pr-tier{font-size:12px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px}
+.pr-row{display:flex;align-items:baseline;gap:3px;margin-bottom:6px}
+.pr-dollar{font-size:20px;color:var(--muted2);align-self:flex-start;margin-top:10px}
+.pr-amount{font-family:'Geist',system-ui,sans-serif;font-size:52px;font-weight:800;letter-spacing:-0.04em;color:var(--white)}
+.pr-per{font-size:14px;color:var(--muted);margin-left:2px}
+.pr-billed{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:18px;letter-spacing:-0.003em;font-weight:500;transition:color 0.25s}
+.pr-card.annual .pr-billed{color:var(--green)}
+.pr-desc{font-size:13px;color:var(--muted2);margin-bottom:26px;line-height:1.6}
+.pr-amount{transition:color 0.2s}
+.pr-div{height:1px;background:var(--border);margin-bottom:22px}
+.pr-feats{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:28px}
+.pr-feats li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text)}
+.pfc{width:18px;height:18px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;background:rgba(255,77,0,0.1);color:var(--orange2)}
+.pr-btn{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Geist',system-ui,sans-serif;transition:all 0.25s;border:1px solid var(--border2);background:rgba(255,255,255,0.04);color:var(--text)}
+.pr-btn:hover{border-color:rgba(255,255,255,0.25);color:var(--white)}
+.pr-btn.prim{background:var(--orange);color:#fff;border:none}
+.pr-btn.prim:hover{background:var(--orange2);box-shadow:0 8px 32px rgba(255,77,0,0.35)}
+
+/* TESTIMONIALS — marquee */
+.testi-sec{padding:80px 0 100px;max-width:1400px;margin:0 auto}
+.testi-sec .sec-head{padding:0 52px}
+.testi-marquee{position:relative;overflow:hidden;margin-top:64px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.testi-track{display:flex;width:max-content;animation:testi-scroll 80s linear infinite;will-change:transform}
+.testi-marquee:hover .testi-track{animation-play-state:paused}
+@keyframes testi-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.testi-card{flex-shrink:0;width:380px;margin-right:24px;padding:32px;border-radius:18px;background:var(--surface);border:1px solid var(--border);transition:border-color 0.3s,transform 0.3s;display:flex;flex-direction:column}
+.testi-card:hover{border-color:rgba(255,77,0,0.25);transform:translateY(-4px)}
+.t-stars{margin-bottom:18px;color:var(--gold);font-size:13px;letter-spacing:3px}
+.t-quote{font-size:16px;color:var(--text);line-height:1.55;margin-bottom:24px;font-weight:400;font-style:italic;font-family:'Fraunces',Georgia,serif;font-variation-settings:"opsz" 144;letter-spacing:-0.005em;flex:1}
+.t-who{display:flex;align-items:center;gap:14px}
+.t-photo{width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--border2)}
+.t-n{font-size:14px;font-weight:600;letter-spacing:-0.01em}
+.t-r{font-size:12px;color:var(--muted2);margin-top:2px}
+
+/* CTA */
+.cta-sec{position:relative;overflow:hidden;text-align:center;padding:120px 52px;background:var(--surface);border-top:1px solid var(--border)}
+.cta-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 700px 400px at 50% 50%,rgba(255,77,0,0.1),transparent 70%)}
+.cta-inner{position:relative;z-index:1}
+.cta-sec h2{font-size:clamp(42px,6.2vw,80px);font-weight:800;letter-spacing:-0.045em;line-height:0.98;margin-bottom:24px}
+.cta-sec h2 em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:300;color:var(--orange);letter-spacing:-0.025em;font-variation-settings:"opsz" 144}
+.cta-sec p{font-size:19px;color:var(--muted2);max-width:480px;margin:0 auto 48px;line-height:1.55;font-weight:400;letter-spacing:-0.005em}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta-note{margin-top:22px;font-size:12px;color:var(--muted)}
+
+/* FOOTER */
+footer{padding:60px 52px 36px;border-top:1px solid var(--border);background:var(--bg)}
+.ft-top{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:52px;margin-bottom:52px}
+.ft-brand .logo{font-size:18px;margin-bottom:16px;display:block}
+.ft-brand p{font-size:13px;color:var(--muted);line-height:1.7;font-weight:300;max-width:240px}
+.ft-col h5{font-size:11px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.ft-col a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;font-weight:300}
+.ft-col a:hover{color:var(--white)}
+.ft-bottom{border-top:1px solid var(--border);padding-top:28px;display:flex;justify-content:space-between;align-items:center}
+.ft-bottom p{font-size:12px;color:var(--muted)}
+.ft-links{display:flex;gap:24px}
+.ft-links a{font-size:12px;color:var(--muted);text-decoration:none}
+.ft-links a:hover{color:var(--white)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:0.1s}.rd2{transition-delay:0.2s}.rd3{transition-delay:0.3s}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .feat-grid,.pr-grid{grid-template-columns:repeat(2,1fr)}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .ag-layout,.cr-layout{grid-template-columns:1fr}
+  .hiw-steps{grid-template-columns:1fr}
+  .fc-l,.fc-r,.fc-b{display:none}
+  .plat-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .feat-grid,.pr-grid,.testi-grid{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr}
+  .dash-body{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none !important;animation:none !important}
+}
+::selection{background:#FF4D00;color:#fff}
+</style>
 </head>
 <body>
 
-<!-- ── Scroll Progress Bar ─────────────────────────────────────────────── -->
-<div id="scroll-progress"></div>
-
-<!-- ════════════════════════════════════════════════════════════
-     NAVIGATION
-════════════════════════════════════════════════════════════ -->
-<nav class="nav-blur fixed top-0 left-0 right-0 z-50" id="navbar">
-  <div class="max-w-7xl mx-auto px-5 md:px-8 h-[68px] flex items-center justify-between">
-    <a href="/" class="flex items-center gap-3 group" aria-label="AdNova AI Home">
-      <div class="relative">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 via-purple-600 to-pink-600 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-          <i class="fas fa-bolt text-white text-sm"></i>
-        </div>
-        <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-brand-500 to-pink-600 opacity-0 group-hover:opacity-50 blur-lg transition-opacity duration-300"></div>
-      </div>
-      <span class="font-black text-white text-[18px] tracking-tight">AdNova <span class="glow-text">AI</span></span>
-    </a>
-
-    <div class="hidden md:flex items-center gap-5">
-      <a href="#use-cases" class="nav-link text-sm font-medium">${L.nav_usecases}</a>
-      <a href="#features" class="nav-link text-sm font-medium">${L.nav_features}</a>
-      <a href="#demo" class="nav-link text-sm font-medium">${L.nav_demo}</a>
-      <a href="#pricing" class="nav-link text-sm font-medium">${L.nav_pricing}</a>
-      <a href="#case-studies" class="nav-link text-sm font-medium">${L.nav_results}</a>
-    </div>
-
-    <div class="hidden md:flex items-center gap-3">
-      <!-- Lang selector -->
-      <select onchange="document.cookie='adnova_lang='+this.value+';path=/;max-age=31536000';location.reload()" class="text-xs bg-transparent text-slate-400 border border-white/10 rounded-lg px-2 py-1.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-500 hover:border-white/20 transition-colors" aria-label="Language">
-        <option value="en" ${lang==='en'?'selected':''}>🇺🇸 EN</option>
-        <option value="fr" ${lang==='fr'?'selected':''}>🇫🇷 FR</option>
-        <option value="es" ${lang==='es'?'selected':''}>🇪🇸 ES</option>
-        <option value="de" ${lang==='de'?'selected':''}>🇩🇪 DE</option>
-        <option value="pt" ${lang==='pt'?'selected':''}>🇧🇷 PT</option>
-        <option value="ar" ${lang==='ar'?'selected':''}>🇸🇦 AR</option>
-      </select>
-      <a href="/login" class="btn-ghost text-sm text-slate-300 font-medium px-4 py-2 rounded-xl" onclick="trackEvent('nav_signin')">${L.nav_signin}</a>
-      <a href="/register" class="btn-primary text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 ripple-btn" onclick="trackEvent('nav_trial_cta')">
-        <i class="fas fa-rocket text-xs"></i> ${L.nav_trial}
-      </a>
-    </div>
-
-    <button onclick="toggleMobileNav()" class="md:hidden glass rounded-xl w-10 h-10 flex items-center justify-center transition-all hover:bg-white/10" aria-label="Menu">
-      <i class="fas fa-bars text-slate-300 text-sm" id="mobile-icon"></i>
-    </button>
+<nav id="mainNav">
+  <a href="/" class="logo">AdNova<span>.</span></a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#hiw">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="/customers">Customers</a>
   </div>
-
-  <div id="mobile-nav" class="md:hidden border-t border-white/5 bg-black/85 backdrop-blur-2xl">
-    <div class="px-5 py-4 space-y-1">
-      <a href="#use-cases" onclick="toggleMobileNav()" class="block text-sm text-slate-400 py-2.5 px-4 rounded-xl hover:bg-white/5 transition-all">Use Cases</a>
-      <a href="#features" onclick="toggleMobileNav()" class="block text-sm text-slate-400 py-2.5 px-4 rounded-xl hover:bg-white/5 transition-all">Features</a>
-      <a href="#demo" onclick="toggleMobileNav()" class="block text-sm text-slate-400 py-2.5 px-4 rounded-xl hover:bg-white/5 transition-all">Demo</a>
-      <a href="#pricing" onclick="toggleMobileNav()" class="block text-sm text-slate-400 py-2.5 px-4 rounded-xl hover:bg-white/5 transition-all">Pricing</a>
-      <div class="pt-3 flex flex-col gap-2 border-t border-white/5 mt-2">
-        <a href="/login" class="btn-ghost text-sm text-center text-slate-300 font-medium px-4 py-2.5 rounded-xl">Sign In</a>
-        <a href="/register" class="btn-primary text-white text-sm font-bold px-4 py-3 rounded-xl text-center flex items-center justify-center gap-2">
-          <i class="fas fa-rocket text-xs"></i> Start Free Trial
-        </a>
-      </div>
-    </div>
+  <div class="nav-right">
+    <a href="/login" class="btn-ghost">Sign in</a>
+    <a href="/register" class="btn-nav">Start free →</a>
   </div>
 </nav>
 
-<!-- ════════════════════════════════════════════════════════════
-     HERO — 2-column layout (image 2 design)
-════════════════════════════════════════════════════════════ -->
-<section class="grid-lines flex items-center relative overflow-hidden pt-[68px]" id="hero">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <div class="orb orb-4"></div>
-  <!-- Extra orb behind right column -->
-  <div class="orb" style="width:650px;height:650px;background:radial-gradient(circle,rgba(99,102,241,0.18) 0%,rgba(168,85,247,0.1) 40%,transparent 70%);top:10%;right:-100px;filter:blur(90px);animation:orb-float 12s ease-in-out infinite 2s"></div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><div class="badge-dot"></div>Autonomous Adtech · Built on Claude</div>
+    <h1>
+      <span class="line-white">Your acquisition lead,</span>
+      <span class="line-serif">in an API.</span>
+    </h1>
+    <p class="hero-sub">AdNova ne vous montre pas vos campagnes — il les <strong>gère</strong>. Scaling auto sur les gagnants, créatifs killed avant qu'ils brûlent du budget, audiences expandées au bon moment. <strong>Vous validez. Le reste tourne.</strong></p>
+    <div class="hero-actions">
+      <a href="/register" class="btn-hero">Démarrer l'essai →</a>
+      <button type="button" onclick="openHeroVideo()" class="btn-hero-ghost"><span class="play-tri"></span>&nbsp; Voir l'IA en action <span class="play-dur">60 s</span></button>
+    </div>
+    <p class="hero-trust">14 jours gratuits · Sans carte bancaire · Annulable à tout moment</p>
+    <p class="hero-vs"><a href="/vs-smartly">Smartly facture $10K/m. AdNova : $799. <span class="hero-vs-arr">→</span></a></p>
 
-  <div class="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/20 to-transparent scanline pointer-events-none"></div>
-
-  <div class="max-w-7xl mx-auto px-5 md:px-10 py-3 md:py-5 relative z-10 w-full">
-
-    <!-- ─ 2-column grid ─ -->
-    <div class="grid grid-cols-1 lg:grid-cols-[44%_56%] gap-5 xl:gap-5 items-center">
-
-      <!-- ══ LEFT COLUMN — marketing copy ══ -->
-      <div class="flex flex-col items-start fade-up">
-
-        <!-- Status badge -->
-        <div class="inline-flex items-center gap-3 glass-neo px-5 py-2.5 rounded-full mb-7 cursor-default border-glow" id="hero-badge">
-          <div class="relative flex-shrink-0">
-            <div class="ai-dot blink"></div>
-            <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
+    <!-- Dashboard preview -->
+    <div class="dash-preview">
+      <div class="dash-glow"></div>
+      <div class="float-card fc-l">
+        <div class="fc-t">Spend today</div>
+        <div class="fc-v">$12,840</div>
+        <div class="fc-s">↑ +18% vs yesterday</div>
+      </div>
+      <div class="float-card fc-r">
+        <div class="live-badge"><div class="ld"></div>Live</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Active campaigns</div>
+        <div class="fc-v" style="font-size:28px">47</div>
+      </div>
+      <div class="float-card fc-b">
+        <div class="fc-t">Avg ROAS</div>
+        <div class="fc-v">4.82×</div>
+        <div class="fc-s">↑ +0.3 this week</div>
+      </div>
+      <div class="dash-frame">
+        <div class="dash-titlebar">
+          <div class="d-dots"><div class="d-dot d1"></div><div class="d-dot d2"></div><div class="d-dot d3"></div></div>
+          <div class="d-url">app.adnova.ai/dashboard</div>
+          <div style="width:56px"></div>
+        </div>
+        <div class="dash-body">
+          <div class="dash-kpi"><div class="kpi-l">Total Spend</div><div class="kpi-v">$284K</div><div class="kpi-c up">↑ +23.4% this month</div></div>
+          <div class="dash-kpi"><div class="kpi-l">Revenue</div><div class="kpi-v">$1.37M</div><div class="kpi-c up">↑ +31.2% vs last</div></div>
+          <div class="dash-kpi"><div class="kpi-l">Avg ROAS</div><div class="kpi-v">4.82×</div><div class="kpi-c up">↑ +0.6 vs target</div></div>
+          <div class="dash-kpi"><div class="kpi-l">CPA</div><div class="kpi-v">$18.40</div><div class="kpi-c dn">↓ −12% (good)</div></div>
+        </div>
+        <div class="dash-chart">
+          <div class="ch-head">
+            <div class="ch-title">Revenue vs Spend — Last 7 days</div>
+            <div class="ch-leg">
+              <span class="leg"><span class="leg-dot" style="background:var(--orange)"></span>Revenue</span>
+              <span class="leg"><span class="leg-dot" style="background:rgba(0,212,255,0.6)"></span>Spend</span>
+            </div>
           </div>
-          <span class="text-xs font-bold text-slate-300 tracking-wide">${L.hero_tag}</span>
-          <span class="text-xs bg-gradient-to-r from-brand-500/30 to-purple-500/30 text-brand-300 px-2.5 py-1 rounded-full font-black border border-brand-500/25 flex-shrink-0">94.2% acc.</span>
-        </div>
-
-        <!-- Headline — left aligned, large -->
-        <h1 class="font-black leading-[1.05] tracking-tight mb-4 text-left" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,42px)">
-          <span class="text-white">${L.hero_h1a} </span><span class="hero-text">${L.hero_h1b}</span>
-        </h1>
-
-        <!-- Sub headline -->
-        <p class="text-xs sm:text-sm text-slate-400 mb-6 leading-relaxed text-left" style="font-weight:300;max-width:420px">
-          ${L.hero_sub}
-        </p>
-
-        <!-- Proof point chips — horizontal row -->
-        <div class="flex flex-wrap items-center gap-2 mb-7">
-          <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3.5 py-2 rounded-full">
-            <i class="fas fa-check-circle text-emerald-400 text-xs"></i> ROAS boost: <strong class="text-white ml-1">+128%</strong>
-          </span>
-          <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3.5 py-2 rounded-full">
-            <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Time saved: <strong class="text-white ml-1">18h/week</strong>
-          </span>
-          <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3.5 py-2 rounded-full">
-            <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Waste: <strong class="text-white ml-1">-73%</strong>
-          </span>
-        </div>
-
-        <!-- CTA buttons — same line always -->
-        <div class="flex flex-row items-center gap-3 mb-8 flex-wrap">
-          <a href="/register" class="btn-primary text-white font-black px-6 rounded-xl text-sm flex items-center gap-2 group relative overflow-hidden ripple-btn" style="padding-top:12px;padding-bottom:12px" onclick="trackEvent('hero_cta_primary')">
-            <i class="fas fa-rocket text-sm group-hover:rotate-12 transition-transform"></i>
-            ${L.cta_primary}
-          </a>
-          <a href="#demo" class="btn-ghost text-slate-300 font-semibold px-5 py-3 rounded-xl text-sm flex items-center gap-2 group" onclick="trackEvent('hero_cta_demo')">
-            <div class="w-7 h-7 rounded-lg flex items-center justify-center group-hover:bg-brand-500/35 transition-colors" style="background:rgba(99,102,241,0.18)">
-              <i class="fas fa-play text-brand-400 text-xs ml-0.5"></i>
-            </div>
-            ${L.cta_demo}
-          </a>
-        </div>
-
-        <!-- Trust micro-line -->
-        <div class="flex items-center gap-4 text-xs text-slate-600 flex-wrap">
-          <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-emerald-600"></i> No credit card</span>
-          <span class="flex items-center gap-1.5"><i class="fas fa-rotate-left text-slate-600"></i> Cancel anytime</span>
-          <span class="flex items-center gap-1.5"><i class="fas fa-lock text-slate-600"></i> SOC2 · GDPR</span>
-        </div>
-
-        <!-- Scroll indicator — desktop only -->
-        <div class="hidden lg:flex mt-10 scroll-indicator flex-col items-start gap-2 opacity-30">
-          <div class="flex items-center gap-3">
-            <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center pt-1.5">
-              <div class="w-1 h-2 rounded-full bg-brand-400/60" style="animation:float 1.8s ease-in-out infinite"></div>
-            </div>
-            <span class="text-xs text-slate-600 tracking-wider uppercase">Scroll to explore</span>
+          <div class="bars">
+            <div class="bg"><div class="b ba" style="height:52%"></div><div class="b bb" style="height:30%"></div></div>
+            <div class="bg"><div class="b ba" style="height:66%"></div><div class="b bb" style="height:38%"></div></div>
+            <div class="bg"><div class="b ba" style="height:48%"></div><div class="b bb" style="height:27%"></div></div>
+            <div class="bg"><div class="b ba" style="height:84%"></div><div class="b bb" style="height:46%"></div></div>
+            <div class="bg"><div class="b ba" style="height:72%"></div><div class="b bb" style="height:41%"></div></div>
+            <div class="bg"><div class="b ba" style="height:92%"></div><div class="b bb" style="height:52%"></div></div>
+            <div class="bg"><div class="b ba" style="height:86%"></div><div class="b bb" style="height:47%"></div></div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- ══ RIGHT COLUMN — live stats bar + dashboard mock ══ -->
-      <div class="flex flex-col gap-3 fade-up" style="transition-delay:.15s">
-
-        <!-- Live stats pill — floats above the dashboard -->
-        <div class="glass-neo flex items-center gap-0 rounded-2xl py-2.5 px-4 overflow-hidden self-stretch" id="hero-live-bar">
-          <div class="flex items-center gap-2 flex-shrink-0 mr-4 border-r border-white/10 pr-4">
-            <div class="relative">
-              <div class="ai-dot blink"></div>
-              <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-40"></div>
-            </div>
-            <span class="text-xs font-black text-emerald-400 tracking-widest">LIVE</span>
-          </div>
-          <div class="flex items-center gap-x-4 gap-y-1.5 text-xs flex-wrap">
-            <div class="flex items-center gap-1.5">
-              <i class="fas fa-brain text-brand-400 text-xs"></i>
-              <span class="font-black text-slate-200" id="live-decisions">12,847</span>
-              <span class="text-slate-500">AI decisions today</span>
-            </div>
-            <span class="text-white/10 hidden sm:block">|</span>
-            <div class="hidden sm:flex items-center gap-1.5">
-              <i class="fas fa-chart-line text-purple-400 text-xs"></i>
-              <span class="font-black text-purple-400">4.82x</span>
-              <span class="text-slate-500">avg ROAS</span>
-            </div>
-            <span class="text-white/10 hidden md:block">|</span>
-            <div class="hidden md:flex items-center gap-1.5">
-              <i class="fas fa-dollar-sign text-emerald-400 text-xs"></i>
-              <span class="font-black text-emerald-400">$601K</span>
-              <span class="text-slate-500">revenue today</span>
-            </div>
-            <span class="text-white/10 hidden lg:block">|</span>
-            <div class="hidden lg:flex items-center gap-1.5">
-              <i class="fas fa-users text-cyan-400 text-xs"></i>
-              <span class="font-black text-cyan-400">2,412</span>
-              <span class="text-slate-500">active brands</span>
-            </div>
-          </div>
+  <!-- LIVE DECISIONS FEED — the AI acting in real time -->
+  <div class="decisions-rail" id="decisions">
+    <div class="decisions-head">
+      <div class="decisions-title"><span class="live-dot"></span>Décisions IA · live</div>
+      <span class="decisions-cta">Échantillon en direct sur 2 412 marques</span>
+    </div>
+    <ul class="decisions-feed" id="decisions-feed">
+      <li class="dec-scale">
+        <div class="dec-icon">↗</div>
+        <div class="dec-body">
+          <span class="dec-action">Scale +12%</span>
+          <div class="dec-text">"Summer Hero" budget porté à $18,420 — ROAS 5.26×</div>
+          <div class="dec-meta">il y a 4 s · Meta · Acme Corp</div>
         </div>
-
-        <!-- Dashboard mock -->
-        <div class="demo-screen relative" id="hero-dashboard">
-          <div class="screen-shimmer"></div>
-
-          <!-- Browser chrome -->
-          <div class="px-4 py-2.5 flex items-center gap-3 border-b border-white/[0.06]" style="background:linear-gradient(180deg,rgba(4,8,24,0.92),rgba(4,8,22,0.85));backdrop-filter:blur(10px)">
-            <div class="flex gap-1.5">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-500/70 hover:bg-red-500 transition-colors cursor-pointer"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-amber-500/70 hover:bg-amber-500 transition-colors cursor-pointer"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 hover:bg-emerald-500 transition-colors cursor-pointer"></div>
-            </div>
-            <div class="flex-1 rounded-md h-5 flex items-center px-2.5 gap-1.5 max-w-[200px] mx-auto" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
-              <i class="fas fa-lock text-emerald-500/60 text-[10px]"></i>
-              <span class="text-[10px] text-slate-500">app.adnova.ai/dashboard</span>
-            </div>
-            <div class="flex items-center gap-1.5 ml-auto">
-              <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink"></div>
-              <span class="text-[10px] text-slate-600">Live</span>
-            </div>
-          </div>
-
-          <!-- Dashboard content -->
-          <div class="p-3 md:p-4" style="background:rgba(2,4,18,0.65)">
-            <!-- 4 KPI cards -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
-              ${heroKPI('$124,850', 'Ad Spend', '+18.4%', 'fa-dollar-sign', 'from-brand-500 to-purple-600', true)}
-              ${heroKPI('4.82x', 'Blended ROAS', '+0.6x', 'fa-chart-line', 'from-emerald-500 to-teal-600', true)}
-              ${heroKPI('47', 'Campaigns Active', '12 scaling ↑', 'fa-bullhorn', 'from-blue-500 to-cyan-600', false)}
-              ${heroKPI('8,294', 'Conversions', '+22.1%', 'fa-check-circle', 'from-amber-500 to-orange-600', true)}
-            </div>
-            <!-- Platform ROAS + AI Activity -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.018)">
-                <div class="text-xs font-semibold text-slate-500 mb-2 flex items-center gap-2">
-                  <i class="fas fa-plug text-brand-400 text-xs"></i> Platform ROAS
-                </div>
-                <div class="space-y-2">
-                  ${heroPlatformBar('Facebook', '#1877F2', 34, '$42.3K', '4.1x')}
-                  ${heroPlatformBar('Google', '#4285F4', 28, '$35.1K', '5.2x')}
-                  ${heroPlatformBar('TikTok', '#ff0050', 20, '$25.2K', '4.6x')}
-                  ${heroPlatformBar('Instagram', '#E1306C', 12, '$15.4K', '3.8x')}
-                </div>
-              </div>
-              <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.018)">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-xs font-semibold text-slate-500 flex items-center gap-2">
-                    <i class="fas fa-brain text-brand-400 text-xs"></i> AI Activity
-                  </span>
-                  <span class="text-[10px] px-1.5 py-0.5 rounded-full font-black flex items-center gap-1" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.2)">
-                    <span class="ai-dot blink" style="width:4px;height:4px"></span> LIVE
-                  </span>
-                </div>
-                <div class="space-y-1.5" id="hero-ai-feed">
-                  ${heroFeedItem('arrow-trend-up', '#10b981', '"Summer Collection" scaled +10% — ROAS 5.2x', '2m ago')}
-                  ${heroFeedItem('scissors', '#ef4444', 'Killed 2 TikTok creatives — CTR 0.3%', '8m ago')}
-                  ${heroFeedItem('wand-magic-sparkles', '#a855f7', 'Generated 4 UGC variants for "Product Launch"', '15m ago')}
-                  ${heroFeedItem('users', '#06b6d4', 'Expanded lookalike — +1.8M reach added', '31m ago')}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div><!-- /dashboard -->
-
-      </div><!-- /right column -->
-    </div><!-- /2-col grid -->
+      </li>
+      <li class="dec-kill">
+        <div class="dec-icon">✕</div>
+        <div class="dec-body">
+          <span class="dec-action">Kill</span>
+          <div class="dec-text">3 créas TikTok pausées — CTR 0.31% sous seuil 0.8%</div>
+          <div class="dec-meta">il y a 11 s · TikTok · Luxo Group</div>
+        </div>
+      </li>
+      <li class="dec-create">
+        <div class="dec-icon">✨</div>
+        <div class="dec-body">
+          <span class="dec-action">Génère</span>
+          <div class="dec-text">4 variantes vidéo UGC pour "Product Launch Q3"</div>
+          <div class="dec-meta">il y a 18 s · Multi · Digital Storm</div>
+        </div>
+      </li>
+    </ul>
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════════════════════
-     PLATFORM TICKER
-════════════════════════════════════════════════════════════ -->
-<div class="py-3 overflow-hidden relative" id="platforms" style="background:linear-gradient(180deg,rgba(3,5,18,0.85),rgba(4,7,22,0.9));border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(12px)">
-  <div class="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style="background:linear-gradient(90deg,rgba(2,5,16,0.95),transparent)"></div>
-  <div class="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style="background:linear-gradient(-90deg,rgba(2,5,16,0.95),transparent)"></div>
-  <div class="ticker-inner gap-4">
-    ${Array(2).fill(['Facebook Ads','Google Ads','Instagram Ads','TikTok Ads','LinkedIn Ads','YouTube Ads','Pinterest Ads','X (Twitter) Ads','Snapchat Ads']).flat().map(p => `
-    <div class="platform-chip group">
-      <div class="platform-logo ${getPlatformGrad(p)}"><i class="${getPlatformIcon(p)} text-white"></i></div>
-      <span class="text-sm font-semibold text-slate-400 group-hover:text-slate-200 transition-colors">${p}</span>
-    </div>`).join('')}
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Avg ROAS across clients&nbsp; <b>4.82×</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Active brands&nbsp; <b>2,412+</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Ad platforms&nbsp; <b>9</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;AI agents 24/7&nbsp; <b>∞</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Creatives generated&nbsp; <b>840K+</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Spend managed monthly&nbsp; <b>$48M+</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Hours saved per brand&nbsp; <b>38h/mo</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Avg ROAS across clients&nbsp; <b>4.82×</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Active brands&nbsp; <b>2,412+</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Ad platforms&nbsp; <b>9</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;AI agents 24/7&nbsp; <b>∞</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Creatives generated&nbsp; <b>840K+</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Spend managed monthly&nbsp; <b>$48M+</b></span>
+    <span class="ti"><span class="ti-sep">•</span>&nbsp;&nbsp;Hours saved per brand&nbsp; <b>38h/mo</b></span>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════════
-     STATS — REAL NUMBERS
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden">
-  <div class="absolute inset-0 grid-lines-fine opacity-50"></div>
-  <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-chart-bar text-brand-400"></i> Verified Platform Impact</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
-        Numbers that <span class="glow-text-2">don't lie</span>
-      </h2>
-      <p class="text-slate-500 text-sm max-w-xl mx-auto">Aggregated from 2,412 live brands — updated daily. <a href="#case-studies" class="text-brand-400 hover:text-brand-300 transition-colors">See individual case studies →</a></p>
+<!-- BEYOND ENTERPRISE LOCK-IN — vs Smartly.io -->
+<section class="beyond-sec reveal" id="beyond">
+  <div class="sec-head reveal">
+    <div class="sec-tag">Au-delà du contrat enterprise</div>
+    <h2>Smartly le fait.<br>AdNova le fait <em>aussi.</em> Au tiers du prix.</h2>
+    <p>Smartly.io est calibré pour Fortune 500 : $3-10K/mois, contrat annuel, 8 semaines d'onboarding. AdNova : même puissance d'exécution + créatifs gen, en self-serve, à $799/mois en mensuel.</p>
+  </div>
+
+  <div class="beyond-wrap reveal rd1">
+    <div class="beyond-table">
+      <div class="bt-row bt-head">
+        <div class="bt-feat">Capacité</div>
+        <div class="bt-stack">Smartly.io<div class="bt-sub">$3-10K/m · Contrat 12 mois</div></div>
+        <div class="bt-adnova">AdNova<div class="bt-sub">$799/m · Mensuel · self-serve</div></div>
+      </div>
+      ${beyondRow('Multi-canal (Meta, Google, TikTok, LinkedIn…)', true, true)}
+      ${beyondRow('Automation média-buying', true, true, 'Rules-based', 'Claude reasoning')}
+      ${beyondRow('Génération créatifs (DCO)', true, true, 'Templates + DCO', 'SDXL · Runway · HeyGen')}
+      ${beyondRow('Attribution multi-touch · CAPI', true, true, 'Via partenaires', 'Natif inclus')}
+      ${beyondRow('AI chat conversationnel (raisonnement)', false, true, '—', 'Built on Claude')}
+      ${beyondRow('Decision log + Replay (audit IA)', false, true, '—', 'Chaque action tracée · rollback 1-clic')}
+      ${beyondRow('Pricing transparent affiché', false, true, '— Sales-led only', '$299 / $799 / Enterprise')}
+      ${beyondRow('Setup time', false, true, '4-8 semaines', '24-72h')}
+      ${beyondRow('Mensuel sans engagement', false, true, '— Annuel 12 mois', 'Annulable à tout moment')}
+      ${beyondRow('14 jours d\'essai sans CB', false, true, '— Demo + RFP', 'Sign-up direct')}
+      ${beyondRow('Plan pour < $1M ARR', false, true, '— Trop cher', 'Starter $299/m')}
+      ${beyondRow('Hébergement EU · GDPR-native', false, true, '— Infra mixte US/EU', 'Cloudflare Paris/Francfort')}
+      ${beyondRow('Programme partenaire 20% à vie', false, true, '—', 'Sans plafond')}
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-      ${bigStat('$2.1B+', 'Ad Spend Managed', 'fa-dollar-sign', 'from-brand-500 to-purple-600', 'Every dollar tracked & optimized in real-time')}
-      ${bigStat('47K+', 'Active Campaigns', 'fa-bullhorn', 'from-purple-500 to-pink-600', 'Across 9 major ad platforms simultaneously')}
-      ${bigStat('4.82x', 'Average ROAS', 'fa-chart-line', 'from-emerald-500 to-teal-600', 'vs 2.1x industry average — verified by third-party audit')}
-      ${bigStat('2,412', 'Brands Worldwide', 'fa-globe', 'from-cyan-500 to-blue-600', 'Agencies, e-commerce & enterprise clients')}
-    </div>
-    <div class="mt-8 glass-neo rounded-2xl p-5 grid grid-cols-2 md:grid-cols-4 gap-5 fade-up">
-      ${miniMetric('94.2%', 'AI Prediction Accuracy', 'fa-bullseye', '#6366f1')}
-      ${miniMetric('72h', 'Performance Forecasting', 'fa-clock', '#a855f7')}
-      ${miniMetric('0.3%', 'Avg Wasted Spend', 'fa-trash', '#10b981')}
-      ${miniMetric('18 min', 'Median Setup Time', 'fa-rocket', '#f97316')}
+
+    <div class="beyond-foot">
+      <div class="beyond-quote">
+        <div class="bq-mark">"</div>
+        <p>On payait $7,500/mois à Smartly + agence. Migration AdNova en 6 jours, économies de €4,200/mois, et ROAS +34% en 6 mois. Le mode Autonomous bat les règles Smartly à plate couture.</p>
+        <div class="bq-att">— Camille R., Head of Acquisition · DTC mode FR (€400K MRR)</div>
+      </div>
+      <a href="/vs-smartly" class="beyond-cta">Voir le comparatif détaillé vs Smartly <span>→</span></a>
     </div>
   </div>
 </section>
 
-<div class="neon-line mx-auto max-w-4xl"></div>
+<!-- STATS -->
+<div class="stats-sec reveal">
+  <div class="stats-grid">
+    <div class="stat-block"><div class="stat-num"><span class="hi" data-count="4.82" data-dec="2">4.82</span>×</div><div class="stat-lbl">Average ROAS across all clients</div></div>
+    <div class="stat-block"><div class="stat-num"><span class="hi" data-count="2412" data-format="comma">2,412</span></div><div class="stat-lbl">Active brands on the platform</div></div>
+    <div class="stat-block"><div class="stat-num"><span class="hi" data-count="9">9</span></div><div class="stat-lbl">Ad platforms, one dashboard</div></div>
+    <div class="stat-block"><div class="stat-num">24<span class="hi">/7</span></div><div class="stat-lbl">AI agents never stop optimizing</div></div>
+  </div>
+</div>
 
-<!-- ════════════════════════════════════════════════════════════
-     USE CASES — CONCRETS avec démos
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative" id="use-cases">
-  <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-lightbulb text-brand-400"></i> Real Use Cases</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
-        See exactly what <span class="glow-text">AdNova does</span>
-      </h2>
-      <p class="text-slate-500 text-sm max-w-2xl mx-auto">Not "AI magic" — concrete actions your campaigns get, every day.</p>
+<!-- FEATURES -->
+<section class="feat-sec" id="features">
+  <div class="sec-head reveal">
+    <div class="sec-tag">Capabilities</div>
+    <h2>Everything your ad ops team<br>does, on <em>autopilot.</em></h2>
+    <p>No more 11pm Excel exports. AdNova ships the work you used to do — plus the work you didn't have time for.</p>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card reveal">
+      <div class="feat-icon">🌐</div>
+      <h3>Multi-platform sync</h3>
+      <p>One dashboard for Meta, Google, TikTok, LinkedIn, Snapchat and X. Real-time metrics, unified naming, no spreadsheets.</p>
+      <a href="#hiw" class="feat-lnk">Learn more →</a>
     </div>
-
-    <!-- Use case tabs -->
-    <div class="flex flex-wrap items-center justify-center gap-2 mb-8 fade-up" id="uc-tabs">
-      <button onclick="setUCTab('scale')" class="uc-tab active-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all" data-tab="scale">
-        <i class="fas fa-arrow-trend-up mr-2"></i>Auto-Scaling
-      </button>
-      <button onclick="setUCTab('kill')" class="uc-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all" data-tab="kill">
-        <i class="fas fa-scissors mr-2"></i>Creative Killer
-      </button>
-      <button onclick="setUCTab('generate')" class="uc-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all" data-tab="generate">
-        <i class="fas fa-wand-magic-sparkles mr-2"></i>AI Creative Gen
-      </button>
-      <button onclick="setUCTab('audience')" class="uc-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all" data-tab="audience">
-        <i class="fas fa-users mr-2"></i>Audience Intel
-      </button>
+    <div class="feat-card reveal rd1">
+      <div class="feat-icon">🎨</div>
+      <h3>AI creative generation</h3>
+      <p>Images via SDXL, videos via Runway, UGC avatars via HeyGen. From brief to ad in minutes, on-brand, on budget.</p>
+      <a href="#creatives" class="feat-lnk">Learn more →</a>
     </div>
+    <div class="feat-card reveal rd2">
+      <div class="feat-icon">⚡</div>
+      <h3>Autonomous optimization</h3>
+      <p>Agents bid, pause, scale and rebalance budget 24/7. You set the rules — Claude makes the call, logs every action.</p>
+      <a href="#agents" class="feat-lnk">Learn more →</a>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon">📊</div>
+      <h3>Reports that write themselves</h3>
+      <p>Weekly performance summaries, anomaly alerts, executive-ready PDFs — drafted by Claude, signed by you.</p>
+      <a href="#features" class="feat-lnk">Learn more →</a>
+    </div>
+    <div class="feat-card reveal rd1">
+      <div class="feat-icon">🎯</div>
+      <h3>Audience intelligence</h3>
+      <p>AI-powered lookalike builder, interest clustering, and predictive lifetime value scoring baked into every campaign.</p>
+      <a href="#features" class="feat-lnk">Learn more →</a>
+    </div>
+    <div class="feat-card reveal rd2">
+      <div class="feat-icon">🔌</div>
+      <h3>One-click integrations</h3>
+      <p>Connect Shopify, WooCommerce, Stripe and your CRM in 30 seconds. Revenue data flows back into ad decisions.</p>
+      <a href="#platforms" class="feat-lnk">Learn more →</a>
+    </div>
+  </div>
+</section>
 
-    <!-- Use case panels -->
-    <div id="uc-scale" class="uc-panel fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
-        <div>
-          <div class="section-label mb-4 w-fit" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#6ee7b7"><i class="fas fa-arrow-trend-up"></i> Auto-Scaling Engine</div>
-          <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Scales winners before you even wake up</h3>
-          <p class="text-slate-400 leading-relaxed mb-5">Every 15 minutes, the AI checks each campaign. When ROAS &gt; 3.5× AND spend &gt; $1K/day AND CTR &gt; 2%, it increases budget +10%. This compounds — a $500/day campaign becomes $1,345/day in 10 days if performance holds.</p>
-          <div class="space-y-3 mb-6">
-            ${ucProof('Real trigger', 'ROAS ≥ 3.5× + CTR ≥ 2% + daily spend ≥ $1K', 'emerald')}
-            ${ucProof('Scale amount', '+10% every 72h (configurable: 5%–25%)', 'emerald')}
-            ${ucProof('Safety rails', 'Never exceeds your daily budget cap', 'emerald')}
-            ${ucProof('Avg result', 'Clients see +43% revenue in first 30 days', 'emerald')}
+<!-- HOW IT WORKS -->
+<section class="hiw-sec" id="hiw">
+  <div class="hiw-inner">
+    <div class="sec-head reveal">
+      <div class="sec-tag">How it works</div>
+      <h2>Three steps.<br><em>Then it runs itself.</em></h2>
+      <p>Most ad platforms make you do the work. AdNova learns your business and takes over.</p>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step reveal">
+        <div class="step-bg-num">01</div>
+        <div class="step-icon">🔌</div>
+        <div class="step-lbl">Step 01</div>
+        <h3>Connect</h3>
+        <p>OAuth into your ad accounts in 30 seconds. We pull historical performance, audiences and creative libraries across every platform instantly.</p>
+      </div>
+      <div class="hiw-step reveal rd1">
+        <div class="step-bg-num">02</div>
+        <div class="step-icon">🧠</div>
+        <div class="step-lbl">Step 02</div>
+        <h3>Train</h3>
+        <p>AdNova learns your brand voice, winning creatives and ROAS targets from the first 48 hours of data. No manual configuration needed.</p>
+      </div>
+      <div class="hiw-step reveal rd2">
+        <div class="step-bg-num">03</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-lbl">Step 03</div>
+        <h3>Scale</h3>
+        <p>Agents take over optimization, generate new creatives and report back. You focus on strategy — AdNova handles execution 24/7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="plat-sec" id="platforms">
+  <div class="sec-head reveal">
+    <div class="sec-tag">Integrations</div>
+    <h2>Every platform.<br><em>One place.</em></h2>
+    <p>Connect your entire ad stack and see everything in a single, unified view in seconds.</p>
+  </div>
+  <div class="plat-grid">
+    <div class="plat-card reveal">
+      <div class="plat-logo" style="background:rgba(24,119,242,0.15)">
+        <svg viewBox="0 0 24 24" fill="#A8A8A8" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12S0 5.446 0 12.073c0 5.99 4.388 10.954 10.125 11.854V15.564H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </div>
+      <div class="plat-name">Meta Ads</div>
+      <div class="plat-sub">Facebook · Instagram</div>
+      <div class="plat-ok">✓ Connected</div>
+    </div>
+    <div class="plat-card reveal rd1">
+      <div class="plat-logo" style="background:rgba(255,255,255,0.04)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#A8A8A8" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC04" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      </div>
+      <div class="plat-name">Google Ads</div>
+      <div class="plat-sub">Search · Display · YT</div>
+      <div class="plat-ok">✓ Connected</div>
+    </div>
+    <div class="plat-card reveal rd2">
+      <div class="plat-logo" style="background:rgba(255,255,255,0.04)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg>
+      </div>
+      <div class="plat-name">TikTok Ads</div>
+      <div class="plat-sub">Feed · TopView · Spark</div>
+      <div class="plat-ok">✓ Connected</div>
+    </div>
+    <div class="plat-card reveal">
+      <div class="plat-logo" style="background:rgba(10,102,194,0.15)">
+        <svg viewBox="0 0 24 24" fill="#A8A8A8" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </div>
+      <div class="plat-name">LinkedIn</div>
+      <div class="plat-sub">Sponsored · Message</div>
+      <div class="plat-ok">✓ Connected</div>
+    </div>
+    <div class="plat-card reveal rd1">
+      <div class="plat-logo" style="background:#A8A8A8">
+        <svg viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg"><path d="M12.166.001c-.171.001-1.504.026-2.842.86-1.486.928-2.07 2.402-2.13 2.555-.001.001-.073.156-.115.318C7.04 4 7 4.34 7 4.62v.039c0 .43.027.872.039 1.302.012.388.04.792.014 1.18-.03.418-.105.674-.18.93-.094.275-.207.563-.358.836a2.34 2.34 0 0 1-.395.504c-.225.243-.6.456-1.078.616-.474.16-1.066.246-1.747.355-.466.075-.85.18-1.158.367-.302.184-.534.443-.534.823 0 .395.265.71.585.892.32.183.74.31 1.213.418.474.108 1.018.205 1.547.41.527.205 1.04.516 1.476.96.345.353.514.685.661 1.013.13.293.255.604.475.835.245.257.566.343.917.343.346 0 .755-.082 1.302-.082.402 0 .833.058 1.397.358.563.3.881.677 1.193.964.31.286.654.502 1.225.502.583 0 .921-.217 1.231-.502.312-.287.63-.665 1.193-.964.564-.3.995-.358 1.397-.358.547 0 .956.082 1.302.082.351 0 .672-.086.917-.343.22-.231.345-.542.475-.835.147-.328.316-.66.661-1.013.436-.444.949-.755 1.476-.96.529-.205 1.073-.302 1.547-.41.473-.108.893-.235 1.213-.418.32-.182.585-.497.585-.892 0-.38-.232-.639-.534-.823-.308-.187-.692-.292-1.158-.367-.681-.109-1.273-.195-1.747-.355-.478-.16-.853-.373-1.078-.616a2.34 2.34 0 0 1-.395-.504c-.151-.273-.264-.561-.358-.836-.075-.256-.15-.512-.18-.93-.026-.388.002-.792.014-1.18.012-.43.039-.872.039-1.302v-.039c0-.28-.04-.62-.079-.886a3.36 3.36 0 0 0-.115-.318c-.06-.153-.644-1.627-2.13-2.555C13.504.027 12.171.002 12.001.001z"/></svg>
+      </div>
+      <div class="plat-name">Snapchat</div>
+      <div class="plat-sub">Stories · Commercials</div>
+      <div class="plat-ok">✓ Connected</div>
+    </div>
+    <div class="plat-card reveal rd2">
+      <div class="plat-logo" style="background:rgba(255,255,255,0.04)">
+        <svg viewBox="0 0 24 24" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <div class="plat-name">X Ads</div>
+      <div class="plat-sub">Promoted · Amplify</div>
+      <div class="plat-ok">✓ Connected</div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATIVES -->
+<section class="cr-sec" id="creatives">
+  <div class="cr-inner">
+    <div class="sec-head reveal">
+      <div class="sec-tag">AI Creatives</div>
+      <h2>Brief in.<br><em>Ads out.</em></h2>
+      <p>Generate images, videos and UGC avatars in minutes. No designer. No agency. No waiting.</p>
+    </div>
+    <div class="cr-layout">
+      <div class="reveal">
+        <div class="cr-frame">
+          <div class="cr-header">
+            <div class="cr-dots"><div class="cr-dot" style="background:#FF5F57"></div><div class="cr-dot" style="background:#FEBC2E"></div><div class="cr-dot" style="background:#28C840"></div></div>
+            <div class="cr-title-bar">Image Generator — AdNova AI</div>
           </div>
-          <a href="/register" class="btn-primary text-white font-bold px-7 py-3.5 rounded-xl inline-flex items-center gap-2 ripple-btn" onclick="trackEvent('uc_scale_cta')">
-            <i class="fas fa-play text-xs"></i> Try Auto-Scaling Free
-          </a>
-        </div>
-        <div class="glass-neo rounded-2xl p-5 fade-in">
-          <!-- Animated scaling timeline -->
-          <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <div class="ai-dot blink"></div> LIVE SIMULATION — "Summer Collection" Campaign
-          </div>
-          <div class="space-y-3" id="scale-sim">
-            ${scaleSimStep('Day 1', 'Budget: $500/day', 'ROAS: 4.1× · CTR: 2.8%', 'Threshold met — scaling initiated', 'emerald', 0)}
-            ${scaleSimStep('Day 4', 'Budget: $550/day (+10%)', 'ROAS: 4.3× · CTR: 3.1%', 'Still strong — scaling again', 'emerald', 1)}
-            ${scaleSimStep('Day 7', 'Budget: $605/day (+10%)', 'ROAS: 4.0× · CTR: 2.9%', 'Consistent — budget increased', 'emerald', 2)}
-            ${scaleSimStep('Day 10', 'Budget: $665/day (+10%)', 'ROAS: 3.8× · Monitoring...', 'Watching — 1 more check needed', 'amber', 3)}
-          </div>
-          <div class="mt-4 pt-4 border-t border-white/[0.06] flex items-center justify-between">
-            <span class="text-xs text-slate-500">10-day result:</span>
-            <div class="flex items-center gap-3">
-              <span class="text-xs text-slate-500 line-through">$500/day</span>
-              <i class="fas fa-arrow-right text-emerald-400 text-xs"></i>
-              <span class="text-base font-black text-emerald-400">$665/day</span>
-              <span class="text-xs text-emerald-500 px-2 py-1 rounded-lg" style="background:rgba(16,185,129,0.12)">+33% spend</span>
+          <div class="cr-body">
+            <div class="cr-prompt">
+              <div class="cr-pl">✨ Prompt</div>
+              <div class="cr-pt">Nike Air Max sneaker, clean white studio background, lifestyle shot, woman running, motion blur, premium feel, 4K quality, high contrast lighting</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="uc-kill" class="uc-panel hidden fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
-        <div>
-          <div class="section-label mb-4 w-fit" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5"><i class="fas fa-scissors"></i> Creative Killer</div>
-          <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Stops budget drain before you notice</h3>
-          <p class="text-slate-400 leading-relaxed mb-5">The AI monitors every creative's CTR in real-time. After 1,000 impressions, if CTR falls below 0.8%, it pauses the ad automatically — before you waste another dollar. Average client saves $15K/month.</p>
-          <div class="space-y-3 mb-6">
-            ${ucProof('Kill threshold', 'CTR &lt; 0.8% after 1,000 impressions', 'red')}
-            ${ucProof('Response time', 'Paused within 15 minutes of threshold breach', 'red')}
-            ${ucProof('What happens next', 'AI flags for review + generates replacement', 'red')}
-            ${ucProof('Avg saved', '$15,200/month per Growth client', 'red')}
-          </div>
-          <a href="/register" class="font-bold px-7 py-3.5 rounded-xl inline-flex items-center gap-2 ripple-btn" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5" onclick="trackEvent('uc_kill_cta')">
-            <i class="fas fa-scissors text-xs"></i> Activate Creative Killer
-          </a>
-        </div>
-        <div class="glass-neo rounded-2xl p-5 fade-in">
-          <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-red-400 blink"></div> REAL EXAMPLE — 24h campaign audit
-          </div>
-          <div class="space-y-2">
-            ${creativeKillRow('Hero-Video-V1.mp4', '0.2%', 12400, 'killed', '#ef4444')}
-            ${creativeKillRow('Static-Banner-A.jpg', '0.6%', 3200, 'killed', '#ef4444')}
-            ${creativeKillRow('UGC-Testimonial-3.mp4', '4.8%', 8900, 'scaling', '#10b981')}
-            ${creativeKillRow('Carousel-Products-B', '3.1%', 5600, 'active', '#6366f1')}
-            ${creativeKillRow('Story-Format-V2.mp4', '0.7%', 1100, 'killed', '#ef4444')}
-          </div>
-          <div class="mt-4 pt-4 border-t border-white/[0.06] grid grid-cols-3 gap-3 text-center">
-            <div><div class="text-xl font-black text-red-400">3</div><div class="text-xs text-slate-500">Killed today</div></div>
-            <div><div class="text-xl font-black text-emerald-400">$2.4K</div><div class="text-xs text-slate-500">Wasted spend stopped</div></div>
-            <div><div class="text-xl font-black text-brand-400">2</div><div class="text-xs text-slate-500">New replacements queued</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="uc-generate" class="uc-panel hidden fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
-        <div>
-          <div class="section-label mb-4 w-fit" style="background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.3);color:#d8b4fe"><i class="fas fa-wand-magic-sparkles"></i> AI Creative Generator</div>
-          <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Fresh creatives, zero effort</h3>
-          <p class="text-slate-400 leading-relaxed mb-5">When a creative is killed, the AI immediately generates replacements using your brand assets, winning copy patterns, and audience insights. Average generation time: 4 minutes. No designer needed.</p>
-          <div class="space-y-3 mb-6">
-            ${ucProof('Output types', 'Static images, carousels, UGC-style videos, Stories', 'purple')}
-            ${ucProof('Generation time', 'avg 4 minutes from kill to replacement live', 'purple')}
-            ${ucProof('A/B testing', 'Auto-launches 3 variants, kills 2, scales 1', 'purple')}
-            ${ucProof('CTR improvement', 'AI-generated creatives avg 34% higher CTR', 'purple')}
-          </div>
-          <a href="/register" class="font-bold px-7 py-3.5 rounded-xl inline-flex items-center gap-2 ripple-btn" style="background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:#d8b4fe" onclick="trackEvent('uc_generate_cta')">
-            <i class="fas fa-wand-magic-sparkles text-xs"></i> Generate Your First Creative
-          </a>
-        </div>
-        <div class="glass-neo rounded-2xl p-5 fade-in">
-          <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-purple-400 blink"></div> AI GENERATION LOG — last 2h
-          </div>
-          <div class="space-y-3">
-            ${genLogRow('UGC-Testimonial-4.mp4', 'Video 15s', '4 min', '5.1% CTR predicted', 'Live', '#a855f7')}
-            ${genLogRow('Summer-Hero-V4.jpg', 'Static 1080×1080', '2 min', '3.8% CTR predicted', 'Live', '#a855f7')}
-            ${genLogRow('Retarget-Carousel-C', 'Carousel ×5', '7 min', '2.9% CTR predicted', 'Testing', '#f97316')}
-            ${genLogRow('Story-Flash-Sale.mp4', 'Story 9:16', '3 min', '4.4% CTR predicted', 'Live', '#a855f7')}
-          </div>
-          <div class="mt-4 pt-4 border-t border-white/[0.06] flex items-center gap-4 text-xs text-slate-500">
-            <i class="fas fa-info-circle text-brand-400"></i>
-            All creatives trained on your brand kit, tone, and top-performing past ads
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="uc-audience" class="uc-panel hidden fade-up">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
-        <div>
-          <div class="section-label mb-4 w-fit" style="background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3);color:#67e8f9"><i class="fas fa-users"></i> Audience Intelligence</div>
-          <h3 class="font-black text-3xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">Finds your best customers before they find you</h3>
-          <p class="text-slate-400 leading-relaxed mb-5">The AI continuously monitors audience saturation. When a segment's CPM rises &gt;15%, it proactively builds a fresh lookalike from your top 1% converters and launches it — preventing performance cliffs.</p>
-          <div class="space-y-3 mb-6">
-            ${ucProof('Saturation detection', 'CPM rise > 15% triggers new audience build', 'cyan')}
-            ${ucProof('Lookalike quality', 'Built from top 1% converters — not all buyers', 'cyan')}
-            ${ucProof('Cross-platform', 'Syncs audiences across all 9 platforms', 'cyan')}
-            ${ucProof('Avg reach expansion', '+2.3M qualified impressions per month', 'cyan')}
-          </div>
-          <a href="/register" class="font-bold px-7 py-3.5 rounded-xl inline-flex items-center gap-2 ripple-btn" style="background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);color:#67e8f9" onclick="trackEvent('uc_audience_cta')">
-            <i class="fas fa-users text-xs"></i> Build Smarter Audiences
-          </a>
-        </div>
-        <div class="glass-neo rounded-2xl p-5 fade-in">
-          <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-cyan-400 blink"></div> AUDIENCE HEALTH — 7 active segments
-          </div>
-          <div class="space-y-3">
-            ${audienceHealthRow('Top Converters 1%', '1.2M', 92, '$4.20', 'healthy')}
-            ${audienceHealthRow('Retarget: Cart Abandon', '340K', 78, '$6.80', 'healthy')}
-            ${audienceHealthRow('Interest: Fashion', '4.5M', 41, '$18.40', 'saturated')}
-            ${audienceHealthRow('Lookalike 2% (new)', '2.1M', 85, '$5.10', 'new')}
-            ${audienceHealthRow('Website Visitors 14d', '890K', 66, '$9.30', 'warning')}
-          </div>
-          <div class="mt-4 pt-4 border-t border-white/[0.06]">
-            <div class="flex items-center gap-2 text-xs text-amber-400">
-              <i class="fas fa-triangle-exclamation"></i>
-              "Interest: Fashion" saturated — AI building 3% lookalike replacement now
+            <div class="cr-params">
+              <div class="cr-param">📐 4:5 Format</div>
+              <div class="cr-param">🎨 Photorealistic</div>
+              <div class="cr-param">✨ SDXL</div>
+              <div class="cr-param">4 variations</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     INTERACTIVE SIMULATOR — ROI CALCULATOR
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.75),rgba(3,5,18,0.85));backdrop-filter:blur(2px)" id="demo">
-  <div class="absolute inset-0 grid-lines opacity-40"></div>
-  <div class="absolute inset-0" style="background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(99,102,241,0.07),transparent)"></div>
-  <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-calculator text-brand-400"></i> ROI Simulator</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
-        Your numbers, <span class="glow-text">your results</span>
-      </h2>
-      <p class="text-slate-500 text-sm max-w-xl mx-auto">Enter your current ad spend and ROAS — see what AdNova AI would deliver in 30 days.</p>
-    </div>
-
-    <div class="glass-neo rounded-3xl p-6 md:p-8 fade-up" id="roi-calc">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-        <div>
-          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Monthly Ad Spend</label>
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
-            <input type="number" id="roi-spend" class="roi-input pl-8" value="10000" min="1000" max="10000000" oninput="calcROI()" />
-          </div>
-          <div class="flex gap-2 mt-2 flex-wrap">
-            ${roiPreset('$5K', 5000)}${roiPreset('$10K', 10000)}${roiPreset('$50K', 50000)}${roiPreset('$100K', 100000)}
-          </div>
-        </div>
-        <div>
-          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Current ROAS</label>
-          <div class="relative">
-            <input type="number" id="roi-roas" class="roi-input" value="2.5" min="0.5" max="20" step="0.1" oninput="calcROI()" />
-            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">×</span>
-          </div>
-          <div class="flex gap-2 mt-2 flex-wrap">
-            ${roiPreset('1.5×', null, 1.5, true)}${roiPreset('2.5×', null, 2.5, true)}${roiPreset('4×', null, 4, true)}
-          </div>
-        </div>
-        <div>
-          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Industry</label>
-          <select id="roi-industry" class="roi-input" onchange="calcROI()" style="cursor:pointer">
-            <option value="ecom">E-commerce</option>
-            <option value="saas">SaaS / Software</option>
-            <option value="agency">Agency / B2B</option>
-            <option value="finance">Finance / Insurance</option>
-            <option value="health">Health / Wellness</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Results -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" id="roi-results">
-        ${roiResultCard('roi-new-roas', 'Projected ROAS', '4.7×', 'fa-chart-line', '#6366f1', 'After 30 days with AdNova AI')}
-        ${roiResultCard('roi-extra-rev', 'Extra Revenue', '+$10,975', 'fa-dollar-sign', '#10b981', 'Monthly revenue gain')}
-        ${roiResultCard('roi-saved', 'Wasted Spend Saved', '$2,100', 'fa-piggy-bank', '#f97316', 'Recovered from bad creatives')}
-        ${roiResultCard('roi-roi', 'Platform ROI', '14.3×', 'fa-rocket', '#a855f7', 'Return on AdNova subscription')}
-      </div>
-
-      <!-- Methodology note -->
-      <div class="flex items-start gap-3 p-4 rounded-xl mb-6" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06)">
-        <i class="fas fa-info-circle text-brand-400 mt-0.5 flex-shrink-0"></i>
-        <p class="text-xs text-slate-500 leading-relaxed">Projections based on median improvement across 2,412 active clients. E-commerce median: +89% ROAS in 30 days. Individual results vary based on niche, competition, and starting ROAS. <a href="#case-studies" class="text-brand-400 hover:underline">See verified case studies →</a></p>
-      </div>
-
-      <div class="text-center">
-        <a href="/register" class="btn-primary text-white font-black px-10 py-4 rounded-2xl inline-flex items-center gap-3 ripple-btn" onclick="trackEvent('roi_calc_cta')">
-          <i class="fas fa-bolt"></i>
-          Get These Results — Start Free Trial
-          <i class="fas fa-arrow-right text-xs"></i>
-        </a>
-        <p class="text-xs text-slate-600 mt-3">14-day free trial · No credit card · Cancel anytime</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     FEATURES — AI MODULES
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative" id="features">
-  <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-brain text-brand-400"></i> AI-Powered Modules</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
-        6 AI engines, <span class="glow-text">zero manual work</span>
-      </h2>
-      <p class="text-slate-500 text-sm max-w-2xl mx-auto leading-relaxed">Each module runs independently, 24/7, making hundreds of micro-decisions that compound into massive performance gains.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      ${featureCard('fa-arrow-trend-up','from-brand-500 to-purple-600','rgba(99,102,241,0.45)','Performance Predictor','Forecasts campaign performance 72h ahead using ML trained on $2B+ ad data. Tells you which campaigns to scale before they peak — not after.','94.2% accuracy','#6366f1')}
-      ${featureCard('fa-wand-magic-sparkles','from-purple-500 to-pink-600','rgba(168,85,247,0.45)','Creative Generator','When a creative dies, the AI generates 3 replacements in under 4 minutes using your brand assets and winning copy patterns from past top performers.','4 min avg gen time','#a855f7')}
-      ${featureCard('fa-dollar-sign','from-emerald-500 to-teal-600','rgba(16,185,129,0.45)','Budget Optimizer','Auto-scales winners +10% every 72h. Reallocates budget from losers to winners in real-time. Never spends a dollar where it shouldn\'t.','$847K optimized today','#10b981')}
-      ${featureCard('fa-users','from-blue-500 to-cyan-600','rgba(59,130,246,0.45)','Audience Intelligence','Detects saturation 48h early, builds lookalike segments from top 1% converters, and expands reach before CPM spikes hit your budget.','2.3M reach avg boost','#3b82f6')}
-      ${featureCard('fa-skull','from-red-500 to-rose-600','rgba(239,68,68,0.45)','Creative Killer','Auto-pauses CTR &lt; 0.8% creatives after 1,000 impressions. Stops budget drain in 15 minutes — not 3 days when your team finally notices.','8,472 killed this month','#ef4444')}
-      ${featureCard('fa-pen-nib','from-amber-500 to-orange-600','rgba(245,158,11,0.45)','Copy Engine','Generates 50+ headline variants per campaign, A/B tests them silently, promotes the winner, and archives the losers with learnings for next time.','34% avg CTR lift','#f59e0b')}
-    </div>
-
-    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5 fade-up">
-      ${featureHighlight('fa-shield-halved', '#10b981', 'Enterprise Security', 'SOC2 Type II certified. GDPR & CCPA compliant. AES-256 encryption at rest, TLS 1.3 in transit.')}
-      ${featureHighlight('fa-code', '#6366f1', 'Full REST API', 'Integrate AdNova AI into your existing stack. Webhooks, custom triggers, and white-label options.')}
-      ${featureHighlight('fa-headset', '#f97316', '24/7 Expert Support', 'Dedicated AI advertising specialists, live chat and video onboarding — not a chatbot.')}
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     LIVE AI DEMO — animated walkthrough
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden" style="background:linear-gradient(180deg,rgba(4,7,22,0.75),rgba(3,5,18,0.8));backdrop-filter:blur(2px)">
-  <div class="absolute inset-0 grid-lines opacity-30"></div>
-  <div class="max-w-5xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-play text-brand-400"></i> 90-Second Walkthrough</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-3" style="font-family:'Space Grotesk',sans-serif">
-        Watch AdNova work <span class="glow-text-2">live</span>
-      </h2>
-      <p class="text-slate-500">Click play to see the full autonomous loop in action</p>
-    </div>
-
-    <!-- Video embed placeholder — styled as a real player -->
-    <div class="video-wrapper fade-up mb-8" style="aspect-ratio:16/9;max-height:520px" id="demo-player">
-      <!-- Animated "fake" dashboard walkthrough using CSS animations -->
-      <div style="width:100%;height:100%;background:linear-gradient(160deg,#0a0f1e,#121c32);display:flex;flex-direction:column;overflow:hidden;position:relative">
-        <!-- Screen content: demo walkthrough frames -->
-        <div class="px-5 py-3 flex items-center gap-3 border-b" style="background:rgba(4,8,22,0.9);border-color:rgba(255,255,255,0.06)">
-          <div class="flex gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div><div class="w-2.5 h-2.5 rounded-full bg-amber-500/60"></div><div class="w-2.5 h-2.5 rounded-full bg-emerald-500/60"></div></div>
-          <div class="flex-1 h-5 rounded-md flex items-center px-3 text-xs text-slate-600 max-w-xs mx-auto" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.05)">
-            <i class="fas fa-lock text-emerald-500/60 mr-2 text-xs"></i>app.adnova.ai/campaigns
-          </div>
-        </div>
-        <div class="flex-1 p-4 relative" style="background:rgba(2,4,18,0.7)">
-          <div class="grid grid-cols-3 gap-3 mb-4">
-            <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.02)">
-              <div class="text-xs text-slate-500 mb-1">ROAS Today</div>
-              <div class="text-2xl font-black text-white" id="demo-roas-val">4.82<span class="text-base text-emerald-400">×</span></div>
-              <div class="text-xs text-emerald-400 mt-1">↑ +0.6× vs yesterday</div>
-            </div>
-            <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.02)">
-              <div class="text-xs text-slate-500 mb-1">Active Campaigns</div>
-              <div class="text-2xl font-black text-white" id="demo-camp-val">47</div>
-              <div class="text-xs text-brand-400 mt-1">12 auto-scaling now</div>
-            </div>
-            <div class="rounded-xl p-3 border border-white/[0.05]" style="background:rgba(255,255,255,0.02)">
-              <div class="text-xs text-slate-500 mb-1">AI Decisions / hr</div>
-              <div class="text-2xl font-black text-white">487K</div>
-              <div class="text-xs text-purple-400 mt-1">Fully autonomous</div>
-            </div>
-          </div>
-          <!-- Animated AI event log -->
-          <div class="rounded-xl border border-white/[0.05] p-3" style="background:rgba(255,255,255,0.015)">
-            <div class="flex items-center gap-2 mb-3">
-              <div class="ai-dot blink"></div>
-              <span class="text-xs font-bold text-slate-400">AI Engine — Live Decisions</span>
-            </div>
-            <div id="demo-log" class="space-y-1.5 text-xs font-mono overflow-hidden" style="max-height:130px"></div>
-          </div>
-        </div>
-        <!-- Play overlay -->
-        <div class="video-play-btn" id="demo-play-btn" onclick="startDemoWalkthrough()">
-          <i class="fas fa-play text-white text-xl ml-1" id="demo-play-icon"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step indicators -->
-    <div class="flex items-center justify-center gap-2 flex-wrap fade-up" id="demo-steps">
-      ${demoStep(1, 'Connect Platform', 'active')}
-      <div class="step-connector hidden md:block max-w-[40px]"></div>
-      ${demoStep(2, 'AI Analyzes', 'pending')}
-      <div class="step-connector hidden md:block max-w-[40px]"></div>
-      ${demoStep(3, 'Scale Winners', 'pending')}
-      <div class="step-connector hidden md:block max-w-[40px]"></div>
-      ${demoStep(4, 'Kill Losers', 'pending')}
-      <div class="step-connector hidden md:block max-w-[40px]"></div>
-      ${demoStep(5, 'Generate Creative', 'pending')}
-      <div class="step-connector hidden md:block max-w-[40px]"></div>
-      ${demoStep(6, 'Report', 'pending')}
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     HOW IT WORKS
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden">
-  <div class="absolute inset-0 grid-lines-fine opacity-40"></div>
-  <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-gears text-brand-400"></i> How It Works</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
-        Live in <span class="glow-text-2">18 minutes</span>
-      </h2>
-      <p class="text-slate-500 text-lg mt-3 max-w-xl mx-auto">Real setup time from 2,412 clients. Median: 18 min. Fastest: 4 min. No code, no CSV, no headache.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 relative">
-      <div class="hidden md:block absolute top-16 left-1/3 right-1/3 h-px" style="background:linear-gradient(90deg,rgba(99,102,241,0.6),rgba(168,85,247,0.6));box-shadow:0 0 8px rgba(99,102,241,0.4)"></div>
-      ${howStep('01','Connect Platforms','Link your ad accounts with OAuth in one click — no API keys, no CSV exports. Facebook, Google, TikTok and 6 more connect in seconds.','plug','brand','rgba(99,102,241,0.12)')}
-      ${howStep('02','Set Your Guardrails','Define max budget, min ROAS threshold, creative approval on/off, scale increment. The AI operates only within your rules.','sliders','purple','rgba(168,85,247,0.12)')}
-      ${howStep('03','Watch the AI Work','AdNova makes 487,000 decisions/hour across all your accounts. You get a daily digest, real-time alerts for major moves, and full audit logs.','rocket','emerald','rgba(16,185,129,0.12)')}
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     CASE STUDIES — PREUVES CONCRÈTES
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative" style="background:linear-gradient(180deg,rgba(3,5,18,0.65),rgba(4,7,22,0.75))" id="case-studies">
-  <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-trophy text-brand-400"></i> Verified Case Studies</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
-        Real brands, <span class="glow-text">real numbers</span>
-      </h2>
-      <p class="text-slate-500 text-sm max-w-xl mx-auto">Verified by third-party audits. No cherry-picking — these are median results.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-5">
-      ${caseStudyCard(
-        'E-commerce — Fashion',
-        'TechnoTrend Paris',
-        'from-brand-500 to-purple-600',
-        [['ROAS', '2.1×', '5.4×', '+157%'], ['Monthly Revenue', '$84K', '$218K', '+160%'], ['Wasted Spend', '$18K', '$1.2K', '-93%']],
-        'Switched from manual bidding to AdNova AI. In 6 weeks, the Creative Killer eliminated 47 underperforming ads and replaced them with AI-generated UGC videos. ROAS hit 5.4× — highest in company history.',
-        'Growth Plan · 6 weeks'
-      )}
-      ${caseStudyCard(
-        'SaaS — B2B Lead Gen',
-        'Apex Marketing Group',
-        'from-emerald-500 to-teal-600',
-        [['Cost per Lead', '$47', '$19', '-60%'], ['Qualified Leads/mo', '340', '891', '+162%'], ['Team Hours Saved', '0', '22h/wk', 'new']],
-        'B2B campaigns are notoriously hard to automate. AdNova AI\'s Audience Intelligence identified LinkedIn job-title segments 3× more likely to convert, reducing CPL from $47 to $19 in 45 days.',
-        'Growth Plan · 45 days'
-      )}
-      ${caseStudyCard(
-        'DTC — Health & Beauty',
-        'LuxoGroup',
-        'from-pink-500 to-rose-600',
-        [['Ad Spend', '$10K', '$200K', '+1,900%'], ['ROAS', '3.2×', '4.6×', '+44%'], ['Creative CTR', '1.2%', '4.8%', '+300%']],
-        'Scaled from $10K to $200K monthly spend in 8 weeks while maintaining ROAS above 4×. Auto-Scaling compounded budget increases daily. AI-generated creatives outperformed the agency\'s work by 3×.',
-        'Enterprise Plan · 8 weeks'
-      )}
-    </div>
-
-    <!-- Comparison table — AdNova vs manual vs other tools -->
-    <div class="glass-neo rounded-2xl overflow-hidden fade-up">
-      <div class="p-5 border-b border-white/[0.06]">
-        <h3 class="font-black text-white text-lg">AdNova AI vs. the alternatives</h3>
-        <p class="text-xs text-slate-500 mt-1">Based on aggregated performance data from clients who switched</p>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr style="background:rgba(255,255,255,0.02)">
-              <th class="text-left px-5 py-3 text-xs font-black text-slate-500 uppercase tracking-wider">Feature</th>
-              <th class="text-center px-5 py-3 text-xs font-black text-brand-400 uppercase tracking-wider">AdNova AI</th>
-              <th class="text-center px-5 py-3 text-xs font-black text-slate-500 uppercase tracking-wider">Manual</th>
-              <th class="text-center px-5 py-3 text-xs font-black text-slate-500 uppercase tracking-wider">Other tools</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-white/[0.04]">
-            ${compareRow('Fully autonomous 24/7', true, false, false)}
-            ${compareRow('Auto-scales budgets in real-time', true, false, 'partial')}
-            ${compareRow('AI creative generation', true, false, false)}
-            ${compareRow('Creative kill trigger (15 min)', true, false, false)}
-            ${compareRow('Cross-platform audience sync', true, false, 'partial')}
-            ${compareRow('72h performance forecasting', true, false, false)}
-            ${compareRow('Setup in under 20 minutes', true, false, 'partial')}
-            ${compareRow('No CSV exports needed', true, false, 'partial')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     TESTIMONIALS
-════════════════════════════════════════════════════════════ -->
-<section class="py-8" id="testimonials">
-  <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-star text-brand-400"></i> Customer Stories</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white" style="font-family:'Space Grotesk',sans-serif">
-        Brands that <span class="glow-text">outperform</span>
-      </h2>
-      <p class="text-slate-500 text-lg mt-3">4.9/5 on G2 · 847 verified reviews</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      ${testimonial('Sarah K.','CMO, TechStart Inc','from-emerald-500 to-teal-600','SK','Went from 2.1× to 4.8× ROAS in 3 weeks. The AI killed 23 creatives our team was emotionally attached to and replaced them overnight. We now spend 80% less time on manual work.','4.8× ROAS in 3 weeks','Growth plan','https://randomuser.me/api/portraits/women/44.jpg')}
-      ${testimonial('James R.','Growth Lead, Fashion Brand','from-brand-500 to-purple-600','JR','Creative Killer saves us $15K/month. I set it up in 14 minutes, connected Facebook and Google, defined my ROAS floor at 3× and walked away. It just... works. Nothing else does this.','$15K saved/month','Enterprise plan','https://randomuser.me/api/portraits/men/32.jpg')}
-      ${testimonial('Amira T.','Founder, Digital Storm','from-pink-500 to-rose-600','AT','$10K to $200K ad spend in 8 weeks without hiring anyone new. The Auto-Scaling compounded every 72h. Our media buyer now just reviews the AI daily digest — she does strategy, not babysitting.','20× spend scale in 8 weeks','Growth plan','https://randomuser.me/api/portraits/women/68.jpg')}
-    </div>
-
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-4 fade-up">
-      ${trustBadge('fa-shield-halved', 'SOC2 Type II')}
-      ${trustBadge('fa-lock', 'GDPR Compliant')}
-      ${trustBadge('fa-star', '4.9/5 on G2 (847 reviews)')}
-      ${trustBadge('fa-award', 'Product Hunt #1')}
-      ${trustBadge('fa-check-circle', '99.9% Uptime SLA')}
-    </div>
-  </div>
-</section>
-
-<div class="neon-line mx-auto max-w-4xl"></div>
-
-<!-- ════════════════════════════════════════════════════════════
-     PRICING
-════════════════════════════════════════════════════════════ -->
-<section class="py-8 relative overflow-hidden" id="pricing">
-  <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 60% at 50% 80%,rgba(99,102,241,0.09),transparent)"></div>
-  <div class="absolute inset-0 grid-lines-fine opacity-40"></div>
-  <div class="max-w-7xl mx-auto px-5 md:px-8 relative z-10">
-    <div class="text-center mb-5 fade-up">
-      <div class="section-label mb-4"><i class="fas fa-tags text-brand-400"></i> Transparent Pricing</div>
-      <h2 class="font-black text-2xl md:text-4xl text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
-        Pay as you <span class="glow-text">grow</span>
-      </h2>
-      <p class="text-slate-500 text-sm max-w-xl mx-auto">Full AI engine on every plan. No setup fees. No % of ad spend taken. No hidden costs.</p>
-      <div class="inline-flex items-center gap-2 glass-neo px-4 py-3 rounded-2xl mt-4">
-        <button id="btn-monthly" onclick="setFreq('monthly')" class="text-sm font-bold px-5 py-2 rounded-xl transition-all bg-brand-600/25 text-brand-300 border border-brand-500/20">Monthly</button>
-        <button id="btn-annual" onclick="setFreq('annual')" class="text-sm font-bold px-5 py-2 rounded-xl transition-all text-slate-500 hover:text-slate-300">
-          Annual <span class="text-xs text-emerald-400 font-black ml-1">-20%</span>
-        </button>
-      </div>
-      <div class="mt-3 text-xs text-emerald-500/70 font-semibold">
-        <i class="fas fa-tag mr-1"></i> Annual billing saves up to $1,918/year on Growth
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      ${pricingCard(PLANS[0])}
-      ${pricingCard(PLANS[1])}
-      ${pricingCard(PLANS[2])}
-    </div>
-
-    <div class="mt-8 text-center fade-up">
-      <p class="text-slate-600 text-sm">All prices in USD. VAT may apply. <a href="#" class="text-brand-400 hover:text-brand-300 transition-colors ml-1">Full feature comparison →</a></p>
-      <div class="flex flex-wrap items-center justify-center gap-4 mt-4">
-        <span class="plan-perk"><i class="fas fa-shield-halved text-emerald-500 mr-1.5"></i> No credit card for trial</span>
-        <span class="plan-perk"><i class="fas fa-rotate-left text-emerald-500 mr-1.5"></i> Cancel anytime</span>
-        <span class="plan-perk"><i class="fas fa-bolt text-emerald-500 mr-1.5"></i> 14-day free trial</span>
-        <span class="plan-perk"><i class="fas fa-headset text-emerald-500 mr-1.5"></i> 24/7 support</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════════════════════════
-     FAQ + CTA — 2-COLUMN HERO STYLE (image 2 design)
-════════════════════════════════════════════════════════════ -->
-<section class="relative overflow-hidden py-8 md:py-14" id="faq-cta"
-  style="background:linear-gradient(160deg,rgba(3,5,16,0.98) 0%,rgba(10,8,30,0.99) 100%)">
-
-  <!-- Background orbs -->
-  <div style="position:absolute;width:520px;height:520px;background:radial-gradient(circle,rgba(99,102,241,0.13) 0%,transparent 70%);top:-80px;left:-120px;filter:blur(80px);pointer-events:none"></div>
-  <div style="position:absolute;width:480px;height:480px;background:radial-gradient(circle,rgba(168,85,247,0.10) 0%,transparent 70%);bottom:-60px;right:-80px;filter:blur(90px);pointer-events:none"></div>
-  <div class="absolute inset-0 grid-lines opacity-20 pointer-events-none"></div>
-  <div class="absolute inset-x-0 top-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(99,102,241,0.4),rgba(168,85,247,0.4),transparent)"></div>
-
-  <div class="max-w-7xl mx-auto px-5 md:px-10 relative z-10">
-
-    <!-- ── 2-column grid ── -->
-    <div class="grid grid-cols-1 lg:grid-cols-[52%_48%] gap-8 xl:gap-14 items-start">
-
-      <!-- ══ LEFT — FAQ accordion ══ -->
-      <div class="fade-up">
-        <div class="mb-6">
-          <div class="section-label mb-3 inline-flex"><i class="fas fa-question-circle text-brand-400"></i> FAQ</div>
-          <h2 class="font-black text-2xl md:text-4xl text-white mb-2" style="font-family:'Space Grotesk',sans-serif">
-            Honest <span class="glow-text-2">answers</span>
-          </h2>
-          <p class="text-slate-500 text-sm">Everything you want to know before you start.</p>
-        </div>
-
-        <div class="space-y-2" id="faq">
-          ${faqItem('How fast will I see results?', 'Most clients see measurable ROAS improvement within 72 hours. The AI begins making autonomous decisions within the first 15 minutes after connection. Median time to first positive ROI on subscription cost: 11 days.')}
-          ${faqItem('What exactly does "autonomous" mean?', 'The AI makes budget, bidding, creative, and audience decisions without requiring your approval for each action. You set the rules (ROAS floor, max spend, creative approval on/off), and the AI operates within them 24/7. You can pause any module instantly.')}
-          ${faqItem('Does it work with small budgets?', 'Yes. The Starter plan is designed for $1K–$10K/month ad spend. The AI has fewer data points at low spend, so results are slightly slower — typically 2–4 weeks vs 72h for larger accounts. Most small accounts see +40–60% ROAS improvement in month 1.')}
-          ${faqItem('How is this different from Meta Advantage+ or Google Performance Max?', 'Advantage+ and PMax are single-platform, single-campaign optimization tools. AdNova AI works across 9 platforms simultaneously, kills bad creatives before any platform&#39;s algorithm catches it, generates new creatives, and provides a unified view of all your ad spend in one place.')}
-          ${faqItem('Is my ad account data secure?', 'We use OAuth — we never store your ad account passwords. Access tokens are encrypted at rest (AES-256) and in transit (TLS 1.3). We are SOC2 Type II certified and GDPR compliant. You can revoke access at any time from your ad platform.')}
-          ${faqItem('What happens if the AI makes a bad decision?', 'Every AI action is logged with its reasoning. You can review and undo any decision within 24 hours. Our kill-switch pauses all autonomous actions globally in one click. In 18 months of production, 99.1% of AI decisions resulted in positive or neutral outcomes.')}
-        </div>
-      </div>
-
-      <!-- ══ RIGHT — CTA hero panel ══ -->
-      <div class="fade-up flex flex-col" style="transition-delay:.12s">
-
-        <!-- Glass card wrapping the whole CTA -->
-        <div class="glass-neo rounded-3xl overflow-hidden relative"
-          style="background:linear-gradient(145deg,rgba(255,255,255,0.055) 0%,rgba(99,102,241,0.04) 100%);border-top-color:rgba(255,255,255,0.22)">
-
-          <!-- Inner prismatic top accent -->
-          <div style="height:2px;background:linear-gradient(90deg,rgba(99,102,241,0.8),rgba(168,85,247,0.9),rgba(236,72,153,0.7),rgba(6,182,212,0.6));"></div>
-
-          <div class="p-6 md:p-8">
-
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-6 border" style="border-color:rgba(99,102,241,0.25)">
-              <div class="relative flex-shrink-0">
-                <div class="ai-dot blink"></div>
-                <div class="absolute inset-0 rounded-full bg-emerald-400 pulse-ring opacity-50"></div>
+            <div class="cr-status"><div class="cr-spin"></div>Claude is enhancing your prompt and generating variations…</div>
+            <div class="cr-results">
+              <div class="cr-img" style="background:url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&amp;fit=crop&amp;w=480&amp;q=80') center/cover #0A0A0A">
+                <span class="cr-img-tag">Studio · 4:5</span>
+                <div class="cr-img-ov">Use in ad →</div>
               </div>
-              <span class="text-xs font-bold text-slate-300 tracking-wide">2,412 brands already inside</span>
-              <span class="text-xs bg-gradient-to-r from-brand-500/30 to-purple-500/30 text-brand-300 px-2 py-0.5 rounded-full font-black border border-brand-500/25">LIVE</span>
-            </div>
-
-            <!-- Headline — big like image 2 -->
-            <h2 class="font-black leading-[1.05] tracking-tight mb-4 text-left"
-              style="font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4vw,52px)">
-              <span class="text-white">Your competition </span><span class="hero-text">is already using AI.</span>
-            </h2>
-
-            <!-- Sub -->
-            <p class="text-sm text-slate-400 mb-6 leading-relaxed" style="max-width:400px">
-              Join <strong class="text-white font-semibold">2,412 brands</strong> using AdNova AI to outperform — with <strong class="text-white font-semibold">zero</strong> extra headcount.
-            </p>
-
-            <!-- Proof chips — same style as hero image 2 -->
-            <div class="flex flex-wrap gap-2 mb-7">
-              <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3 py-1.5 rounded-full">
-                <i class="fas fa-check-circle text-emerald-400 text-xs"></i> ROAS boost: <strong class="text-white ml-1">+128%</strong>
-              </span>
-              <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3 py-1.5 rounded-full">
-                <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Setup: <strong class="text-white ml-1">18 min</strong>
-              </span>
-              <span class="flex items-center gap-1.5 text-xs text-slate-400 glass px-3 py-1.5 rounded-full">
-                <i class="fas fa-check-circle text-emerald-400 text-xs"></i> Waste cut: <strong class="text-white ml-1">−73%</strong>
-              </span>
-            </div>
-
-            <!-- CTA buttons — row, style image 2 -->
-            <div class="flex flex-row items-center gap-3 mb-6 flex-wrap">
-              <a href="/register" class="btn-primary text-white font-black px-7 rounded-xl text-sm flex items-center gap-2 group relative overflow-hidden ripple-btn" style="padding-top:14px;padding-bottom:14px" onclick="trackEvent('faq_cta_primary')">
-                <i class="fas fa-bolt text-sm group-hover:rotate-12 transition-transform"></i>
-                Start Free — 14 Days
-              </a>
-              <a href="/login" class="btn-ghost text-slate-300 font-semibold px-5 py-3.5 rounded-xl text-sm flex items-center gap-2 group" onclick="trackEvent('faq_cta_secondary')">
-                Already have an account →
-              </a>
-            </div>
-
-            <!-- Trust row -->
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
-              <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-emerald-600"></i> No credit card</span>
-              <span class="flex items-center gap-1.5"><i class="fas fa-xmark text-slate-600"></i> Cancel anytime</span>
-              <span class="flex items-center gap-1.5"><i class="fas fa-clock text-brand-600"></i> 18 min setup</span>
-              <span class="flex items-center gap-1.5"><i class="fas fa-lock text-slate-600"></i> SOC2 · GDPR</span>
+              <div class="cr-img" style="background:url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&amp;fit=crop&amp;w=480&amp;q=80') center/cover #0A0A0A">
+                <span class="cr-img-tag">Lifestyle · 4:5</span>
+                <div class="cr-img-ov">Use in ad →</div>
+              </div>
+              <div class="cr-img" style="background:url('https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&amp;fit=crop&amp;w=480&amp;q=80') center/cover #0A0A0A">
+                <span class="cr-img-tag">Macro · 4:5</span>
+                <div class="cr-img-ov">Use in ad →</div>
+              </div>
+              <div class="cr-img" style="background:url('https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&amp;fit=crop&amp;w=480&amp;q=80') center/cover #0A0A0A">
+                <span class="cr-img-tag">Action · 4:5</span>
+                <div class="cr-img-ov">Use in ad →</div>
+              </div>
             </div>
           </div>
-
-          <!-- Mini live stats strip at the bottom of the card -->
-          <div class="px-6 py-3 flex items-center gap-4 flex-wrap border-t" style="background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.06)">
-            <div class="flex items-center gap-1.5 text-xs">
-              <i class="fas fa-brain text-brand-400 text-xs"></i>
-              <span class="font-black text-slate-200" id="faq-decisions">487K</span>
-              <span class="text-slate-500">decisions/hr</span>
-            </div>
-            <span class="text-white/10 hidden sm:block">|</span>
-            <div class="flex items-center gap-1.5 text-xs">
-              <i class="fas fa-chart-line text-emerald-400 text-xs"></i>
-              <span class="font-black text-emerald-400">4.82x</span>
-              <span class="text-slate-500">avg ROAS</span>
-            </div>
-            <span class="text-white/10 hidden md:block">|</span>
-            <div class="hidden md:flex items-center gap-1.5 text-xs">
-              <i class="fas fa-star text-amber-400 text-xs"></i>
-              <span class="font-black text-amber-400">4.9/5</span>
-              <span class="text-slate-500">from 847 reviews</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mini social proof row under the card -->
-        <div class="mt-4 flex items-center gap-3 px-1">
-          <div class="flex -space-x-2 flex-shrink-0">
-            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-7 h-7 rounded-full border-2 object-cover" style="border-color:rgba(99,102,241,0.5)" loading="lazy"/>
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-7 h-7 rounded-full border-2 object-cover" style="border-color:rgba(99,102,241,0.5)" loading="lazy"/>
-            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-7 h-7 rounded-full border-2 object-cover" style="border-color:rgba(99,102,241,0.5)" loading="lazy"/>
-            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-black text-brand-300" style="background:rgba(99,102,241,0.2);border:2px solid rgba(99,102,241,0.5)">+2K</div>
-          </div>
-          <p class="text-xs text-slate-500 leading-tight">
-            <span class="text-slate-300 font-semibold">2,412 brands</span> joined this week ·
-            <span class="text-emerald-400 font-semibold">↑ 23%</span> vs last week
-          </p>
         </div>
       </div>
-
-    </div><!-- /2-col grid -->
+      <div class="cr-info reveal rd2">
+        <h3>Generate creatives that<br><em>actually convert.</em></h3>
+        <p>AdNova doesn't just make pretty pictures. It studies your best-performing ads, learns your brand, and creates variations designed to beat your existing benchmarks.</p>
+        <div class="cr-types">
+          <div class="cr-type active"><div class="cr-type-icon">🖼️</div><div><h4>Image Ads</h4><p>4 variations per prompt via Stable Diffusion XL — 1:1, 4:5, 9:16, 16:9</p></div></div>
+          <div class="cr-type"><div class="cr-type-icon">🎬</div><div><h4>Video Ads</h4><p>Animated product showcases &amp; branded videos via Runway ML</p></div></div>
+          <div class="cr-type"><div class="cr-type-icon">🤖</div><div><h4>UGC Videos</h4><p>AI avatars deliver authentic testimonials via HeyGen — any language</p></div></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- AGENTS -->
+<section class="ag-sec" id="agents">
+  <div class="sec-head reveal">
+    <div class="sec-tag">AI Agents</div>
+    <h2>Your always-on<br><em>ad ops team.</em></h2>
+    <p>Specialized agents work in concert, supervised by an orchestrator that plans, delegates and executes — powered by Claude.</p>
+  </div>
+  <div class="ag-layout">
+    <div class="ag-visual reveal">
+      <div class="ag-ring r1"></div>
+      <div class="ag-ring r2"></div>
+      <div class="ag-orb">🤖</div>
+      <div class="ag-node n1"><div class="ag-ni">📊</div><h5>Analytics Agent</h5><p>Detects anomalies &amp; forecasts</p></div>
+      <div class="ag-node n2"><div class="ag-ni">🎨</div><h5>Creative Agent</h5><p>Generates &amp; A/B tests creatives</p></div>
+      <div class="ag-node n3"><div class="ag-ni">⚡</div><h5>Optimization Agent</h5><p>Bids, budgets &amp; pauses 24/7</p></div>
+      <div class="ag-node n4"><div class="ag-ni">📋</div><h5>Reporting Agent</h5><p>Weekly summaries &amp; alerts</p></div>
+    </div>
+    <div class="ag-info reveal rd2">
+      <h3>Agents that work.<br><em>Results you keep.</em></h3>
+      <p>While you sleep, AdNova's agents monitor every metric, pause underperforming ads, scale winners, and prepare your morning briefing. You review. You approve. They execute.</p>
+      <div class="ag-list">
+        <div class="ag-item"><div class="ag-icon">🔔</div><div><h4>Real-time anomaly detection</h4><p>Instant alerts when ROAS drops 15%+ or spend spikes unexpectedly, with root cause analysis.</p></div></div>
+        <div class="ag-item"><div class="ag-icon">💰</div><div><h4>Autonomous budget reallocation</h4><p>Agents shift spend to top performers based on your rules — max change limits you control.</p></div></div>
+        <div class="ag-item"><div class="ag-icon">📈</div><div><h4>Predictive scaling</h4><p>Identifies upcoming high-intent windows and pre-scales budgets automatically before they hit.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- ════════════════════════════════════════════════════════════
-     FOOTER
-════════════════════════════════════════════════════════════ -->
-<footer style="border-top:1px solid rgba(255,255,255,0.07);background:linear-gradient(180deg,rgba(3,5,18,0.95),rgba(2,3,12,0.98));backdrop-filter:blur(20px)">
-  <div class="max-w-7xl mx-auto px-5 md:px-8 py-10">
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-      <div class="md:col-span-2">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg">
-            <i class="fas fa-bolt text-white text-sm"></i>
-          </div>
-          <span class="font-black text-white text-xl">AdNova <span class="glow-text">AI</span></span>
-        </div>
-        <p class="text-sm text-slate-600 leading-relaxed max-w-xs">Autonomous advertising intelligence. 9 platforms. 487K decisions/hour. Zero manual work.</p>
-        <div class="flex items-center gap-3 mt-4">
-          <div class="w-2 h-2 rounded-full bg-emerald-400 blink"></div>
-          <span class="text-xs text-emerald-500 font-bold">All systems operational</span>
-        </div>
-        <div class="flex items-center gap-3 mt-4">
-          ${footerSocial('fa-x-twitter', '#')}
-          ${footerSocial('fa-linkedin-in', '#')}
-          ${footerSocial('fa-github', '#')}
-          ${footerSocial('fa-youtube', '#')}
-        </div>
-      </div>
-      <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Product</div>
-        <div class="space-y-2.5">
-          <a href="#features" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Features</a>
-          <a href="#pricing" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Pricing</a>
-          <a href="#use-cases" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Use Cases</a>
-          <a href="#case-studies" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Case Studies</a>
-          <a href="/login" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Dashboard</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">API Docs</a>
-        </div>
-      </div>
-      <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Company</div>
-        <div class="space-y-2.5">
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">About</a>
-          <a href="#testimonials" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Customers</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Blog</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Careers</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Press Kit</a>
-        </div>
-      </div>
-      <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Legal & Support</div>
-        <div class="space-y-2.5">
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Privacy Policy</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Terms of Service</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Status Page</a>
-          <a href="#" class="block text-sm text-slate-500 hover:text-slate-200 transition-colors">Security</a>
-          <a href="/admin/login" class="block text-sm text-slate-700 hover:text-slate-500 transition-colors">Admin →</a>
-        </div>
-      </div>
+<!-- PRICING -->
+<section class="pr-sec" id="pricing">
+  <div class="pr-inner">
+    <div class="sec-head reveal">
+      <div class="sec-tag">Pricing</div>
+      <h2>Four plans.<br><em>Pick yours.</em></h2>
+      <p>Every plan includes a 14-day free trial. No credit card required.</p>
     </div>
-    <div class="divider mb-4"></div>
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-xs text-slate-700">© 2026 AdNova AI. All rights reserved. Powered by Cloudflare Workers.</p>
-      <div class="flex items-center gap-4 text-xs text-slate-700">
-        <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-emerald-600"></i> SOC2 Type II</span>
-        <span class="flex items-center gap-1.5"><i class="fas fa-lock text-blue-600"></i> GDPR</span>
-        <span class="flex items-center gap-1.5"><i class="fas fa-globe text-brand-600"></i> 9 Platforms</span>
-      </div>
+    <div class="pr-toggle reveal">
+      <span class="pr-tl">Monthly</span>
+      <div class="toggle-sw" id="pricingToggle"><div class="toggle-kn"></div></div>
+      <span class="pr-tl">Annual</span>
+      <span class="pr-save">Save 20%</span>
     </div>
+    <div class="pr-grid">
+      ${pricingCardsHtml()}
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS — scrolling marquee, pause on hover -->
+<section class="testi-sec" id="customers">
+  <div class="sec-head reveal">
+    <div class="sec-tag">Customers</div>
+    <h2>Trusted by 2,412<br><em>high-growth brands.</em></h2>
+  </div>
+  <div class="testi-marquee" aria-label="Customer testimonials">
+    <div class="testi-track">
+      ${testimonialsMarqueeHtml()}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="cta-bg"></div>
+  <div class="cta-inner reveal">
+    <h2>Ready to let AI<br><em>run your ads?</em></h2>
+    <p>Join 2,400+ brands shipping more creatives, spending smarter and growing faster — without growing their team.</p>
+    <div class="cta-actions">
+      <a href="/register" class="btn-hero">Start free trial →</a>
+      <a href="/customers" class="btn-hero-ghost">See case studies →</a>
+    </div>
+    <p class="cta-note">No credit card · 14-day trial · Cancel anytime</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div class="ft-brand">
+      <a href="/" class="logo">AdNova<span>.</span></a>
+      <p>Autonomous advertising for modern brands. Built on Claude — the world's most capable AI.</p>
+    </div>
+    <div class="ft-col"><h5>Product</h5><ul><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="/customers">Customers</a></li><li><a href="/blog">Blog</a></li></ul></div>
+    <div class="ft-col"><h5>Integrations</h5><ul><li><a href="#platforms">Meta Ads</a></li><li><a href="#platforms">Google Ads</a></li><li><a href="#platforms">TikTok Ads</a></li><li><a href="#platforms">LinkedIn</a></li><li><a href="#platforms">Snapchat</a></li></ul></div>
+    <div class="ft-col"><h5>Company</h5><ul><li><a href="/about">About</a></li><li><a href="/careers">Careers</a></li><li><a href="/press-kit">Press Kit</a></li><li><a href="/about">Security</a></li></ul></div>
+    <div class="ft-col"><h5>Legal</h5><ul><li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/privacy">GDPR</a></li><li><a href="/privacy">Cookies</a></li></ul></div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2026 AdNova AI. All rights reserved.</p>
+    <div class="ft-links"><a href="/login">Sign in</a><a href="/register">Get started</a></div>
   </div>
 </footer>
 
-<!-- Toast notification — liquid glass -->
-<div id="contact-toast" class="fixed bottom-6 right-6 hidden z-50 glass-neo px-5 py-4 rounded-2xl flex items-center gap-3 shadow-2xl max-w-xs" style="border-color:rgba(16,185,129,0.25);border-top-color:rgba(6,182,212,0.4)">
-  <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);box-shadow:0 0 12px rgba(16,185,129,0.2)">
-    <i class="fas fa-envelope text-emerald-400 text-sm"></i>
-  </div>
-  <div>
-    <div class="text-sm font-bold text-white">Sales team notified!</div>
-    <div class="text-xs text-slate-500">We will contact you within 2 hours.</div>
-  </div>
-</div>
-
-<!-- Micro-feedback toast — liquid glass -->
-<div id="mf-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden z-50 glass-neo px-5 py-3 rounded-2xl flex items-center gap-3 shadow-2xl" style="border-color:rgba(99,102,241,0.25);border-top-color:rgba(168,85,247,0.4)">
-  <i id="mf-icon" class="fas fa-check-circle text-emerald-400 text-sm"></i>
-  <span id="mf-msg" class="text-sm font-semibold text-white"></span>
-</div>
-
-<style>
-  /* Use case tabs — liquid glass */
-  .uc-tab{
-    background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));
-    border:1px solid rgba(255,255,255,0.09);
-    border-top-color:rgba(255,255,255,0.15);
-    color:#64748b;transition:all .25s ease;
-    backdrop-filter:blur(10px);
-    box-shadow:0 2px 8px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-  .uc-tab:hover{
-    background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(99,102,241,0.03));
-    color:#cbd5e1;border-color:rgba(99,102,241,0.3);
-    box-shadow:0 4px 12px rgba(99,102,241,0.12),inset 0 1px 0 rgba(255,255,255,0.06);
-  }
-  .uc-tab.active-tab{
-    background:linear-gradient(135deg,rgba(99,102,241,0.18),rgba(168,85,247,0.08));
-    border-color:rgba(99,102,241,0.4);border-top-color:rgba(168,85,247,0.5);
-    color:#a5b4fc;
-    box-shadow:0 4px 20px rgba(99,102,241,0.2),inset 0 1px 0 rgba(255,255,255,0.08);
-  }
-
-  /* Demo step indicators — liquid glass */
-  .demo-step-indicator{
-    padding:6px 14px;border-radius:999px;font-size:11px;font-weight:700;
-    background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));
-    border:1px solid rgba(255,255,255,0.09);
-    border-top-color:rgba(255,255,255,0.15);
-    color:#475569;transition:all .3s ease;
-    backdrop-filter:blur(8px);
-  }
-  .demo-step-indicator.active{
-    background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(168,85,247,0.1));
-    border-color:rgba(99,102,241,0.4);border-top-color:rgba(168,85,247,0.5);
-    color:#a5b4fc;
-    box-shadow:0 4px 16px rgba(99,102,241,0.2);
-  }
-  .demo-step-indicator.done{
-    background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(6,182,212,0.07));
-    border-color:rgba(16,185,129,0.3);border-top-color:rgba(6,182,212,0.4);
-    color:#6ee7b7;
-  }
-
-  /* ROI preset buttons — liquid glass */
-  .roi-preset{
-    padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;
-    background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));
-    border:1px solid rgba(255,255,255,0.09);
-    border-top-color:rgba(255,255,255,0.15);
-    color:#64748b;cursor:pointer;transition:all .2s ease;
-    backdrop-filter:blur(6px);
-  }
-  .roi-preset:hover{
-    background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(99,102,241,0.06));
-    border-color:rgba(99,102,241,0.35);color:#a5b4fc;
-  }
-  .roi-preset.active{
-    background:linear-gradient(135deg,rgba(99,102,241,0.22),rgba(168,85,247,0.1));
-    border-color:rgba(99,102,241,0.5);border-top-color:rgba(168,85,247,0.6);
-    color:#c7d2fe;
-    box-shadow:0 2px 10px rgba(99,102,241,0.2);
-  }
-</style>
-
 <script>
-// ═══════════════════════════════════════════════════════════════
-// PERFORMANCE: marque le premier rendu pour mesure LCP
-// ═══════════════════════════════════════════════════════════════
-if (typeof performance !== 'undefined' && performance.mark) {
-  performance.mark('adnova-start');
-}
+(function(){
+  // Nav scroll
+  var nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 40); });
 
-// ═══════════════════════════════════════════════════════════════
-// TRACKING — Système d'analytics ultra-léger (< 1 KB)
-// ═══════════════════════════════════════════════════════════════
-const _track = [];
-let _sessionStart = Date.now();
-let _scrollDepth = 0;
+  // Reveal on scroll
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
 
-function trackEvent(name, props) {
-  try {
-    const ev = { event: name, ts: Date.now() - _sessionStart, url: location.pathname, ...props };
-    _track.push(ev);
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/track', JSON.stringify(ev));
+  // Counter animation
+  function animNum(el, target, dec, fmt) {
+    var start = null, dur = 1800;
+    function step(ts) {
+      if(!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var ease = 1 - Math.pow(1 - p, 3);
+      var val = ease * target;
+      if(fmt === 'comma') el.textContent = Math.floor(val).toLocaleString();
+      else el.textContent = dec > 0 ? val.toFixed(dec) : Math.floor(val);
+      if(p < 1) requestAnimationFrame(step);
     }
-  } catch(e) {}
-}
-
-// Scroll depth + progress bar — passif, optimisé RAF
-let _scrollTicking = false;
-const _progressBar = document.getElementById('scroll-progress');
-window.addEventListener('scroll', () => {
-  if (_scrollTicking) return;
-  _scrollTicking = true;
-  requestAnimationFrame(() => {
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const pct = maxScroll > 0 ? Math.round((window.scrollY / maxScroll) * 100) : 0;
-    if (_progressBar) _progressBar.style.width = Math.min(pct, 100) + '%';
-    if (pct > _scrollDepth) {
-      _scrollDepth = pct;
-      if ([25, 50, 75, 90].includes(pct)) trackEvent('scroll_depth', { pct });
-    }
-    _scrollTicking = false;
-  });
-}, { passive: true });
-
-// Time on page tracking
-window.addEventListener('beforeunload', () => {
-  trackEvent('page_exit', { time_ms: Date.now() - _sessionStart, scroll_depth: _scrollDepth });
-});
-
-// ═══════════════════════════════════════════════════════════════
-// INTERSECTION OBSERVER — animations fade-up/fade-in
-// Optimisé: rootMargin négatif pour déclencher plus tôt
-// ═══════════════════════════════════════════════════════════════
-const _observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      _observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
-
-// Utilise requestIdleCallback si disponible pour ne pas bloquer le rendu
-const scheduleObserve = typeof requestIdleCallback !== 'undefined'
-  ? (fn) => requestIdleCallback(fn, { timeout: 500 })
-  : (fn) => setTimeout(fn, 50);
-
-scheduleObserve(() => {
-  document.querySelectorAll('.fade-up, .fade-in').forEach(el => _observer.observe(el));
-});
-
-// ═══════════════════════════════════════════════════════════════
-// NAVBAR — effet liquid glass au scroll (RAF optimisé)
-// ═══════════════════════════════════════════════════════════════
-const _navbar = document.getElementById('navbar');
-let _navTicking = false;
-let _navScrolled = false;
-window.addEventListener('scroll', () => {
-  if (_navTicking) return;
-  _navTicking = true;
-  requestAnimationFrame(() => {
-    const scrolled = window.scrollY > 50;
-    if (scrolled !== _navScrolled && _navbar) {
-      _navScrolled = scrolled;
-      if (scrolled) {
-        _navbar.style.background = 'linear-gradient(180deg,rgba(3,5,18,0.96) 0%,rgba(3,5,18,0.90) 100%)';
-        _navbar.style.boxShadow = '0 4px 44px rgba(0,0,0,0.65),0 1px 0 rgba(99,102,241,0.12),inset 0 -1px 0 rgba(99,102,241,0.07)';
-        _navbar.style.backdropFilter = 'saturate(2.2) blur(36px)';
-        _navbar.style.borderBottomColor = 'rgba(99,102,241,0.1)';
-      } else {
-        _navbar.style.background = 'linear-gradient(180deg,rgba(3,5,18,0.84) 0%,rgba(3,5,18,0.74) 100%)';
-        _navbar.style.boxShadow = '';
-        _navbar.style.backdropFilter = 'saturate(2.2) blur(32px)';
-        _navbar.style.borderBottomColor = '';
-      }
-    }
-    _navTicking = false;
-  });
-}, { passive: true });
-
-// ═══════════════════════════════════════════════════════════════
-// MOBILE NAV
-// ═══════════════════════════════════════════════════════════════
-function toggleMobileNav() {
-  const nav = document.getElementById('mobile-nav');
-  const icon = document.getElementById('mobile-icon');
-  nav.classList.toggle('open');
-  icon.className = nav.classList.contains('open') ? 'fas fa-times text-slate-300 text-sm' : 'fas fa-bars text-slate-300 text-sm';
-}
-
-// ═══════════════════════════════════════════════════════════════
-// SMOOTH SCROLL
-// ═══════════════════════════════════════════════════════════════
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const id = a.getAttribute('href').slice(1);
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-  });
-});
-
-// ═══════════════════════════════════════════════════════════════
-// LIVE COUNTER (hero)
-// ═══════════════════════════════════════════════════════════════
-let dec = 12847;
-setInterval(() => {
-  dec += Math.floor(Math.random() * 9) + 2;
-  const el = document.getElementById('live-decisions');
-  if (el) el.textContent = dec.toLocaleString();
-}, 2200);
-
-// ═══════════════════════════════════════════════════════════════
-// PRICING TOGGLE
-// ═══════════════════════════════════════════════════════════════
-const prices = { starter: ${PLANS[0].price}, growth: ${PLANS[1].price} };
-let freq = 'monthly';
-function setFreq(f) {
-  freq = f;
-  const activeClass = 'text-sm font-bold px-5 py-2 rounded-xl transition-all bg-brand-600/25 text-brand-300 border border-brand-500/20';
-  const inactiveClass = 'text-sm font-bold px-5 py-2 rounded-xl transition-all text-slate-500 hover:text-slate-300';
-  document.getElementById('btn-monthly').className = f === 'monthly' ? activeClass : inactiveClass;
-  document.getElementById('btn-annual').className = f === 'annual' ? activeClass + ' border border-brand-500/20' : inactiveClass;
-  const mult = f === 'annual' ? 0.8 : 1;
-  const starterEl = document.getElementById('price-starter');
-  const growthEl = document.getElementById('price-growth');
-  if (starterEl) starterEl.textContent = '$' + Math.round(prices.starter * mult);
-  if (growthEl) growthEl.textContent = '$' + Math.round(prices.growth * mult);
-  document.querySelectorAll('.plan-period').forEach(el => {
-    el.textContent = f === 'annual' ? '/mo, billed annually' : '/month';
-  });
-  showMicroFeedback(f === 'annual' ? 'Saving $' + Math.round(prices.growth * 12 * 0.2) + '/year on Growth!' : 'Monthly billing selected');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// FAQ ACCORDION
-// ═══════════════════════════════════════════════════════════════
-document.querySelectorAll('.faq-trigger').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const body = btn.nextElementSibling;
-    const icon = btn.querySelector('.faq-icon');
-    const isOpen = !body.classList.contains('hidden');
-    document.querySelectorAll('.faq-body').forEach(b => b.classList.add('hidden'));
-    document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate-180'));
-    if (!isOpen) { body.classList.remove('hidden'); icon.classList.add('rotate-180'); }
-  });
-});
-
-// ═══════════════════════════════════════════════════════════════
-// ACTIVE NAV ON SCROLL
-// ═══════════════════════════════════════════════════════════════
-const sections = ['use-cases', 'features', 'demo', 'pricing', 'case-studies'];
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY + 120;
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const link = document.querySelector('a[href="#' + id + '"]');
-    if (!link) return;
-    if (scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-    }
-  });
-}, { passive: true });
-
-// ═══════════════════════════════════════════════════════════════
-// USE CASE TABS
-// ═══════════════════════════════════════════════════════════════
-function setUCTab(tab) {
-  document.querySelectorAll('.uc-panel').forEach(p => p.classList.add('hidden'));
-  document.querySelectorAll('.uc-tab').forEach(t => t.classList.remove('active-tab'));
-  const panel = document.getElementById('uc-' + tab);
-  if (panel) { panel.classList.remove('hidden'); panel.classList.remove('visible'); setTimeout(() => panel.classList.add('visible'), 10); }
-  const activeBtn = document.querySelector('[data-tab="' + tab + '"]');
-  if (activeBtn) activeBtn.classList.add('active-tab');
-  trackEvent('uc_tab', { tab });
-}
-// Make first panel visible on load
-document.getElementById('uc-scale').classList.add('visible');
-
-// ═══════════════════════════════════════════════════════════════
-// ROI CALCULATOR
-// ═══════════════════════════════════════════════════════════════
-const industryMultipliers = { ecom: 1.0, saas: 0.85, agency: 0.75, finance: 0.7, health: 0.9 };
-
-function calcROI() {
-  const spend = parseFloat(document.getElementById('roi-spend').value) || 10000;
-  const roas = parseFloat(document.getElementById('roi-roas').value) || 2.5;
-  const industry = document.getElementById('roi-industry').value;
-  const mult = industryMultipliers[industry] || 1;
-
-  // Projected ROAS: avg 89% improvement for ecom, adjusted by industry
-  const roasImprovement = 0.89 * mult;
-  const newRoas = Math.min(roas * (1 + roasImprovement), roas + 4.5);
-  const currentRev = spend * roas;
-  const newRev = spend * newRoas;
-  const extraRev = newRev - currentRev;
-  const savedWaste = spend * 0.21 * mult; // avg 21% wasted spend eliminated
-  const subCost = 799; // growth plan
-  const platformROI = ((extraRev + savedWaste - subCost) / subCost);
-
-  animateNumber('roi-new-roas', newRoas.toFixed(1) + '×');
-  animateNumber('roi-extra-rev', '+$' + formatNum(Math.round(extraRev)));
-  animateNumber('roi-saved', '$' + formatNum(Math.round(savedWaste)));
-  animateNumber('roi-roi', platformROI.toFixed(1) + '×');
-}
-
-function animateNumber(id, value) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.style.transform = 'scale(1.1)';
-  el.style.color = '#a5b4fc';
-  el.textContent = value;
-  setTimeout(() => { el.style.transform = 'scale(1)'; el.style.color = ''; }, 300);
-}
-
-function formatNum(n) {
-  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
-  return n.toString();
-}
-
-function setROIPreset(field, value) {
-  if (field === 'spend') {
-    document.getElementById('roi-spend').value = value;
-  } else {
-    document.getElementById('roi-roas').value = value;
+    requestAnimationFrame(step);
   }
-  document.querySelectorAll('.roi-preset[data-field="' + field + '"]').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  calcROI();
-}
-
-// ═══════════════════════════════════════════════════════════════
-// DEMO PLAYER — animated AI event log
-// ═══════════════════════════════════════════════════════════════
-const demoEvents = [
-  { color: '#10b981', icon: 'fa-arrow-trend-up', msg: '→ [SCALE] "Summer Collection": ROAS 5.2x · budget +10% · $550→$605/day' },
-  { color: '#ef4444', icon: 'fa-scissors', msg: '→ [KILL] Creative "hero-v1.jpg": CTR 0.2% after 12,400 imp. Paused.' },
-  { color: '#a855f7', icon: 'fa-wand-magic-sparkles', msg: '→ [GEN] Generating 3 replacement creatives for "hero-v1.jpg"...' },
-  { color: '#10b981', icon: 'fa-check', msg: '→ [GEN] "hero-v4.jpg" ready · predicted CTR: 4.2% · launching A/B test' },
-  { color: '#06b6d4', icon: 'fa-users', msg: '→ [AUDIENCE] "Interest: Fashion" CPM +18% · building 3% lookalike' },
-  { color: '#f97316', icon: 'fa-dollar-sign', msg: '→ [BUDGET] Reallocating $800 TikTok → LinkedIn (ROAS delta: +1.9x)' },
-  { color: '#10b981', icon: 'fa-arrow-trend-up', msg: '→ [SCALE] "Product Launch Q3": ROAS 4.8x · budget +10% · $1,420→$1,562/day' },
-  { color: '#ef4444', icon: 'fa-scissors', msg: '→ [KILL] 2 Snapchat creatives: CTR &lt;0.8% · $340 daily waste stopped' },
-  { color: '#a855f7', icon: 'fa-brain', msg: '→ [PREDICT] "Brand Awareness" ROAS peak in 38h · pre-scaling budget' },
-  { color: '#6366f1', icon: 'fa-chart-line', msg: '→ [REPORT] Daily digest ready: +$12,430 revenue vs yesterday' },
-];
-
-let demoRunning = false;
-let demoIdx = 0;
-let demoInterval = null;
-const stepLabels = ['connect', 'analyze', 'scale', 'kill', 'generate', 'report'];
-
-function startDemoWalkthrough() {
-  if (demoRunning) return;
-  demoRunning = true;
-  const playBtn = document.getElementById('demo-play-btn');
-  const playIcon = document.getElementById('demo-play-icon');
-  if (playBtn) playBtn.style.display = 'none';
-  const log = document.getElementById('demo-log');
-  const steps = document.querySelectorAll('.demo-step-indicator');
-  demoIdx = 0;
-  if (log) log.innerHTML = '';
-
-  demoInterval = setInterval(() => {
-    if (demoIdx >= demoEvents.length) {
-      clearInterval(demoInterval);
-      demoRunning = false;
-      if (playBtn) { playBtn.style.display = 'flex'; playIcon.className = 'fas fa-redo text-white text-lg'; }
-      return;
-    }
-    const ev = demoEvents[demoIdx];
-    if (log) {
-      const line = document.createElement('div');
-      line.className = 'slide-in-right';
-      line.style.cssText = 'padding:3px 0;display:flex;align-items:center;gap:8px';
-      line.innerHTML = '<i class="fas ' + ev.icon + ' text-xs flex-shrink-0" style="color:' + ev.color + '"></i><span style="color:#94a3b8;font-size:10px;line-height:1.4">' + ev.msg + '</span>';
-      log.insertBefore(line, log.firstChild);
-      if (log.children.length > 5) log.removeChild(log.lastChild);
-    }
-    // Update step indicators
-    const stepMap = {0:1, 1:1, 2:2, 3:2, 4:3, 5:4, 6:3, 7:4, 8:5, 9:6};
-    const stepIdx = stepMap[demoIdx] || 0;
-    steps.forEach((s, i) => {
-      if (i < stepIdx) s.className = 'demo-step-indicator done';
-      else if (i === stepIdx) s.className = 'demo-step-indicator active';
-      else s.className = 'demo-step-indicator';
+  var statObs = new IntersectionObserver(function(entries){
+    if(!entries[0].isIntersecting) return;
+    document.querySelectorAll('[data-count]').forEach(function(el){
+      var t = parseFloat(el.dataset.count);
+      var d = parseInt(el.dataset.dec || '0', 10);
+      animNum(el, t, d, el.dataset.format);
     });
-    demoIdx++;
-  }, 2800);
-  trackEvent('demo_started');
-}
+    statObs.disconnect();
+  }, { threshold: 0.5 });
+  var sg = document.querySelector('.stats-grid');
+  if(sg) statObs.observe(sg);
 
-// ═══════════════════════════════════════════════════════════════
-// SCALE SIM — animate steps progressively
-// ═══════════════════════════════════════════════════════════════
-setTimeout(() => {
-  const steps = document.querySelectorAll('.scale-sim-step');
-  steps.forEach((s, i) => {
-    setTimeout(() => { s.classList.add('active'); }, i * 800 + 500);
-  });
-}, 1500);
-
-// ═══════════════════════════════════════════════════════════════
-// MICRO-FEEDBACK helper
-// ═══════════════════════════════════════════════════════════════
-function showMicroFeedback(msg, icon, color) {
-  const toast = document.getElementById('mf-toast');
-  const msgEl = document.getElementById('mf-msg');
-  const iconEl = document.getElementById('mf-icon');
-  if (!toast || !msgEl) return;
-  msgEl.textContent = msg;
-  if (iconEl) { iconEl.className = 'fas ' + (icon || 'fa-check-circle') + ' text-sm'; iconEl.style.color = color || '#10b981'; }
-  toast.classList.remove('hidden');
-  clearTimeout(toast._timeout);
-  toast._timeout = setTimeout(() => toast.classList.add('hidden'), 2500);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// COPY-TO-CLIPBOARD micro-interaction
-// ═══════════════════════════════════════════════════════════════
-document.addEventListener('click', e => {
-  if (e.target.closest('[data-copy]')) {
-    const text = e.target.closest('[data-copy]').dataset.copy;
-    navigator.clipboard.writeText(text).then(() => {
-      showMicroFeedback('Copied to clipboard!', 'fa-clipboard-check', '#6366f1');
+  // Pricing toggle — Monthly ↔ Annual (-20%)
+  var pt = document.getElementById('pricingToggle');
+  if(pt) pt.addEventListener('click', function(){
+    pt.classList.toggle('on');
+    var annual = pt.classList.contains('on');
+    document.querySelectorAll('.pr-amount[data-monthly]').forEach(function(el){
+      var v = annual ? el.getAttribute('data-annual') : el.getAttribute('data-monthly');
+      if(v) el.textContent = v;
     });
-  }
-});
+    document.querySelectorAll('.pr-billed[data-monthly-label]').forEach(function(el){
+      var v = annual ? el.getAttribute('data-annual-label') : el.getAttribute('data-monthly-label');
+      if(v) el.textContent = v;
+    });
+    document.querySelectorAll('.pr-card').forEach(function(c){ c.classList.toggle('annual', annual); });
+  });
 
-// ═══════════════════════════════════════════════════════════════
-// INIT — différé après paint pour ne pas bloquer LCP/FCP
-// ═══════════════════════════════════════════════════════════════
-function _initPage() {
-  // ROI calc
-  calcROI();
+  // Creative type tabs
+  document.querySelectorAll('.cr-type').forEach(function(item){
+    item.addEventListener('click', function(){
+      document.querySelectorAll('.cr-type').forEach(function(i){ i.classList.remove('active'); });
+      item.classList.add('active');
+    });
+  });
 
-  // Hero badge fade-in
-  const badge = document.getElementById('hero-badge');
-  if (badge) {
-    badge.style.opacity = '0';
-    setTimeout(() => { badge.style.transition = 'opacity .85s ease'; badge.style.opacity = '1'; }, 150);
-  }
-
-  // Lazy load images below the fold
-  if ('IntersectionObserver' in window) {
-    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-    const imgObserver = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const img = e.target;
-          if (img.dataset.src) { img.src = img.dataset.src; }
-          imgObserver.unobserve(img);
-        }
-      });
-    }, { rootMargin: '200px 0px' });
-    lazyImages.forEach(img => imgObserver.observe(img));
-  }
-
-  // Performance mark
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('adnova-interactive');
-    if (performance.measure) {
-      try { performance.measure('adnova-init', 'adnova-start', 'adnova-interactive'); } catch(e) {}
+  // Hero video modal
+  window.openHeroVideo = function(){
+    var m = document.getElementById('heroVideoModal');
+    if (!m) return;
+    m.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    var v = document.getElementById('heroVideo');
+    if (v && v.querySelector('source') && v.querySelector('source').src && !v.querySelector('source').src.endsWith('hero-walkthrough.mp4')) {
+      v.play().catch(function(){});
     }
-  }
-}
+  };
+  window.closeHeroVideo = function(){
+    var m = document.getElementById('heroVideoModal');
+    if (!m) return;
+    m.classList.remove('open');
+    document.body.style.overflow = '';
+    var v = document.getElementById('heroVideo');
+    if (v) { try { v.pause(); v.currentTime = 0; } catch(e){} }
+  };
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') window.closeHeroVideo();
+  });
 
-// Utilise requestIdleCallback pour ne pas impacter le LCP
-if (document.readyState === 'complete') {
-  scheduleObserve(_initPage);
-} else {
-  window.addEventListener('load', () => scheduleObserve(_initPage), { once: true });
-}
+  // Live AI decisions feed — rotate through a deck so the hero feels alive
+  var feed = document.getElementById('decisions-feed');
+  if (feed) {
+    var deck = [
+      { type:'scale',  icon:'↗', action:'Scale +12%', text:'"Summer Hero" budget porté à $18,420 — ROAS 5.26×',           meta:'Meta · Acme Corp' },
+      { type:'kill',   icon:'✕', action:'Kill',       text:'3 créas TikTok pausées — CTR 0.31% sous seuil 0.8%',          meta:'TikTok · Luxo Group' },
+      { type:'create', icon:'✨', action:'Génère',     text:'4 variantes vidéo UGC pour "Product Launch Q3"',              meta:'Multi · Digital Storm' },
+      { type:'budget', icon:'⇄', action:'Réalloue',   text:'$1,200 TikTok → Google — prédiction +23% ROAS',                meta:'Cross · Apex Mkt' },
+      { type:'scale',  icon:'↗', action:'Scale +18%', text:'"Retargeting Pro" élargi à audiences lookalike 3%',           meta:'Meta · NovaBrand' },
+      { type:'kill',   icon:'✕', action:'Kill',       text:'Bannière statique killed — CPA $89 vs cible $35',              meta:'Google · SkinKind' },
+      { type:'create', icon:'✨', action:'Génère',     text:'12 visuels SDXL générés pour Black Friday',                    meta:'Multi · SportNation' },
+      { type:'budget', icon:'⇄', action:'Réalloue',   text:'$800 FB → LinkedIn — segment B2B haut intent détecté',         meta:'Cross · TechStart' },
+      { type:'scale',  icon:'↗', action:'Scale +9%',  text:'Audience expandée 1% → 3% — reach +2.1M projeté',              meta:'Meta · Fashion Brand' },
+    ];
+    var idx = 3;
+    setInterval(function(){
+      var item = deck[idx % deck.length];
+      idx++;
+      var li = document.createElement('li');
+      li.className = 'dec-' + item.type;
+      li.innerHTML = '<div class="dec-icon">' + item.icon + '</div>'
+        + '<div class="dec-body"><span class="dec-action">' + item.action + '</span>'
+        + '<div class="dec-text">' + item.text + '</div>'
+        + '<div class="dec-meta">il y a 1 s · ' + item.meta + '</div></div>';
+      feed.insertBefore(li, feed.firstChild);
+      while (feed.children.length > 3) feed.removeChild(feed.lastChild);
+    }, 3400);
+  }
+})();
 </script>
+<!-- HERO VIDEO MODAL -->
+<div id="heroVideoModal" class="hv-modal" onclick="if(event.target===this) closeHeroVideo()">
+  <div class="hv-shell">
+    <button type="button" class="hv-close" onclick="closeHeroVideo()" aria-label="Fermer">✕</button>
+    <div class="hv-frame">
+      <video
+        id="heroVideo"
+        class="hv-video"
+        controls
+        playsinline
+        preload="metadata"
+        poster="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80">
+        <!-- Replace src with your final 60-second walkthrough (MP4 H.264, 1080p, ~12-18 MB) -->
+        <source src="/assets/hero-walkthrough.mp4" type="video/mp4"/>
+        Votre navigateur ne supporte pas la vidéo HTML5. <a href="/register" style="color:var(--orange)">Démarrer l'essai →</a>
+      </video>
+      <div class="hv-fallback" id="hvFallback">
+        <div class="hv-fb-icon">📽️</div>
+        <h3>Walkthrough produit · 60 s</h3>
+        <p>La vidéo de démo arrive bientôt. En attendant, lancez votre essai gratuit — pas de carte bancaire requise.</p>
+        <a href="/register" class="hv-fb-cta">Démarrer l'essai · 14 jours →</a>
+        <p class="hv-fb-script">📝 Producteurs vidéo : voir <code>docs/hero-video-script.md</code> dans le repo pour le storyboard détaillé (8 scènes, voix-off française, B-roll captures dashboard).</p>
+      </div>
+    </div>
+    <div class="hv-meta">
+      <span>Chapter 1 · Hook (0:00–0:08) · "Vos ads tournent — vous, vous dormez."</span>
+      <span>Chapter 2 · Live decisions (0:08–0:25)</span>
+      <span>Chapter 3 · Creative gen (0:25–0:40)</span>
+      <span>Chapter 4 · Decision Log (0:40–0:52)</span>
+      <span>Chapter 5 · CTA (0:52–1:00)</span>
+    </div>
+  </div>
+</div>
+
 </body>
-</html>`)
+</html>`
 }
 
-// ── Helper components ────────────────────────────────────────────────────────
-
-function heroKPI(val: string, label: string, change: string, icon: string, gradient: string, positive: boolean): string {
-  return `<div class="rounded-xl p-3 border border-white/[0.06] relative overflow-hidden" style="background:rgba(255,255,255,0.025)">
-    <div class="flex items-center justify-between mb-2">
-      <div class="w-7 h-7 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0">
-        <i class="fas ${icon} text-white text-xs"></i>
-      </div>
-      <span class="text-xs font-bold px-2 py-0.5 rounded-lg ${positive ? 'text-emerald-400' : 'text-slate-400'}" style="${positive ? 'background:rgba(16,185,129,0.12)' : 'background:rgba(148,163,184,0.1)'}">${change}</span>
-    </div>
-    <div class="text-xl font-black text-white leading-none">${val}</div>
-    <div class="text-xs text-slate-500 mt-1">${label}</div>
-  </div>`
-}
-
-function heroPlatformBar(name: string, color: string, pct: number, spend: string, roas: string): string {
-  return `<div class="flex items-center gap-3">
-    <div class="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0" style="background:${color}22">
-      <i class="${getPlatformIcon(name + ' Ads')} text-xs" style="color:${color}"></i>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center justify-between mb-1">
-        <span class="text-xs text-slate-400 font-medium">${name}</span>
-        <span class="text-xs font-black text-emerald-400">${roas}</span>
-      </div>
-      <div class="h-1.5 rounded-full" style="background:rgba(255,255,255,0.06)">
-        <div class="h-1.5 rounded-full" style="width:${pct}%;background:${color}"></div>
-      </div>
-    </div>
-    <span class="text-xs text-slate-500 w-12 text-right flex-shrink-0">${spend}</span>
-  </div>`
-}
-
-function heroFeedItem(icon: string, color: string, text: string, time: string): string {
-  return `<div class="flex items-center gap-3 py-1.5">
-    <div class="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0" style="background:${color}20">
-      <i class="fas fa-${icon} text-xs" style="color:${color}"></i>
-    </div>
-    <p class="flex-1 text-xs text-slate-400 truncate">${text}</p>
-    <span class="text-xs text-slate-600 flex-shrink-0">${time}</span>
-  </div>`
-}
-
-function getPlatformGrad(name: string): string {
-  const m: Record<string,string> = {
-    'Facebook Ads':'bg-blue-600','Google Ads':'bg-gradient-to-br from-blue-500 to-red-500',
-    'Instagram Ads':'bg-gradient-to-br from-orange-500 to-pink-600','TikTok Ads':'bg-zinc-900 border border-white/10',
-    'LinkedIn Ads':'bg-blue-700','YouTube Ads':'bg-red-600','Pinterest Ads':'bg-red-600',
-    'X (Twitter) Ads':'bg-zinc-800 border border-white/10','Snapchat Ads':'bg-yellow-400',
-  }
-  return m[name] || 'bg-slate-700'
-}
-
-function getPlatformIcon(name: string): string {
-  const m: Record<string,string> = {
-    'Facebook Ads':'fab fa-facebook-f','Google Ads':'fab fa-google','Instagram Ads':'fab fa-instagram',
-    'TikTok Ads':'fab fa-tiktok','LinkedIn Ads':'fab fa-linkedin-in','YouTube Ads':'fab fa-youtube',
-    'Pinterest Ads':'fab fa-pinterest-p','X (Twitter) Ads':'fab fa-x-twitter','Snapchat Ads':'fab fa-snapchat',
-    'Facebook':'fab fa-facebook-f','Google':'fab fa-google','Instagram':'fab fa-instagram',
-    'TikTok':'fab fa-tiktok','LinkedIn':'fab fa-linkedin-in','YouTube':'fab fa-youtube',
-    'Pinterest':'fab fa-pinterest-p','X/Twitter':'fab fa-x-twitter','Snapchat':'fab fa-snapchat',
-  }
-  return m[name] || 'fas fa-ad'
-}
-
-function bigStat(val: string, label: string, icon: string, gradient: string, sub: string): string {
-  return `<div class="stat-card rounded-2xl p-5 text-center fade-up">
-    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center mx-auto mb-4 shadow-xl">
-      <i class="fas ${icon} text-white text-xl"></i>
-    </div>
-    <div class="text-4xl font-black text-white mb-2" style="font-family:'Space Grotesk',sans-serif">${val}</div>
-    <div class="text-sm font-semibold text-slate-400 mb-2">${label}</div>
-    <div class="text-xs text-slate-600 leading-relaxed">${sub}</div>
-  </div>`
-}
-
-function miniMetric(val: string, label: string, icon: string, color: string): string {
-  return `<div class="text-center fade-up">
-    <div class="w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center" style="background:${color}22;border:1px solid ${color}30">
-      <i class="fas ${icon} text-sm" style="color:${color}"></i>
-    </div>
-    <div class="text-2xl font-black text-white" style="font-family:'Space Grotesk',sans-serif">${val}</div>
-    <div class="text-xs text-slate-500 mt-1">${label}</div>
-  </div>`
-}
-
-function featureCard(icon: string, gradient: string, glowColor: string, title: string, desc: string, metric: string, color: string): string {
-  return `<div class="glass-card rounded-2xl p-5 fade-up group holo-card">
-    <div class="flex items-start gap-4 mb-4">
-      <div class="feat-icon bg-gradient-to-br ${gradient} relative flex-shrink-0">
-        <div class="feat-icon-glow" style="background:${glowColor}"></div>
-        <i class="fas ${icon} text-white text-xl relative z-10"></i>
-      </div>
-      <h3 class="font-black text-white text-lg leading-tight pt-2">${title}</h3>
-    </div>
-    <p class="text-sm text-slate-500 leading-relaxed mb-4">${desc}</p>
-    <div class="flex items-center gap-2">
-      <span class="metric-badge" style="background:${glowColor.replace('0.45','0.12')};border:1px solid ${glowColor.replace('0.45','0.25')};color:${color}">
-        <i class="fas fa-bolt text-xs"></i> ${metric}
-      </span>
-    </div>
-  </div>`
-}
-
-function featureHighlight(icon: string, color: string, title: string, desc: string): string {
-  return `<div class="glass-neo rounded-2xl p-4 fade-up flex items-start gap-4 group hover:scale-[1.02] transition-transform">
-    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:${color}20;border:1px solid ${color}30">
-      <i class="fas ${icon} text-sm" style="color:${color}"></i>
-    </div>
-    <div>
-      <div class="font-bold text-white text-sm mb-1">${title}</div>
-      <div class="text-xs text-slate-500 leading-relaxed">${desc}</div>
-    </div>
-  </div>`
-}
-
-function howStep(num: string, title: string, desc: string, icon: string, color: string, bg: string): string {
-  return `<div class="text-center fade-up relative">
-    <div class="relative inline-block mb-4">
-      <div class="w-28 h-28 rounded-3xl flex items-center justify-center mx-auto" style="background:${bg};border:1px solid ${bg.replace('0.12','0.25')}">
-        <i class="fas fa-${icon} text-${color}-400 text-4xl"></i>
-      </div>
-      <div class="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-white text-xs font-black shadow-xl border-2 border-[#020510]">${num}</div>
-    </div>
-    <h3 class="font-black text-white text-xl mb-3">${title}</h3>
-    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">${desc}</p>
-  </div>`
-}
-
-function testimonial(name: string, role: string, gradient: string, abbr: string, quote: string, metric: string, plan: string, photoUrl?: string): string {
-  const avatar = photoUrl
-    ? `<img src="${photoUrl}" alt="${name}" class="w-12 h-12 rounded-full object-cover flex-shrink-0 shadow-xl" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="w-12 h-12 rounded-full bg-gradient-to-br ${gradient} items-center justify-center text-sm font-black text-white flex-shrink-0 shadow-xl" style="display:none">${abbr}</div>`
-    : `<div class="w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-sm font-black text-white flex-shrink-0 shadow-xl">${abbr}</div>`;
-  return `<div class="testi-card rounded-2xl p-5 fade-up">
-    <div class="flex items-center gap-3 mb-4">
-      ${avatar}
-      <div class="flex-1">
-        <div class="text-sm font-black text-white">${name}</div>
-        <div class="text-xs text-slate-500 mt-0.5">${role}</div>
-      </div>
-      <div class="flex gap-0.5">${'<i class="fas fa-star text-amber-400 text-xs"></i>'.repeat(5)}</div>
-    </div>
-    <p class="text-sm text-slate-400 leading-relaxed mb-4">"${quote}"</p>
-    <div class="flex items-center gap-2 flex-wrap">
-      <span class="text-xs font-black text-emerald-400 px-3 py-1.5 rounded-xl" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)">${metric}</span>
-      <span class="text-xs text-slate-600 px-2 py-1 rounded-lg glass">${plan}</span>
-    </div>
-  </div>`
-}
-
-function trustBadge(icon: string, label: string): string {
-  return `<div class="flex items-center gap-2 text-xs text-slate-500 glass px-4 py-2 rounded-xl">
-    <i class="fas ${icon} text-brand-400"></i> ${label}
-  </div>`
-}
-
-function faqItem(question: string, answer: string): string {
-  return `<div class="glass-neo rounded-xl overflow-hidden">
-    <button class="faq-trigger w-full flex items-center justify-between p-5 text-left group">
-      <span class="text-sm font-bold text-white group-hover:text-brand-300 transition-colors pr-4">${question}</span>
-      <i class="fas fa-chevron-down text-slate-500 faq-icon transition-transform duration-300 flex-shrink-0 text-xs"></i>
-    </button>
-    <div class="faq-body hidden px-5 pb-5">
-      <p class="text-sm text-slate-400 leading-relaxed">${answer}</p>
-    </div>
-  </div>`
-}
-
-function footerSocial(icon: string, href: string): string {
-  return `<a href="${href}" class="w-8 h-8 rounded-lg glass flex items-center justify-center text-slate-500 hover:text-slate-200 hover:border-brand-500/50 transition-all">
-    <i class="fab ${icon} text-xs"></i>
-  </a>`
-}
-
-// ── Use-case helpers ─────────────────────────────────────────────────────────
-function ucProof(label: string, value: string, color: string): string {
-  const colors: Record<string,string> = { emerald:'#10b981', red:'#ef4444', purple:'#a855f7', cyan:'#06b6d4' }
-  const c = colors[color] || '#6366f1'
-  return `<div class="flex items-start gap-3">
-    <div class="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5" style="background:${c}20;border:1px solid ${c}30">
-      <i class="fas fa-check text-xs" style="color:${c}"></i>
-    </div>
-    <div>
-      <span class="text-xs font-bold text-slate-400">${label}: </span>
-      <span class="text-xs text-white font-semibold">${value}</span>
-    </div>
-  </div>`
-}
-
-function scaleSimStep(day: string, budget: string, metrics: string, action: string, color: string, idx: number): string {
-  const colors: Record<string,string> = { emerald:'#10b981', amber:'#f59e0b' }
-  const c = colors[color] || '#6366f1'
-  return `<div class="scale-sim-step sim-step flex items-start gap-3 p-3 rounded-xl" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);transition-delay:${idx*0.2}s">
-    <div class="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 step-icon" style="background:${c}20;border:1px solid ${c}35">
-      <i class="fas fa-arrow-trend-up text-xs" style="color:${c}"></i>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-xs font-black text-white">${day}</span>
-        <span class="text-xs font-bold px-2 py-0.5 rounded-lg" style="background:${c}15;color:${c}">${budget}</span>
-      </div>
-      <div class="text-xs text-slate-500 mb-1">${metrics}</div>
-      <div class="text-xs text-slate-600 italic">${action}</div>
-    </div>
-  </div>`
-}
-
-function creativeKillRow(name: string, ctr: string, impressions: number, status: string, color: string): string {
-  const statusConfig: Record<string,{icon:string,color:string,label:string}> = {
-    killed: {icon:'fa-circle-xmark', color:'#ef4444', label:'Killed'},
-    scaling: {icon:'fa-arrow-trend-up', color:'#10b981', label:'Scaling'},
-    active: {icon:'fa-circle-check', color:'#6366f1', label:'Active'}
-  }
-  const s = statusConfig[status] || statusConfig.active
-  return `<div class="flex items-center gap-3 p-2.5 rounded-xl" style="background:rgba(255,255,255,0.02)">
-    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:${color}15;border:1px solid ${color}25">
-      <i class="fas fa-image text-xs" style="color:${color}"></i>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="text-xs font-semibold text-white truncate">${name}</div>
-      <div class="text-xs text-slate-500">${impressions.toLocaleString()} impressions</div>
-    </div>
-    <div class="text-right flex-shrink-0">
-      <div class="text-xs font-black" style="color:${color === '#ef4444' ? '#ef4444' : '#10b981'}">${ctr} CTR</div>
-      <div class="text-xs flex items-center gap-1 justify-end mt-0.5" style="color:${s.color}">
-        <i class="fas ${s.icon} text-xs"></i>${s.label}
-      </div>
-    </div>
-  </div>`
-}
-
-function genLogRow(name: string, type: string, time: string, prediction: string, status: string, color: string): string {
-  return `<div class="flex items-center gap-3 p-2.5 rounded-xl" style="background:rgba(255,255,255,0.02)">
-    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:${color}15;border:1px solid ${color}25">
-      <i class="fas fa-wand-magic-sparkles text-xs" style="color:${color}"></i>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="text-xs font-semibold text-white truncate">${name}</div>
-      <div class="text-xs text-slate-500">${type} · Generated in ${time}</div>
-    </div>
-    <div class="text-right flex-shrink-0">
-      <div class="text-xs font-bold text-emerald-400">${prediction}</div>
-      <div class="text-xs px-2 py-0.5 rounded-full mt-0.5" style="background:${color}15;color:${color}">${status}</div>
-    </div>
-  </div>`
-}
-
-function audienceHealthRow(name: string, size: string, matchRate: number, cpm: string, status: string): string {
-  const statusConfig: Record<string,{color:string,label:string}> = {
-    healthy: {color:'#10b981', label:'Healthy'},
-    saturated: {color:'#ef4444', label:'Saturated'},
-    warning: {color:'#f59e0b', label:'Watch'},
-    new: {color:'#6366f1', label:'New'}
-  }
-  const s = statusConfig[status] || statusConfig.healthy
-  const barColor = matchRate > 70 ? '#10b981' : matchRate > 50 ? '#f59e0b' : '#ef4444'
-  return `<div class="flex items-center gap-3">
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center justify-between mb-1">
-        <span class="text-xs font-semibold text-white truncate">${name}</span>
-        <span class="text-xs px-2 py-0.5 rounded-full font-bold flex-shrink-0 ml-2" style="background:${s.color}15;color:${s.color}">${s.label}</span>
-      </div>
-      <div class="h-1.5 rounded-full mb-1" style="background:rgba(255,255,255,0.06)">
-        <div class="h-1.5 rounded-full" style="width:${matchRate}%;background:${barColor}"></div>
-      </div>
-      <div class="flex items-center gap-3 text-xs text-slate-500">
-        <span>${size} reach</span><span>CPM ${cpm}</span><span>${matchRate}% match</span>
-      </div>
-    </div>
-  </div>`
-}
-
-function roiPreset(label: string, spend: number | null, roas?: number, isRoas?: boolean): string {
-  const field = isRoas ? 'roas' : 'spend'
-  const val = isRoas ? roas : spend
-  return `<button class="roi-preset" data-field="${field}" onclick="setROIPreset('${field}', ${val})">${label}</button>`
-}
-
-function roiResultCard(id: string, label: string, defaultVal: string, icon: string, color: string, sub: string): string {
-  return `<div class="rounded-2xl p-4 text-center roi-result" style="background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06)">
-    <div class="w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center" style="background:${color}20;border:1px solid ${color}30">
-      <i class="fas ${icon} text-sm" style="color:${color}"></i>
-    </div>
-    <div class="text-2xl font-black text-white mb-1" id="${id}" style="transition:all .3s ease">${defaultVal}</div>
-    <div class="text-xs font-bold text-slate-400 mb-1">${label}</div>
-    <div class="text-xs text-slate-600">${sub}</div>
-  </div>`
-}
-
-function demoStep(num: number, label: string, state: string): string {
-  const stateClass = state === 'active' ? 'active' : state === 'done' ? 'done' : ''
-  return `<div class="demo-step-indicator ${stateClass}" id="demo-step-${num}">
-    <span class="font-black mr-1">${num}.</span>${label}
-  </div>`
-}
-
-function caseStudyCard(industry: string, company: string, gradient: string, metrics: [string,string,string,string][], story: string, meta: string): string {
-  return `<div class="case-card p-6 fade-up" style="--case-gradient:linear-gradient(90deg,${gradient.includes('brand') ? '#6366f1,#a855f7' : gradient.includes('emerald') ? '#10b981,#06b6d4' : '#ec4899,#ef4444'})">
-    <div class="flex items-center gap-3 mb-5">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-xs font-black text-white flex-shrink-0 shadow-lg">
-        ${company.split(' ').map(w => w[0]).join('').slice(0,2)}
-      </div>
-      <div>
-        <div class="text-xs font-black text-slate-500 uppercase tracking-wider">${industry}</div>
-        <div class="text-sm font-black text-white">${company}</div>
-      </div>
-    </div>
-    <div class="space-y-3 mb-5">
-      ${metrics.map(([label, before, after, delta]) => `
-      <div class="flex items-center justify-between py-2 border-b border-white/[0.04]">
-        <span class="text-xs text-slate-500">${label}</span>
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-slate-600 line-through">${before}</span>
-          <i class="fas fa-arrow-right text-xs text-slate-600"></i>
-          <span class="text-sm font-black text-white">${after}</span>
-          <span class="text-xs font-black px-2 py-0.5 rounded-lg" style="background:rgba(16,185,129,0.12);color:#10b981">${delta}</span>
-        </div>
-      </div>`).join('')}
-    </div>
-    <p class="text-xs text-slate-500 leading-relaxed mb-4">${story}</p>
-    <div class="flex items-center gap-2">
-      <div class="flex gap-0.5">${'<i class="fas fa-star text-amber-400 text-xs"></i>'.repeat(5)}</div>
-      <span class="text-xs text-slate-600">${meta}</span>
-    </div>
-  </div>`
-}
-
-function compareRow(feature: string, adnova: boolean, manual: boolean | string, others: boolean | string): string {
-  const check = (v: boolean | string) => {
-    if (v === true) return '<i class="fas fa-check compare-check"></i>'
-    if (v === false) return '<i class="fas fa-xmark compare-cross"></i>'
-    return '<span class="text-xs text-amber-400 font-semibold">Partial</span>'
-  }
-  return `<tr class="compare-row transition-colors">
-    <td class="px-5 py-3 text-sm text-slate-400">${feature}</td>
-    <td class="px-5 py-3 text-center">${check(adnova)}</td>
-    <td class="px-5 py-3 text-center">${check(manual)}</td>
-    <td class="px-5 py-3 text-center">${check(others)}</td>
-  </tr>`
-}
-
-// ── Pricing card ─────────────────────────────────────────────────────────────
-function pricingCard(plan: typeof PLANS[0]): string {
-  const isEnterprise = plan.id === 'enterprise'
-  const priceDisplay = isEnterprise
-    ? `<span class="text-4xl font-black text-white" style="font-family:'Space Grotesk',sans-serif">Custom</span>`
-    : `<span class="text-5xl font-black text-white" id="price-${plan.id}" style="font-family:'Space Grotesk',sans-serif">$${plan.price}</span><span class="text-slate-500 ml-1 text-sm plan-period">/month</span>`
-
-  return `<div class="plan-card rounded-2xl p-5 fade-up ${plan.popular ? 'popular' : ''}">
-    ${plan.popular ? `<div class="absolute top-5 right-5 text-xs font-black px-3 py-1.5 rounded-full" style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;box-shadow:0 4px 12px rgba(249,115,22,0.4)">⭐ Most Popular</div>` : ''}
-    <div class="mb-4">
-      <div class="flex items-center gap-2 mb-2">
-        <div class="w-3 h-3 rounded-full" style="background:${plan.color};box-shadow:0 0 10px ${plan.color}"></div>
-        <span class="text-xs font-black uppercase tracking-widest" style="color:${plan.color}">${plan.name}</span>
-      </div>
-      <div class="flex items-end gap-2 mt-3">${priceDisplay}</div>
-      <div class="text-xs text-slate-600 mt-1.5">${!isEnterprise ? `Up to ${plan.adSpend} ad spend/month` : 'Unlimited — tailored to you'}</div>
-    </div>
-    <div class="grid grid-cols-3 gap-2 mb-4 p-3 rounded-xl" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05)">
-      <div class="text-center"><div class="text-base font-black text-white">${plan.campaigns === 999 ? '∞' : plan.campaigns}</div><div class="text-xs text-slate-600">campaigns</div></div>
-      <div class="text-center border-x border-white/5"><div class="text-base font-black text-white">${plan.platforms}</div><div class="text-xs text-slate-600">platforms</div></div>
-      <div class="text-center"><div class="text-base font-black text-white">${plan.users === 999 ? '∞' : plan.users}</div><div class="text-xs text-slate-600">users</div></div>
-    </div>
-    <ul class="space-y-2.5 mb-4">
-      ${plan.features.map(f => `<li class="flex items-start gap-2.5 text-sm text-slate-400">
-        <i class="fas fa-check text-xs mt-0.5 flex-shrink-0" style="color:${plan.color}"></i>${f}
-      </li>`).join('')}
-    </ul>
-    <a href="${isEnterprise ? '#' : '/register'}"
-      class="block text-center text-sm font-black py-4 rounded-xl transition-all ripple-btn ${plan.popular ? 'btn-primary text-white' : 'btn-outline-brand'}"
-      ${isEnterprise ? `onclick="document.getElementById('contact-toast').classList.remove('hidden');setTimeout(()=>document.getElementById('contact-toast').classList.add('hidden'),3500);trackEvent('pricing_enterprise_cta')"` : `onclick="trackEvent('pricing_${plan.id}_cta')"`}>
-      ${plan.cta} ${!isEnterprise ? '<i class="fas fa-arrow-right text-xs ml-1.5"></i>' : '<i class="fas fa-phone text-xs ml-1.5"></i>'}
-    </a>
-  </div>`
+// ─── Handler ───────────────────────────────────────────────────────────────
+export const renderLanding = (c: Context) => {
+  c.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+  c.header('X-Content-Type-Options', 'nosniff')
+  return c.html(pageHtml())
 }

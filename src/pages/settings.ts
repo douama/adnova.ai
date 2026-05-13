@@ -3,15 +3,15 @@ import { type Lang, t } from '../lib/i18n'
 
 export function renderSettings(lang: Lang = 'en'): string {
   const platforms = [
-    { id:'facebook', name:'Facebook Ads', icon:'fab fa-facebook-f', color:'#1877F2', grad:'from-blue-600 to-blue-700', connected:true, accountId:'act_1234567890', token:'EAA****', scope:'ads_management,business_management', dailyBudget:'500', currency:'USD' },
-    { id:'google', name:'Google Ads', icon:'fab fa-google', color:'#4285F4', grad:'from-blue-500 to-red-500', connected:true, accountId:'MCC-789-012-3456', token:'ya29.****', scope:'AdWords', dailyBudget:'800', currency:'USD' },
-    { id:'instagram', name:'Instagram Ads', icon:'fab fa-instagram', color:'#E1306C', grad:'from-orange-500 to-pink-600', connected:true, accountId:'ig_act_9876543', token:'IGQ****', scope:'instagram_basic,ads_management', dailyBudget:'300', currency:'USD' },
-    { id:'tiktok', name:'TikTok Ads', icon:'fab fa-tiktok', color:'#ff0050', grad:'from-slate-900 to-pink-600', connected:true, accountId:'TT-ADV-556677', token:'ttad****', scope:'campaign.read,campaign.write', dailyBudget:'250', currency:'USD' },
-    { id:'linkedin', name:'LinkedIn Ads', icon:'fab fa-linkedin-in', color:'#0077b5', grad:'from-blue-700 to-blue-800', connected:true, accountId:'LI-ADV-112233', token:'AQV****', scope:'rw_ads,r_ads_reporting', dailyBudget:'200', currency:'USD' },
-    { id:'youtube', name:'YouTube Ads', icon:'fab fa-youtube', color:'#ff0000', grad:'from-red-600 to-red-700', connected:true, accountId:'YT-ADV-445566', token:'ya29.****', scope:'YouTube Analytics', dailyBudget:'350', currency:'USD' },
+    { id:'facebook', name:'Facebook Ads', icon:'fab fa-facebook-f', color:'#A8A8A8', grad:'from-slate-600 to-slate-700', connected:true, accountId:'act_1234567890', token:'EAA****', scope:'ads_management,business_management', dailyBudget:'500', currency:'USD' },
+    { id:'google', name:'Google Ads', icon:'fab fa-google', color:'#A8A8A8', grad:'from-slate-500 to-slate-500', connected:true, accountId:'MCC-789-012-3456', token:'ya29.****', scope:'AdWords', dailyBudget:'800', currency:'USD' },
+    { id:'instagram', name:'Instagram Ads', icon:'fab fa-instagram', color:'#A8A8A8', grad:'from-orange-500 to-brand-600', connected:true, accountId:'ig_act_9876543', token:'IGQ****', scope:'instagram_basic,ads_management', dailyBudget:'300', currency:'USD' },
+    { id:'tiktok', name:'TikTok Ads', icon:'fab fa-tiktok', color:'#A8A8A8', grad:'from-slate-900 to-brand-600', connected:true, accountId:'TT-ADV-556677', token:'ttad****', scope:'campaign.read,campaign.write', dailyBudget:'250', currency:'USD' },
+    { id:'linkedin', name:'LinkedIn Ads', icon:'fab fa-linkedin-in', color:'#A8A8A8', grad:'from-slate-700 to-slate-800', connected:true, accountId:'LI-ADV-112233', token:'AQV****', scope:'rw_ads,r_ads_reporting', dailyBudget:'200', currency:'USD' },
+    { id:'youtube', name:'YouTube Ads', icon:'fab fa-youtube', color:'#A8A8A8', grad:'from-slate-600 to-slate-700', connected:true, accountId:'YT-ADV-445566', token:'ya29.****', scope:'YouTube Analytics', dailyBudget:'350', currency:'USD' },
     { id:'twitter', name:'X (Twitter) Ads', icon:'fab fa-x-twitter', color:'#14171a', grad:'from-slate-800 to-slate-900', connected:true, accountId:'TW-ADV-778899', token:'AAAAAAAAAl****', scope:'tweet.read,ads.read,ads.write', dailyBudget:'150', currency:'USD' },
-    { id:'pinterest', name:'Pinterest Ads', icon:'fab fa-pinterest-p', color:'#e60023', grad:'from-red-600 to-red-700', connected:true, accountId:'PI-ADV-223344', token:'pina_****', scope:'ads:read,ads:write', dailyBudget:'100', currency:'USD' },
-    { id:'snapchat', name:'Snapchat Ads', icon:'fab fa-snapchat', color:'#FFFC00', grad:'from-yellow-400 to-yellow-500', connected:false, accountId:'', token:'', scope:'snapchat-marketing-api', dailyBudget:'100', currency:'USD' },
+    { id:'pinterest', name:'Pinterest Ads', icon:'fab fa-pinterest-p', color:'#e60023', grad:'from-slate-600 to-slate-700', connected:true, accountId:'PI-ADV-223344', token:'pina_****', scope:'ads:read,ads:write', dailyBudget:'100', currency:'USD' },
+    { id:'snapchat', name:'Snapchat Ads', icon:'fab fa-snapchat', color:'#A8A8A8', grad:'from-brand-400 to-brand-500', connected:false, accountId:'', token:'', scope:'snapchat-marketing-api', dailyBudget:'100', currency:'USD' },
   ]
 
   const content = `
@@ -44,7 +44,7 @@ export function renderSettings(lang: Lang = 'en'): string {
       <div id="panel-workspace" class="settings-panel">
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
               <i class="fas fa-building text-white text-sm"></i>
             </div>
             <div>
@@ -83,7 +83,7 @@ export function renderSettings(lang: Lang = 'en'): string {
               <option>UTC+1 (Central European Time)</option><option>UTC+0 (London)</option>
             </select>
           </div>
-          <button onclick="saveWorkspace()" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all">
+          <button onclick="saveWorkspace()" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all">
             <i class="fas fa-save text-xs"></i> Save Changes
           </button>
         </div>
@@ -94,7 +94,7 @@ export function renderSettings(lang: Lang = 'en'): string {
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
                 <i class="fas fa-plug text-white text-sm"></i>
               </div>
               <div>
@@ -102,7 +102,7 @@ export function renderSettings(lang: Lang = 'en'): string {
                 <p class="text-xs text-slate-500">Configure API keys, budgets and permissions</p>
               </div>
             </div>
-            <span class="text-xs glass px-3 py-1.5 rounded-full text-emerald-400 font-semibold">${platforms.filter(p=>p.connected).length}/9 connected</span>
+            <span class="text-xs glass px-3 py-1.5 rounded-full text-brand-400 font-semibold">${platforms.filter(p=>p.connected).length}/9 connected</span>
           </div>
 
           <div class="space-y-4" id="platforms-settings-list">
@@ -115,7 +115,7 @@ export function renderSettings(lang: Lang = 'en'): string {
       <div id="panel-profile" class="settings-panel hidden">
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center">
               <i class="fas fa-user text-white text-sm"></i>
             </div>
             <div>
@@ -124,7 +124,7 @@ export function renderSettings(lang: Lang = 'en'): string {
             </div>
           </div>
           <div class="flex items-center gap-4 mb-4">
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center text-2xl font-black text-white">JD</div>
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-2xl font-black text-white">JD</div>
             <div>
               <button class="glass hover:bg-white/10 text-sm text-slate-300 px-4 py-2 rounded-xl transition-all mb-2 block">Upload Photo</button>
               <p class="text-xs text-slate-600">JPG, PNG or GIF — max 2MB</p>
@@ -148,7 +148,7 @@ export function renderSettings(lang: Lang = 'en'): string {
               <input value="Marketing Director" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
             </div>
           </div>
-          <button onclick="showToast('Profile saved!')" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Save Profile</button>
+          <button onclick="showToast('Profile saved!')" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Save Profile</button>
         </div>
       </div>
 
@@ -157,7 +157,7 @@ export function renderSettings(lang: Lang = 'en'): string {
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
                 <i class="fas fa-users text-white text-sm"></i>
               </div>
               <h3 class="font-bold text-white">Team Members</h3>
@@ -167,10 +167,10 @@ export function renderSettings(lang: Lang = 'en'): string {
             </button>
           </div>
           <div class="space-y-3" id="team-list">
-            ${teamMember2('John Doe', 'john@acmecorp.com', 'Owner', 'JD', 'from-brand-500 to-purple-600')}
-            ${teamMember2('Sarah Kim', 'sarah@acmecorp.com', 'Admin', 'SK', 'from-emerald-500 to-teal-600')}
-            ${teamMember2('Mike Chen', 'mike@acmecorp.com', 'Editor', 'MC', 'from-blue-500 to-cyan-600')}
-            ${teamMember2('Emma Davis', 'emma@acmecorp.com', 'Viewer', 'ED', 'from-pink-500 to-rose-600')}
+            ${teamMember2('John Doe', 'john@acmecorp.com', 'Owner', 'JD', 'from-brand-500 to-brand-600')}
+            ${teamMember2('Sarah Kim', 'sarah@acmecorp.com', 'Admin', 'SK', 'from-brand-500 to-brand-600')}
+            ${teamMember2('Mike Chen', 'mike@acmecorp.com', 'Editor', 'MC', 'from-slate-500 to-slate-600')}
+            ${teamMember2('Emma Davis', 'emma@acmecorp.com', 'Viewer', 'ED', 'from-brand-500 to-brand-600')}
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ export function renderSettings(lang: Lang = 'en'): string {
       <div id="panel-notifications" class="settings-panel hidden">
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-orange-600 flex items-center justify-center">
               <i class="fas fa-bell text-white text-sm"></i>
             </div>
             <h3 class="font-bold text-white">Notification Preferences</h3>
@@ -203,7 +203,7 @@ export function renderSettings(lang: Lang = 'en'): string {
               ['Slack integration alerts', false],
             ])}
           </div>
-          <button onclick="showToast('Notification preferences saved!')" class="mt-4 bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Save Preferences</button>
+          <button onclick="showToast('Notification preferences saved!')" class="mt-4 bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Save Preferences</button>
         </div>
       </div>
 
@@ -211,7 +211,7 @@ export function renderSettings(lang: Lang = 'en'): string {
       <div id="panel-security" class="settings-panel hidden">
         <div class="glass rounded-2xl p-6 space-y-5">
           <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-500 to-orange-600 flex items-center justify-center">
               <i class="fas fa-shield-halved text-white text-sm"></i>
             </div>
             <h3 class="font-bold text-white">Security Settings</h3>
@@ -223,7 +223,7 @@ export function renderSettings(lang: Lang = 'en'): string {
               <input type="password" placeholder="Current password" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
               <input type="password" placeholder="New password" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
               <input type="password" placeholder="Confirm new password" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
-              <button onclick="showToast('Password updated!')" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold">Update Password</button>
+              <button onclick="showToast('Password updated!')" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold">Update Password</button>
             </div>
           </div>
           <!-- 2FA -->
@@ -245,7 +245,7 @@ export function renderSettings(lang: Lang = 'en'): string {
               ${sessionRow('Chrome / macOS', 'Paris, France', true)}
               ${sessionRow('Mobile Safari / iOS', 'Paris, France', false)}
             </div>
-            <button onclick="showToast('All other sessions revoked!')" class="mt-3 text-xs text-red-400 hover:text-red-300 transition-colors">Revoke all other sessions</button>
+            <button onclick="showToast('All other sessions revoked!')" class="mt-3 text-xs text-slate-400 hover:text-slate-300 transition-colors">Revoke all other sessions</button>
           </div>
         </div>
       </div>
@@ -255,7 +255,7 @@ export function renderSettings(lang: Lang = 'en'): string {
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center">
                 <i class="fas fa-key text-white text-sm"></i>
               </div>
               <h3 class="font-bold text-white">API Keys</h3>
@@ -276,7 +276,7 @@ export function renderSettings(lang: Lang = 'en'): string {
       <div id="panel-ai_prefs" class="settings-panel hidden">
         <div class="glass rounded-2xl p-6">
           <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
               <i class="fas fa-brain text-white text-sm"></i>
             </div>
             <div>
@@ -329,19 +329,19 @@ export function renderSettings(lang: Lang = 'en'): string {
             ${prefToggle2('Daily AI performance reports', true)}
             ${prefToggle2('A/B test automation', true)}
           </div>
-          <button onclick="showToast('AI preferences saved!')" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Save AI Settings</button>
+          <button onclick="showToast('AI preferences saved!')" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">Save AI Settings</button>
         </div>
       </div>
 
       <!-- BILLING REDIRECT PANEL -->
       <div id="panel-billing_link" class="settings-panel hidden">
         <div class="glass rounded-2xl p-6 text-center">
-          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-4">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mx-auto mb-4">
             <i class="fas fa-credit-card text-white text-2xl"></i>
           </div>
           <h3 class="font-bold text-white text-lg mb-2">Billing & Subscription</h3>
           <p class="text-slate-500 text-sm mb-6">Manage your plan, invoices and payment methods</p>
-          <a href="/billing" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white px-8 py-3 rounded-xl font-bold inline-flex items-center gap-2">
+          <a href="/billing" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white px-8 py-3 rounded-xl font-bold inline-flex items-center gap-2">
             <i class="fas fa-external-link text-xs"></i> Go to Billing
           </a>
         </div>
@@ -388,7 +388,7 @@ export function renderSettings(lang: Lang = 'en'): string {
           </select>
         </div>
         <div class="flex gap-3">
-          <button onclick="sendInvite()" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 text-white py-3 rounded-xl text-sm font-bold">Send Invite</button>
+          <button onclick="sendInvite()" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 text-white py-3 rounded-xl text-sm font-bold">Send Invite</button>
           <button onclick="closeInviteModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-3 rounded-xl text-sm font-semibold">Cancel</button>
         </div>
       </div>
@@ -396,8 +396,8 @@ export function renderSettings(lang: Lang = 'en'): string {
   </div>
 
   <!-- Toast -->
-  <div id="settings-toast" class="hidden fixed bottom-6 right-6 z-50 glass border border-emerald-500/30 rounded-xl px-5 py-3 flex items-center gap-3 animate-fadeIn">
-    <i class="fas fa-check-circle text-emerald-400"></i>
+  <div id="settings-toast" class="hidden fixed bottom-6 right-6 z-50 glass border border-brand-500/30 rounded-xl px-5 py-3 flex items-center gap-3 animate-fadeIn">
+    <i class="fas fa-check-circle text-brand-400"></i>
     <span class="text-sm text-white font-semibold" id="toast-msg">Saved!</span>
   </div>
 
@@ -414,7 +414,7 @@ export function renderSettings(lang: Lang = 'en'): string {
   }
 
   // ── Toast ─────────────────────────────────────────────────────────────────
-  function showToast(msg, color = 'emerald') {
+  function showToast(msg, color = 'brand') {
     const t = document.getElementById('settings-toast');
     const m = document.getElementById('toast-msg');
     m.textContent = msg;
@@ -441,18 +441,18 @@ export function renderSettings(lang: Lang = 'en'): string {
     iconEl.innerHTML = '<i class="' + p.icon + '"></i>';
     document.getElementById('modal-platform-content').innerHTML = \`
       <!-- Statut connexion -->
-      <div class="flex items-center gap-3 p-3.5 rounded-xl \${p.connected ? 'bg-emerald-500/8 border border-emerald-500/20' : 'bg-amber-500/8 border border-amber-500/20'}">
-        <i class="fas fa-\${p.connected ? 'check-circle text-emerald-400' : 'triangle-exclamation text-amber-400'} text-base"></i>
+      <div class="flex items-center gap-3 p-3.5 rounded-xl \${p.connected ? 'bg-brand-500/8 border border-brand-500/20' : 'bg-brand-500/8 border border-brand-500/20'}">
+        <i class="fas fa-\${p.connected ? 'check-circle text-brand-400' : 'triangle-exclamation text-brand-400'} text-base"></i>
         <div>
-          <div class="text-sm font-semibold \${p.connected ? 'text-emerald-300' : 'text-amber-300'}">\${p.connected ? 'Plateforme connectée et active' : 'Non connectée — renseignez vos identifiants'}</div>
-          <div class="text-xs \${p.connected ? 'text-emerald-600' : 'text-amber-600'} mt-0.5">Scopes requis: \${p.scope}</div>
+          <div class="text-sm font-semibold \${p.connected ? 'text-brand-300' : 'text-brand-300'}">\${p.connected ? 'Plateforme connectée et active' : 'Non connectée — renseignez vos identifiants'}</div>
+          <div class="text-xs \${p.connected ? 'text-brand-600' : 'text-brand-600'} mt-0.5">Scopes requis: \${p.scope}</div>
         </div>
       </div>
 
       <!-- Section Identifiants -->
       <div class="glass rounded-xl p-4 border border-white/5 space-y-4">
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-          <i class="fas fa-id-card text-blue-400"></i> Identifiants API
+          <i class="fas fa-id-card text-slate-400"></i> Identifiants API
         </h4>
         <div>
           <label class="text-xs font-semibold text-slate-400 mb-1.5 block">
@@ -478,7 +478,7 @@ export function renderSettings(lang: Lang = 'en'): string {
       <!-- Section Budget -->
       <div class="glass rounded-xl p-4 border border-white/5">
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-          <i class="fas fa-dollar-sign text-emerald-400"></i> Budget & Devise
+          <i class="fas fa-dollar-sign text-brand-400"></i> Budget & Devise
         </h4>
         <div class="grid grid-cols-2 gap-4">
           <div>
@@ -501,14 +501,14 @@ export function renderSettings(lang: Lang = 'en'): string {
 
       <!-- Actions -->
       <div class="flex gap-3 pt-1">
-        <button onclick="savePlatformConfig('\${id}')" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
+        <button onclick="savePlatformConfig('\${id}')" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
           <i class="fas fa-save text-xs"></i> Sauvegarder
         </button>
         \${p.connected ? \`
-        <button onclick="testPlatformConn('\${id}')" class="glass hover:bg-emerald-500/10 text-emerald-400 text-sm py-3 px-5 rounded-xl font-semibold transition-all border border-emerald-500/20 flex items-center gap-1.5">
+        <button onclick="testPlatformConn('\${id}')" class="glass hover:bg-brand-500/10 text-brand-400 text-sm py-3 px-5 rounded-xl font-semibold transition-all border border-brand-500/20 flex items-center gap-1.5">
           <i class="fas fa-vial text-xs"></i> Tester
         </button>
-        <button onclick="disconnectPlatform('\${id}')" class="glass hover:bg-red-500/10 text-red-400 text-sm py-3 px-4 rounded-xl transition-all border border-red-500/20 flex items-center gap-1.5" title="Déconnecter">
+        <button onclick="disconnectPlatform('\${id}')" class="glass hover:bg-slate-500/10 text-slate-400 text-sm py-3 px-4 rounded-xl transition-all border border-slate-500/20 flex items-center gap-1.5" title="Déconnecter">
           <i class="fas fa-unlink text-xs"></i>
         </button>\` : ''}
       </div>
@@ -524,7 +524,7 @@ export function renderSettings(lang: Lang = 'en'): string {
     const account = document.getElementById('cfg-account')?.value;
     const token = document.getElementById('cfg-token')?.value;
     const budget = document.getElementById('cfg-budget')?.value;
-    if(!account || !token) { showToast('Account ID and Token are required', 'red'); return; }
+    if(!account || !token) { showToast('Account ID and Token are required', 'slate'); return; }
     // Call API
     fetch('/api/platforms/' + id + '/connect', {
       method: 'POST',
@@ -543,7 +543,7 @@ export function renderSettings(lang: Lang = 'en'): string {
   }
 
   function testPlatformConn(id) {
-    showToast('Testing connection to ' + id + '...', 'blue');
+    showToast('Testing connection to ' + id + '...', 'slate');
     setTimeout(() => showToast('✓ ' + id + ' connection verified!'), 1500);
   }
 
@@ -559,7 +559,7 @@ export function renderSettings(lang: Lang = 'en'): string {
     showToast(name + '\'s role changed to ' + newRole);
     const select = document.querySelector('#member-' + id + ' select');
     if (select) select.className = select.className.replace(/text-\w+-400/g, 'text-slate-300');
-    const roleColors = { Owner:'brand', Admin:'emerald', Editor:'blue', Viewer:'slate' };
+    const roleColors = { Owner:'brand', Admin:'brand', Editor:'slate', Viewer:'slate' };
     const c = roleColors[newRole] || 'slate';
     if (select) select.classList.add('text-' + c + '-400');
   }
@@ -576,14 +576,14 @@ export function renderSettings(lang: Lang = 'en'): string {
   function sendInvite() {
     const email = document.getElementById('invite-email')?.value;
     const role = document.getElementById('invite-role')?.value;
-    if(!email) { showToast('Enter an email address', 'red'); return; }
+    if(!email) { showToast('Enter an email address', 'slate'); return; }
     closeInviteModal();
     showToast('Invite sent to ' + email + ' as ' + role);
     // Append to team list
     const list = document.getElementById('team-list');
     const div = document.createElement('div');
     div.className = 'flex items-center gap-3 p-3 glass rounded-xl';
-    div.innerHTML = '<div class="w-9 h-9 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-xs font-bold text-white">?' + '</div><div class="flex-1 min-w-0"><div class="text-sm font-semibold text-white truncate">Pending: ' + email + '</div><div class="text-xs text-slate-500">Invite sent</div></div><span class="text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 font-semibold">Pending</span>';
+    div.innerHTML = '<div class="w-9 h-9 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-xs font-bold text-white">?' + '</div><div class="flex-1 min-w-0"><div class="text-sm font-semibold text-white truncate">Pending: ' + email + '</div><div class="text-xs text-slate-500">Invite sent</div></div><span class="text-xs px-2 py-1 rounded-full bg-brand-500/20 text-brand-400 font-semibold">Pending</span>';
     list.appendChild(div);
   }
 
@@ -593,7 +593,7 @@ export function renderSettings(lang: Lang = 'en'): string {
     const key = 'ank_' + Array.from({length: 32}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
     const list = document.getElementById('api-keys-list');
     const div = document.createElement('div');
-    div.className = 'glass rounded-xl p-4 flex flex-col gap-2 border border-emerald-500/20';
+    div.className = 'glass rounded-xl p-4 flex flex-col gap-2 border border-brand-500/20';
     div.innerHTML = \`<div class="flex items-center justify-between"><span class="text-xs font-bold text-slate-300">New Key</span><span class="badge-live text-xs px-2 py-0.5 rounded-full">Active</span></div>
       <div class="font-mono text-xs text-slate-400 bg-black/30 rounded-lg p-2 flex items-center justify-between">
         <span>\${key}</span>
@@ -616,7 +616,7 @@ function settingsTab(id: string, icon: string, label: string, active: boolean): 
 }
 
 function platformSettingRow(p: {id:string;name:string;icon:string;color:string;grad:string;connected:boolean;accountId:string;token:string;scope:string;dailyBudget:string;currency:string}): string {
-  return `<div class="glass rounded-xl border ${p.connected ? 'border-white/8' : 'border-amber-500/15'} overflow-hidden" data-platform="${p.id}">
+  return `<div class="glass rounded-xl border ${p.connected ? 'border-white/8' : 'border-brand-500/15'} overflow-hidden" data-platform="${p.id}">
     <!-- Header plateforme -->
     <div class="flex items-center gap-4 p-4">
       <div class="w-11 h-11 rounded-xl bg-gradient-to-br ${p.grad} flex items-center justify-center flex-shrink-0 shadow-lg">
@@ -630,11 +630,11 @@ function platformSettingRow(p: {id:string;name:string;icon:string;color:string;g
         ${p.connected ? `
         <div class="flex items-center flex-wrap gap-x-4 gap-y-0.5 text-xs text-slate-500">
           <span class="flex items-center gap-1"><i class="fas fa-fingerprint text-slate-600"></i> <span class="font-mono">${p.accountId}</span></span>
-          <span class="flex items-center gap-1"><i class="fas fa-dollar-sign text-emerald-600"></i> $${p.dailyBudget}/jour</span>
+          <span class="flex items-center gap-1"><i class="fas fa-dollar-sign text-brand-600"></i> $${p.dailyBudget}/jour</span>
           <span class="flex items-center gap-1"><i class="fas fa-lock text-slate-600"></i> ${p.token.replace(/[^*]/g, (c, i) => i < 4 ? c : '*').slice(0,12)}…</span>
-        </div>` : `<div class="text-xs text-amber-500/80 flex items-center gap-1.5"><i class="fas fa-triangle-exclamation"></i> Aucune configuration — connectez cette plateforme</div>`}
+        </div>` : `<div class="text-xs text-brand-500/80 flex items-center gap-1.5"><i class="fas fa-triangle-exclamation"></i> Aucune configuration — connectez cette plateforme</div>`}
       </div>
-      <button onclick="openPlatformConfig('${p.id}')" class="${p.connected ? 'glass hover:bg-brand-500/10 text-brand-400 border border-brand-500/20' : 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-400 border border-amber-500/30'} text-xs px-4 py-2.5 rounded-xl transition-all font-semibold flex items-center gap-1.5 flex-shrink-0">
+      <button onclick="openPlatformConfig('${p.id}')" class="${p.connected ? 'glass hover:bg-brand-500/10 text-brand-400 border border-brand-500/20' : 'bg-gradient-to-r from-brand-500/20 to-orange-500/20 hover:from-brand-500/30 hover:to-orange-500/30 text-brand-400 border border-brand-500/30'} text-xs px-4 py-2.5 rounded-xl transition-all font-semibold flex items-center gap-1.5 flex-shrink-0">
         <i class="fas fa-${p.connected ? 'sliders' : 'plug'} text-xs"></i>${p.connected ? 'Configurer' : 'Connecter'}
       </button>
     </div>
@@ -646,11 +646,11 @@ function platformSettingRow(p: {id:string;name:string;icon:string;color:string;g
         <span>Scopes: <span class="text-slate-500">${p.scope}</span></span>
       </div>
       <div class="flex items-center gap-1.5 text-xs text-slate-600 ml-auto">
-        <button onclick="testPlatformConn('${p.id}')" class="text-emerald-500/70 hover:text-emerald-400 transition-colors flex items-center gap-1">
+        <button onclick="testPlatformConn('${p.id}')" class="text-brand-500/70 hover:text-brand-400 transition-colors flex items-center gap-1">
           <i class="fas fa-vial text-xs"></i> Tester
         </button>
         <span class="text-slate-700">·</span>
-        <button onclick="disconnectPlatform('${p.id}')" class="text-red-500/60 hover:text-red-400 transition-colors flex items-center gap-1">
+        <button onclick="disconnectPlatform('${p.id}')" class="text-slate-500/60 hover:text-slate-400 transition-colors flex items-center gap-1">
           <i class="fas fa-unlink text-xs"></i> Déconnecter
         </button>
       </div>
@@ -659,7 +659,7 @@ function platformSettingRow(p: {id:string;name:string;icon:string;color:string;g
 }
 
 function teamMember2(name: string, email: string, role: string, abbr: string, gradient: string): string {
-  const roleColors: Record<string,string> = { Owner:'brand', Admin:'emerald', Editor:'blue', Viewer:'slate' }
+  const roleColors: Record<string,string> = { Owner:'brand', Admin:'brand', Editor:'slate', Viewer:'slate' }
   const c = roleColors[role] || 'slate'
   const safeId = name.replace(/\s+/g, '-').toLowerCase()
   return `<div class="flex items-center gap-3 p-3 glass rounded-xl" id="member-${safeId}">
@@ -674,7 +674,7 @@ function teamMember2(name: string, email: string, role: string, abbr: string, gr
       <option value="Editor" ${role === 'Editor' ? 'selected' : ''}>Editor</option>
       <option value="Viewer" ${role === 'Viewer' ? 'selected' : ''}>Viewer</option>
     </select>
-    ${role !== 'Owner' ? `<button onclick="removeMember('${safeId}','${name}')" class="w-7 h-7 glass hover:bg-red-500/10 rounded-lg flex items-center justify-center text-slate-600 hover:text-red-400 transition-all ml-1"><i class="fas fa-trash text-xs"></i></button>` : '<div class="w-7"></div>'}
+    ${role !== 'Owner' ? `<button onclick="removeMember('${safeId}','${name}')" class="w-7 h-7 glass hover:bg-slate-500/10 rounded-lg flex items-center justify-center text-slate-600 hover:text-slate-400 transition-all ml-1"><i class="fas fa-trash text-xs"></i></button>` : '<div class="w-7"></div>'}
   </div>`
 }
 
@@ -711,8 +711,8 @@ function sessionRow(device: string, location: string, current: boolean): string 
       <div class="text-xs text-slate-600">${location}</div>
     </div>
     ${current
-      ? '<span class="text-xs text-emerald-400 font-semibold">Current</span>'
-      : '<button onclick="showToast(\'Session revoked\')" class="text-xs text-red-400 hover:text-red-300 transition-colors">Revoke</button>'}
+      ? '<span class="text-xs text-brand-400 font-semibold">Current</span>'
+      : '<button onclick="showToast(\'Session revoked\')" class="text-xs text-slate-400 hover:text-slate-300 transition-colors">Revoke</button>'}
   </div>`
 }
 
@@ -727,7 +727,7 @@ function apiKeyRow2(label: string, key: string, status: string, scope: string, e
       </div>
       <div class="flex items-center gap-2">
         ${isActive ? `<button onclick="navigator.clipboard.writeText('${key}').then(()=>showToast('Key copied!'))" class="text-slate-500 hover:text-slate-300 transition-colors"><i class="fas fa-copy text-xs"></i></button>` : ''}
-        ${isActive ? `<button onclick="if(confirm('Revoke this key?')){this.closest('.glass').remove();showToast('Key revoked')}" class="text-red-500 hover:text-red-400 transition-colors"><i class="fas fa-trash text-xs"></i></button>` : ''}
+        ${isActive ? `<button onclick="if(confirm('Revoke this key?')){this.closest('.glass').remove();showToast('Key revoked')}" class="text-slate-500 hover:text-slate-400 transition-colors"><i class="fas fa-trash text-xs"></i></button>` : ''}
       </div>
     </div>
     <div class="font-mono text-xs text-slate-500 bg-black/20 rounded-lg p-2 truncate">${key}</div>

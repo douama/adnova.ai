@@ -10,7 +10,7 @@ export const BLOG_ARTICLES = [
     readTime: '8 min',
     author: 'Priya Nair',
     authorRole: 'CTO',
-    color: 'indigo',
+    color: 'slate',
     icon: 'fa-brain',
     image: 'https://sspark.genspark.ai/cfimages?u1=ZUuikylglBj9dXBa3xPXi0poNPenbcfBx34H3Z9C1dQ6OvkhTeOMv0CWeNoi57E0d8K7d3L65HFH%2FuPh5VRpe%2FCkIItFoMHogWS38n03It6OeDvl7bXPLz8%3D&u2=3ysion0%2B8AZc7jM8&width=1296',
     content: `
@@ -45,7 +45,7 @@ export const BLOG_ARTICLES = [
     readTime: '11 min',
     author: 'Marcus Chen',
     authorRole: 'CEO',
-    color: 'cyan',
+    color: 'slate',
     icon: 'fa-chart-pie',
     image: 'https://sspark.genspark.ai/cfimages?u1=mez8qjbDwih6ldbWI5hJXftFhT9GzH5JwAGupoW0EVZADNXsxnN7yVJXlh7Jm3QE93Nvo%2FnkkAkleJvWqaqhs7k3rfaMpwbKnGieYqf%2FLkifzbqQcZ96izFvwKpqRSc%3D&u2=yvl98r%2Bpapepm8e9&width=1280',
     content: `<p>The TikTok vs. Facebook debate has evolved significantly in 2026. Based on $2.4B in ad spend analyzed through our platform, here's the definitive guide.</p><h2>TikTok Wins For:</h2><ul><li>18-34 demographics (40% lower CPM)</li><li>Product discovery and awareness</li><li>Fashion, beauty, fitness, food brands</li><li>Viral-potential products</li></ul><h2>Facebook Still Dominates For:</h2><ul><li>35+ demographics</li><li>B2B lead generation</li><li>High-intent retargeting</li><li>Local service businesses</li></ul>`
@@ -59,7 +59,7 @@ export const BLOG_ARTICLES = [
     readTime: '12 min',
     author: 'Sofia Rossi',
     authorRole: 'CPO',
-    color: 'pink',
+    color: 'brand',
     icon: 'fa-video',
     image: 'https://sspark.genspark.ai/cfimages?u1=ns3BJ7ptPq7t8%2FKbFVA3RxiBY3jtx9mT0Z30tiYyaLkRSp3yAk0meh1lApPXSc4sF665nBsMJO8myrpIik1kBFCUKjvKQOWP9rVWgKfE5Alyn5wBCXqarEdqJ5KIXUGF8fTEo6UiypkKRs0TZE5Yq5%2FsE7n%2F7Q%3D%3D&u2=dW9GVN3NW4qDA5hy&width=920',
     content: `<p>UGC (User-Generated Content) video ads have become the highest-performing format across all social platforms. But creating authentic UGC at scale has always been a bottleneck — until AI changed everything.</p><h2>Why UGC Outperforms Brand Video</h2><p>Our analysis across 10,000+ creatives shows UGC-style ads have 4.2× higher click-through rates and 3.8× lower CPAs compared to polished brand videos. The authenticity creates trust; trust drives conversions.</p>`
@@ -73,7 +73,7 @@ export const BLOG_ARTICLES = [
     readTime: '9 min',
     author: 'Aisha Yamamoto',
     authorRole: 'Head of AI Research',
-    color: 'amber',
+    color: 'brand',
     icon: 'fa-dollar-sign',
     image: 'https://sspark.genspark.ai/cfimages?u1=katYtIi9NlJ2bUuInDhcIuLZeD%2BtLXZrN2PEvkfJu2B9fMWV0n8%2B9O1aCTt7vl4mePjsTu9NhEYlfoqJ78XSdAHfSwNu7Sgljh9oGnuHYpysyp%2B3eTnTuKhy1KWJ2LjUmExTTRyonsgUPpuO7Fj2uvs%3D&u2=LUUspvgJIhJHt1ZP&width=1920',
     content: `<p>Here's a trap we see constantly: brands optimize for ROAS and celebrate hitting 8× — while their business is quietly losing money. ROAS (Return on Ad Spend) measures revenue per dollar spent on ads, but it ignores COGS, fulfillment, returns, and overhead.</p><h2>The Dangerous ROAS Optimization Trap</h2><p>Consider a product with 60% gross margin. A 2× ROAS means you break even. A 5× ROAS is actually only 3× profitROAS. Many businesses are running campaigns that look great on paper while bleeding cash.</p>`
@@ -87,7 +87,7 @@ export const BLOG_ARTICLES = [
     readTime: '10 min',
     author: 'Priya Nair',
     authorRole: 'CTO',
-    color: 'purple',
+    color: 'brand',
     icon: 'fa-users',
     image: 'https://sspark.genspark.ai/cfimages?u1=u8rHInh5t5JQjmqahtTCJDRxhawSxEioHRgOVffOza%2FxM7Tr4sVpBfnTtAmaKI1Cszdj5cPSOiuodQZZkahIxLQnw3GsDWGr0Rwm1Osx%2FBAd8OnP7hIFWZCekMd8jSJbQWoLTq9F&u2=GfuIctatb%2Fjj7WUp&width=1600',
     content: `<p>Traditional lookalike audiences relied on massive pixel data from users across Facebook's network. iOS 14.5 changed everything — opt-out rates hit 85%, destroying the signal quality that made lookalikes work.</p><h2>What Replaced Lookalike Audiences</h2><p>At AdNova AI, we've developed contextual audience modeling that doesn't rely on third-party cookies or cross-app tracking. Instead, it builds intent models from first-party behavioral signals, content consumption patterns, and on-platform engagement metrics.</p>`
@@ -101,7 +101,7 @@ export const BLOG_ARTICLES = [
     readTime: '14 min',
     author: 'Sofia Rossi',
     authorRole: 'CPO',
-    color: 'rose',
+    color: 'brand',
     icon: 'fa-flask',
     image: 'https://sspark.genspark.ai/cfimages?u1=a8cfj0LNtMPfakYfS5zdM1oZr9N58CLv0pH5%2BY4WwZd3z4yrlAGKa4Z3vTEEdhzIXh4iRA84a2aqLaKUuoakGWGyKgkonHlE7PLFkt2XwIdWFg%2FDoFxWHur1kEC5%2BpwIh4LGM7V%2FCDHXd1UN5%2FE4RoM1zdbQXsCqbLyPU%2BTsvKpRbHWI2lyTrB9aT%2F2TqD50s1ABQXd%2FX4qn3g%3D%3D&u2=1gKAMzazStgOt2Az&width=1920',
     content: `<p>Most brands test creatives wrong. They run 5-10 ads, wait two weeks, pick the winner, and repeat. This approach wastes 80% of testing budget and misses insights that could transform performance.</p><h2>The AI-Powered Testing Framework</h2><p>Our framework deconstructs creative into 6 independent variables: hook (first 3 seconds), value proposition, social proof element, CTA type, color palette, and format. By testing each variable independently, we identify winning components that can be recombined into high-performing ads.</p>`
@@ -115,7 +115,7 @@ export const BLOG_ARTICLES = [
     readTime: '13 min',
     author: 'Luca Ferretti',
     authorRole: 'VP Engineering',
-    color: 'cyan',
+    color: 'slate',
     icon: 'fa-google',
     image: 'https://sspark.genspark.ai/cfimages?u1=5tP3N6vU%2F1KZbo0a8mZEDuaiajTu0Djn6MOktMtBKnx7cG7kXvj4f824J3FWVx5wWepGuEVnFjExRYgjk77%2Fg3e6UQTkFRoOmiCxzYr4j3f%2FBQvra%2B9B3w%2B3mjX7cYVeVKD9y4hMs5a0Emt2SrC9j3YIihMgDMHVC%2BbcEHI%2B0S6s%2BidzBNUiRp4%3D&u2=lSvm57USTkWW3ujq&width=1600',
     content: `<p>Google Performance Max was supposed to replace all other campaign types. Two years into widespread adoption, we have enough data to give an honest assessment. The short version: PMax is powerful but needs careful management.</p><h2>What PMax Does Well</h2><ul><li>Cross-channel reach with a single budget</li><li>Strong for branded and remarketing signals</li><li>Excellent for high-volume e-commerce with full product feeds</li></ul>`
@@ -129,7 +129,7 @@ export const BLOG_ARTICLES = [
     readTime: '15 min',
     author: 'James Okafor',
     authorRole: 'VP Sales',
-    color: 'amber',
+    color: 'brand',
     icon: 'fa-shopping-bag',
     image: 'https://sspark.genspark.ai/cfimages?u1=YZCLExW6Rh68m%2BC6OgO7ZLACd5yRxZyJVAkNc4YmnUEcRvE84K6ecvX%2B7zjrZnkfBnCpP%2FVjjosMKNRGncQ0pkV50%2FRSGX4mp%2BD6fTl3tIu3rCmQOPshwa4oTVnZFtqWKrmdtD%2BcdegYodWNHYzfAXr%2B%2BX7aDxDam2UTYnHnU3ZXsKcFyQ%3D%3D&u2=ooWtiYgw4wxhRrBD&width=811',
     content: `<p>Amazon Ads occupies a unique position in the advertising ecosystem: buyers are actively looking to purchase. This is why Amazon search ads typically produce the highest conversion rates of any platform — often 10-15% versus 1-3% on social.</p>`
@@ -143,7 +143,7 @@ export const BLOG_ARTICLES = [
     readTime: '16 min',
     author: 'Sofia Rossi',
     authorRole: 'CPO',
-    color: 'pink',
+    color: 'brand',
     icon: 'fa-pen-fancy',
     image: 'https://sspark.genspark.ai/cfimages?u1=nYC3yg78t3aH%2FhFZPTWtbH6XASmWFEaNLFLut8z%2Fin3p8IbU2YJ6yw2z6FycAUFZZAWBoXZ4DnEyXIseFMKUzdzFKq2JgRHaClqBGcA2370TrXa1l%2FL3xvFa4d9QK0mtTQVxajBlMQlCkCy6uJGxc1XKSic%3D&u2=sDf7QVJo0vbY6NnQ&width=624',
     content: `<p>The fear that "AI copy sounds robotic" is now outdated. Modern LLMs trained on high-converting ad copy can generate persuasive, natural-sounding text that outperforms human writers 60% of the time in direct response contexts.</p><h2>The 50 Formulas</h2><p>We analyzed our top 10,000 performing ads to extract the underlying formulas. Here are the top 10:</p><ol><li><strong>Problem-Agitate-Solve:</strong> Identify pain, twist the knife, present solution</li><li><strong>Social Proof Stack:</strong> "2,412 brands trust [X] to..."</li><li><strong>Number Specificity:</strong> "87% of our customers see results in 72 hours"</li></ol>`
@@ -157,7 +157,7 @@ export const BLOG_ARTICLES = [
     readTime: '12 min',
     author: 'Marcus Chen',
     authorRole: 'CEO',
-    color: 'blue',
+    color: 'slate',
     icon: 'fa-linkedin',
     image: 'https://sspark.genspark.ai/cfimages?u1=kUuS2kShSUjXzqZ2P7i8SXTr9Km7NL%2BKVUXz3K4ZtMGkAW%2FhB8b9jJp5piGqr967sGqHBVg2fpQqhUTI%2BBYA0pCodAnH%2B5DRst2Z0NB%2B7SxODBWM99nJLyQcceMYTErSil9yqC%2Fu0kXViuRjSJCX&u2=UDcdkXYDUfD4VxK0&width=1024',
     content: `<p>LinkedIn advertising has a reputation for being expensive. And it's true — average CPCs of $8-15 make it inaccessible without a clear strategy. But the quality of B2B leads is unmatched. Here's how to make the economics work.</p>`
@@ -171,7 +171,7 @@ export const BLOG_ARTICLES = [
     readTime: '11 min',
     author: 'Aisha Yamamoto',
     authorRole: 'Head of AI Research',
-    color: 'indigo',
+    color: 'slate',
     icon: 'fa-mobile-alt',
     image: 'https://sspark.genspark.ai/cfimages?u1=beWwD0c%2BGoDVITeQH1vAP4gaMdrhjVi5KNSPYSmM706F38CdLRrYV27oyz1hbB26UL6bMczEmg0i%2BpXOhRtWD9hmserJ3Rzpc2AwJQsyeQo%3D&u2=x4VssKLPhmaLA6F&width=2400',
     content: `<p>With each iOS update, Apple further restricts the data available to advertisers. iOS 18 introduced SKAdNetwork 5.0 with even tighter attribution windows. Here's what that means for your campaigns — and how to adapt.</p>`
@@ -185,7 +185,7 @@ export const BLOG_ARTICLES = [
     readTime: '13 min',
     author: 'Marcus Chen',
     authorRole: 'CEO',
-    color: 'emerald',
+    color: 'brand',
     icon: 'fa-chart-line',
     image: 'https://sspark.genspark.ai/cfimages?u1=Km0IeATPQ78PrKTnEXOk2NW5c99sHzfrFHO6aRrz42XK%2BTVO694LujtPCLofF6rJY2dvCpSwwBW3%2BX40qiGKj%2Bc47j1f4KTVuIDWyzVu2S8vAR%2BD%2FRw%2Fw15iy7zAC2137YImX003ZEZIgPY0VAE%2B4ndiqHhp%2B8xtG%2BrhffDDfkygThkqlXHi2mwKCkhI&u2=onmLNKDSNGh7eAdS&width=1827',
     content: `<p>The #1 mistake in advertising: finding something that works at $1K/month and immediately scaling to $50K. The efficiency economics change dramatically at scale, and most brands aren't prepared for it.</p>`
@@ -199,7 +199,7 @@ export const BLOG_ARTICLES = [
     readTime: '10 min',
     author: 'Sofia Rossi',
     authorRole: 'CPO',
-    color: 'purple',
+    color: 'brand',
     icon: 'fa-redo',
     image: 'https://sspark.genspark.ai/cfimages?u1=LoHaAwPDNN90%2Buomdjl52rquE%2F0tIbWYZGNbETBnOeCIpUEG3gmmcZEdBt0E%2BJJocYF2NOyoI8NHbCHMqN07WOnCm8DlNNVyIFIpftJLnJZ7OHn%2BJvO1YfloH3rCGb5I6XQLXC7VpzvLzuTh%2FezP2nU6%2B3PaGgEaS%2ByVbUCqTFzWsZR9PRuQpCgXMOW58iRnz8BLq5DHQsDkhMrvQ1xzp0F6HRZ6iQA%3D&u2=8fe8QbtfVqLvV6Rk&width=1536',
     content: `<p>The standard retargeting setup — show someone who visited your site an ad for the thing they looked at — is now table stakes. The brands winning on retargeting are running 7-touch sequences across 4+ platforms with dynamic creative tailored to each stage.</p>`
@@ -213,7 +213,7 @@ export const BLOG_ARTICLES = [
     readTime: '8 min',
     author: 'Luca Ferretti',
     authorRole: 'VP Engineering',
-    color: 'rose',
+    color: 'brand',
     icon: 'fa-shield-alt',
     image: 'https://sspark.genspark.ai/cfimages?u1=zPcOAk9%2Fhi9lQ88YmGTfUYBEoJVXyn0TdeCSSjly0uJ9KWZCcstrYDN6CTHWMhHrMBUlrXnXmgmfQZAamjCBDC%2FehTeD1fjpqtqDdJbicVukeaHK9dawKz80t5iWx0st7jDksDeqA9rRp%2FO1YHHitWDaeNWJBwwpJh0jKIfG3ChTr285KQxaNQA%2Brz5HQ4HFtP%2Bqden0a7ZoQOVDaA%3D%3D&u2=gv9O1jXwiuzbGkrI&width=1897',
     content: `<p>Your advertising accounts contain your best customer data: behavioral signals, purchase history, audience insights. This data is a target for competitors and bad actors. Here's how to protect it.</p>`
@@ -227,7 +227,7 @@ export const BLOG_ARTICLES = [
     readTime: '12 min',
     author: 'Aisha Yamamoto',
     authorRole: 'Head of AI Research',
-    color: 'amber',
+    color: 'brand',
     icon: 'fa-project-diagram',
     image: 'https://sspark.genspark.ai/cfimages?u1=ll4zJSAtO7oaSI0KRoGpC7ituFmtgH7SaU%2FzuHwR%2FAm4R0Z%2Fa4laFOAbp978xoYlDJIV9uSbv25udROn3n1b%2FGDVGuUfgN9zhYmdXbEPt5GRyIwe6T9RFs0%2FvTbta7RXIgtEPLKln2foG%2BzeX5ghfHZFWyeHe0FApR%2FypZ3YACZ1%2F3xhxzrJAs9SMQN48gEp41Lf80auIZGfaG8d&u2=cmKiLeMG%2F%2F9IhJWM&width=1440',
     content: `<p>Last-click attribution is the biggest lie in digital marketing. It tells you that the Google branded search ad that converted a customer was the most valuable touchpoint — ignoring the TikTok awareness video that introduced them to your brand 3 weeks earlier.</p>`
@@ -241,7 +241,7 @@ export const BLOG_ARTICLES = [
     readTime: '9 min',
     author: 'Sofia Rossi',
     authorRole: 'CPO',
-    color: 'cyan',
+    color: 'slate',
     icon: 'fa-sync-alt',
     image: 'https://sspark.genspark.ai/cfimages?u1=lTQB%2BdJBMAsbfyiuMQ00c%2BX6Z%2Fd1u2dUastRTk3lhQLQ220lsKW0fJafLXm7482QzZjqT%2Bl1XjPVNIgKDmwh3Od6uRVQg05zBETL5ZYaMrnTzsVK&u2=avpYG%2F%2Ffj913a9l7&width=996',
     content: `<p>Ad fatigue costs brands billions in wasted spend annually. When your audience has seen the same creative too many times, CPMs rise, CTRs fall, and ROAS collapses. The solution isn't just rotating creatives — it's building a systematic refresh engine.</p>`
@@ -255,7 +255,7 @@ export const BLOG_ARTICLES = [
     readTime: '18 min',
     author: 'James Okafor',
     authorRole: 'VP Sales',
-    color: 'rose',
+    color: 'brand',
     icon: 'fa-gift',
     image: 'https://sspark.genspark.ai/cfimages?u1=C19fhzUlp2xOd9V4B0O483ZFdfEyWHZcW1oz1%2FEkgjGekFJJDt5XPnlQPbcGtksY1bSvXzmZCC%2F80IFBdzJmgEfm7UDyRRTfbBsFLF3ru2om7K115OIV7AS5o7OfmcOcib67w4uNRNUk4tcmtbAHhK4br2v6AdTY%2F3VWC%2B8Rsw%3D%3D&u2=5tKBTgZfsNNftcY6&width=1600',
     content: `<p>Q4 is simultaneously the most lucrative and most dangerous advertising period of the year. CPMs spike 150-300% from October to December, but conversion rates also peak. The brands that win Q4 plan their strategies in August.</p>`
@@ -269,7 +269,7 @@ export const BLOG_ARTICLES = [
     readTime: '11 min',
     author: 'Aisha Yamamoto',
     authorRole: 'Head of AI Research',
-    color: 'purple',
+    color: 'brand',
     icon: 'fa-users-cog',
     image: 'https://sspark.genspark.ai/cfimages?u1=aaFsaBt6NCQ9wyTGQg1vq8kid1hdYxnN5KF2HlqOs1sduheY%2FrD5Rehf%2Beu8YLji0XkXQiIHBya4LMXxotikDFb3Wlxwg4VRxYnQAvIZZvXwwe%2BZNYr9LSwqbrjlHg%3D%3D&u2=em7rh6RWCRqzhbIC&width=760',
     content: `<p>Targeting "Women, 25-45, interested in fitness" is how every competitor is also targeting your audience. The only differentiator in 2026 is how precisely you can identify behavioral intent signals that predict purchase likelihood.</p>`
@@ -283,7 +283,7 @@ export const BLOG_ARTICLES = [
     readTime: '10 min',
     author: 'Marcus Chen',
     authorRole: 'CEO',
-    color: 'indigo',
+    color: 'slate',
     icon: 'fa-th-large',
     image: 'https://sspark.genspark.ai/cfimages?u1=E5%2B2rTu0HRR1HUYaUP4uztntqW1ovlDV92DcG5sspWgKU%2Bc5hm7KHYJmMtovG4EMnTuDDB3L5okUXkx6D8H8gM4GhcwIQOdPUtoToWnyzQPS9yS3Azq8%2FHVRhjMmNloy2RNG5kd0AsM%3D&u2=jbFQzTomfS4VrOs3&width=1920',
     content: `<p>The advertising industry has a herding problem. 80% of social ad budgets go to Meta and TikTok, creating intense auction competition and escalating CPMs. Meanwhile, Snapchat and Pinterest offer access to massive, purchase-intent audiences at a fraction of the cost.</p>`
@@ -297,7 +297,7 @@ export const BLOG_ARTICLES = [
     readTime: '14 min',
     author: 'Priya Nair',
     authorRole: 'CTO',
-    color: 'emerald',
+    color: 'brand',
     icon: 'fa-balance-scale',
     image: 'https://sspark.genspark.ai/cfimages?u1=5XTyyQwfb1DaO3ztWeH3Il70C4LzgfRlxtA2ICEjpSrIKTK6gg54x64%2F8rZhpQ4mWNMxmbQBFBwLu65bdyiIbGp71pj7fEBNOOUhTEMXxVn26ApB&u2=qdXEE8dq7clrSCc7&width=1600',
     content: `<p>Budget allocation across platforms is one of the most consequential decisions in advertising. It's also one where human intuition is notoriously unreliable. We tend to over-invest in familiar platforms and under-explore channels that could deliver better returns.</p><h2>The Portfolio Theory Approach</h2><p>At AdNova AI, we treat ad budget allocation like modern portfolio theory treats investment allocation: maximize expected return (ROAS) for a given level of risk (variance in performance), while maintaining diversification across channels.</p>`
@@ -324,7 +324,7 @@ export function renderBlog(): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="hidden md:flex items-center gap-6">
@@ -342,8 +342,8 @@ export function renderBlog(): string {
 <!-- HERO -->
 <section class="pt-28 pb-12 px-6">
   <div class="max-w-6xl mx-auto">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-indigo-300 border border-indigo-500/20 mb-6">
-      <i class="fas fa-rss text-indigo-400"></i>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-slate-300 border border-slate-500/20 mb-6">
+      <i class="fas fa-rss text-slate-400"></i>
       Published Weekly · AI Advertising Intelligence
     </div>
     <div class="flex items-end justify-between gap-4 flex-wrap mb-8">
@@ -368,30 +368,30 @@ export function renderBlog(): string {
 <!-- FEATURED ARTICLE -->
 <section class="px-6 pb-12">
   <div class="max-w-6xl mx-auto">
-    <a href="/blog/${featured.slug}" class="glass-card rounded-3xl p-8 md:p-10 grid md:grid-cols-5 gap-8 group block border border-indigo-500/20">
+    <a href="/blog/${featured.slug}" class="glass-card rounded-3xl p-8 md:p-10 grid md:grid-cols-5 gap-8 group block border border-slate-500/20">
       <div class="md:col-span-3 flex flex-col justify-between">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <span class="px-2.5 py-1 rounded-full bg-indigo-500/15 text-indigo-400 text-xs font-medium">${featured.category}</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-500/15 text-slate-400 text-xs font-medium">${featured.category}</span>
             <span class="text-slate-500 text-xs">FEATURED</span>
           </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-indigo-300 transition-colors leading-tight" style="font-family:'Space Grotesk',sans-serif">${featured.title}</h2>
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-slate-300 transition-colors leading-tight" style="font-family:'Space Grotesk',sans-serif">${featured.title}</h2>
           <p class="text-slate-400 leading-relaxed mb-6">${featured.excerpt}</p>
         </div>
         <div class="flex items-center gap-4">
-          <div class="w-9 h-9 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs font-bold">${featured.author.split(' ').map(n => n[0]).join('')}</div>
+          <div class="w-9 h-9 rounded-full bg-slate-500/20 flex items-center justify-center text-slate-400 text-xs font-bold">${featured.author.split(' ').map(n => n[0]).join('')}</div>
           <div>
             <div class="text-white text-sm font-medium">${featured.author}</div>
             <div class="text-slate-500 text-xs">${featured.authorRole} · ${featured.date} · ${featured.readTime} read</div>
           </div>
-          <span class="ml-auto text-indigo-400 group-hover:translate-x-1 transition-transform inline-block"><i class="fas fa-arrow-right"></i></span>
+          <span class="ml-auto text-slate-400 group-hover:translate-x-1 transition-transform inline-block"><i class="fas fa-arrow-right"></i></span>
         </div>
       </div>
       <div class="md:col-span-2 flex items-center justify-center">
         <div class="w-full max-w-xs glass-neo rounded-2xl relative overflow-hidden" style="aspect-ratio:16/10">
           ${featured.image ? `<img src="${featured.image}" alt="${featured.title}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
-          <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-purple-500/10 flex items-center justify-center ${featured.image ? 'hidden' : ''}">
-            <i class="fas ${featured.icon} text-7xl text-indigo-400/60"></i>
+          <div class="absolute inset-0 bg-gradient-to-br from-slate-500/20 to-brand-500/10 flex items-center justify-center ${featured.image ? 'hidden' : ''}">
+            <i class="fas ${featured.icon} text-7xl text-slate-400/60"></i>
           </div>
         </div>
       </div>
@@ -419,7 +419,7 @@ export function renderBlog(): string {
           <div class="flex items-center gap-2 mb-2">
             <span class="text-slate-600 text-xs"><i class="fas fa-clock mr-1"></i>${article.readTime}</span>
           </div>
-          <h3 class="text-white font-bold text-base leading-snug mb-2 group-hover:text-indigo-300 transition-colors flex-grow">${article.title}</h3>
+          <h3 class="text-white font-bold text-base leading-snug mb-2 group-hover:text-slate-300 transition-colors flex-grow">${article.title}</h3>
           <p class="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-2">${article.excerpt}</p>
           <div class="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
             <div class="flex items-center gap-2">
@@ -434,27 +434,27 @@ export function renderBlog(): string {
 
     <!-- Newsletter CTA -->
     <div class="mt-14 glass-neo rounded-3xl p-8 md:p-10 text-center">
-      <i class="fas fa-envelope-open-text text-4xl text-indigo-400 mb-4"></i>
+      <i class="fas fa-envelope-open-text text-4xl text-slate-400 mb-4"></i>
       <h3 class="text-2xl font-bold text-white mb-2" style="font-family:'Space Grotesk',sans-serif">Get weekly AI advertising insights</h3>
       <p class="text-slate-400 mb-6">New articles every week. No spam. Unsubscribe anytime.</p>
       <form class="flex gap-3 max-w-md mx-auto" onsubmit="return handleNewsletterSignup(event)">
-        <input type="email" placeholder="your@email.com" class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm"/>
+        <input type="email" placeholder="your@email.com" class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-slate-500 text-sm"/>
         <button type="submit" class="btn-primary px-5 py-2.5 rounded-xl text-white font-semibold text-sm whitespace-nowrap">Subscribe</button>
       </form>
-      <p id="nl-success" class="text-emerald-400 text-sm mt-3 hidden"><i class="fas fa-check mr-1"></i>You're subscribed!</p>
+      <p id="nl-success" class="text-brand-400 text-sm mt-3 hidden"><i class="fas fa-check mr-1"></i>You're subscribed!</p>
     </div>
   </div>
 </section>
 
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. · <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a></p>
+  <p>© 2026 AdNova AI, Inc. · <a href="/privacy" class="hover:text-slate-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-slate-400 transition-colors">Terms</a></p>
 </footer>
 
 <style>
 .blog-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:-1}
 .blog-orb-1{width:600px;height:600px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(99,102,241,0.1),transparent 70%)}
 .blog-orb-2{width:400px;height:400px;bottom:0;left:-100px;background:radial-gradient(circle,rgba(168,85,247,0.07),transparent 70%)}
-.cat-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#94a3b8}
+.cat-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#7A7A7A}
 .cat-btn:hover,.cat-btn.active{background:rgba(99,102,241,0.2);border-color:rgba(99,102,241,0.4);color:#a5b4fc}
 .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 </style>
@@ -499,7 +499,7 @@ export function renderBlogArticle(slug: string): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="flex items-center gap-4">
@@ -513,9 +513,9 @@ export function renderBlogArticle(slug: string): string {
 <main class="max-w-3xl mx-auto px-6 pt-28 pb-24">
   <!-- Breadcrumb -->
   <nav class="flex items-center gap-2 text-sm text-slate-500 mb-8">
-    <a href="/" class="hover:text-indigo-400">Home</a><span>/</span>
-    <a href="/blog" class="hover:text-indigo-400">Blog</a><span>/</span>
-    <span class="text-indigo-400 truncate max-w-xs">${article.title.substring(0, 40)}...</span>
+    <a href="/" class="hover:text-slate-400">Home</a><span>/</span>
+    <a href="/blog" class="hover:text-slate-400">Blog</a><span>/</span>
+    <span class="text-slate-400 truncate max-w-xs">${article.title.substring(0, 40)}...</span>
   </nav>
 
   <!-- Meta -->
@@ -548,8 +548,8 @@ export function renderBlogArticle(slug: string): string {
   </div>
 
   <!-- CTA Box -->
-  <div class="mt-12 glass-neo rounded-2xl p-8 text-center border border-indigo-500/20">
-    <i class="fas fa-rocket text-3xl text-indigo-400 mb-3"></i>
+  <div class="mt-12 glass-neo rounded-2xl p-8 text-center border border-slate-500/20">
+    <i class="fas fa-rocket text-3xl text-slate-400 mb-3"></i>
     <h3 class="text-xl font-bold text-white mb-2">Ready to implement this with AI?</h3>
     <p class="text-slate-400 text-sm mb-4">AdNova AI automates everything discussed in this article. Start your free trial today.</p>
     <a href="/register" class="btn-primary px-6 py-3 rounded-xl text-white font-semibold inline-flex items-center gap-2"><i class="fas fa-rocket"></i> Start Free Trial</a>
@@ -564,26 +564,26 @@ export function renderBlogArticle(slug: string): string {
       <a href="/blog/${r.slug}" class="glass-card rounded-xl p-4 flex gap-4 group">
         <div class="w-10 h-10 rounded-lg bg-${r.color}-500/15 flex items-center justify-center flex-shrink-0"><i class="fas ${r.icon} text-${r.color}-400 text-sm"></i></div>
         <div class="flex-1 min-w-0">
-          <div class="text-white font-medium text-sm group-hover:text-indigo-300 transition-colors leading-snug">${r.title}</div>
+          <div class="text-white font-medium text-sm group-hover:text-slate-300 transition-colors leading-snug">${r.title}</div>
           <div class="text-slate-500 text-xs mt-1">${r.readTime} · ${r.author}</div>
         </div>
-        <i class="fas fa-arrow-right text-slate-600 group-hover:text-indigo-400 transition-colors mt-1 flex-shrink-0"></i>
+        <i class="fas fa-arrow-right text-slate-600 group-hover:text-slate-400 transition-colors mt-1 flex-shrink-0"></i>
       </a>`).join('')}
     </div>
   </div>` : ''}
 </main>
 
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. · <a href="/blog" class="hover:text-indigo-400 transition-colors">Blog</a> · <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a></p>
+  <p>© 2026 AdNova AI, Inc. · <a href="/blog" class="hover:text-slate-400 transition-colors">Blog</a> · <a href="/privacy" class="hover:text-slate-400 transition-colors">Privacy</a></p>
 </footer>
 
 <style>
 .blog-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:-1}
 .blog-orb-1{width:600px;height:600px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(99,102,241,0.1),transparent 70%)}
-.prose-custom p{color:#94a3b8;line-height:1.8;margin-bottom:1.25rem}
+.prose-custom p{color:#7A7A7A;line-height:1.8;margin-bottom:1.25rem}
 .prose-custom h2{color:#f1f5f9;font-weight:700;font-size:1.4rem;margin:2rem 0 .75rem;font-family:'Space Grotesk',sans-serif}
 .prose-custom h3{color:#e2e8f0;font-weight:600;font-size:1.1rem;margin:1.5rem 0 .5rem}
-.prose-custom ul,.prose-custom ol{color:#94a3b8;padding-left:1.5rem;margin-bottom:1.25rem;line-height:1.8}
+.prose-custom ul,.prose-custom ol{color:#7A7A7A;padding-left:1.5rem;margin-bottom:1.25rem;line-height:1.8}
 .prose-custom ul{list-style:disc}
 .prose-custom ol{list-style:decimal}
 .prose-custom li{margin-bottom:.4rem}

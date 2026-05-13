@@ -3,5 +3,10 @@
   "name": "adnova-ai",
   "compatibility_date": "2024-09-23",
   "pages_build_output_dir": "./dist",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  "vars": {
+    "ENVIRONMENT": "production"
+  }
 }

@@ -96,8 +96,24 @@ export type TranslationKey =
   | 'platform_speed' | 'syncing' | 'last_sync' | 'account_id'
   | 'monthly_spend' | 'campaigns_count' | 'pixel_status' | 'pixel_active'
   | 'pixel_inactive' | 'reconnect' | 'token_expired' | 'warning'
+  | 'admin_panel' | 'super_admin' | 'tenants' | 'users' | 'plans' | 'security' | 'logs' | 'ai_monitor' | 'config'
+  | 'monthly_recurring_revenue' | 'annual_recurring_revenue' | 'active_clients' | 'managed_spend'
+  | 'active_campaigns_count' | 'generated_creatives' | 'system_uptime' | 'nps_score'
+  | 'mrr_and_new_clients' | 'last_months' | 'plan_distribution' | 'new_clients_7days'
+  | 'system_alerts' | 'active_alerts' | 'ai_global_stats' | 'ai_decisions_hour' | 'campaigns_scaled_24h'
+  | 'creatives_killed_24h' | 'prediction_accuracy' | 'active_models' | 'gpus_used'
+  | 'top_clients_spend' | 'recent_admin_actions' | 'see_all' | 'today' | 'yesterday' | 'days_ago'
+  | 'critical' | 'expiration' | 'performance_issue' | 'payment_failed' | 'info'
+  | 'token_verification' | 'new_account_created' | 'account_suspended' | 'plan_updated' | 'ai_config_modified'
+  | 'refund_processed' | 'ip_blocked' | 'see_all_campaigns' | 'global_view' | 'all_ad_platforms'
+  | 'top_campaigns_month' | 'global_creative_stats' | 'generated_today' | 'killed_low_ctr' | 'average_ctr_global'
+  | 'creative_distribution' | 'top_creatives_month' | 'video' | 'static_image' | 'carousel' | 'story_reels' | 'other'
+  | 'view_all_campaigns_client' | 'sla_ok' | 'march_2026' | 'retention_rate' | 'latest_customers'
+  | 'client_name' | 'plan_type' | 'ad_spend' | 'avg_roas' | 'registration_date' | 'retention' | 'trial'
+  | 'monitoring' | 'watch' | 'reconnect_now' | 'plan_distribution_clients' | 'mrr_growth' | 'new_clients_month'
+  | 'monthly_retention' | 'monthly_churn' | 'monthly_arr_growth'
 
-type Translations = Record<TranslationKey, string>
+type Translations = Partial<Record<TranslationKey, string>>
 
 const dict: Record<Lang, Translations> = {
   en: {
@@ -290,6 +306,10 @@ const dict: Record<Lang, Translations> = {
 
 export function t(lang: Lang, key: TranslationKey): string {
   return dict[lang]?.[key] ?? dict['en'][key] ?? key
+}
+
+export function getTranslations(lang: Lang): Translations {
+  return dict[lang] ?? dict['en']
 }
 
 export function getLangDir(lang: Lang): 'rtl' | 'ltr' {

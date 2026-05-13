@@ -13,7 +13,7 @@ export const renderAdminBilling = (c: Context) => {
       <button class="admin-glass text-xs px-4 py-2 rounded-lg text-orange-400 hover:bg-orange-500/10 transition-all border border-orange-500/20">
         <i class="fas fa-download mr-1.5"></i> Export CSV
       </button>
-      <a href="https://dashboard.stripe.com" target="_blank" class="admin-glass text-xs px-4 py-2 rounded-lg text-purple-400 hover:bg-purple-500/10 transition-all border border-purple-500/20">
+      <a href="https://dashboard.stripe.com" target="_blank" class="admin-glass text-xs px-4 py-2 rounded-lg text-brand-400 hover:bg-brand-500/10 transition-all border border-brand-500/20">
         <i class="fab fa-stripe mr-1.5"></i> Stripe Dashboard
       </a>
     </div>
@@ -21,9 +21,9 @@ export const renderAdminBilling = (c: Context) => {
 
   <!-- KPIs -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    ${billKpi('Balance Stripe', '$284,700', 'emerald', 'fa-dollar-sign')}
-    ${billKpi('En attente (payout)', '$12,400', 'amber', 'fa-clock')}
-    ${billKpi('Paiements échoués', '3', 'red', 'fa-credit-card')}
+    ${billKpi('Balance Stripe', '$284,700', 'brand', 'fa-dollar-sign')}
+    ${billKpi('En attente (payout)', '$12,400', 'brand', 'fa-clock')}
+    ${billKpi('Paiements échoués', '3', 'slate', 'fa-credit-card')}
     ${billKpi('Remboursements/mois', '$2,400', 'orange', 'fa-rotate-left')}
   </div>
 
@@ -65,11 +65,11 @@ export const renderAdminBilling = (c: Context) => {
   <!-- Paiements échoués -->
   <div class="glass rounded-2xl p-5">
     <div class="flex items-center gap-2 mb-4">
-      <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
-        <i class="fas fa-credit-card text-red-400 text-sm"></i>
+      <div class="w-8 h-8 rounded-lg bg-slate-500/20 flex items-center justify-center">
+        <i class="fas fa-credit-card text-slate-400 text-sm"></i>
       </div>
       <h3 class="font-bold text-white">Paiements Échoués — Action Requise</h3>
-      <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full ml-auto">3 en attente</span>
+      <span class="text-xs bg-slate-500/20 text-slate-400 px-2 py-0.5 rounded-full ml-auto">3 en attente</span>
     </div>
     <div class="space-y-3">
       ${failedPayment('Promo Corp', 299, 'Carte refusée', '28 mars 2026', 2)}
@@ -112,10 +112,10 @@ function invoiceRow(id: string, client: string, plan: string, amount: number, st
 }
 
 function failedPayment(client: string, amount: number, reason: string, date: string, attempts: number): string {
-  return `<div class="flex items-center justify-between p-4 glass rounded-xl border border-red-500/10">
+  return `<div class="flex items-center justify-between p-4 glass rounded-xl border border-slate-500/10">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-red-500/15 flex items-center justify-center">
-        <i class="fas fa-credit-card text-red-400 text-xs"></i>
+      <div class="w-8 h-8 rounded-lg bg-slate-500/15 flex items-center justify-center">
+        <i class="fas fa-credit-card text-slate-400 text-xs"></i>
       </div>
       <div>
         <div class="text-sm font-semibold text-slate-200">${client}</div>
@@ -124,12 +124,12 @@ function failedPayment(client: string, amount: number, reason: string, date: str
     </div>
     <div class="flex items-center gap-4">
       <div class="text-right">
-        <div class="text-sm font-bold text-red-400">$${amount}</div>
+        <div class="text-sm font-bold text-slate-400">$${amount}</div>
         <div class="text-xs text-slate-600">${date}</div>
       </div>
       <div class="flex gap-2">
-        <button class="text-xs text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg hover:bg-amber-500/10 transition-all">Relancer</button>
-        <button class="text-xs text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500/10 transition-all">Annuler</button>
+        <button class="text-xs text-brand-400 border border-brand-500/30 px-3 py-1.5 rounded-lg hover:bg-brand-500/10 transition-all">Relancer</button>
+        <button class="text-xs text-slate-400 border border-slate-500/30 px-3 py-1.5 rounded-lg hover:bg-slate-500/10 transition-all">Annuler</button>
       </div>
     </div>
   </div>`

@@ -19,7 +19,7 @@ export const renderAdminTenants = (c: Context) => {
         <option>Actif</option><option>Essai</option><option>Suspendu</option><option>Churned</option>
       </select>
     </div>
-    <button onclick="openCreateTenant()" class="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg transition-all">
+    <button onclick="openCreateTenant()" class="bg-gradient-to-r from-orange-600 to-slate-600 hover:from-orange-500 hover:to-slate-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg transition-all">
       <i class="fas fa-plus"></i> Créer un client
     </button>
   </div>
@@ -27,9 +27,9 @@ export const renderAdminTenants = (c: Context) => {
   <!-- Stats rapides -->
   <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
     ${tenantStat('2,412', 'Total clients', 'fa-building', 'orange')}
-    ${tenantStat('1,847', 'Actifs', 'fa-circle-check', 'emerald')}
-    ${tenantStat('284', 'En essai', 'fa-clock', 'amber')}
-    ${tenantStat('47', 'Suspendus', 'fa-ban', 'red')}
+    ${tenantStat('1,847', 'Actifs', 'fa-circle-check', 'brand')}
+    ${tenantStat('284', 'En essai', 'fa-clock', 'brand')}
+    ${tenantStat('47', 'Suspendus', 'fa-ban', 'slate')}
     ${tenantStat('234', 'Churned', 'fa-user-xmark', 'slate')}
   </div>
 
@@ -66,18 +66,18 @@ export const renderAdminTenants = (c: Context) => {
           </tr>
         </thead>
         <tbody id="tenants-table">
-          ${tenantRow('Apex Marketing', 'apex-marketing', 'Enterprise', '$2,400', '$312,000', '6.2x', 18, 12, 'active', '15 jan 2026', 'AM', '#10b981')}
-          ${tenantRow('Mega Retail Co.', 'mega-retail', 'Enterprise', '$2,400', '$284,000', '5.8x', 24, 8, 'active', '3 jan 2026', 'MR', '#10b981')}
+          ${tenantRow('Apex Marketing', 'apex-marketing', 'Enterprise', '$2,400', '$312,000', '6.2x', 18, 12, 'active', '15 jan 2026', 'AM', '#FF4D00')}
+          ${tenantRow('Mega Retail Co.', 'mega-retail', 'Enterprise', '$2,400', '$284,000', '5.8x', 24, 8, 'active', '3 jan 2026', 'MR', '#FF4D00')}
           ${tenantRow('Acme Corp', 'acme-corp', 'Growth', '$799', '$124,850', '4.82x', 47, 4, 'active', '12 jan 2026', 'AC', '#f97316')}
           ${tenantRow('LuxoGroup', 'luxogroup', 'Growth', '$799', '$148,500', '4.9x', 31, 6, 'active', '25 mar 2026', 'LG', '#f97316')}
           ${tenantRow('Digital Storm', 'digital-storm', 'Growth', '$799', '$84,200', '4.6x', 14, 3, 'active', 'Aujourd\'hui', 'DS', '#f97316')}
-          ${tenantRow('TechStart Inc.', 'techstart', 'Starter', '$299', '$28,400', '3.4x', 12, 2, 'active', '18 fév 2026', 'TS', '#6366f1')}
-          ${tenantRow('Fashion Brand', 'fashion-brand', 'Starter', '$299', '$19,200', '3.1x', 8, 2, 'trial', '29 mar 2026', 'FB', '#f59e0b')}
-          ${tenantRow('SportNation', 'sportnation', 'Starter', '$299', '$9,100', '2.9x', 5, 1, 'active', '26 mar 2026', 'SN', '#6366f1')}
-          ${tenantRow('SpamCo', 'spamco', '—', '$0', '$0', '—', 0, 1, 'suspended', '10 mar 2026', 'SC', '#ef4444')}
-          ${tenantRow('Trendy Store', 'trendy-store', 'Trial', '$0', '$0', '—', 0, 1, 'trial', '27 mar 2026', 'TS', '#f59e0b')}
+          ${tenantRow('TechStart Inc.', 'techstart', 'Starter', '$299', '$28,400', '3.4x', 12, 2, 'active', '18 fév 2026', 'TS', '#FF6B2B')}
+          ${tenantRow('Fashion Brand', 'fashion-brand', 'Starter', '$299', '$19,200', '3.1x', 8, 2, 'trial', '29 mar 2026', 'FB', '#FF6B2B')}
+          ${tenantRow('SportNation', 'sportnation', 'Starter', '$299', '$9,100', '2.9x', 5, 1, 'active', '26 mar 2026', 'SN', '#FF6B2B')}
+          ${tenantRow('SpamCo', 'spamco', '—', '$0', '$0', '—', 0, 1, 'suspended', '10 mar 2026', 'SC', '#7A7A7A')}
+          ${tenantRow('Trendy Store', 'trendy-store', 'Trial', '$0', '$0', '—', 0, 1, 'trial', '27 mar 2026', 'TS', '#FF6B2B')}
           ${tenantRow('FlashRetail Pro', 'flashretail', 'Growth', '$799', '$67,800', '5.1x', 16, 5, 'active', '29 mar 2026', 'FR', '#f97316')}
-          ${tenantRow('NovaBrand Inc.', 'novabrand', 'Starter', '$299', '$12,400', '3.8x', 6, 2, 'active', 'Hier', 'NB', '#6366f1')}
+          ${tenantRow('NovaBrand Inc.', 'novabrand', 'Starter', '$299', '$12,400', '3.8x', 6, 2, 'active', 'Hier', 'NB', '#FF6B2B')}
         </tbody>
       </table>
     </div>
@@ -95,7 +95,7 @@ export const renderAdminTenants = (c: Context) => {
     <div class="glass rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-fadeIn border border-orange-500/20">
       <div class="p-5 border-b border-white/10 flex items-center justify-between sticky top-0 glass z-10">
         <div class="flex items-center gap-3">
-          <div id="modal-abbr" class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-bold text-white">AC</div>
+          <div id="modal-abbr" class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-slate-600 flex items-center justify-center font-bold text-white">AC</div>
           <div>
             <h2 id="modal-name" class="font-black text-white text-lg">Acme Corp</h2>
             <p id="modal-sub" class="text-xs text-slate-500">ID: acme-corp · Plan Growth · Actif</p>
@@ -107,9 +107,9 @@ export const renderAdminTenants = (c: Context) => {
         <!-- Stats -->
         <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-3">
           ${modalStat('MRR', '$799/mois', 'fa-dollar-sign', 'orange')}
-          ${modalStat('Spend géré', '$124,850', 'fa-bolt', 'emerald')}
-          ${modalStat('ROAS moyen', '4.82x', 'fa-chart-line', 'blue')}
-          ${modalStat('Campagnes', '47 actives', 'fa-bullhorn', 'purple')}
+          ${modalStat('Spend géré', '$124,850', 'fa-bolt', 'brand')}
+          ${modalStat('ROAS moyen', '4.82x', 'fa-chart-line', 'slate')}
+          ${modalStat('Campagnes', '47 actives', 'fa-bullhorn', 'brand')}
         </div>
 
         <!-- Actions rapides -->
@@ -118,15 +118,15 @@ export const renderAdminTenants = (c: Context) => {
             <i class="fas fa-user-secret text-orange-400"></i> Impersonner
           </button>
           <button onclick="openChangePlanModal()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
-            <i class="fas fa-arrow-up text-emerald-400"></i> Changer plan
+            <i class="fas fa-arrow-up text-brand-400"></i> Changer plan
           </button>
           <button onclick="sendTenantEmail()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
-            <i class="fas fa-envelope text-cyan-400"></i> Envoyer email
+            <i class="fas fa-envelope text-slate-400"></i> Envoyer email
           </button>
           <button onclick="resetTenantPassword()" class="glass hover:bg-white/10 text-slate-300 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all">
-            <i class="fas fa-key text-amber-400"></i> Reset password
+            <i class="fas fa-key text-brand-400"></i> Reset password
           </button>
-          <button id="suspend-modal-btn" onclick="suspendTenant()" class="glass hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20">
+          <button id="suspend-modal-btn" onclick="suspendTenant()" class="glass hover:bg-slate-500/10 text-slate-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-slate-500/20">
             <i class="fas fa-ban"></i> Suspendre
           </button>
         </div>
@@ -159,15 +159,15 @@ export const renderAdminTenants = (c: Context) => {
             ${detailRow('Limite spend', '$200,000/mois')}
           </div>
           <div class="mt-3 progress-bar">
-            <div class="progress-fill bg-gradient-to-r from-orange-500 to-amber-400" style="width:62%"></div>
+            <div class="progress-fill bg-gradient-to-r from-orange-500 to-brand-400" style="width:62%"></div>
           </div>
           <div class="text-xs text-slate-500 mt-1">62% de la limite mensuelle</div>
         </div>
 
         <!-- Notes admin -->
         <!-- Change Plan Modal (inline) -->
-        <div id="change-plan-panel" class="md:col-span-3 hidden glass rounded-xl p-4 border border-emerald-500/20">
-          <h4 class="font-semibold text-white text-sm mb-3 flex items-center gap-2"><i class="fas fa-arrow-up text-emerald-400"></i> Changer le plan</h4>
+        <div id="change-plan-panel" class="md:col-span-3 hidden glass rounded-xl p-4 border border-brand-500/20">
+          <h4 class="font-semibold text-white text-sm mb-3 flex items-center gap-2"><i class="fas fa-arrow-up text-brand-400"></i> Changer le plan</h4>
           <div class="flex items-center gap-3">
             <select id="new-plan-select" class="flex-1 glass rounded-xl px-3 py-2.5 text-sm text-slate-300 outline-none border border-white/10 bg-transparent cursor-pointer">
               <option>Trial (14 jours)</option>
@@ -175,7 +175,7 @@ export const renderAdminTenants = (c: Context) => {
               <option selected>Growth — $799/mois</option>
               <option>Enterprise — Custom</option>
             </select>
-            <button onclick="confirmChangePlan()" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs px-4 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all">Confirmer</button>
+            <button onclick="confirmChangePlan()" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white text-xs px-4 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all">Confirmer</button>
             <button onclick="document.getElementById('change-plan-panel').classList.add('hidden')" class="glass hover:bg-white/10 text-slate-400 text-xs px-4 py-2.5 rounded-xl transition-all">Annuler</button>
           </div>
         </div>
@@ -239,7 +239,7 @@ export const renderAdminTenants = (c: Context) => {
         </div>
         <div class="flex justify-end gap-3">
           <button onclick="closeCreateTenant()" class="glass hover:bg-white/10 text-slate-400 px-5 py-2 rounded-xl text-xs transition-all">Annuler</button>
-          <button id="btn-create-tenant" onclick="createTenant(this)" class="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all hover:opacity-90 active:scale-95">
+          <button id="btn-create-tenant" onclick="createTenant(this)" class="bg-gradient-to-r from-orange-600 to-slate-600 text-white px-6 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all hover:opacity-90 active:scale-95">
             <i class="fas fa-plus"></i> Créer le client
           </button>
         </div>
@@ -274,7 +274,7 @@ export const renderAdminTenants = (c: Context) => {
     // ── Actions ─────────────────────────────────────────────────────────────
     function impersonateTenant() {
       const name = currentTenantName;
-      showAdminToast('🔐 Connexion en tant que "' + name + '" — redirection...', 'amber');
+      showAdminToast('🔐 Connexion en tant que "' + name + '" — redirection...', 'brand');
       closeTenantModal();
       setTimeout(() => window.location.href = '/dashboard', 2000);
     }
@@ -284,33 +284,33 @@ export const renderAdminTenants = (c: Context) => {
     function confirmChangePlan() {
       const plan = document.getElementById('new-plan-select').value;
       document.getElementById('change-plan-panel').classList.add('hidden');
-      showAdminToast('✓ Plan de "' + currentTenantName + '" changé vers ' + plan, 'emerald');
+      showAdminToast('✓ Plan de "' + currentTenantName + '" changé vers ' + plan, 'brand');
     }
     function sendTenantEmail() {
       const msg = prompt('Message email à envoyer à "' + currentTenantName + '":');
       if (!msg) return;
-      showAdminToast('✉️ Email envoyé à "' + currentTenantName + '"', 'emerald');
+      showAdminToast('✉️ Email envoyé à "' + currentTenantName + '"', 'brand');
     }
     function resetTenantPassword() {
       if (!confirm('Envoyer un lien de réinitialisation au propriétaire de "' + currentTenantName + '"?')) return;
-      showAdminToast('🔑 Lien de reset envoyé à "' + currentTenantName + '"', 'emerald');
+      showAdminToast('🔑 Lien de reset envoyé à "' + currentTenantName + '"', 'brand');
     }
     function suspendTenant() {
       currentTenantSuspended = !currentTenantSuspended;
       const btn = document.getElementById('suspend-modal-btn');
       if (currentTenantSuspended) {
         btn.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Réactiver';
-        btn.className = 'glass hover:bg-emerald-500/10 text-emerald-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-emerald-500/20';
-        showAdminToast('⛔ Client "' + currentTenantName + '" suspendu — accès révoqué', 'red');
+        btn.className = 'glass hover:bg-brand-500/10 text-brand-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-brand-500/20';
+        showAdminToast('⛔ Client "' + currentTenantName + '" suspendu — accès révoqué', 'slate');
       } else {
         btn.innerHTML = '<i class="fas fa-ban mr-1"></i>Suspendre';
-        btn.className = 'glass hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20';
-        showAdminToast('✓ Client "' + currentTenantName + '" réactivé', 'emerald');
+        btn.className = 'glass hover:bg-slate-500/10 text-slate-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-slate-500/20';
+        showAdminToast('✓ Client "' + currentTenantName + '" réactivé', 'brand');
       }
     }
     function saveTenantNote() {
       const note = document.getElementById('admin-note-textarea').value;
-      showAdminToast('✓ Note sauvegardée pour "' + currentTenantName + '"', 'emerald');
+      showAdminToast('✓ Note sauvegardée pour "' + currentTenantName + '"', 'brand');
     }
 
     // ── Create Tenant ────────────────────────────────────────────────────────
@@ -332,10 +332,10 @@ export const renderAdminTenants = (c: Context) => {
       const emailEl = document.querySelector('#create-tenant-modal input[type="email"]');
       const planEl  = document.querySelector('#create-tenant-modal select');
       if (!nameEl || !nameEl.value.trim()) {
-        showAdminToast('⚠ Veuillez saisir le nom de la société', 'amber'); return;
+        showAdminToast('⚠ Veuillez saisir le nom de la société', 'brand'); return;
       }
       if (!emailEl || !emailEl.value.trim() || !emailEl.value.includes('@')) {
-        showAdminToast('⚠ Veuillez saisir un email valide', 'amber'); return;
+        showAdminToast('⚠ Veuillez saisir un email valide', 'brand'); return;
       }
       const origHTML = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création...';
@@ -348,7 +348,7 @@ export const renderAdminTenants = (c: Context) => {
         const abbr    = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
         const tbody   = document.getElementById('tenants-table');
         if (tbody) {
-          const planColors = { 'Trial':'slate', 'Starter':'indigo', 'Growth':'orange', 'Enterprise':'emerald' };
+          const planColors = { 'Trial':'slate', 'Starter':'slate', 'Growth':'orange', 'Enterprise':'brand' };
           const pc = planColors[planTxt] || 'slate';
           const tr = document.createElement('tr');
           tr.className = 'table-row border-b border-white/5 transition-all';
@@ -356,22 +356,22 @@ export const renderAdminTenants = (c: Context) => {
             <td class="py-3 px-2"><input type="checkbox" class="rounded border-white/20 bg-transparent w-3 h-3"/></td>
             <td class="py-3">
               <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500/30 to-red-500/30 flex items-center justify-center text-xs font-bold text-orange-300">\${abbr}</div>
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500/30 to-slate-500/30 flex items-center justify-center text-xs font-bold text-orange-300">\${abbr}</div>
                 <div><div class="text-xs font-bold text-white">\${name}</div><div class="text-xs text-slate-600">\${email}</div></div>
               </div>
             </td>
             <td class="py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-\${pc}-500/15 text-\${pc}-400 font-semibold">\${planTxt}</span></td>
-            <td class="py-3 text-xs font-bold text-emerald-400">$0</td>
+            <td class="py-3 text-xs font-bold text-brand-400">$0</td>
             <td class="py-3 text-xs text-slate-500">—</td>
-            <td class="py-3 text-xs text-blue-400">—</td>
+            <td class="py-3 text-xs text-slate-400">—</td>
             <td class="py-3 text-xs text-slate-500">0</td>
             <td class="py-3 text-xs text-slate-500">1</td>
             <td class="py-3"><span class="badge-trial text-xs px-2 py-0.5 rounded-full">Trial</span></td>
             <td class="py-3 text-xs text-slate-600">Aujourd'hui</td>
             <td class="py-3">
               <div class="flex items-center gap-1">
-                <button onclick="openTenantModal('new-tenant','\${abbr}',\`\${name} — ID: new-tenant · Plan Trial · Actif\`)" class="glass hover:bg-white/10 text-slate-400 text-xs p-1.5 rounded-lg transition-all"><i class="fas fa-eye text-xs"></i></button>
-                <button class="glass hover:bg-amber-500/10 text-amber-400 text-xs p-1.5 rounded-lg transition-all"><i class="fas fa-ban text-xs"></i></button>
+                <button onclick="openTenantModal(\${JSON.stringify(name)},\${JSON.stringify(abbr)},\${JSON.stringify(name + ' — ID: new-tenant · Plan Trial · Actif')})" class="glass hover:bg-white/10 text-slate-400 text-xs p-1.5 rounded-lg transition-all"><i class="fas fa-eye text-xs"></i></button>
+                <button class="glass hover:bg-brand-500/10 text-brand-400 text-xs p-1.5 rounded-lg transition-all"><i class="fas fa-ban text-xs"></i></button>
               </div>
             </td>
           \`;
@@ -380,7 +380,7 @@ export const renderAdminTenants = (c: Context) => {
         closeCreateTenant();
         btn.innerHTML = origHTML;
         btn.disabled  = false;
-        showAdminToast('✓ Client "' + name + '" créé — invitation envoyée à ' + email, 'emerald');
+        showAdminToast('✓ Client "' + name + '" créé — invitation envoyée à ' + email, 'brand');
       }, 1500);
     }
 
@@ -388,28 +388,28 @@ export const renderAdminTenants = (c: Context) => {
     function exportTenantsCSV() {
       const rows = [['Nom','Plan','MRR','Spend','ROAS','Campagnes','Statut','Date']];
       document.querySelectorAll('#tenants-table tr:not([style*=none])').forEach(row => {
-        const cells = [...row.querySelectorAll('td')].map(td => td.textContent.trim().replace(/\s+/g,' '));
+        const cells = [...row.querySelectorAll('td')].map(td => td.textContent.trim().replace(/\\s+/g,' '));
         if (cells.length > 3) rows.push(cells.slice(1, 9));
       });
-      const csv = rows.map(r => r.join(',')).join('\n');
+      const csv = rows.map(r => r.join(',')).join('\\n');
       const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
       a.download = 'tenants-export-' + new Date().toISOString().slice(0,10) + '.csv'; a.click();
-      showAdminToast('✓ Export CSV téléchargé (' + (rows.length-1) + ' clients)', 'emerald');
+      showAdminToast('✓ Export CSV téléchargé (' + (rows.length-1) + ' clients)', 'brand');
     }
 
     // ── Bulk Actions ──────────────────────────────────────────────────────────
     function bulkAction() {
       const checked = document.querySelectorAll('#tenants-table input[type="checkbox"]:checked');
-      if (checked.length === 0) { showAdminToast('Sélectionnez au moins un client', 'amber'); return; }
-      const action = prompt('Action sur ' + checked.length + ' client(s):\n1. Envoyer email\n2. Suspendre\n3. Changer plan\n\nEntrez 1, 2 ou 3:');
+      if (checked.length === 0) { showAdminToast('Sélectionnez au moins un client', 'brand'); return; }
+      const action = prompt('Action sur ' + checked.length + ' client(s):\\n1. Envoyer email\\n2. Suspendre\\n3. Changer plan\\n\\nEntrez 1, 2 ou 3:');
       if (!action) return;
       const labels = { '1': 'Email envoyé', '2': 'Clients suspendus', '3': 'Plans mis à jour' };
-      showAdminToast('✓ ' + (labels[action]||'Action') + ' pour ' + checked.length + ' client(s)', 'emerald');
+      showAdminToast('✓ ' + (labels[action]||'Action') + ' pour ' + checked.length + ' client(s)', 'brand');
     }
 
     // ── Toast ─────────────────────────────────────────────────────────────────
-    function showAdminToast(msg, type = 'emerald') {
-      const colors = { emerald:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', amber:'bg-amber-500/20 border-amber-500/30 text-amber-300', red:'bg-red-500/20 border-red-500/30 text-red-300' };
+    function showAdminToast(msg, type = 'brand') {
+      const colors = { emerald:'bg-brand-500/20 border-brand-500/30 text-brand-300', amber:'bg-brand-500/20 border-brand-500/30 text-brand-300', red:'bg-slate-500/20 border-slate-500/30 text-slate-300' };
       const t = document.createElement('div');
       t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl shadow-2xl ' + (colors[type]||colors.emerald);
       t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 4000);
@@ -430,7 +430,7 @@ function tenantStat(val: string, label: string, icon: string, color: string): st
 }
 
 function tenantRow(name: string, id: string, plan: string, mrr: string, spend: string, roas: string, campaigns: number, users: number, status: string, date: string, abbr: string, color: string): string {
-  const planColors: Record<string,string> = { Starter:'indigo', Growth:'orange', Enterprise:'emerald', '—':'red', Trial:'amber' }
+  const planColors: Record<string,string> = { Starter:'slate', Growth:'orange', Enterprise:'brand', '—':'slate', Trial:'brand' }
   const pc = planColors[plan] || 'slate'
   const statusMap: Record<string,string> = { active:'badge-active', trial:'badge-trial', suspended:'badge-suspended', churned:'badge-inactive' }
   const statusLabel: Record<string,string> = { active:'Actif', trial:'Essai', suspended:'Suspendu', churned:'Churned' }
@@ -447,8 +447,8 @@ function tenantRow(name: string, id: string, plan: string, mrr: string, spend: s
     </td>
     <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-${pc}-500/15 text-${pc}-400 font-semibold">${plan}</span></td>
     <td class="px-4 py-3 text-right font-bold text-orange-400">${mrr}</td>
-    <td class="px-4 py-3 text-right font-semibold text-emerald-400">${spend}</td>
-    <td class="px-4 py-3 text-right font-bold text-blue-400">${roas}</td>
+    <td class="px-4 py-3 text-right font-semibold text-brand-400">${spend}</td>
+    <td class="px-4 py-3 text-right font-bold text-slate-400">${roas}</td>
     <td class="px-4 py-3 text-right text-slate-400">${campaigns > 0 ? campaigns : '—'}</td>
     <td class="px-4 py-3 text-right text-slate-400">${users}</td>
     <td class="px-4 py-3"><span class="${statusMap[status]} text-xs px-2 py-0.5 rounded-full">${statusLabel[status]}</span></td>
@@ -463,8 +463,8 @@ function tenantRow(name: string, id: string, plan: string, mrr: string, spend: s
           <i class="fas fa-user-secret text-orange-400 text-xs"></i>
           <span class="tooltip-text">Impersonner</span>
         </button>
-        <button onclick="if(confirm('Suspendre ${name} ?')){this.innerHTML='<i class=\\'fas fa-check-circle text-emerald-400 text-xs\\'></i>';this.classList.add('bg-emerald-500/10');showAdminToast('⛔ ${name} suspendu','red')}" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-red-500/10 transition-all tooltip">
-          <i class="fas fa-ban text-red-400 text-xs"></i>
+        <button onclick="if(confirm('Suspendre ${name} ?')){this.innerHTML='<i class=\\'fas fa-check-circle text-brand-400 text-xs\\'></i>';this.classList.add('bg-brand-500/10');showAdminToast('⛔ ${name} suspendu','slate')}" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-slate-500/10 transition-all tooltip">
+          <i class="fas fa-ban text-slate-400 text-xs"></i>
           <span class="tooltip-text">Suspendre</span>
         </button>
       </div>

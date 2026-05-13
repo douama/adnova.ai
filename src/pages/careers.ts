@@ -44,7 +44,7 @@ export function renderCareers(): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="hidden md:flex items-center gap-6">
@@ -62,8 +62,8 @@ export function renderCareers(): string {
 <!-- HERO -->
 <section class="pt-32 pb-16 px-6 text-center relative overflow-hidden">
   <div class="max-w-4xl mx-auto">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-emerald-300 border border-emerald-500/20 mb-8">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-brand-300 border border-brand-500/20 mb-8">
+      <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
       ${jobs.length} Open Positions · Hiring Globally
     </div>
     <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight" style="font-family:'Space Grotesk',sans-serif">
@@ -91,17 +91,17 @@ export function renderCareers(): string {
     </div>
     <div class="grid md:grid-cols-3 gap-6 mb-12">
       <div class="glass-card rounded-2xl p-6 text-center">
-        <i class="fas fa-chart-line text-3xl text-indigo-400 mb-3"></i>
+        <i class="fas fa-chart-line text-3xl text-slate-400 mb-3"></i>
         <h3 class="text-white font-bold text-lg mb-2">Massive Impact</h3>
         <p class="text-slate-400 text-sm">Every engineer on our team directly impacts $600M+ in annual ad revenue for our customers. Your work matters at scale.</p>
       </div>
       <div class="glass-card rounded-2xl p-6 text-center">
-        <i class="fas fa-flask text-3xl text-purple-400 mb-3"></i>
+        <i class="fas fa-flask text-3xl text-brand-400 mb-3"></i>
         <h3 class="text-white font-bold text-lg mb-2">Cutting-Edge AI</h3>
         <p class="text-slate-400 text-sm">Work with the latest in reinforcement learning, LLMs, computer vision, and multi-armed bandits on real production systems.</p>
       </div>
       <div class="glass-card rounded-2xl p-6 text-center">
-        <i class="fas fa-seedling text-3xl text-emerald-400 mb-3"></i>
+        <i class="fas fa-seedling text-3xl text-brand-400 mb-3"></i>
         <h3 class="text-white font-bold text-lg mb-2">Grow Fast</h3>
         <p class="text-slate-400 text-sm">We're growing 3× year-over-year. Exceptional performers advance quickly. We promote from within and build leadership from our own team.</p>
       </div>
@@ -119,8 +119,8 @@ export function renderCareers(): string {
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
       ${perks.map(p => `
       <div class="glass p-5 rounded-2xl">
-        <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center mb-3">
-          <i class="fas ${p.icon} text-indigo-400"></i>
+        <div class="w-10 h-10 rounded-xl bg-slate-500/15 flex items-center justify-center mb-3">
+          <i class="fas ${p.icon} text-slate-400"></i>
         </div>
         <h3 class="text-white font-semibold text-sm mb-1">${p.title}</h3>
         <p class="text-slate-500 text-xs leading-relaxed">${p.desc}</p>
@@ -150,7 +150,7 @@ export function renderCareers(): string {
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-1.5 flex-wrap">
               <h3 class="text-white font-semibold">${j.title}</h3>
-              <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 text-xs">${j.level}</span>
+              <span class="px-2 py-0.5 rounded-full bg-slate-500/10 text-slate-400 text-xs">${j.level}</span>
             </div>
             <p class="text-slate-400 text-sm mb-2">${j.desc}</p>
             <div class="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
@@ -182,11 +182,11 @@ export function renderCareers(): string {
       <p class="text-slate-400 mb-10 max-w-xl mx-auto">We move fast and respect your time. Our process takes 2-3 weeks from application to offer.</p>
       <div class="flex flex-wrap justify-center gap-4 text-sm">
         ${[
-          ['1', 'Application Review', '2-3 days', 'indigo'],
-          ['2', 'Recruiter Screen', '30 min', 'purple'],
-          ['3', 'Technical / Skills Interview', '1 hour', 'cyan'],
-          ['4', 'Team Interview', '1.5 hours', 'amber'],
-          ['5', 'Offer', '24-48 hours', 'emerald'],
+          ['1', 'Application Review', '2-3 days', 'slate'],
+          ['2', 'Recruiter Screen', '30 min', 'brand'],
+          ['3', 'Technical / Skills Interview', '1 hour', 'slate'],
+          ['4', 'Team Interview', '1.5 hours', 'brand'],
+          ['5', 'Offer', '24-48 hours', 'brand'],
         ].map(([n, step, time, color]) => `
         <div class="glass p-4 rounded-xl min-w-32 text-center">
           <div class="w-8 h-8 rounded-full bg-${color}-500/20 text-${color}-400 font-bold mx-auto mb-2 flex items-center justify-center text-sm">${n}</div>
@@ -199,14 +199,14 @@ export function renderCareers(): string {
 </section>
 
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. · <a href="/about" class="hover:text-indigo-400 transition-colors">About</a> · <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a></p>
+  <p>© 2026 AdNova AI, Inc. · <a href="/about" class="hover:text-slate-400 transition-colors">About</a> · <a href="/privacy" class="hover:text-slate-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-slate-400 transition-colors">Terms</a></p>
 </footer>
 
 <style>
 .careers-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:-1}
 .careers-orb-1{width:600px;height:600px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(99,102,241,0.1),transparent 70%)}
-.careers-orb-2{width:400px;height:400px;bottom:0;left:-100px;background:radial-gradient(circle,rgba(16,185,129,0.07),transparent 70%)}
-.dept-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#94a3b8;cursor:pointer}
+.careers-orb-2{width:400px;height:400px;bottom:0;left:-100px;background:radial-gradient(circle,rgba(255,77,0,0.07),transparent 70%)}
+.dept-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#7A7A7A;cursor:pointer}
 .dept-btn:hover,.dept-btn.active{background:rgba(99,102,241,0.2);border-color:rgba(99,102,241,0.4);color:#a5b4fc}
 </style>
 <script>

@@ -48,7 +48,7 @@ export function renderPressKit(): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="flex items-center gap-4">
@@ -61,8 +61,8 @@ export function renderPressKit(): string {
 <!-- HERO -->
 <section class="pt-32 pb-16 px-6 text-center">
   <div class="max-w-4xl mx-auto">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-indigo-300 border border-indigo-500/20 mb-6">
-      <i class="fas fa-newspaper text-indigo-400"></i>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-slate-300 border border-slate-500/20 mb-6">
+      <i class="fas fa-newspaper text-slate-400"></i>
       Press & Media Resources
     </div>
     <h1 class="text-5xl md:text-6xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
@@ -79,7 +79,7 @@ export function renderPressKit(): string {
 <!-- COMPANY FACTS -->
 <section class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3"><i class="fas fa-info-circle text-indigo-400"></i> Company Facts</h2>
+    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3"><i class="fas fa-info-circle text-slate-400"></i> Company Facts</h2>
     <div class="grid md:grid-cols-2 gap-4">
       ${[
         ['Full Name', 'AdNova AI, Inc.'],
@@ -108,7 +108,7 @@ export function renderPressKit(): string {
 <!-- COMPANY DESCRIPTION -->
 <section class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-file-alt text-purple-400"></i> Company Description</h2>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-file-alt text-brand-400"></i> Company Description</h2>
     <div class="space-y-4">
       <div class="glass-card rounded-2xl p-6">
         <div class="text-xs text-slate-500 mb-2 uppercase tracking-wider">One Sentence (25 words)</div>
@@ -130,14 +130,14 @@ export function renderPressKit(): string {
 <!-- BRAND ASSETS -->
 <section id="assets" class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-palette text-cyan-400"></i> Brand Assets</h2>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-palette text-slate-400"></i> Brand Assets</h2>
     <div class="grid md:grid-cols-2 gap-4 mb-8">
       <!-- Logo Preview -->
       <div class="glass-card rounded-2xl p-6">
         <div class="text-xs text-slate-500 mb-4 uppercase tracking-wider">Primary Logo — Dark Background</div>
         <div class="bg-slate-950 rounded-xl p-8 flex items-center justify-center mb-4" style="height:120px">
           <div class="flex items-center gap-3">
-            <svg width="40" height="40" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg2)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+            <svg width="40" height="40" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg2)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
             <span class="text-white font-bold text-2xl" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
           </div>
         </div>
@@ -197,10 +197,10 @@ export function renderPressKit(): string {
 
     <!-- Usage Guidelines -->
     <div class="glass p-5 rounded-xl">
-      <h3 class="text-white font-semibold mb-3 flex items-center gap-2"><i class="fas fa-exclamation-triangle text-amber-400"></i> Usage Guidelines</h3>
+      <h3 class="text-white font-semibold mb-3 flex items-center gap-2"><i class="fas fa-exclamation-triangle text-brand-400"></i> Usage Guidelines</h3>
       <div class="grid md:grid-cols-2 gap-4 text-sm">
         <div>
-          <div class="text-emerald-400 font-medium mb-2">✓ Permitted</div>
+          <div class="text-brand-400 font-medium mb-2">✓ Permitted</div>
           <ul class="text-slate-400 space-y-1">
             <li>Editorial coverage of AdNova AI</li>
             <li>Screenshots of public AdNova AI pages</li>
@@ -209,7 +209,7 @@ export function renderPressKit(): string {
           </ul>
         </div>
         <div>
-          <div class="text-rose-400 font-medium mb-2">✗ Not Permitted</div>
+          <div class="text-brand-400 font-medium mb-2">✗ Not Permitted</div>
           <ul class="text-slate-400 space-y-1">
             <li>Modifying logo colors or proportions</li>
             <li>Using logo to imply endorsement</li>
@@ -230,19 +230,19 @@ export function renderPressKit(): string {
 <!-- EXECUTIVES -->
 <section class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-users text-amber-400"></i> Executive Bios</h2>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-users text-brand-400"></i> Executive Bios</h2>
     <div class="grid md:grid-cols-2 gap-5">
       ${executives.map(exec => `
       <div class="glass-card rounded-2xl p-6">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">${exec.name.split(' ').map(n => n[0]).join('')}</div>
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-500 to-brand-600 flex items-center justify-center text-white font-bold">${exec.name.split(' ').map(n => n[0]).join('')}</div>
           <div>
             <div class="text-white font-bold">${exec.name}</div>
-            <div class="text-indigo-400 text-sm">${exec.role}</div>
+            <div class="text-slate-400 text-sm">${exec.role}</div>
           </div>
         </div>
         <p class="text-slate-400 text-sm leading-relaxed mb-3">${exec.bio}</p>
-        <a href="mailto:press@adnova.ai?subject=Interview Request: ${encodeURIComponent(exec.name)}" class="text-indigo-400 hover:underline text-xs">Request interview →</a>
+        <a href="mailto:press@adnova.ai?subject=Interview Request: ${encodeURIComponent(exec.name)}" class="text-slate-400 hover:underline text-xs">Request interview →</a>
       </div>`).join('')}
     </div>
   </div>
@@ -251,18 +251,18 @@ export function renderPressKit(): string {
 <!-- PRESS RELEASES -->
 <section class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-bullhorn text-emerald-400"></i> Recent Press Releases</h2>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-bullhorn text-brand-400"></i> Recent Press Releases</h2>
     <div class="space-y-3">
       ${pressReleases.map(pr => `
       <div class="glass-card rounded-xl p-5 flex items-center justify-between gap-4">
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1.5">
-            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-medium">${pr.tag}</span>
+            <span class="px-2 py-0.5 rounded-full bg-slate-500/10 text-slate-400 text-xs font-medium">${pr.tag}</span>
             <span class="text-slate-500 text-xs">${pr.date}</span>
           </div>
           <h3 class="text-white font-medium text-sm leading-snug">${pr.title}</h3>
         </div>
-        <a href="mailto:press@adnova.ai?subject=Press Release Request: ${encodeURIComponent(pr.date)}" class="text-indigo-400 hover:text-white text-xs whitespace-nowrap transition-colors flex items-center gap-1"><i class="fas fa-download text-xs"></i> PDF</a>
+        <a href="mailto:press@adnova.ai?subject=Press Release Request: ${encodeURIComponent(pr.date)}" class="text-slate-400 hover:text-white text-xs whitespace-nowrap transition-colors flex items-center gap-1"><i class="fas fa-download text-xs"></i> PDF</a>
       </div>`).join('')}
     </div>
   </div>
@@ -271,11 +271,11 @@ export function renderPressKit(): string {
 <!-- AWARDS -->
 <section class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-trophy text-amber-400"></i> Awards & Recognition</h2>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-trophy text-brand-400"></i> Awards & Recognition</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
       ${awards.map(a => `
       <div class="glass p-4 rounded-xl flex gap-3">
-        <i class="fas fa-medal text-amber-400 mt-0.5 flex-shrink-0"></i>
+        <i class="fas fa-medal text-brand-400 mt-0.5 flex-shrink-0"></i>
         <div>
           <div class="text-white font-medium text-sm">${a.award}</div>
           <div class="text-slate-400 text-xs">${a.org} · ${a.year}</div>
@@ -288,19 +288,19 @@ export function renderPressKit(): string {
 <!-- MEDIA CONTACTS -->
 <section class="py-12 px-6 border-t border-white/5">
   <div class="max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-headset text-rose-400"></i> Media Contacts</h2>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><i class="fas fa-headset text-brand-400"></i> Media Contacts</h2>
     <div class="grid md:grid-cols-2 gap-5 mb-6">
       ${mediaContacts.map(mc => `
       <div class="glass-card rounded-2xl p-6">
         <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center text-rose-400 font-bold text-sm">${mc.name.split(' ').map(n => n[0]).join('')}</div>
+          <div class="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400 font-bold text-sm">${mc.name.split(' ').map(n => n[0]).join('')}</div>
           <div>
             <div class="text-white font-semibold">${mc.name}</div>
             <div class="text-slate-400 text-xs">${mc.role}</div>
           </div>
         </div>
         <div class="text-slate-500 text-xs mb-1">Focus: ${mc.focus}</div>
-        <a href="mailto:${mc.email}" class="text-indigo-400 hover:underline text-sm">${mc.email}</a>
+        <a href="mailto:${mc.email}" class="text-slate-400 hover:underline text-sm">${mc.email}</a>
       </div>`).join('')}
     </div>
     <div class="glass p-5 rounded-xl text-sm text-slate-400">
@@ -310,7 +310,7 @@ export function renderPressKit(): string {
 </section>
 
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. · <a href="/about" class="hover:text-indigo-400 transition-colors">About</a> · <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a></p>
+  <p>© 2026 AdNova AI, Inc. · <a href="/about" class="hover:text-slate-400 transition-colors">About</a> · <a href="/privacy" class="hover:text-slate-400 transition-colors">Privacy</a> · <a href="/terms" class="hover:text-slate-400 transition-colors">Terms</a></p>
 </footer>
 
 <style>

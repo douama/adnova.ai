@@ -1,0 +1,35 @@
+{
+  "name": "adnova-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:prod": "wrangler deploy --env production",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cf-typegen": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "secrets:bulk": "wrangler secret bulk .dev.vars"
+  },
+  "dependencies": {
+    "@adnova/shared": "workspace:*",
+    "@anthropic-ai/sdk": "^0.65.0",
+    "@hono/zod-validator": "^0.4.2",
+    "@supabase/supabase-js": "^2.49.0",
+    "drizzle-orm": "^0.36.4",
+    "hono": "^4.6.12",
+    "postgres": "^3.4.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250620.0",
+    "drizzle-kit": "^0.30.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "wrangler": "^4.4.0"
+  }
+}

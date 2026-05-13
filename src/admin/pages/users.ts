@@ -32,7 +32,7 @@ export const renderAdminUsers = (c: Context) => {
       <button onclick="exportUsersCSV()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-2 rounded-xl flex items-center gap-1 transition-all">
         <i class="fas fa-download text-xs"></i> Export CSV
       </button>
-      <button onclick="openUserModal()" class="bg-gradient-to-r from-orange-600 to-red-600 hover:opacity-90 text-white text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg">
+      <button onclick="openUserModal()" class="bg-gradient-to-r from-orange-600 to-slate-600 hover:opacity-90 text-white text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg">
         <i class="fas fa-plus"></i> Créer utilisateur
       </button>
     </div>
@@ -41,10 +41,10 @@ export const renderAdminUsers = (c: Context) => {
   <!-- Stats -->
   <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
     ${uStat('6,284', 'Total users', 'fa-users', 'orange', 'us-total')}
-    ${uStat('4,820', 'Actifs', 'fa-circle-check', 'emerald', 'us-active')}
-    ${uStat('2', 'Super Admin', 'fa-shield-halved', 'red', 'us-super')}
-    ${uStat('2,412', 'Owners', 'fa-crown', 'amber', 'us-owners')}
-    ${uStat('1,412', 'Membres équipe', 'fa-user-group', 'blue', 'us-members')}
+    ${uStat('4,820', 'Actifs', 'fa-circle-check', 'brand', 'us-active')}
+    ${uStat('2', 'Super Admin', 'fa-shield-halved', 'slate', 'us-super')}
+    ${uStat('2,412', 'Owners', 'fa-crown', 'brand', 'us-owners')}
+    ${uStat('1,412', 'Membres équipe', 'fa-user-group', 'slate', 'us-members')}
   </div>
 
   <!-- Users Table -->
@@ -55,7 +55,7 @@ export const renderAdminUsers = (c: Context) => {
         <span class="text-slate-500 font-normal text-xs ml-1" id="users-count">(6,284)</span>
       </h3>
       <div class="flex items-center gap-2 text-xs text-slate-500">
-        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div> Live
+        <div class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div> Live
       </div>
     </div>
     <div class="overflow-x-auto">
@@ -72,14 +72,14 @@ export const renderAdminUsers = (c: Context) => {
           </tr>
         </thead>
         <tbody id="users-tbody">
-          ${userRow('u1', 'Super Admin', 'superadmin@adnova.ai', 'superadmin', 'Plateforme AdNova', 'active', 'Il y a 5min', '1 jan 2025', 'SA', '#ef4444')}
+          ${userRow('u1', 'Super Admin', 'superadmin@adnova.ai', 'superadmin', 'Plateforme AdNova', 'active', 'Il y a 5min', '1 jan 2025', 'SA', '#7A7A7A')}
           ${userRow('u2', 'John Doe', 'john@acmecorp.com', 'owner', 'Acme Corp', 'active', "Aujourd'hui 14:32", '12 jan 2026', 'JD', '#f97316')}
-          ${userRow('u3', 'Sarah Kim', 'sarah@acmecorp.com', 'admin', 'Acme Corp', 'active', "Aujourd'hui 11:15", '12 jan 2026', 'SK', '#10b981')}
+          ${userRow('u3', 'Sarah Kim', 'sarah@acmecorp.com', 'admin', 'Acme Corp', 'active', "Aujourd'hui 11:15", '12 jan 2026', 'SK', '#FF4D00')}
           ${userRow('u4', 'Mike Chen', 'mike@acmecorp.com', 'editor', 'Acme Corp', 'active', 'Hier 18:42', '15 jan 2026', 'MC', '#3b82f6')}
-          ${userRow('u5', 'Emma Davis', 'emma@acmecorp.com', 'viewer', 'Acme Corp', 'active', '28 mar 2026', '20 jan 2026', 'ED', '#8b5cf6')}
+          ${userRow('u5', 'Emma Davis', 'emma@acmecorp.com', 'viewer', 'Acme Corp', 'active', '28 mar 2026', '20 jan 2026', 'ED', '#FF6B2B')}
           ${userRow('u6', 'Alex Turner', 'alex@apexmkt.com', 'owner', 'Apex Marketing', 'active', "Aujourd'hui 09:18", '15 jan 2026', 'AT', '#f97316')}
-          ${userRow('u7', 'Spam User', 'spam@spamco.io', 'owner', 'SpamCo', 'suspended', 'Bloqué', '10 mar 2026', 'SU', '#ef4444')}
-          ${userRow('u8', 'Marie Dupont', 'marie@fashionbrand.fr', 'owner', 'Fashion Brand', 'trial', '29 mar 2026', '29 mar 2026', 'MD', '#f59e0b')}
+          ${userRow('u7', 'Spam User', 'spam@spamco.io', 'owner', 'SpamCo', 'suspended', 'Bloqué', '10 mar 2026', 'SU', '#7A7A7A')}
+          ${userRow('u8', 'Marie Dupont', 'marie@fashionbrand.fr', 'owner', 'Fashion Brand', 'trial', '29 mar 2026', '29 mar 2026', 'MD', '#FF6B2B')}
         </tbody>
       </table>
     </div>
@@ -98,7 +98,7 @@ export const renderAdminUsers = (c: Context) => {
     <div class="glass rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-fadeIn" style="border:1px solid rgba(249,115,22,0.3)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between sticky top-0 glass rounded-t-2xl z-10">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-slate-600 flex items-center justify-center">
             <i class="fas fa-user-plus text-white text-sm" id="user-modal-icon"></i>
           </div>
           <div>
@@ -151,9 +151,9 @@ export const renderAdminUsers = (c: Context) => {
         <div>
           <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Statut</label>
           <div class="flex gap-2">
-            ${statusRadio('active', 'Actif', 'emerald', true)}
-            ${statusRadio('trial', 'Essai', 'amber', false)}
-            ${statusRadio('suspended', 'Suspendu', 'red', false)}
+            ${statusRadio('active', 'Actif', 'brand', true)}
+            ${statusRadio('trial', 'Essai', 'brand', false)}
+            ${statusRadio('suspended', 'Suspendu', 'slate', false)}
           </div>
         </div>
         <div class="flex items-center gap-2 glass rounded-xl p-3">
@@ -162,7 +162,7 @@ export const renderAdminUsers = (c: Context) => {
         </div>
         <div class="flex justify-end gap-3 pt-1">
           <button onclick="closeUserModal()" class="glass hover:bg-white/10 text-slate-400 px-5 py-2.5 rounded-xl text-sm transition-all">Annuler</button>
-          <button onclick="saveUser()" class="bg-gradient-to-r from-orange-600 to-red-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2">
+          <button onclick="saveUser()" class="bg-gradient-to-r from-orange-600 to-slate-600 hover:opacity-90 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2">
             <i class="fas fa-save"></i> <span id="user-save-label">Créer</span>
           </button>
         </div>
@@ -172,30 +172,30 @@ export const renderAdminUsers = (c: Context) => {
 
   <!-- Ban Confirm Modal -->
   <div id="ban-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-fadeIn" style="border:1px solid rgba(239,68,68,0.3)">
-      <div class="w-12 h-12 rounded-2xl bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-ban text-red-400 text-xl"></i>
+    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-fadeIn" style="border:1px solid rgba(122,122,122,0.3)">
+      <div class="w-12 h-12 rounded-2xl bg-slate-500/20 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-ban text-slate-400 text-xl"></i>
       </div>
       <h3 class="font-bold text-white text-center mb-2" id="ban-modal-title">Suspendre l'utilisateur ?</h3>
       <p class="text-xs text-slate-400 text-center mb-5" id="ban-modal-desc">Cet utilisateur ne pourra plus se connecter.</p>
       <div class="flex gap-3">
         <button onclick="closeBanModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm transition-all">Annuler</button>
-        <button onclick="confirmBan()" id="ban-confirm-btn" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Suspendre</button>
+        <button onclick="confirmBan()" id="ban-confirm-btn" class="flex-1 bg-slate-600 hover:bg-slate-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Suspendre</button>
       </div>
     </div>
   </div>
 
   <!-- Reset Password Modal -->
   <div id="reset-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-fadeIn" style="border:1px solid rgba(245,158,11,0.3)">
-      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-key text-amber-400 text-xl"></i>
+    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-fadeIn" style="border:1px solid rgba(255,107,43,0.3)">
+      <div class="w-12 h-12 rounded-2xl bg-brand-500/20 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-key text-brand-400 text-xl"></i>
       </div>
       <h3 class="font-bold text-white text-center mb-2">Réinitialiser le mot de passe ?</h3>
       <p class="text-xs text-slate-400 text-center mb-5" id="reset-modal-name">Un email de réinitialisation sera envoyé.</p>
       <div class="flex gap-3">
         <button onclick="closeResetModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm transition-all">Annuler</button>
-        <button onclick="confirmReset()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Envoyer email</button>
+        <button onclick="confirmReset()" class="flex-1 bg-brand-600 hover:bg-brand-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Envoyer email</button>
       </div>
     </div>
   </div>
@@ -276,7 +276,7 @@ export const renderAdminUsers = (c: Context) => {
     const last = document.getElementById('user-lastname').value.trim();
     const email = document.getElementById('user-email').value.trim();
     if (!first || !email) {
-      showAdminToast('Prénom et email sont requis', 'red');
+      showAdminToast('Prénom et email sont requis', 'slate');
       return;
     }
     const name = (first + ' ' + last).trim();
@@ -288,9 +288,9 @@ export const renderAdminUsers = (c: Context) => {
         row.dataset.userName = name;
         row.dataset.userEmail = email;
       }
-      showAdminToast('Utilisateur "' + name + '" mis à jour', 'emerald');
+      showAdminToast('Utilisateur "' + name + '" mis à jour', 'brand');
     } else {
-      showAdminToast('Utilisateur "' + name + '" créé avec succès', 'emerald');
+      showAdminToast('Utilisateur "' + name + '" créé avec succès', 'brand');
       // Could add new row dynamically here
     }
     closeUserModal();
@@ -308,8 +308,8 @@ export const renderAdminUsers = (c: Context) => {
       : name + ' ne pourra plus se connecter.';
     document.getElementById('ban-confirm-btn').textContent = isSuspended ? 'Réactiver' : 'Suspendre';
     document.getElementById('ban-confirm-btn').className = isSuspended
-      ? 'flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all'
-      : 'flex-1 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all';
+      ? 'flex-1 bg-brand-600 hover:bg-brand-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all'
+      : 'flex-1 bg-slate-600 hover:bg-slate-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all';
     document.getElementById('ban-modal').classList.remove('hidden');
   }
   function closeBanModal() { document.getElementById('ban-modal').classList.add('hidden'); banUserId = null; }
@@ -327,11 +327,11 @@ export const renderAdminUsers = (c: Context) => {
         const banBtn = row.querySelector('.ban-btn');
         if (banBtn) {
           banBtn.title = isNowActive ? 'Suspendre' : 'Réactiver';
-          banBtn.querySelector('i').className = isNowActive ? 'fas fa-ban text-red-400 text-xs' : 'fas fa-rotate-left text-emerald-400 text-xs';
+          banBtn.querySelector('i').className = isNowActive ? 'fas fa-ban text-slate-400 text-xs' : 'fas fa-rotate-left text-brand-400 text-xs';
           banBtn.dataset.suspended = isNowActive ? 'false' : 'true';
         }
       }
-      showAdminToast(banAction === 'unban' ? 'Utilisateur réactivé avec succès' : 'Utilisateur suspendu', banAction === 'unban' ? 'emerald' : 'amber');
+      showAdminToast(banAction === 'unban' ? 'Utilisateur réactivé avec succès' : 'Utilisateur suspendu', banAction === 'unban' ? 'brand' : 'brand');
     }
     closeBanModal();
   }
@@ -346,7 +346,7 @@ export const renderAdminUsers = (c: Context) => {
   function closeResetModal() { document.getElementById('reset-modal').classList.add('hidden'); resetUserId = null; }
   function confirmReset() {
     closeResetModal();
-    showAdminToast('Email de réinitialisation envoyé', 'amber');
+    showAdminToast('Email de réinitialisation envoyé', 'brand');
   }
 
   // ── Password toggle ───────────────────────────────────────────────────────
@@ -379,10 +379,10 @@ export const renderAdminUsers = (c: Context) => {
 
   // ── Toast ─────────────────────────────────────────────────────────────────
   function showAdminToast(msg, color='brand') {
-    const colors = { brand:'bg-orange-500/90', emerald:'bg-emerald-500/90', amber:'bg-amber-500/90', red:'bg-red-500/90' };
+    const colors = { brand:'bg-orange-500/90', emerald:'bg-brand-500/90', amber:'bg-brand-500/90', red:'bg-slate-500/90' };
     const t = document.createElement('div');
     t.className = (colors[color]||colors.brand) + ' text-white text-xs px-4 py-3 rounded-xl shadow-xl backdrop-blur-sm pointer-events-auto flex items-center gap-2 animate-fadeIn';
-    t.innerHTML = '<i class="fas fa-' + (color==='red'?'exclamation-circle':'check-circle') + '"></i> ' + msg;
+    t.innerHTML = '<i class="fas fa-' + (color==='slate'?'exclamation-circle':'check-circle') + '"></i> ' + msg;
     document.getElementById('admin-users-toast').appendChild(t);
     setTimeout(() => t.remove(), 3500);
   }
@@ -415,7 +415,7 @@ function statusRadio(value: string, label: string, color: string, checked: boole
 }
 
 function userRow(id: string, name: string, email: string, role: string, tenant: string, status: string, lastLogin: string, created: string, abbr: string, color: string): string {
-  const roleColors: Record<string,string> = { superadmin:'red', owner:'orange', admin:'emerald', editor:'blue', viewer:'slate' }
+  const roleColors: Record<string,string> = { superadmin:'slate', owner:'orange', admin:'brand', editor:'slate', viewer:'slate' }
   const roleLabels: Record<string,string> = { superadmin:'Super Admin', owner:'Owner', admin:'Admin', editor:'Éditeur', viewer:'Lecteur' }
   const rc = roleColors[role] || 'slate'
   const statusClass = status === 'active' ? 'badge-active' : status === 'trial' ? 'badge-trial' : 'badge-suspended'
@@ -446,10 +446,10 @@ function userRow(id: string, name: string, email: string, role: string, tenant: 
           <i class="fas fa-pencil text-slate-400 text-xs"></i>
         </button>
         <button onclick="requestResetPassword('${id}','${name}')" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-white/10 transition-all" title="Réinitialiser mot de passe">
-          <i class="fas fa-key text-amber-400 text-xs"></i>
+          <i class="fas fa-key text-brand-400 text-xs"></i>
         </button>
-        <button onclick="requestBan('${id}','${name}',${isSuspended})" class="ban-btn w-7 h-7 glass rounded-lg flex items-center justify-center transition-all ${isSuspended ? 'hover:bg-emerald-500/10' : 'hover:bg-red-500/10'}" data-suspended="${isSuspended}" title="${isSuspended ? 'Réactiver' : 'Suspendre'}">
-          <i class="fas ${isSuspended ? 'fa-rotate-left text-emerald-400' : 'fa-ban text-red-400'} text-xs"></i>
+        <button onclick="requestBan('${id}','${name}',${isSuspended})" class="ban-btn w-7 h-7 glass rounded-lg flex items-center justify-center transition-all ${isSuspended ? 'hover:bg-brand-500/10' : 'hover:bg-slate-500/10'}" data-suspended="${isSuspended}" title="${isSuspended ? 'Réactiver' : 'Suspendre'}">
+          <i class="fas ${isSuspended ? 'fa-rotate-left text-brand-400' : 'fa-ban text-slate-400'} text-xs"></i>
         </button>
       </div>
     </td>

@@ -11,20 +11,21 @@ export const renderAdminPlans = (c: Context) => {
       <p class="text-xs text-slate-500 mt-0.5">Gérez les plans d'abonnement et leurs limites — cliquez sur <strong class="text-orange-400">Modifier</strong> pour éditer</p>
     </div>
     <div class="flex items-center gap-3">
-      <div class="flex items-center gap-2 text-xs text-emerald-400 glass px-3 py-1.5 rounded-xl">
+      <div class="flex items-center gap-2 text-xs text-brand-400 glass px-3 py-1.5 rounded-xl">
         <i class="fas fa-check-circle"></i> Synced with landing
       </div>
-      <button onclick="openNewPlanModal()" class="bg-gradient-to-r from-orange-500 to-red-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition-all shadow-lg flex items-center gap-1.5">
+      <button onclick="openNewPlanModal()" class="bg-gradient-to-r from-orange-500 to-slate-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition-all shadow-lg flex items-center gap-1.5">
         <i class="fas fa-plus"></i> Nouveau Plan
       </button>
     </div>
   </div>
 
   <!-- Plans Cards (éditables) -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6" id="plans-grid">
-    ${adminPlanCard(PLANS[0], 1240, 370760, '37.1%', '94.2%', 0)}
-    ${adminPlanCard(PLANS[1], 892, 713108, '37.0%', '96.8%', 1)}
-    ${adminPlanCard(PLANS[2], 280, 3360000, '26.0%', '99.1%', 2)}
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6" id="plans-grid">
+    ${adminPlanCard(PLANS[0], 1240, 60760, '37.1%', '94.2%', 0)}
+    ${adminPlanCard(PLANS[1], 892, 132908, '37.0%', '96.8%', 1)}
+    ${adminPlanCard(PLANS[2], 280, 139720, '26.0%', '99.1%', 2)}
+    ${adminPlanCard(PLANS[3], 42, 504000, '8.5%', '99.6%', 3)}
   </div>
 
   <!-- Plan Stats Table -->
@@ -35,22 +36,23 @@ export const renderAdminPlans = (c: Context) => {
         <thead>
           <tr class="text-slate-600 border-b border-white/5">
             <th class="text-left pb-3 font-semibold">Métrique</th>
-            <th class="text-center pb-3 font-semibold text-indigo-400">Starter</th>
-            <th class="text-center pb-3 font-semibold text-orange-400">Growth</th>
-            <th class="text-center pb-3 font-semibold text-emerald-400">Enterprise</th>
+            <th class="text-center pb-3 font-semibold text-slate-400">Starter</th>
+            <th class="text-center pb-3 font-semibold text-orange-400">Pro</th>
+            <th class="text-center pb-3 font-semibold text-brand-400">Agency</th>
+            <th class="text-center pb-3 font-semibold text-brand-400">Enterprise</th>
           </tr>
         </thead>
         <tbody>
-          ${planMetric('Clients actifs', '1,240', '892', '280')}
-          ${planMetric('MRR généré', '$370K', '$713K', '$3.36M')}
-          ${planMetric('ROAS moyen', '3.4x', '4.9x', '6.2x')}
-          ${planMetric('Spend géré/mois', '$12M', '$89M', '$312M')}
-          ${planMetric('Campagnes actives', '12,400', '22,300', '12,584')}
-          ${planMetric('Créatifs générés/j', '2,480K', '5,460K', '4,860K')}
-          ${planMetric('Taux de rétention', '91.4%', '95.8%', '98.9%')}
-          ${planMetric('NPS moyen', '62', '74', '89')}
-          ${planMetric('Churn mensuel', '3.2%', '1.8%', '0.4%')}
-          ${planMetric('Upgrades/mois', '+48', '+28', '+4')}
+          ${planMetric('Clients actifs', '1,240', '892', '280', '42')}
+          ${planMetric('MRR généré', '$60K', '$132K', '$139K', '$504K')}
+          ${planMetric('ROAS moyen', '3.4x', '4.9x', '5.5x', '6.2x')}
+          ${planMetric('Spend géré/mois', '$2M', '$18M', '$92M', '$312M')}
+          ${planMetric('Campagnes actives', '12,400', '22,300', '8,540', '4,584')}
+          ${planMetric('Créatifs générés/j', '2,480K', '5,460K', '3,210K', '4,860K')}
+          ${planMetric('Taux de rétention', '91.4%', '95.8%', '97.6%', '99.4%')}
+          ${planMetric('NPS moyen', '62', '74', '81', '89')}
+          ${planMetric('Churn mensuel', '3.2%', '1.8%', '0.9%', '0.2%')}
+          ${planMetric('Upgrades/mois', '+48', '+28', '+12', '+4')}
         </tbody>
       </table>
     </div>
@@ -60,11 +62,11 @@ export const renderAdminPlans = (c: Context) => {
   <div class="glass rounded-2xl p-5">
     <h3 class="font-bold text-white mb-4">Mouvements de Plans Récents</h3>
     <div class="space-y-2">
-      ${planMove('Apex Marketing', 'Growth', 'Enterprise', 'upgrade', '28 mars 2026')}
-      ${planMove('Digital Storm', 'Starter', 'Growth', 'upgrade', '31 mars 2026')}
+      ${planMove('Apex Marketing', 'Agency', 'Enterprise', 'upgrade', '28 mars 2026')}
+      ${planMove('Digital Storm', 'Pro', 'Agency', 'upgrade', '31 mars 2026')}
       ${planMove('Trendy Store', '—', 'Trial', 'new', '27 mars 2026')}
       ${planMove('Fashion Brand', '—', 'Trial', 'new', '29 mars 2026')}
-      ${planMove('OldBrand Corp', 'Growth', 'Starter', 'downgrade', '25 mars 2026')}
+      ${planMove('OldBrand Corp', 'Pro', 'Starter', 'downgrade', '25 mars 2026')}
       ${planMove('SpamCo', 'Starter', '—', 'suspended', '01 mars 2026')}
     </div>
   </div>
@@ -74,7 +76,7 @@ export const renderAdminPlans = (c: Context) => {
     <div class="glass rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-orange-500/20 animate-fadeIn">
       <div class="p-5 border-b border-white/10 flex items-center justify-between sticky top-0 glass z-10">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center"><i class="fas fa-edit text-white text-sm"></i></div>
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-slate-600 flex items-center justify-center"><i class="fas fa-edit text-white text-sm"></i></div>
           <div>
             <h3 class="font-bold text-white" id="edit-plan-title">Modifier le plan</h3>
             <p class="text-xs text-slate-500">Modifiez les limites et le prix — sauvegardez pour appliquer</p>
@@ -100,7 +102,7 @@ export const renderAdminPlans = (c: Context) => {
 
         <!-- Section Limites -->
         <div class="glass rounded-xl p-4 border border-white/5">
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-sliders text-blue-400"></i> Limites & Quotas</h4>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-sliders text-slate-400"></i> Limites & Quotas</h4>
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Spend publicitaire max</label>
@@ -128,7 +130,7 @@ export const renderAdminPlans = (c: Context) => {
         <!-- Section Features -->
         <div class="glass rounded-xl p-4 border border-white/5">
           <div class="flex items-center justify-between mb-3">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-list-check text-emerald-400"></i> Fonctionnalités incluses</h4>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-list-check text-brand-400"></i> Fonctionnalités incluses</h4>
             <button onclick="addFeatureLine()" class="text-xs text-orange-400 hover:text-orange-300 flex items-center gap-1 transition-colors"><i class="fas fa-plus text-xs"></i> Ajouter</button>
           </div>
           <div id="ep-features-list" class="space-y-2">
@@ -137,7 +139,7 @@ export const renderAdminPlans = (c: Context) => {
         </div>
 
         <div class="flex items-center gap-3 pt-2">
-          <button onclick="saveEditPlan()" class="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
+          <button onclick="saveEditPlan()" class="flex-1 bg-gradient-to-r from-orange-600 to-slate-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
             <i class="fas fa-save text-xs"></i> Sauvegarder les modifications
           </button>
           <button onclick="closeEditPlanModal()" class="glass hover:bg-white/10 text-slate-400 py-3 px-6 rounded-xl text-sm font-semibold transition-all">Annuler</button>
@@ -148,10 +150,10 @@ export const renderAdminPlans = (c: Context) => {
 
   <!-- ── Modal Nouveau Plan ──────────────────────────────────────────── -->
   <div id="new-plan-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target===this)document.getElementById('new-plan-modal').classList.add('hidden')">
-    <div class="glass rounded-2xl w-full max-w-md border border-emerald-500/20 animate-fadeIn">
+    <div class="glass rounded-2xl w-full max-w-md border border-brand-500/20 animate-fadeIn">
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center"><i class="fas fa-plus text-white text-sm"></i></div>
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center"><i class="fas fa-plus text-white text-sm"></i></div>
           <h3 class="font-bold text-white">Créer un nouveau plan</h3>
         </div>
         <button onclick="document.getElementById('new-plan-modal').classList.add('hidden')" class="text-slate-500 hover:text-slate-300 w-8 h-8 glass rounded-lg flex items-center justify-center"><i class="fas fa-times text-xs"></i></button>
@@ -159,14 +161,14 @@ export const renderAdminPlans = (c: Context) => {
       <div class="p-5 space-y-4">
         <div>
           <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Nom du plan</label>
-          <input id="np-name" placeholder="ex: Pro" class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-emerald-500 transition-all bg-transparent"/>
+          <input id="np-name" placeholder="ex: Pro" class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
         </div>
         <div>
           <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Prix mensuel ($, 0 = Sur devis)</label>
-          <input id="np-price" type="number" placeholder="499" class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-emerald-500 transition-all bg-transparent"/>
+          <input id="np-price" type="number" placeholder="499" class="w-full glass rounded-xl px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
         </div>
         <div class="flex gap-3">
-          <button onclick="createNewPlan()" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+          <button onclick="createNewPlan()" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
             <i class="fas fa-plus text-xs"></i> Créer
           </button>
           <button onclick="document.getElementById('new-plan-modal').classList.add('hidden')" class="glass hover:bg-white/10 text-slate-400 py-3 px-5 rounded-xl text-sm font-semibold">Annuler</button>
@@ -212,9 +214,9 @@ export const renderAdminPlans = (c: Context) => {
     div.className = 'flex items-center gap-2 feature-line';
     div.dataset.fi = String(idx);
     div.innerHTML = \`
-      <i class="fas fa-check text-emerald-400 text-xs flex-shrink-0 w-4"></i>
+      <i class="fas fa-check text-brand-400 text-xs flex-shrink-0 w-4"></i>
       <input value="\${value}" placeholder="Fonctionnalité..." class="flex-1 glass rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-orange-500 transition-all bg-transparent"/>
-      <button onclick="this.closest('.feature-line').remove()" class="w-6 h-6 glass hover:bg-red-500/10 rounded flex items-center justify-center text-slate-600 hover:text-red-400 transition-all flex-shrink-0">
+      <button onclick="this.closest('.feature-line').remove()" class="w-6 h-6 glass hover:bg-slate-500/10 rounded flex items-center justify-center text-slate-600 hover:text-slate-400 transition-all flex-shrink-0">
         <i class="fas fa-minus text-xs"></i>
       </button>
     \`;
@@ -235,7 +237,7 @@ export const renderAdminPlans = (c: Context) => {
     const features = [...document.querySelectorAll('#ep-features-list .feature-line input')]
       .map(i => i.value.trim()).filter(Boolean);
 
-    if (!name) { showAdminToast('⚠ Le nom du plan est requis', 'amber'); return; }
+    if (!name) { showAdminToast('⚠ Le nom du plan est requis', 'brand'); return; }
 
     // Update in-memory
     PLANS_EDIT[currentEditIdx] = { ...p, name, price, adSpend, campaigns, platforms, users, creatives, features };
@@ -256,16 +258,16 @@ export const renderAdminPlans = (c: Context) => {
       const limitsEl = card.querySelector('.plan-card-limits');
       if (limitsEl) {
         limitsEl.innerHTML = [
-          adSpend ? '<span><i class="fas fa-bolt text-amber-400 mr-1"></i>' + adSpend + '</span>' : '',
-          campaigns ? '<span><i class="fas fa-bullhorn text-blue-400 mr-1"></i>' + campaigns + ' campagnes</span>' : '',
-          platforms ? '<span><i class="fas fa-plug text-purple-400 mr-1"></i>' + platforms + ' plateformes</span>' : '',
-          users ? '<span><i class="fas fa-users text-emerald-400 mr-1"></i>' + users + ' users</span>' : '',
+          adSpend ? '<span><i class="fas fa-bolt text-brand-400 mr-1"></i>' + adSpend + '</span>' : '',
+          campaigns ? '<span><i class="fas fa-bullhorn text-slate-400 mr-1"></i>' + campaigns + ' campagnes</span>' : '',
+          platforms ? '<span><i class="fas fa-plug text-brand-400 mr-1"></i>' + platforms + ' plateformes</span>' : '',
+          users ? '<span><i class="fas fa-users text-brand-400 mr-1"></i>' + users + ' users</span>' : '',
         ].filter(Boolean).join('');
       }
     }
 
     closeEditPlanModal();
-    showAdminToast('✓ Plan "' + name + '" mis à jour', 'emerald');
+    showAdminToast('✓ Plan "' + name + '" mis à jour', 'brand');
   }
 
   function openNewPlanModal() {
@@ -277,8 +279,8 @@ export const renderAdminPlans = (c: Context) => {
   function createNewPlan() {
     const name = document.getElementById('np-name').value.trim();
     const price = parseInt(document.getElementById('np-price').value) || 0;
-    if (!name) { showAdminToast('⚠ Nom du plan requis', 'amber'); return; }
-    const newPlan = { id: name.toLowerCase().replace(/\\s/g,'-'), name, price, color:'#94a3b8', features:[], adSpend:'', campaigns:0, platforms:0, users:0, creatives:0 };
+    if (!name) { showAdminToast('⚠ Nom du plan requis', 'brand'); return; }
+    const newPlan = { id: name.toLowerCase().replace(/\\s/g,'-'), name, price, color:'#7A7A7A', features:[], adSpend:'', campaigns:0, platforms:0, users:0, creatives:0 };
     const idx = PLANS_EDIT.length;
     PLANS_EDIT.push({ ...newPlan, idx });
     const grid = document.getElementById('plans-grid');
@@ -304,11 +306,11 @@ export const renderAdminPlans = (c: Context) => {
     \`;
     grid.appendChild(div);
     document.getElementById('new-plan-modal').classList.add('hidden');
-    showAdminToast('✓ Plan "' + name + '" créé — cliquez sur Modifier pour configurer', 'emerald');
+    showAdminToast('✓ Plan "' + name + '" créé — cliquez sur Modifier pour configurer', 'brand');
   }
 
-  function showAdminToast(msg, type = 'emerald') {
-    const colors = { emerald:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', amber:'bg-amber-500/20 border-amber-500/30 text-amber-300', red:'bg-red-500/20 border-red-500/30 text-red-300' };
+  function showAdminToast(msg, type = 'brand') {
+    const colors = { emerald:'bg-brand-500/20 border-brand-500/30 text-brand-300', amber:'bg-brand-500/20 border-brand-500/30 text-brand-300', red:'bg-slate-500/20 border-slate-500/30 text-slate-300' };
     const t = document.createElement('div');
     t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl shadow-2xl ' + (colors[type]||colors.emerald);
     t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 4000);
@@ -349,29 +351,30 @@ function adminPlanCard(plan: { id: string; name: string; price: number; color: s
       ${plan.features.length > 5 ? `<li class="text-xs text-slate-600">+ ${plan.features.length - 5} autres fonctionnalités...</li>` : ''}
     </ul>
     <div class="plan-card-limits flex flex-wrap gap-2 mb-4 text-xs">
-      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-bolt text-amber-400"></i>${plan.adSpend}</span>
-      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-bullhorn text-blue-400"></i>${plan.campaigns} camp.</span>
-      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-plug text-purple-400"></i>${plan.platforms} plat.</span>
-      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-users text-emerald-400"></i>${plan.users} users</span>
+      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-bolt text-brand-400"></i>${plan.adSpend}</span>
+      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-bullhorn text-slate-400"></i>${plan.campaigns} camp.</span>
+      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-plug text-brand-400"></i>${plan.platforms} plat.</span>
+      <span class="glass rounded-lg px-2 py-1 text-slate-400 flex items-center gap-1"><i class="fas fa-users text-brand-400"></i>${plan.users} users</span>
     </div>
     <div class="flex gap-2 text-xs">
-      <span class="flex-1 text-center py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">Rétention: ${retention}</span>
-      <span class="flex-1 text-center py-1.5 rounded-lg bg-blue-500/10 text-blue-400">Croissance: ${growth}</span>
+      <span class="flex-1 text-center py-1.5 rounded-lg bg-brand-500/10 text-brand-400">Rétention: ${retention}</span>
+      <span class="flex-1 text-center py-1.5 rounded-lg bg-slate-500/10 text-slate-400">Croissance: ${growth}</span>
     </div>
   </div>`
 }
 
-function planMetric(label: string, starter: string, growth: string, enterprise: string): string {
+function planMetric(label: string, starter: string, pro: string, agency: string, enterprise: string): string {
   return `<tr class="table-row border-b border-white/5">
     <td class="py-2.5 text-slate-400">${label}</td>
-    <td class="py-2.5 text-center text-indigo-400 font-semibold">${starter}</td>
-    <td class="py-2.5 text-center text-orange-400 font-semibold">${growth}</td>
-    <td class="py-2.5 text-center text-emerald-400 font-semibold">${enterprise}</td>
+    <td class="py-2.5 text-center text-slate-400 font-semibold">${starter}</td>
+    <td class="py-2.5 text-center text-orange-400 font-semibold">${pro}</td>
+    <td class="py-2.5 text-center text-brand-400 font-semibold">${agency}</td>
+    <td class="py-2.5 text-center text-brand-400 font-semibold">${enterprise}</td>
   </tr>`
 }
 
 function planMove(tenant: string, from: string, to: string, type: string, date: string): string {
-  const icons: Record<string,string> = { upgrade: 'fa-arrow-up text-emerald-400', downgrade: 'fa-arrow-down text-amber-400', new: 'fa-plus text-blue-400', suspended: 'fa-ban text-red-400' }
+  const icons: Record<string,string> = { upgrade: 'fa-arrow-up text-brand-400', downgrade: 'fa-arrow-down text-brand-400', new: 'fa-plus text-slate-400', suspended: 'fa-ban text-slate-400' }
   const labels: Record<string,string> = { upgrade: 'Upgrade', downgrade: 'Downgrade', new: 'Inscription', suspended: 'Suspendu' }
   return `<div class="flex items-center justify-between p-3 glass rounded-xl hover:bg-white/3 transition-all">
     <div class="flex items-center gap-3">
@@ -385,7 +388,7 @@ function planMove(tenant: string, from: string, to: string, type: string, date: 
     </div>
     <div class="flex items-center gap-3">
       <span class="text-xs text-slate-500">${date}</span>
-      <span class="text-xs font-bold px-2 py-0.5 rounded-full ${type === 'upgrade' ? 'bg-emerald-500/15 text-emerald-400' : type === 'downgrade' ? 'bg-amber-500/15 text-amber-400' : type === 'new' ? 'bg-blue-500/15 text-blue-400' : 'bg-red-500/15 text-red-400'}">${labels[type]}</span>
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full ${type === 'upgrade' ? 'bg-brand-500/15 text-brand-400' : type === 'downgrade' ? 'bg-brand-500/15 text-brand-400' : type === 'new' ? 'bg-slate-500/15 text-slate-400' : 'bg-slate-500/15 text-slate-400'}">${labels[type]}</span>
     </div>
   </div>`
 }

@@ -33,18 +33,18 @@ export const renderAdminLogs = (c: Context) => {
       <button onclick="exportLogsCSV()" class="admin-glass text-xs px-4 py-2 rounded-lg text-orange-400 hover:bg-orange-500/10 transition-all border border-orange-500/20 flex items-center gap-1">
         <i class="fas fa-download mr-1"></i> Exporter CSV
       </button>
-      <button onclick="toggleLiveMode()" id="live-mode-btn" class="admin-glass text-xs px-4 py-2 rounded-lg text-emerald-400 hover:bg-emerald-500/10 transition-all border border-emerald-500/20 flex items-center gap-1.5">
-        <div class="w-2 h-2 rounded-full bg-emerald-500 blink"></div> Live
+      <button onclick="toggleLiveMode()" id="live-mode-btn" class="admin-glass text-xs px-4 py-2 rounded-lg text-brand-400 hover:bg-brand-500/10 transition-all border border-brand-500/20 flex items-center gap-1.5">
+        <div class="w-2 h-2 rounded-full bg-brand-500 blink"></div> Live
       </button>
     </div>
   </div>
 
   <!-- Stats rapides -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    ${logStat('Erreurs (24h)', '127', 'red', 'fa-circle-xmark', 'log-stat-errors')}
-    ${logStat('Warnings (24h)', '842', 'amber', 'fa-triangle-exclamation', 'log-stat-warns')}
-    ${logStat('Info (24h)', '283,851', 'blue', 'fa-circle-info', 'log-stat-info')}
-    ${logStat('Latence API moy.', '24ms', 'emerald', 'fa-bolt', 'log-stat-latency')}
+    ${logStat('Erreurs (24h)', '127', 'slate', 'fa-circle-xmark', 'log-stat-errors')}
+    ${logStat('Warnings (24h)', '842', 'brand', 'fa-triangle-exclamation', 'log-stat-warns')}
+    ${logStat('Info (24h)', '283,851', 'slate', 'fa-circle-info', 'log-stat-info')}
+    ${logStat('Latence API moy.', '24ms', 'brand', 'fa-bolt', 'log-stat-latency')}
   </div>
 
   <!-- Logs Table -->
@@ -58,7 +58,7 @@ export const renderAdminLogs = (c: Context) => {
       <div class="flex items-center gap-3 text-xs text-slate-500">
         <span><span id="visible-count">18</span> / <span id="total-count">18</span> logs affichés</span>
         <div class="flex items-center gap-1.5" id="live-indicator">
-          <div class="w-2 h-2 rounded-full bg-emerald-500 blink"></div>
+          <div class="w-2 h-2 rounded-full bg-brand-500 blink"></div>
           <span>Live</span>
         </div>
       </div>
@@ -114,7 +114,7 @@ export const renderAdminLogs = (c: Context) => {
 
   <!-- Log Detail Modal (click on row) -->
   <div id="log-detail-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-lg animate-fadeIn" style="border:1px solid rgba(99,102,241,0.3)">
+    <div class="glass rounded-2xl w-full max-w-lg animate-fadeIn" style="border:1px solid rgba(255,77,0,0.3)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
         <h2 class="font-bold text-white flex items-center gap-2"><i class="fas fa-file-alt text-brand-400"></i> Log Detail</h2>
         <button onclick="closeLogDetail()" class="text-slate-500 hover:text-slate-300 w-8 h-8 glass rounded-lg flex items-center justify-center"><i class="fas fa-times"></i></button>
@@ -191,7 +191,7 @@ export const renderAdminLogs = (c: Context) => {
 
   // ── Log row click → detail modal ──────────────────────────────────────────
   function showLogDetail(level, service, message, tenant, time) {
-    const levelColors = { error:'red', warn:'amber', info:'blue', debug:'slate' };
+    const levelColors = { error:'slate', warn:'brand', info:'slate', debug:'slate' };
     const lc = levelColors[level] || 'slate';
     document.getElementById('log-detail-content').innerHTML = \`
       <div class="flex gap-2 flex-wrap">
@@ -238,8 +238,8 @@ export const renderAdminLogs = (c: Context) => {
     const btn = document.getElementById('live-mode-btn');
     const indicator = document.getElementById('live-indicator');
     if (liveMode) {
-      btn.className = btn.className.replace('text-slate-400 border-white/10','text-emerald-400 border-emerald-500/20');
-      btn.innerHTML = '<div class="w-2 h-2 rounded-full bg-emerald-500 blink"></div> Live';
+      btn.className = btn.className.replace('text-slate-400 border-white/10','text-brand-400 border-brand-500/20');
+      btn.innerHTML = '<div class="w-2 h-2 rounded-full bg-brand-500 blink"></div> Live';
       indicator.style.opacity = '1';
       startLive();
     } else {
@@ -257,7 +257,7 @@ export const renderAdminLogs = (c: Context) => {
       const tbody = document.getElementById('logs-tbody');
       const now = new Date();
       const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
-      const levelColors = { error:'red', warn:'amber', info:'blue', debug:'slate' };
+      const levelColors = { error:'slate', warn:'brand', info:'slate', debug:'slate' };
       const lc = levelColors[sample[0]] || 'slate';
       const tr = document.createElement('tr');
       tr.className = 'table-row border-b border-white/5 hover:bg-white/3 cursor-pointer transition-all animate-fadeIn';
@@ -322,7 +322,7 @@ export const renderAdminLogs = (c: Context) => {
 
   // ── Toast ──────────────────────────────────────────────────────────────────
   function showLogsToast(msg, color='brand') {
-    const colors = { brand:'bg-orange-500/90', emerald:'bg-emerald-500/90', amber:'bg-amber-500/90', red:'bg-red-500/90' };
+    const colors = { brand:'bg-orange-500/90', emerald:'bg-brand-500/90', amber:'bg-brand-500/90', red:'bg-slate-500/90' };
     const t = document.createElement('div');
     t.className = (colors[color]||colors.brand) + ' text-white text-xs px-4 py-3 rounded-xl shadow-xl backdrop-blur-sm pointer-events-auto flex items-center gap-2 animate-fadeIn';
     t.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg;
@@ -366,7 +366,7 @@ function logStat(label: string, value: string, color: string, icon: string, id: 
 }
 
 function logRow(level: string, service: string, message: string, tenant: string, time: string): string {
-  const levelColors: Record<string,string> = { error: 'red', warn: 'amber', info: 'blue', debug: 'slate' }
+  const levelColors: Record<string,string> = { error: 'slate', warn: 'brand', info: 'slate', debug: 'slate' }
   const lc = levelColors[level] || 'slate'
   return `<tr class="table-row border-b border-white/5 hover:bg-white/3 transition-all cursor-pointer" data-level="${level}" data-service="${service}" onclick="showLogDetail('${level}','${service}','${message.replace(/'/g,"\\'")}','${tenant}','${time}')">
     <td class="px-4 py-2.5">

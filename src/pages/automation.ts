@@ -6,7 +6,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
   const content = `
   <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
     <p class="text-slate-400 text-sm">Build smart automation rules. AI executes them automatically.</p>
-    <button onclick="openRuleModal()" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 hover:opacity-90 transition-all shadow-lg">
+    <button onclick="openRuleModal()" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 hover:opacity-90 transition-all shadow-lg">
       <i class="fas fa-plus"></i> New Rule
     </button>
   </div>
@@ -14,30 +14,30 @@ export function renderAutomation(lang: Lang = 'en'): string {
   <!-- Stats -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
     ${autoStat('24', 'Active Rules', 'fa-gears', 'brand', 'stat-rules')}
-    ${autoStat('1,284', 'Actions Today', 'fa-bolt', 'emerald', 'stat-actions')}
-    ${autoStat('$4,200', 'Budget Saved', 'fa-dollar-sign', 'amber', 'stat-saved')}
-    ${autoStat('98.7%', 'Rule Accuracy', 'fa-bullseye', 'blue', 'stat-accuracy')}
+    ${autoStat('1,284', 'Actions Today', 'fa-bolt', 'brand', 'stat-actions')}
+    ${autoStat('$4,200', 'Budget Saved', 'fa-dollar-sign', 'brand', 'stat-saved')}
+    ${autoStat('98.7%', 'Rule Accuracy', 'fa-bullseye', 'slate', 'stat-accuracy')}
   </div>
 
   <!-- Rules Grid -->
   <div class="space-y-3 mb-6" id="rules-container">
-    ${ruleCard('r1', 'Auto-Scale Winners', 'fa-arrow-trend-up', 'emerald', true,
+    ${ruleCard('r1', 'Auto-Scale Winners', 'fa-arrow-trend-up', 'brand', true,
       'IF ROAS ≥ 3.5x AND CTR ≥ 2% AND Spend ≥ $500/day',
       'THEN increase daily budget by +10% every 72 hours (max $5,000/day)',
       '12 campaigns', '38 actions today')}
-    ${ruleCard('r2', 'Kill Underperformers', 'fa-scissors', 'red', true,
+    ${ruleCard('r2', 'Kill Underperformers', 'fa-scissors', 'slate', true,
       'IF CTR < 0.8% AND Impressions ≥ 500 AND Status = Active',
       'THEN pause creative, reallocate budget to top performer, notify team',
       '37 creatives killed', '3 actions today')}
-    ${ruleCard('r3', 'Budget Guardian', 'fa-shield-halved', 'amber', true,
+    ${ruleCard('r3', 'Budget Guardian', 'fa-shield-halved', 'brand', true,
       'IF Daily Spend reaches 90% of budget cap before 6 PM',
       'THEN reduce bids by 20% OR pause lowest ROAS campaigns until midnight',
       'Protected $12,400', '2 triggers today')}
-    ${ruleCard('r4', 'Audience Expander', 'fa-users', 'blue', true,
+    ${ruleCard('r4', 'Audience Expander', 'fa-users', 'slate', true,
       'IF Frequency ≥ 3.5 OR CPM increases 30% in 48h',
       'THEN expand lookalike to next % tier, build new interest audience',
       '8 expansions', '1 action today')}
-    ${ruleCard('r5', 'Creative Refresher', 'fa-wand-magic-sparkles', 'purple', true,
+    ${ruleCard('r5', 'Creative Refresher', 'fa-wand-magic-sparkles', 'brand', true,
       'IF Campaign running > 14 days AND CTR declining > 15%',
       'THEN generate 3 new AI creatives, start A/B test, notify creative team',
       '24 refreshes', '0 today')}
@@ -52,7 +52,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
     <div class="glass rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn" style="border:1px solid rgba(99,102,241,0.35)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between sticky top-0 glass z-10 rounded-t-2xl">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
             <i class="fas fa-gears text-white text-sm" id="rule-modal-icon"></i>
           </div>
           <div>
@@ -91,7 +91,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
         <!-- Action -->
         <div class="glass rounded-xl p-4">
           <div class="flex items-center gap-2 mb-3">
-            <span class="w-9 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-xs font-bold text-white">THEN</span>
+            <span class="w-9 h-6 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold text-white">THEN</span>
             <span class="font-semibold text-white text-sm">Action</span>
           </div>
           <select id="rule-action" class="w-full glass rounded-lg px-3 py-2.5 text-xs text-slate-300 outline-none border border-white/10 focus:border-brand-500 transition-all mb-2">
@@ -134,7 +134,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
 
         <div class="flex justify-end gap-3 pt-1">
           <button onclick="closeRuleModal()" class="glass hover:bg-white/10 text-slate-400 px-5 py-2.5 rounded-xl text-sm transition-all">Cancel</button>
-          <button onclick="saveRule()" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all flex items-center gap-2">
+          <button onclick="saveRule()" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition-all flex items-center gap-2">
             <i class="fas fa-save"></i> Save Rule
           </button>
         </div>
@@ -144,15 +144,15 @@ export function renderAutomation(lang: Lang = 'en'): string {
 
   <!-- Delete confirm modal -->
   <div id="delete-rule-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-fadeIn" style="border:1px solid rgba(239,68,68,0.3)">
-      <div class="w-12 h-12 rounded-2xl bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-trash text-red-400 text-xl"></i>
+    <div class="glass rounded-2xl w-full max-w-sm p-6 animate-fadeIn" style="border:1px solid rgba(122,122,122,0.3)">
+      <div class="w-12 h-12 rounded-2xl bg-slate-500/20 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-trash text-slate-400 text-xl"></i>
       </div>
       <h3 class="font-bold text-white text-center mb-2">Delete Rule?</h3>
       <p class="text-xs text-slate-400 text-center mb-5">This rule will be permanently deleted. All automations will stop.</p>
       <div class="flex gap-3">
         <button onclick="closeDeleteModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-2.5 rounded-xl text-sm transition-all">Cancel</button>
-        <button onclick="confirmDeleteRule()" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Delete</button>
+        <button onclick="confirmDeleteRule()" class="flex-1 bg-slate-600 hover:bg-slate-500 text-white py-2.5 rounded-xl text-sm font-semibold transition-all">Delete</button>
       </div>
     </div>
   </div>
@@ -181,7 +181,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
         <option>≥ gte</option><option>≤ lte</option><option>= equals</option><option>↑ increases</option><option>↓ decreases</option>
       </select>
       <input type="text" placeholder="Value" class="w-16 glass rounded-lg px-2 py-2 text-xs text-slate-200 outline-none border border-white/10"/>
-      <button onclick="removeCondition(\${idx})" class="w-6 h-6 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400 hover:bg-red-500/20 transition-all flex-shrink-0">
+      <button onclick="removeCondition(\${idx})" class="w-6 h-6 rounded-lg bg-slate-500/10 flex items-center justify-center text-slate-400 hover:bg-slate-500/20 transition-all flex-shrink-0">
         <i class="fas fa-times text-xs"></i>
       </button>
     \`;
@@ -223,11 +223,11 @@ export function renderAutomation(lang: Lang = 'en'): string {
   function saveRule() {
     const name = document.getElementById('rule-name').value.trim();
     if (!name) {
-      document.getElementById('rule-name').classList.add('border-red-500');
-      showAutoToast('Please enter a rule name', 'red');
+      document.getElementById('rule-name').classList.add('border-slate-500');
+      showAutoToast('Please enter a rule name', 'slate');
       return;
     }
-    document.getElementById('rule-name').classList.remove('border-red-500');
+    document.getElementById('rule-name').classList.remove('border-slate-500');
 
     if (editingRuleId) {
       // Update existing rule card title
@@ -252,7 +252,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
             <div>
               <h3 class="font-bold text-white rule-title">\${name}</h3>
               <div class="flex items-center gap-2 mt-1">
-                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400">Active</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-400">Active</span>
                 <span class="text-slate-700">·</span>
                 <span class="text-xs text-slate-400">Just created</span>
               </div>
@@ -263,7 +263,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
             <button onclick="openRuleModal('\${id}')" class="w-8 h-8 rounded-lg glass hover:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-300 transition-all">
               <i class="fas fa-pencil text-xs"></i>
             </button>
-            <button onclick="deleteRule('\${id}')" class="w-8 h-8 rounded-lg glass hover:bg-red-500/10 flex items-center justify-center text-red-400 transition-all">
+            <button onclick="deleteRule('\${id}')" class="w-8 h-8 rounded-lg glass hover:bg-slate-500/10 flex items-center justify-center text-slate-400 transition-all">
               <i class="fas fa-trash text-xs"></i>
             </button>
           </div>
@@ -274,7 +274,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
             <p class="text-xs text-slate-400 mt-1">Conditions configured</p>
           </div>
           <div class="glass rounded-xl p-3">
-            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">THEN</span>
+            <span class="text-xs font-bold text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded">THEN</span>
             <p class="text-xs text-slate-400 mt-1">\${actionText}</p>
           </div>
         </div>
@@ -283,7 +283,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
       // Update stats counter
       const statEl = document.getElementById('stat-rules');
       if (statEl) statEl.textContent = (parseInt(statEl.textContent) + 1).toString();
-      showAutoToast('Rule "' + name + '" created and activated', 'emerald');
+      showAutoToast('Rule "' + name + '" created and activated', 'brand');
     }
     document.getElementById('rule-name').value = '';
     closeRuleModal();
@@ -293,7 +293,7 @@ export function renderAutomation(lang: Lang = 'en'): string {
   function toggleRule(id, btn) {
     const isPaused = btn.textContent.trim() === 'Resume';
     btn.textContent = isPaused ? 'Pause' : 'Resume';
-    showAutoToast(isPaused ? 'Rule resumed — AI will execute it' : 'Rule paused — no actions will be taken', isPaused ? 'emerald' : 'amber');
+    showAutoToast(isPaused ? 'Rule resumed — AI will execute it' : 'Rule paused — no actions will be taken', isPaused ? 'brand' : 'brand');
   }
 
   // ── Delete rule ─────────────────────────────────────────────────────────────
@@ -308,15 +308,15 @@ export function renderAutomation(lang: Lang = 'en'): string {
       if (card) card.remove();
     }
     closeDeleteModal();
-    showAutoToast('Rule deleted permanently', 'red');
+    showAutoToast('Rule deleted permanently', 'slate');
   }
 
   // ── Toast ──────────────────────────────────────────────────────────────────
   function showAutoToast(msg, color='brand') {
-    const colors = { brand:'bg-brand-500/90', emerald:'bg-emerald-500/90', amber:'bg-amber-500/90', red:'bg-red-500/90' };
+    const colors = { brand:'bg-brand-500/90', emerald:'bg-brand-500/90', amber:'bg-brand-500/90', red:'bg-slate-500/90' };
     const t = document.createElement('div');
     t.className = \`\${colors[color]||colors.brand} text-white text-xs px-4 py-3 rounded-xl shadow-xl backdrop-blur-sm pointer-events-auto flex items-center gap-2 animate-fadeIn\`;
-    t.innerHTML = \`<i class="fas fa-\${color==='red'?'exclamation-circle':'check-circle'}"></i> \${msg}\`;
+    t.innerHTML = \`<i class="fas fa-\${color==='slate'?'exclamation-circle':'check-circle'}"></i> \${msg}\`;
     const container = document.getElementById('auto-toast');
     container.appendChild(t);
     setTimeout(() => t.remove(), 3500);
@@ -387,7 +387,7 @@ function ruleCard(id: string, title: string, icon: string, color: string, active
         <button onclick="openRuleModal('${id}')" class="w-8 h-8 rounded-lg glass hover:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-300 transition-all">
           <i class="fas fa-pencil text-xs"></i>
         </button>
-        <button onclick="deleteRule('${id}')" class="w-8 h-8 rounded-lg glass hover:bg-red-500/10 flex items-center justify-center text-red-400 transition-all">
+        <button onclick="deleteRule('${id}')" class="w-8 h-8 rounded-lg glass hover:bg-slate-500/10 flex items-center justify-center text-slate-400 transition-all">
           <i class="fas fa-trash text-xs"></i>
         </button>
       </div>
@@ -401,7 +401,7 @@ function ruleCard(id: string, title: string, icon: string, color: string, active
       </div>
       <div class="glass rounded-xl p-3">
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">THEN</span>
+          <span class="text-xs font-bold text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded">THEN</span>
         </div>
         <p class="text-xs text-slate-400">${action}</p>
       </div>

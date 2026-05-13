@@ -24,19 +24,19 @@ export function renderCreatives(lang: Lang = 'en'): string {
       </button>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="openEditorModal()" class="glass hover:bg-blue-500/10 text-blue-400 text-sm font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all border border-blue-500/20">
+      <button onclick="openEditorModal()" class="glass hover:bg-slate-500/10 text-slate-400 text-sm font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all border border-slate-500/20">
         <i class="fas fa-pencil-ruler"></i> Manual Editor
       </button>
-      <button onclick="openGenerateModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg transition-all">
+      <button onclick="openGenerateModal()" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-500 hover:to-brand-500 text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg transition-all">
         <i class="fas fa-wand-magic-sparkles"></i> Generate with AI
       </button>
     </div>
   </div>
 
   <!-- AI Generation Status Banner -->
-  <div class="glass rounded-2xl p-4 mb-6 border border-purple-500/20 flex items-center justify-between">
+  <div class="glass rounded-2xl p-4 mb-6 border border-brand-500/20 flex items-center justify-between">
     <div class="flex items-center gap-4">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center animate-pulse">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center animate-pulse">
         <i class="fas fa-wand-magic-sparkles text-white text-sm"></i>
       </div>
       <div>
@@ -46,18 +46,18 @@ export function renderCreatives(lang: Lang = 'en'): string {
     </div>
     <div class="flex items-center gap-3">
       <div class="progress-bar w-32">
-        <div class="progress-fill bg-gradient-to-r from-purple-500 to-pink-500" style="width:67%" id="gen-progress"></div>
+        <div class="progress-fill bg-gradient-to-r from-brand-500 to-brand-500" style="width:67%" id="gen-progress"></div>
       </div>
-      <span class="text-xs text-purple-400 font-semibold" id="gen-pct">67%</span>
+      <span class="text-xs text-brand-400 font-semibold" id="gen-pct">67%</span>
     </div>
   </div>
 
   <!-- Stats -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    ${creativeStat('142', 'Total Creatives', 'fa-photo-film', 'purple')}
-    ${creativeStat('67', 'Active / Running', 'fa-play-circle', 'emerald')}
-    ${creativeStat('38', 'In A/B Test', 'fa-flask', 'blue')}
-    ${creativeStat('37', 'Killed by AI', 'fa-ban', 'red')}
+    ${creativeStat('142', 'Total Creatives', 'fa-photo-film', 'brand')}
+    ${creativeStat('67', 'Active / Running', 'fa-play-circle', 'brand')}
+    ${creativeStat('38', 'In A/B Test', 'fa-flask', 'slate')}
+    ${creativeStat('37', 'Killed by AI', 'fa-ban', 'slate')}
   </div>
 
   <!-- Creatives Grid -->
@@ -80,22 +80,22 @@ export function renderCreatives(lang: Lang = 'en'): string {
   <div class="glass rounded-2xl p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-          <i class="fas fa-flask text-blue-400 text-sm"></i>
+        <div class="w-8 h-8 rounded-lg bg-slate-500/20 flex items-center justify-center">
+          <i class="fas fa-flask text-slate-400 text-sm"></i>
         </div>
         <div>
           <h3 class="font-bold text-white">Active A/B Tests</h3>
           <p class="text-xs text-slate-500">AI automatically picks the winner</p>
         </div>
       </div>
-      <button onclick="openABTestModal()" class="glass hover:bg-blue-500/10 text-blue-400 text-xs px-3 py-1.5 rounded-lg border border-blue-500/20 flex items-center gap-1.5">
+      <button onclick="openABTestModal()" class="glass hover:bg-slate-500/10 text-slate-400 text-xs px-3 py-1.5 rounded-lg border border-slate-500/20 flex items-center gap-1.5">
         <i class="fas fa-plus text-xs"></i> New A/B Test
       </button>
     </div>
     <div class="space-y-4">
-      ${abTestRow('Summer Collection Creative Test', 'Summer-Hero-V3', 'Summer-Hero-V4', 6.2, 4.8, 72, 'A winning', 'emerald')}
-      ${abTestRow('Product Page Image vs Video', 'Product-Static-A', 'Product-Video-B', 3.1, 4.2, 45, 'B winning', 'blue')}
-      ${abTestRow('Holiday Headline Test', 'Flash-Sale-Headline-A', 'Flash-Sale-Headline-B', 2.8, 2.9, 31, 'Too early', 'amber')}
+      ${abTestRow('Summer Collection Creative Test', 'Summer-Hero-V3', 'Summer-Hero-V4', 6.2, 4.8, 72, 'A winning', 'brand')}
+      ${abTestRow('Product Page Image vs Video', 'Product-Static-A', 'Product-Video-B', 3.1, 4.2, 45, 'B winning', 'slate')}
+      ${abTestRow('Holiday Headline Test', 'Flash-Sale-Headline-A', 'Flash-Sale-Headline-B', 2.8, 2.9, 31, 'Too early', 'brand')}
     </div>
   </div>
 
@@ -104,7 +104,7 @@ export function renderCreatives(lang: Lang = 'en'): string {
     <div class="glass rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn" style="border:1px solid rgba(139,92,246,0.4)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between sticky top-0 glass z-10">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
             <i class="fas fa-wand-magic-sparkles text-white"></i>
           </div>
           <div>
@@ -119,10 +119,10 @@ export function renderCreatives(lang: Lang = 'en'): string {
         <div>
           <label class="text-xs font-semibold text-slate-400 mb-2 block">Creative Type</label>
           <div class="grid grid-cols-4 gap-2">
-            ${genTypeBtn('fa-image', 'AI Image', 'purple', true)}
-            ${genTypeBtn('fa-video', 'AI Video', 'pink', false)}
-            ${genTypeBtn('fa-user-check', 'UGC Style', 'blue', false)}
-            ${genTypeBtn('fa-pen', 'Ad Copy', 'emerald', false)}
+            ${genTypeBtn('fa-image', 'AI Image', 'brand', true)}
+            ${genTypeBtn('fa-video', 'AI Video', 'brand', false)}
+            ${genTypeBtn('fa-user-check', 'UGC Style', 'slate', false)}
+            ${genTypeBtn('fa-pen', 'Ad Copy', 'brand', false)}
           </div>
         </div>
 
@@ -130,7 +130,7 @@ export function renderCreatives(lang: Lang = 'en'): string {
           <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Creative Brief / Prompt *</label>
           <textarea id="gen-prompt" rows="4" placeholder="Describe what you want: product, mood, target audience, style, colors, key message...
 Example: 'Young woman confidently wearing our summer dress at the beach, golden hour, vibrant colors, lifestyle photography style, for 18-35 female audience'"
-            class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-purple-500 transition-all resize-none bg-transparent"></textarea>
+            class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all resize-none bg-transparent"></textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -178,18 +178,18 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
           <div class="grid grid-cols-1 gap-3">
             <div>
               <label class="text-xs text-slate-500 mb-1 block">Headline</label>
-              <input id="gen-headline" type="text" placeholder="Summer Sale — Up to 60% Off!" class="w-full glass rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-purple-500 transition-all bg-transparent"/>
+              <input id="gen-headline" type="text" placeholder="Summer Sale — Up to 60% Off!" class="w-full glass rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
             </div>
             <div>
               <label class="text-xs text-slate-500 mb-1 block">CTA Button Text</label>
-              <input id="gen-cta" type="text" placeholder="Shop Now" class="w-full glass rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-purple-500 transition-all bg-transparent"/>
+              <input id="gen-cta" type="text" placeholder="Shop Now" class="w-full glass rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-brand-500 transition-all bg-transparent"/>
             </div>
           </div>
         </div>
 
-        <div class="glass rounded-xl p-4 border border-purple-500/20">
+        <div class="glass rounded-xl p-4 border border-brand-500/20">
           <div class="flex items-center gap-2 mb-3">
-            <i class="fas fa-brain text-purple-400 text-sm"></i>
+            <i class="fas fa-brain text-brand-400 text-sm"></i>
             <span class="text-sm font-semibold text-white">AI Enhancements</span>
           </div>
           <div class="space-y-2">
@@ -202,7 +202,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
           </div>
         </div>
 
-        <button onclick="generateCreatives()" id="gen-btn" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-lg">
+        <button onclick="generateCreatives()" id="gen-btn" class="w-full bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-500 hover:to-brand-500 text-white font-bold py-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-lg">
           <i class="fas fa-wand-magic-sparkles"></i> Generate 3 Creatives Now
         </button>
       </div>
@@ -214,7 +214,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
     <!-- Left panel: tools -->
     <div class="w-64 glass border-r border-white/10 p-4 flex flex-col gap-4 overflow-y-auto">
       <div class="flex items-center gap-2 mb-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center">
           <i class="fas fa-pencil-ruler text-white text-xs"></i>
         </div>
         <div>
@@ -255,25 +255,25 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
         <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Add Element</label>
         <div class="space-y-1.5">
           <button onclick="addText('Headline Here', 28, '#ffffff', 'bold')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
-            <i class="fas fa-heading text-blue-400 w-4"></i> Add Headline
+            <i class="fas fa-heading text-slate-400 w-4"></i> Add Headline
           </button>
           <button onclick="addText('Your tagline...', 16, '#e2e8f0', 'normal')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
-            <i class="fas fa-align-left text-cyan-400 w-4"></i> Add Subtext
+            <i class="fas fa-align-left text-slate-400 w-4"></i> Add Subtext
           </button>
           <button onclick="addCTA('Shop Now')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
-            <i class="fas fa-mouse-pointer text-purple-400 w-4"></i> Add CTA Button
+            <i class="fas fa-mouse-pointer text-brand-400 w-4"></i> Add CTA Button
           </button>
           <button onclick="addShape('rect')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
-            <i class="fas fa-square text-emerald-400 w-4"></i> Add Rectangle
+            <i class="fas fa-square text-brand-400 w-4"></i> Add Rectangle
           </button>
           <button onclick="addShape('circle')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
-            <i class="fas fa-circle text-pink-400 w-4"></i> Add Circle
+            <i class="fas fa-circle text-brand-400 w-4"></i> Add Circle
           </button>
           <button onclick="addBadge('SALE -50%')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
-            <i class="fas fa-tag text-amber-400 w-4"></i> Add Promo Badge
+            <i class="fas fa-tag text-brand-400 w-4"></i> Add Promo Badge
           </button>
           <label class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 px-3 rounded-lg flex items-center gap-2 transition-all cursor-pointer">
-            <i class="fas fa-image text-rose-400 w-4"></i> Upload Image
+            <i class="fas fa-image text-brand-400 w-4"></i> Upload Image
             <input type="file" accept="image/*" class="hidden" onchange="addImage(event)"/>
           </label>
         </div>
@@ -295,7 +295,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
             <label class="text-xs text-slate-500 mb-1 block">Opacity</label>
             <input type="range" id="prop-opacity" min="10" max="100" value="100" oninput="updateSelectedOpacity(this.value)" class="w-full"/>
           </div>
-          <button onclick="deleteSelected()" class="w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs py-2 rounded-lg transition-all flex items-center justify-center gap-1.5">
+          <button onclick="deleteSelected()" class="w-full bg-slate-500/20 hover:bg-slate-500/30 text-slate-400 text-xs py-2 rounded-lg transition-all flex items-center justify-center gap-1.5">
             <i class="fas fa-trash text-xs"></i> Delete Element
           </button>
         </div>
@@ -337,7 +337,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
     <div class="w-56 glass border-l border-white/10 p-4 flex flex-col gap-4 overflow-y-auto">
       <div>
         <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Creative Name</label>
-        <input type="text" id="creative-name" placeholder="my-ad-creative" class="w-full glass rounded-lg px-3 py-2 text-xs text-slate-200 outline-none border border-white/10 focus:border-blue-500 bg-transparent"/>
+        <input type="text" id="creative-name" placeholder="my-ad-creative" class="w-full glass rounded-lg px-3 py-2 text-xs text-slate-200 outline-none border border-white/10 focus:border-slate-500 bg-transparent"/>
       </div>
       <div>
         <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Campaign</label>
@@ -351,12 +351,12 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
       <div>
         <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Platforms</label>
         <div class="space-y-1.5">
-          ${editorPlatform('Facebook', '#1877F2', true)}
-          ${editorPlatform('Instagram', '#E1306C', true)}
-          ${editorPlatform('TikTok', '#ff0050', false)}
-          ${editorPlatform('Google', '#4285F4', false)}
-          ${editorPlatform('YouTube', '#ff0000', false)}
-          ${editorPlatform('LinkedIn', '#0077b5', false)}
+          ${editorPlatform('Facebook', '#A8A8A8', true)}
+          ${editorPlatform('Instagram', '#A8A8A8', true)}
+          ${editorPlatform('TikTok', '#A8A8A8', false)}
+          ${editorPlatform('Google', '#A8A8A8', false)}
+          ${editorPlatform('YouTube', '#A8A8A8', false)}
+          ${editorPlatform('LinkedIn', '#A8A8A8', false)}
         </div>
       </div>
 
@@ -364,9 +364,9 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
       <div>
         <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Layers</label>
         <div id="layers-list" class="space-y-1 max-h-40 overflow-y-auto text-xs">
-          <div class="glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2"><i class="fas fa-heading text-blue-400 w-3"></i>Headline</div>
-          <div class="glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2"><i class="fas fa-align-left text-cyan-400 w-3"></i>Subtext</div>
-          <div class="glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2"><i class="fas fa-mouse-pointer text-purple-400 w-3"></i>CTA Button</div>
+          <div class="glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2"><i class="fas fa-heading text-slate-400 w-3"></i>Headline</div>
+          <div class="glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2"><i class="fas fa-align-left text-slate-400 w-3"></i>Subtext</div>
+          <div class="glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2"><i class="fas fa-mouse-pointer text-brand-400 w-3"></i>CTA Button</div>
         </div>
       </div>
 
@@ -374,13 +374,13 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
 
       <!-- Save / Export -->
       <div class="space-y-2">
-        <button onclick="saveCreative()" class="w-full bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white text-xs font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+        <button onclick="saveCreative()" class="w-full bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white text-xs font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
           <i class="fas fa-cloud-arrow-up text-xs"></i> Save to Studio
         </button>
         <button onclick="exportCreative('png')" class="w-full glass hover:bg-white/10 text-slate-300 text-xs py-2 rounded-lg flex items-center justify-center gap-2 transition-all">
           <i class="fas fa-download text-xs"></i> Export PNG
         </button>
-        <button onclick="closeEditorModal()" class="w-full glass hover:bg-red-500/10 text-red-400 text-xs py-2 rounded-lg flex items-center justify-center gap-2 transition-all">
+        <button onclick="closeEditorModal()" class="w-full glass hover:bg-slate-500/10 text-slate-400 text-xs py-2 rounded-lg flex items-center justify-center gap-2 transition-all">
           <i class="fas fa-times text-xs"></i> Close Editor
         </button>
       </div>
@@ -400,10 +400,10 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
 
   <!-- ── A/B Test Setup Modal ──────────────────────────────────────────────── -->
   <div id="abtest-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-md animate-fadeIn border border-blue-500/30">
+    <div class="glass rounded-2xl w-full max-w-md animate-fadeIn border border-slate-500/30">
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center"><i class="fas fa-flask text-blue-400 text-sm"></i></div>
+          <div class="w-8 h-8 rounded-lg bg-slate-500/20 flex items-center justify-center"><i class="fas fa-flask text-slate-400 text-sm"></i></div>
           <h3 class="font-bold text-white">New A/B Test</h3>
         </div>
         <button onclick="closeABTestModal()" class="text-slate-500 hover:text-slate-300 w-9 h-9 glass rounded-lg flex items-center justify-center"><i class="fas fa-times"></i></button>
@@ -411,7 +411,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
       <div class="p-5 space-y-4">
         <div>
           <label class="text-xs font-semibold text-slate-400 mb-1.5 block">Test Name</label>
-          <input type="text" id="ab-name" placeholder="e.g., Holiday Banner A vs B" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-blue-500 transition-all bg-transparent"/>
+          <input type="text" id="ab-name" placeholder="e.g., Holiday Banner A vs B" class="w-full glass rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 outline-none border border-white/10 focus:border-slate-500 transition-all bg-transparent"/>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -438,7 +438,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
           </select>
         </div>
         <div class="flex gap-3 pt-2">
-          <button onclick="startABTest()" class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold">Start A/B Test</button>
+          <button onclick="startABTest()" class="flex-1 bg-gradient-to-r from-slate-600 to-slate-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold">Start A/B Test</button>
           <button onclick="closeABTestModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-3 rounded-xl text-sm font-semibold">Cancel</button>
         </div>
       </div>
@@ -503,8 +503,8 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
     // ── Toast ──────────────────────────────────────────────────────────────
     function showCrToast(msg, type = 'success') {
       const toast = document.createElement('div');
-      toast.className = 'fixed bottom-6 right-6 glass px-5 py-3 rounded-xl text-sm font-medium text-white z-[100] animate-fadeIn border ' + (type === 'error' ? 'border-red-500/30' : 'border-purple-500/30');
-      toast.innerHTML = (type === 'error' ? '<i class="fas fa-times-circle text-red-400 mr-2"></i>' : '<i class="fas fa-check-circle text-emerald-400 mr-2"></i>') + msg;
+      toast.className = 'fixed bottom-6 right-6 glass px-5 py-3 rounded-xl text-sm font-medium text-white z-[100] animate-fadeIn border ' + (type === 'error' ? 'border-slate-500/30' : 'border-brand-500/30');
+      toast.innerHTML = (type === 'error' ? '<i class="fas fa-times-circle text-slate-400 mr-2"></i>' : '<i class="fas fa-check-circle text-brand-400 mr-2"></i>') + msg;
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 4000);
     }
@@ -515,22 +515,22 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
       document.getElementById('detail-title').textContent = 'Creative #' + id;
       document.getElementById('detail-content').innerHTML = \`
         <div class="space-y-4">
-          <div class="aspect-video rounded-xl bg-gradient-to-br from-purple-900 to-pink-900 flex items-center justify-center">
-            <i class="fas fa-photo-film text-purple-400 text-5xl opacity-50"></i>
+          <div class="aspect-video rounded-xl bg-gradient-to-br from-brand-900 to-brand-900 flex items-center justify-center">
+            <i class="fas fa-photo-film text-brand-400 text-5xl opacity-50"></i>
           </div>
           <div class="grid grid-cols-3 gap-3">
-            <div class="glass rounded-xl p-3 text-center"><div class="text-xs text-slate-500">CTR</div><div class="font-bold text-emerald-400">5.2%</div></div>
-            <div class="glass rounded-xl p-3 text-center"><div class="text-xs text-slate-500">Score</div><div class="font-bold text-purple-400">91</div></div>
-            <div class="glass rounded-xl p-3 text-center"><div class="text-xs text-slate-500">Status</div><div class="font-bold text-emerald-400">Active</div></div>
+            <div class="glass rounded-xl p-3 text-center"><div class="text-xs text-slate-500">CTR</div><div class="font-bold text-brand-400">5.2%</div></div>
+            <div class="glass rounded-xl p-3 text-center"><div class="text-xs text-slate-500">Score</div><div class="font-bold text-brand-400">91</div></div>
+            <div class="glass rounded-xl p-3 text-center"><div class="text-xs text-slate-500">Status</div><div class="font-bold text-brand-400">Active</div></div>
           </div>
           <div class="flex gap-3">
-            <button onclick="openEditorModal();closeDetailModal()" class="flex-1 glass hover:bg-blue-500/10 text-blue-400 py-2.5 rounded-xl text-sm font-semibold border border-blue-500/20">
+            <button onclick="openEditorModal();closeDetailModal()" class="flex-1 glass hover:bg-slate-500/10 text-slate-400 py-2.5 rounded-xl text-sm font-semibold border border-slate-500/20">
               <i class="fas fa-edit mr-1.5"></i>Edit
             </button>
-            <button onclick="showCrToast('Creative duplicated');closeDetailModal()" class="flex-1 glass hover:bg-emerald-500/10 text-emerald-400 py-2.5 rounded-xl text-sm font-semibold border border-emerald-500/20">
+            <button onclick="showCrToast('Creative duplicated');closeDetailModal()" class="flex-1 glass hover:bg-brand-500/10 text-brand-400 py-2.5 rounded-xl text-sm font-semibold border border-brand-500/20">
               <i class="fas fa-copy mr-1.5"></i>Duplicate
             </button>
-            <button onclick="if(confirm('Delete this creative?')){this.closest('.glass').closest('[id]').querySelector('#detail-content').innerHTML='';closeDetailModal();showCrToast('Creative deleted')}" class="glass hover:bg-red-500/10 text-red-400 py-2.5 px-4 rounded-xl text-sm border border-red-500/20">
+            <button onclick="if(confirm('Delete this creative?')){this.closest('.glass').closest('[id]').querySelector('#detail-content').innerHTML='';closeDetailModal();showCrToast('Creative deleted')}" class="glass hover:bg-slate-500/10 text-slate-400 py-2.5 px-4 rounded-xl text-sm border border-slate-500/20">
               <i class="fas fa-trash text-xs"></i>
             </button>
           </div>
@@ -559,7 +559,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
         w = Math.min(100, w + 0.3);
         prog.style.width = w + '%';
         pct.textContent = Math.round(w) + '%';
-        if(w >= 100) { prog.style.background = '#10b981'; pct.style.color = '#10b981'; }
+        if(w >= 100) { prog.style.background = '#FF4D00'; pct.style.color = '#FF4D00'; }
       }, 2000);
     }
 
@@ -641,7 +641,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
       const el = document.createElement('div');
       el.className = 'ad-element';
       el.dataset.type = 'badge';
-      el.style.cssText = 'position:absolute;top:20px;right:20px;transform:none;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:900;cursor:move;user-select:none;box-shadow:0 4px 15px rgba(239,68,68,0.5);letter-spacing:0.5px';
+      el.style.cssText = 'position:absolute;top:20px;right:20px;transform:none;background:linear-gradient(135deg,#FF6B2B,#7A7A7A);color:#fff;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:900;cursor:move;user-select:none;box-shadow:0 4px 15px rgba(122,122,122,0.5);letter-spacing:0.5px';
       el.textContent = text;
       el.setAttribute('contenteditable','true');
       el.addEventListener('mousedown', e => startDrag(e));
@@ -671,7 +671,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
     }
 
     function addLayerEntry(type, label) {
-      const icons = { text:'fa-heading text-blue-400', cta:'fa-mouse-pointer text-purple-400', shape:'fa-square text-emerald-400', badge:'fa-tag text-amber-400', image:'fa-image text-rose-400' };
+      const icons = { text:'fa-heading text-slate-400', cta:'fa-mouse-pointer text-brand-400', shape:'fa-square text-brand-400', badge:'fa-tag text-brand-400', image:'fa-image text-brand-400' };
       const list = document.getElementById('layers-list');
       const div = document.createElement('div');
       div.className = 'glass rounded px-2 py-1.5 text-slate-300 flex items-center gap-2 text-xs';
@@ -797,12 +797,12 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
 
     // ── Build creative card HTML ───────────────────────────────────────────
     function buildCreativeCardHTML(id, name, type, ctr, status, campaign, platforms, starred, score) {
-      const colors = { video:'purple', image:'blue', ugc:'pink', copy:'emerald' };
+      const colors = { video:'brand', image:'slate', ugc:'brand', copy:'brand' };
       const icons = { video:'fa-video', image:'fa-image', ugc:'fa-user-check', copy:'fa-pen' };
-      const grads = { video:'from-purple-900 to-purple-800', image:'from-blue-900 to-blue-800', ugc:'from-pink-900 to-pink-800', copy:'from-emerald-900 to-emerald-800' };
+      const grads = { video:'from-brand-900 to-brand-800', image:'from-slate-900 to-slate-800', ugc:'from-brand-900 to-brand-800', copy:'from-brand-900 to-brand-800' };
       const statusBadge = status === 'active' ? 'badge-live' : status === 'testing' ? 'badge-scaling' : 'badge-killed';
-      const c = colors[type] || 'blue';
-      const scoreColor = score >= 80 ? 'emerald' : score >= 50 ? 'amber' : 'red';
+      const c = colors[type] || 'slate';
+      const scoreColor = score >= 80 ? 'brand' : score >= 50 ? 'brand' : 'slate';
       return \`<div class="glass rounded-xl overflow-hidden card-hover cursor-pointer creative-card creative-grid-item" data-id="\${id}" data-type="\${type}" onclick="openCreativeDetail('\${id}')">
         <div class="bg-gradient-to-br \${grads[type]||'from-slate-800 to-slate-700'} aspect-square relative flex items-center justify-center">
           <i class="fas \${icons[type]||'fa-image'} text-\${c}-400 text-3xl opacity-40"></i>
@@ -814,7 +814,7 @@ Example: 'Young woman confidently wearing our summer dress at the beach, golden 
           </div>
           <div class="absolute top-2 left-2 flex items-center gap-1">
             <span class="text-xs px-1.5 py-0.5 rounded-md bg-\${c}-500/80 text-white font-semibold capitalize">\${type}</span>
-            \${starred ? '<span class="text-xs px-1.5 py-0.5 rounded-md bg-amber-500/80 text-white"><i class="fas fa-star text-xs"></i></span>' : ''}
+            \${starred ? '<span class="text-xs px-1.5 py-0.5 rounded-md bg-brand-500/80 text-white"><i class="fas fa-star text-xs"></i></span>' : ''}
           </div>
           \${ctr > 0 ? '<div class="absolute top-2 right-2"><span class="text-xs px-1.5 py-0.5 rounded-md bg-black/60 text-' + scoreColor + '-400 font-bold">' + ctr.toFixed(1) + '% CTR</span></div>' : ''}
         </div>
@@ -846,15 +846,15 @@ function creativeStat(val: string, label: string, icon: string, color: string): 
 }
 
 function creativeCard(id: string, name: string, type: string, ctr: number, status: string, campaign: string, platforms: string, starred: boolean, score: number): string {
-  const typeColors: Record<string, string> = { video: 'purple', image: 'blue', ugc: 'pink', copy: 'emerald' }
+  const typeColors: Record<string, string> = { video: 'brand', image: 'slate', ugc: 'brand', copy: 'brand' }
   const typeIcons: Record<string, string> = { video: 'fa-video', image: 'fa-image', ugc: 'fa-user-check', copy: 'fa-pen' }
   const statusBadge = status === 'active' ? 'badge-live' : status === 'testing' ? 'badge-scaling' : 'badge-killed'
-  const color = typeColors[type] || 'blue'
+  const color = typeColors[type] || 'slate'
   const icon = typeIcons[type] || 'fa-image'
-  const scoreColor = score >= 80 ? 'emerald' : score >= 50 ? 'amber' : 'red'
+  const scoreColor = score >= 80 ? 'brand' : score >= 50 ? 'brand' : 'slate'
   const gradients: Record<string, string> = {
-    video: 'from-purple-900 to-purple-800', image: 'from-blue-900 to-blue-800',
-    ugc: 'from-pink-900 to-pink-800', copy: 'from-emerald-900 to-emerald-800'
+    video: 'from-brand-900 to-brand-800', image: 'from-slate-900 to-slate-800',
+    ugc: 'from-brand-900 to-brand-800', copy: 'from-brand-900 to-brand-800'
   }
   return `<div class="glass rounded-xl overflow-hidden card-hover cursor-pointer creative-card creative-grid-item" data-id="${id}" data-type="${type}" onclick="openCreativeDetail('${id}')">
     <div class="bg-gradient-to-br ${gradients[type] || 'from-slate-800 to-slate-700'} aspect-square relative flex items-center justify-center">
@@ -873,7 +873,7 @@ function creativeCard(id: string, name: string, type: string, ctr: number, statu
       </div>
       <div class="absolute top-2 left-2 flex items-center gap-1">
         <span class="text-xs px-1.5 py-0.5 rounded-md bg-${color}-500/80 text-white font-semibold capitalize">${type}</span>
-        ${starred ? '<span class="text-xs px-1.5 py-0.5 rounded-md bg-amber-500/80 text-white"><i class="fas fa-star text-xs"></i></span>' : ''}
+        ${starred ? '<span class="text-xs px-1.5 py-0.5 rounded-md bg-brand-500/80 text-white"><i class="fas fa-star text-xs"></i></span>' : ''}
       </div>
       <div class="absolute top-2 right-2">
         <span class="text-xs px-1.5 py-0.5 rounded-md bg-black/60 text-${scoreColor}-400 font-bold">${ctr}% CTR</span>
@@ -903,21 +903,21 @@ function abTestRow(name: string, varA: string, varB: string, ctrA: number, ctrB:
       <span class="text-xs px-2 py-1 rounded-full bg-${color}-500/20 text-${color}-400">${winner}</span>
     </div>
     <div class="grid grid-cols-2 gap-3">
-      <div class="glass rounded-lg p-3 ${aWin ? 'border border-emerald-500/30' : ''}">
+      <div class="glass rounded-lg p-3 ${aWin ? 'border border-brand-500/30' : ''}">
         <div class="flex items-center justify-between mb-1">
           <span class="text-xs font-semibold text-slate-300">Variant A</span>
-          ${aWin ? '<span class="text-xs text-emerald-400"><i class="fas fa-trophy"></i></span>' : ''}
+          ${aWin ? '<span class="text-xs text-brand-400"><i class="fas fa-trophy"></i></span>' : ''}
         </div>
         <div class="text-xs text-slate-500 truncate mb-1">${varA}</div>
-        <div class="text-lg font-bold ${aWin ? 'text-emerald-400' : 'text-slate-300'}">${ctrA}% CTR</div>
+        <div class="text-lg font-bold ${aWin ? 'text-brand-400' : 'text-slate-300'}">${ctrA}% CTR</div>
       </div>
-      <div class="glass rounded-lg p-3 ${!aWin && winner !== 'Too early' ? 'border border-blue-500/30' : ''}">
+      <div class="glass rounded-lg p-3 ${!aWin && winner !== 'Too early' ? 'border border-slate-500/30' : ''}">
         <div class="flex items-center justify-between mb-1">
           <span class="text-xs font-semibold text-slate-300">Variant B</span>
-          ${!aWin && winner !== 'Too early' ? '<span class="text-xs text-blue-400"><i class="fas fa-trophy"></i></span>' : ''}
+          ${!aWin && winner !== 'Too early' ? '<span class="text-xs text-slate-400"><i class="fas fa-trophy"></i></span>' : ''}
         </div>
         <div class="text-xs text-slate-500 truncate mb-1">${varB}</div>
-        <div class="text-lg font-bold ${!aWin && winner !== 'Too early' ? 'text-blue-400' : 'text-slate-300'}">${ctrB}% CTR</div>
+        <div class="text-lg font-bold ${!aWin && winner !== 'Too early' ? 'text-slate-400' : 'text-slate-300'}">${ctrB}% CTR</div>
       </div>
     </div>
     <div class="flex items-center justify-between mt-3">
@@ -933,8 +933,8 @@ function abTestRow(name: string, varA: string, varB: string, ctrA: number, ctrB:
 }
 
 function genTypeBtn(icon: string, label: string, color: string, active: boolean): string {
-  return `<button onclick="document.querySelectorAll('.gen-type-btn').forEach(b=>b.classList.remove('active-gen','border-purple-500/50','bg-purple-500/10')); this.classList.add('active-gen','border-purple-500/50','bg-purple-500/10')"
-    class="gen-type-btn glass hover:bg-white/10 rounded-xl p-3 flex flex-col items-center gap-2 transition-all border ${active ? 'border-purple-500/50 bg-purple-500/10 active-gen' : 'border-white/10'}">
+  return `<button onclick="document.querySelectorAll('.gen-type-btn').forEach(b=>b.classList.remove('active-gen','border-brand-500/50','bg-brand-500/10')); this.classList.add('active-gen','border-brand-500/50','bg-brand-500/10')"
+    class="gen-type-btn glass hover:bg-white/10 rounded-xl p-3 flex flex-col items-center gap-2 transition-all border ${active ? 'border-brand-500/50 bg-brand-500/10 active-gen' : 'border-white/10'}">
     <i class="fas ${icon} text-${color}-400 text-lg"></i>
     <span class="text-xs text-slate-400">${label}</span>
   </button>`
@@ -948,8 +948,8 @@ function variantBtn(n: number, active: boolean = false): string {
 function genToggle(id: string, label: string, checked: boolean): string {
   return `<div class="flex items-center justify-between py-1.5">
     <span class="text-xs text-slate-400">${label}</span>
-    <button id="${id}-toggle" onclick="this.classList.toggle('bg-purple-600'); this.classList.toggle('bg-white/10'); this.querySelector('div').classList.toggle('translate-x-4')"
-      class="w-9 h-5 rounded-full relative transition-all flex-shrink-0 ${checked ? 'bg-purple-600' : 'bg-white/10'}">
+    <button id="${id}-toggle" onclick="this.classList.toggle('bg-brand-600'); this.classList.toggle('bg-white/10'); this.querySelector('div').classList.toggle('translate-x-4')"
+      class="w-9 h-5 rounded-full relative transition-all flex-shrink-0 ${checked ? 'bg-brand-600' : 'bg-white/10'}">
       <div class="w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 left-0.5 transition-all ${checked ? 'translate-x-4' : ''}"></div>
     </button>
   </div>`

@@ -25,7 +25,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
       <button onclick="exportCampaigns()" class="glass hover:bg-white/10 text-slate-400 text-sm px-4 py-2 rounded-xl flex items-center gap-2 transition-all">
         <i class="fas fa-download text-xs"></i> Export
       </button>
-      <button onclick="openCreateCampaign()" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white text-sm font-bold px-5 py-2 rounded-xl flex items-center gap-2 transition-all shadow-lg">
+      <button onclick="openCreateCampaign()" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-500 hover:to-brand-500 text-white text-sm font-bold px-5 py-2 rounded-xl flex items-center gap-2 transition-all shadow-lg">
         <i class="fas fa-plus text-xs"></i> New Campaign
       </button>
     </div>
@@ -35,9 +35,9 @@ export function renderCampaigns(lang: Lang = 'en'): string {
   <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
     ${campStat('47', 'Total', 'fa-bullhorn', 'slate')}
     ${campStat('12', 'Scaling', 'fa-arrow-trend-up', 'brand')}
-    ${campStat('28', 'Live', 'fa-play-circle', 'emerald')}
-    ${campStat('5', 'Paused', 'fa-pause-circle', 'amber')}
-    ${campStat('2', 'Killed', 'fa-stop-circle', 'red')}
+    ${campStat('28', 'Live', 'fa-play-circle', 'brand')}
+    ${campStat('5', 'Paused', 'fa-pause-circle', 'brand')}
+    ${campStat('2', 'Killed', 'fa-stop-circle', 'slate')}
   </div>
 
   <!-- Campaigns Grid -->
@@ -61,7 +61,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
     <div class="glass rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto animate-fadeIn" style="border:1px solid rgba(99,102,241,0.4)">
       <div class="p-5 border-b border-white/10 flex items-center justify-between sticky top-0 glass z-10">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
             <i class="fas fa-plus text-white" id="modal-icon"></i>
           </div>
           <div>
@@ -125,14 +125,14 @@ export function renderCampaigns(lang: Lang = 'en'): string {
 
         <!-- Platform Selector -->
         <div class="glass rounded-xl p-4">
-          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fas fa-plug text-emerald-400"></i> Platforms</h3>
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fas fa-plug text-brand-400"></i> Platforms</h3>
           <div class="grid grid-cols-3 sm:grid-cols-5 gap-3" id="platform-selector">
-            ${platformSelector('Facebook', 'fab fa-facebook-f', '#1877F2', true)}
-            ${platformSelector('Instagram', 'fab fa-instagram', '#E1306C', true)}
-            ${platformSelector('TikTok', 'fab fa-tiktok', '#ff0050', false)}
-            ${platformSelector('Google', 'fab fa-google', '#4285F4', true)}
-            ${platformSelector('YouTube', 'fab fa-youtube', '#ff0000', false)}
-            ${platformSelector('LinkedIn', 'fab fa-linkedin-in', '#0077b5', false)}
+            ${platformSelector('Facebook', 'fab fa-facebook-f', '#A8A8A8', true)}
+            ${platformSelector('Instagram', 'fab fa-instagram', '#A8A8A8', true)}
+            ${platformSelector('TikTok', 'fab fa-tiktok', '#A8A8A8', false)}
+            ${platformSelector('Google', 'fab fa-google', '#A8A8A8', true)}
+            ${platformSelector('YouTube', 'fab fa-youtube', '#A8A8A8', false)}
+            ${platformSelector('LinkedIn', 'fab fa-linkedin-in', '#A8A8A8', false)}
             ${platformSelector('Pinterest', 'fab fa-pinterest-p', '#e60023', false)}
             ${platformSelector('X/Twitter', 'fab fa-x-twitter', '#14171a', false)}
             ${platformSelector('Snapchat', 'fab fa-snapchat', '#F7C900', false)}
@@ -141,7 +141,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
 
         <!-- Budget & Schedule -->
         <div class="glass rounded-xl p-4">
-          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fas fa-wallet text-amber-400"></i> Budget & Schedule</h3>
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fas fa-wallet text-brand-400"></i> Budget & Schedule</h3>
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="text-xs text-slate-500 mb-1 block">Daily Budget ($)</label>
@@ -201,7 +201,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
 
         <div class="flex justify-end gap-3">
           <button onclick="closeCreateCampaign()" class="glass hover:bg-white/10 text-slate-400 px-6 py-2.5 rounded-xl text-sm font-medium transition-all">Cancel</button>
-          <button onclick="saveCampaign()" id="save-camp-btn" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-bold px-8 py-2.5 rounded-xl text-sm flex items-center gap-2 transition-all">
+          <button onclick="saveCampaign()" id="save-camp-btn" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-500 hover:to-brand-500 text-white font-bold px-8 py-2.5 rounded-xl text-sm flex items-center gap-2 transition-all">
             <i class="fas fa-rocket" id="save-camp-icon"></i> <span id="save-camp-label">Launch Campaign</span>
           </button>
         </div>
@@ -211,18 +211,18 @@ export function renderCampaigns(lang: Lang = 'en'): string {
 
   <!-- ── DELETE Confirmation Modal ─────────────────────────────────────────── -->
   <div id="delete-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-    <div class="glass rounded-2xl w-full max-w-md animate-fadeIn border border-red-500/30">
+    <div class="glass rounded-2xl w-full max-w-md animate-fadeIn border border-slate-500/30">
       <div class="p-6 text-center">
-        <div class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-trash-can text-red-400 text-2xl"></i>
+        <div class="w-16 h-16 rounded-full bg-slate-500/20 flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-trash-can text-slate-400 text-2xl"></i>
         </div>
         <h3 class="font-bold text-white text-lg mb-2">Delete Campaign?</h3>
         <p class="text-slate-400 text-sm mb-1">You are about to delete:</p>
         <p class="font-bold text-white mb-4" id="delete-camp-name">Campaign Name</p>
-        <p class="text-xs text-slate-500 mb-6">This action is <span class="text-red-400 font-semibold">irreversible</span>. All data, creatives, and analytics will be permanently removed.</p>
+        <p class="text-xs text-slate-500 mb-6">This action is <span class="text-slate-400 font-semibold">irreversible</span>. All data, creatives, and analytics will be permanently removed.</p>
         <div class="flex gap-3">
           <button onclick="closeDeleteModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-3 rounded-xl text-sm font-semibold transition-all">Cancel</button>
-          <button onclick="confirmDelete()" class="flex-1 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white py-3 rounded-xl text-sm font-bold transition-all">
+          <button onclick="confirmDelete()" class="flex-1 bg-gradient-to-r from-slate-600 to-brand-600 hover:from-slate-500 hover:to-brand-500 text-white py-3 rounded-xl text-sm font-bold transition-all">
             <i class="fas fa-trash-can mr-2"></i>Delete
           </button>
         </div>
@@ -241,8 +241,8 @@ export function renderCampaigns(lang: Lang = 'en'): string {
   <div id="drawer-overlay" class="hidden fixed inset-0 bg-black/40 z-40" onclick="closeDrawer()"></div>
 
   <!-- Toast -->
-  <div id="camp-toast" class="hidden fixed bottom-6 right-6 z-[70] glass border border-emerald-500/30 rounded-xl px-5 py-3 flex items-center gap-3 animate-fadeIn">
-    <i id="toast-icon" class="fas fa-check-circle text-emerald-400"></i>
+  <div id="camp-toast" class="hidden fixed bottom-6 right-6 z-[70] glass border border-brand-500/30 rounded-xl px-5 py-3 flex items-center gap-3 animate-fadeIn">
+    <i id="toast-icon" class="fas fa-check-circle text-brand-400"></i>
     <span class="text-sm text-white font-semibold" id="camp-toast-msg">Saved!</span>
   </div>
 
@@ -277,7 +277,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
     const m = document.getElementById('camp-toast-msg');
     const ico = document.getElementById('toast-icon');
     m.textContent = msg;
-    ico.className = type === 'error' ? 'fas fa-times-circle text-red-400' : 'fas fa-check-circle text-emerald-400';
+    ico.className = type === 'error' ? 'fas fa-times-circle text-slate-400' : 'fas fa-check-circle text-brand-400';
     t.classList.remove('hidden');
     setTimeout(() => t.classList.add('hidden'), 3500);
   }
@@ -441,21 +441,21 @@ export function renderCampaigns(lang: Lang = 'en'): string {
     if(!c) return;
     document.getElementById('drawer-title').textContent = c.name;
     const roasNum = parseFloat(c.roas);
-    const roasColor = roasNum >= 4.5 ? '#10b981' : roasNum >= 3.5 ? '#3b82f6' : '#f59e0b';
-    const statusColors = { scaling:'#a78bfa', live:'#34d399', paused:'#fbbf24', draft:'#94a3b8', killed:'#f87171' };
-    const sc = statusColors[c.status] || '#94a3b8';
+    const roasColor = roasNum >= 4.5 ? '#FF4D00' : roasNum >= 3.5 ? '#3b82f6' : '#FF6B2B';
+    const statusColors = { scaling:'#a78bfa', live:'#FF4D00', paused:'#FF6B2B', draft:'#7A7A7A', killed:'#7A7A7A' };
+    const sc = statusColors[c.status] || '#7A7A7A';
     document.getElementById('drawer-content').innerHTML = \`
       <div class="space-y-4">
         <!-- Status & Actions -->
         <div class="flex items-center justify-between">
           <span class="text-sm font-bold px-3 py-1 rounded-full" style="background:\${sc}22;color:\${sc}">\${c.status.toUpperCase()}</span>
           <div class="flex items-center gap-2">
-            <button onclick="editCampaign('\${c.id}')" class="glass hover:bg-blue-500/10 text-blue-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-blue-500/20">
+            <button onclick="editCampaign('\${c.id}')" class="glass hover:bg-slate-500/10 text-slate-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-slate-500/20">
               <i class="fas fa-edit text-xs"></i> Edit
             </button>
-            \${c.status === 'paused' ? '<button onclick="changeStatus(\\''+c.id+'\\',\\'live\\')" class="glass hover:bg-emerald-500/10 text-emerald-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-emerald-500/20"><i class="fas fa-play text-xs"></i> Resume</button>' : ''}
-            \${c.status === 'live' || c.status === 'scaling' ? '<button onclick="changeStatus(\\''+c.id+'\\',\\'paused\\')" class="glass hover:bg-amber-500/10 text-amber-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-amber-500/20"><i class="fas fa-pause text-xs"></i> Pause</button>' : ''}
-            <button onclick="openDeleteModal('\${c.id}')" class="glass hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-red-500/20">
+            \${c.status === 'paused' ? '<button onclick="changeStatus(\\''+c.id+'\\',\\'live\\')" class="glass hover:bg-brand-500/10 text-brand-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-brand-500/20"><i class="fas fa-play text-xs"></i> Resume</button>' : ''}
+            \${c.status === 'live' || c.status === 'scaling' ? '<button onclick="changeStatus(\\''+c.id+'\\',\\'paused\\')" class="glass hover:bg-brand-500/10 text-brand-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-brand-500/20"><i class="fas fa-pause text-xs"></i> Pause</button>' : ''}
+            <button onclick="openDeleteModal('\${c.id}')" class="glass hover:bg-slate-500/10 text-slate-400 text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 transition-all border border-slate-500/20">
               <i class="fas fa-trash text-xs"></i>
             </button>
           </div>
@@ -469,7 +469,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
           </div>
           <div class="glass rounded-xl p-3 text-center">
             <div class="text-xs text-slate-500 mb-1">Revenue</div>
-            <div class="text-xl font-black text-emerald-400">\${c.revenue}</div>
+            <div class="text-xl font-black text-brand-400">\${c.revenue}</div>
           </div>
           <div class="glass rounded-xl p-3 text-center">
             <div class="text-xs text-slate-500 mb-1">ROAS</div>
@@ -520,13 +520,13 @@ export function renderCampaigns(lang: Lang = 'en'): string {
         <!-- Quick Actions -->
         <div class="glass rounded-xl p-4 space-y-2">
           <div class="text-xs font-bold text-slate-400 mb-2">Quick Actions</div>
-          <button onclick="showToast('Opening Creative Studio for this campaign...')" class="w-full glass hover:bg-purple-500/10 text-purple-400 text-sm py-2.5 rounded-lg flex items-center gap-2 px-4 transition-all border border-purple-500/20">
+          <button onclick="showToast('Opening Creative Studio for this campaign...')" class="w-full glass hover:bg-brand-500/10 text-brand-400 text-sm py-2.5 rounded-lg flex items-center gap-2 px-4 transition-all border border-brand-500/20">
             <i class="fas fa-palette text-xs"></i> View Creatives
           </button>
-          <button onclick="showToast('Analytics loading...')" class="w-full glass hover:bg-blue-500/10 text-blue-400 text-sm py-2.5 rounded-lg flex items-center gap-2 px-4 transition-all border border-blue-500/20">
+          <button onclick="showToast('Analytics loading...')" class="w-full glass hover:bg-slate-500/10 text-slate-400 text-sm py-2.5 rounded-lg flex items-center gap-2 px-4 transition-all border border-slate-500/20">
             <i class="fas fa-chart-line text-xs"></i> View Analytics
           </button>
-          <button onclick="duplicateCampaign('\${c.id}')" class="w-full glass hover:bg-emerald-500/10 text-emerald-400 text-sm py-2.5 rounded-lg flex items-center gap-2 px-4 transition-all border border-emerald-500/20">
+          <button onclick="duplicateCampaign('\${c.id}')" class="w-full glass hover:bg-brand-500/10 text-brand-400 text-sm py-2.5 rounded-lg flex items-center gap-2 px-4 transition-all border border-brand-500/20">
             <i class="fas fa-copy text-xs"></i> Duplicate Campaign
           </button>
         </div>
@@ -576,18 +576,18 @@ export function renderCampaigns(lang: Lang = 'en'): string {
 
   // ── Build campaign card HTML dynamically ───────────────────────────────────
   function buildCampaignCardHTML(c) {
-    const platColors = { Facebook:'#1877F2', Google:'#4285F4', Instagram:'#E1306C', TikTok:'#ff0050', Snapchat:'#F7C900', LinkedIn:'#0077b5', Pinterest:'#e60023', 'X/Twitter':'#14171a', YouTube:'#ff0000' };
+    const platColors = { Facebook:'#A8A8A8', Google:'#A8A8A8', Instagram:'#A8A8A8', TikTok:'#A8A8A8', Snapchat:'#F7C900', LinkedIn:'#A8A8A8', Pinterest:'#e60023', 'X/Twitter':'#14171a', YouTube:'#A8A8A8' };
     const platIcons = { Facebook:'fab fa-facebook', Google:'fab fa-google', Instagram:'fab fa-instagram', TikTok:'fab fa-tiktok', Snapchat:'fab fa-snapchat', LinkedIn:'fab fa-linkedin-in', Pinterest:'fab fa-pinterest-p', 'X/Twitter':'fab fa-x-twitter', YouTube:'fab fa-youtube' };
     const statusColors = { scaling:'badge-scaling', live:'badge-live', paused:'badge-paused', draft:'badge-draft', killed:'badge-killed' };
     const roasNum = parseFloat(c.roas);
-    const roasColor = roasNum >= 4.5 ? 'emerald' : roasNum >= 3.5 ? 'blue' : c.roas === '—' ? 'slate' : 'amber';
+    const roasColor = roasNum >= 4.5 ? 'brand' : roasNum >= 3.5 ? 'slate' : c.roas === '—' ? 'slate' : 'brand';
     return \`<div class="glass rounded-2xl p-5 card-hover cursor-pointer camp-card-wrapper relative" data-id="\${c.id}" data-name="\${c.name.toLowerCase()}" data-platforms="\${c.platforms.join(',').toLowerCase()}" data-status="\${c.status}">
       <!-- Action buttons (appear on hover) -->
       <div class="camp-card-actions absolute top-3 right-3 flex items-center gap-1 z-10">
-        <button onclick="event.stopPropagation();editCampaign('\${c.id}')" title="Edit" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-blue-500/20 text-blue-400 transition-all border border-blue-500/20">
+        <button onclick="event.stopPropagation();editCampaign('\${c.id}')" title="Edit" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-slate-500/20 text-slate-400 transition-all border border-slate-500/20">
           <i class="fas fa-edit text-xs"></i>
         </button>
-        <button onclick="event.stopPropagation();openDeleteModal('\${c.id}')" title="Delete" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-red-500/20 text-red-400 transition-all border border-red-500/20">
+        <button onclick="event.stopPropagation();openDeleteModal('\${c.id}')" title="Delete" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-slate-500/20 text-slate-400 transition-all border border-slate-500/20">
           <i class="fas fa-trash text-xs"></i>
         </button>
       </div>
@@ -603,7 +603,7 @@ export function renderCampaigns(lang: Lang = 'en'): string {
       </div>
       <div class="grid grid-cols-2 gap-3 mb-3">
         <div class="glass rounded-lg p-2.5"><div class="text-xs text-slate-500">Spend</div><div class="text-sm font-bold text-white">\${c.spend}</div></div>
-        <div class="glass rounded-lg p-2.5"><div class="text-xs text-slate-500">Revenue</div><div class="text-sm font-bold text-emerald-400">\${c.revenue}</div></div>
+        <div class="glass rounded-lg p-2.5"><div class="text-xs text-slate-500">Revenue</div><div class="text-sm font-bold text-brand-400">\${c.revenue}</div></div>
         <div class="glass rounded-lg p-2.5"><div class="text-xs text-slate-500">ROAS</div><div class="text-sm font-bold text-\${roasColor}-400">\${c.roas}\${c.roas!=='—'?'x':''}</div></div>
         <div class="glass rounded-lg p-2.5"><div class="text-xs text-slate-500">CTR</div><div class="text-sm font-bold text-slate-200">\${c.ctr}\${c.ctr!=='—'?'%':''}</div></div>
       </div>
@@ -646,17 +646,17 @@ function campStat(value: string, label: string, icon: string, color: string): st
 function campaignCard(id: string, name: string, platforms: string[], status: string, spend: string, revenue: string, roas: string, ctr: string, scaleIn: number, aiNote: string, impressions: number, clicks: number): string {
   const statusClass = status === 'scaling' ? 'badge-scaling' : status === 'live' ? 'badge-live' : status === 'paused' ? 'badge-paused' : status === 'draft' ? 'badge-draft' : 'badge-killed'
   const platformIcons: Record<string, string> = { Facebook: 'fab fa-facebook', Google: 'fab fa-google', Instagram: 'fab fa-instagram', TikTok: 'fab fa-tiktok', Snapchat: 'fab fa-snapchat', LinkedIn: 'fab fa-linkedin-in', Pinterest: 'fab fa-pinterest-p', 'X/Twitter': 'fab fa-x-twitter', YouTube: 'fab fa-youtube' }
-  const platformColors: Record<string, string> = { Facebook: '#1877F2', Google: '#4285F4', Instagram: '#E1306C', TikTok: '#ff0050', Snapchat: '#F7C900', LinkedIn: '#0077b5', Pinterest: '#e60023', 'X/Twitter': '#14171a', YouTube: '#ff0000' }
+  const platformColors: Record<string, string> = { Facebook: '#A8A8A8', Google: '#A8A8A8', Instagram: '#A8A8A8', TikTok: '#A8A8A8', Snapchat: '#F7C900', LinkedIn: '#A8A8A8', Pinterest: '#e60023', 'X/Twitter': '#14171a', YouTube: '#A8A8A8' }
   const roasNum = parseFloat(roas)
-  const roasColor = roasNum >= 4.5 ? 'emerald' : roasNum >= 3.5 ? 'blue' : roas === '—' ? 'slate' : 'amber'
+  const roasColor = roasNum >= 4.5 ? 'brand' : roasNum >= 3.5 ? 'slate' : roas === '—' ? 'slate' : 'brand'
 
   return `<div class="glass rounded-2xl p-5 card-hover cursor-pointer camp-card-wrapper relative" data-id="${id}" data-name="${name.toLowerCase()}" data-platforms="${platforms.join(',').toLowerCase()}" data-status="${status}">
     <!-- Hover action buttons -->
     <div class="camp-card-actions absolute top-3 right-3 flex items-center gap-1 z-10">
-      <button onclick="event.stopPropagation();editCampaign('${id}')" title="Edit" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-blue-500/20 text-blue-400 transition-all border border-blue-500/20">
+      <button onclick="event.stopPropagation();editCampaign('${id}')" title="Edit" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-slate-500/20 text-slate-400 transition-all border border-slate-500/20">
         <i class="fas fa-edit text-xs"></i>
       </button>
-      <button onclick="event.stopPropagation();openDeleteModal('${id}')" title="Delete" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-red-500/20 text-red-400 transition-all border border-red-500/20">
+      <button onclick="event.stopPropagation();openDeleteModal('${id}')" title="Delete" class="w-7 h-7 glass rounded-lg flex items-center justify-center hover:bg-slate-500/20 text-slate-400 transition-all border border-slate-500/20">
         <i class="fas fa-trash text-xs"></i>
       </button>
     </div>
@@ -680,7 +680,7 @@ function campaignCard(id: string, name: string, platforms: string[], status: str
       </div>
       <div class="glass rounded-lg p-2.5">
         <div class="text-xs text-slate-500">Revenue</div>
-        <div class="text-sm font-bold text-emerald-400">${revenue}</div>
+        <div class="text-sm font-bold text-brand-400">${revenue}</div>
       </div>
       <div class="glass rounded-lg p-2.5">
         <div class="text-xs text-slate-500">ROAS</div>
@@ -708,7 +708,7 @@ function campaignCard(id: string, name: string, platforms: string[], status: str
         <span class="text-xs text-brand-400 font-semibold">in ${scaleIn}h</span>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill bg-gradient-to-r from-brand-500 to-purple-500" style="width:${Math.max(10, 100 - (scaleIn / 72 * 100))}%"></div>
+        <div class="progress-fill bg-gradient-to-r from-brand-500 to-brand-500" style="width:${Math.max(10, 100 - (scaleIn / 72 * 100))}%"></div>
       </div>
     </div>` : ''}
     </div>

@@ -14,14 +14,14 @@ export const renderOnboarding = (c: Context) => {
     body { background:#040812; font-family:'Inter',sans-serif; }
     .glass { background:rgba(255,255,255,0.04); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); }
     .input-field { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#e2e8f0; transition:all 0.2s; width:100%; }
-    .input-field:focus { outline:none; border-color:#6366f1; background:rgba(99,102,241,0.06); box-shadow:0 0 0 3px rgba(99,102,241,0.12); }
-    .input-field::placeholder { color:#475569; }
+    .input-field:focus { outline:none; border-color:#FF4D00; background:rgba(99,102,241,0.06); box-shadow:0 0 0 3px rgba(99,102,241,0.12); }
+    .input-field::placeholder { color:#7A7A7A; }
     .step-dot { width:8px; height:8px; border-radius:50%; transition:all 0.4s; }
     .platform-card { cursor:pointer; transition:all 0.2s; border:2px solid rgba(255,255,255,0.06); }
-    .platform-card.selected { border-color:#6366f1; background:rgba(99,102,241,0.12); }
+    .platform-card.selected { border-color:#FF4D00; background:rgba(99,102,241,0.12); }
     .platform-card:hover { border-color:rgba(99,102,241,0.4); background:rgba(99,102,241,0.06); }
     .progress-track { height:3px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
-    .progress-fill-ob { height:100%; background:linear-gradient(90deg,#6366f1,#8b5cf6); border-radius:2px; transition:width 0.5s ease; }
+    .progress-fill-ob { height:100%; background:linear-gradient(90deg,#FF4D00,#8b5cf6); border-radius:2px; transition:width 0.5s ease; }
     @keyframes fadeSlideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .fade-in { animation:fadeSlideIn 0.4s ease forwards; }
     @keyframes spin { to{transform:rotate(360deg)} }
@@ -42,7 +42,7 @@ export const renderOnboarding = (c: Context) => {
   <!-- Header -->
   <header class="flex items-center justify-between px-6 py-4 border-b border-white/5">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center pulse-glow">
+      <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-slate-500 to-brand-600 flex items-center justify-center pulse-glow">
         <i class="fas fa-bolt text-white text-sm"></i>
       </div>
       <span class="font-black text-white">AdNova AI</span>
@@ -69,7 +69,7 @@ export const renderOnboarding = (c: Context) => {
     <!-- ═══ STEP 1 — Workspace ═══════════════════════════════════════════════ -->
     <div id="step-1" class="fade-in">
       <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center mx-auto mb-4 shadow-2xl pulse-glow">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mx-auto mb-4 shadow-2xl pulse-glow">
           <i class="fas fa-building text-white text-2xl"></i>
         </div>
         <h1 class="text-3xl font-black text-white mb-2">Set up your workspace</h1>
@@ -136,7 +136,7 @@ export const renderOnboarding = (c: Context) => {
         </div>
       </div>
       <div class="flex justify-end mt-6">
-        <button onclick="goStep(2)" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
+        <button onclick="goStep(2)" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
           Continue <i class="fas fa-arrow-right"></i>
         </button>
       </div>
@@ -145,31 +145,31 @@ export const renderOnboarding = (c: Context) => {
     <!-- ═══ STEP 2 — Connect Platforms ═══════════════════════════════════════ -->
     <div id="step-2" class="hidden">
       <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mx-auto mb-4 shadow-2xl">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center mx-auto mb-4 shadow-2xl">
           <i class="fas fa-plug text-white text-2xl"></i>
         </div>
         <h1 class="text-3xl font-black text-white mb-2">Connect your ad platforms</h1>
         <p class="text-slate-400">AdNova AI will sync your campaigns and start optimizing within minutes.</p>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6" id="platforms-grid">
-        ${platformCard('facebook', 'fab fa-facebook-f', '#1877F2', 'Facebook Ads', 'Campaigns, Audiences, Pixels')}
-        ${platformCard('google', 'fab fa-google', '#4285F4', 'Google Ads', 'Search, Display, Shopping')}
-        ${platformCard('instagram', 'fab fa-instagram', '#E1306C', 'Instagram Ads', 'Stories, Reels, Feed')}
+        ${platformCard('facebook', 'fab fa-facebook-f', '#A8A8A8', 'Facebook Ads', 'Campaigns, Audiences, Pixels')}
+        ${platformCard('google', 'fab fa-google', '#A8A8A8', 'Google Ads', 'Search, Display, Shopping')}
+        ${platformCard('instagram', 'fab fa-instagram', '#A8A8A8', 'Instagram Ads', 'Stories, Reels, Feed')}
         ${platformCard('tiktok', 'fab fa-tiktok', '#010101', 'TikTok Ads', 'In-Feed, TopView, Spark')}
-        ${platformCard('linkedin', 'fab fa-linkedin-in', '#0077b5', 'LinkedIn Ads', 'B2B, Lead Gen, Sponsored')}
-        ${platformCard('youtube', 'fab fa-youtube', '#ff0000', 'YouTube Ads', 'Video, Bumper, TrueView')}
-        ${platformCard('snapchat', 'fab fa-snapchat', '#FFFC00', 'Snapchat Ads', 'Stories, AR, Collection')}
+        ${platformCard('linkedin', 'fab fa-linkedin-in', '#A8A8A8', 'LinkedIn Ads', 'B2B, Lead Gen, Sponsored')}
+        ${platformCard('youtube', 'fab fa-youtube', '#A8A8A8', 'YouTube Ads', 'Video, Bumper, TrueView')}
+        ${platformCard('snapchat', 'fab fa-snapchat', '#A8A8A8', 'Snapchat Ads', 'Stories, AR, Collection')}
         ${platformCard('pinterest', 'fab fa-pinterest-p', '#e60023', 'Pinterest Ads', 'Shopping, Video, Idea')}
         ${platformCard('twitter', 'fab fa-x-twitter', '#14171a', 'X (Twitter) Ads', 'Promoted, Trend Takeover')}
       </div>
       <div id="connect-status" class="glass rounded-xl p-3 mb-4 hidden flex items-center gap-2 text-xs text-slate-300">
-        <i class="fas fa-circle-check text-emerald-400"></i>
+        <i class="fas fa-circle-check text-brand-400"></i>
         <span id="connect-status-text">Connected!</span>
       </div>
       <p class="text-xs text-slate-600 text-center mb-6">You can always connect more platforms later in Settings.</p>
       <div class="flex justify-between items-center mt-2">
         <button onclick="goStep(1)" class="glass hover:bg-white/10 text-slate-400 px-6 py-2.5 rounded-xl text-sm transition-all">← Back</button>
-        <button onclick="goStep(3)" id="platforms-next" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
+        <button onclick="goStep(3)" id="platforms-next" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
           Continue <i class="fas fa-arrow-right"></i>
         </button>
       </div>
@@ -178,7 +178,7 @@ export const renderOnboarding = (c: Context) => {
     <!-- ═══ STEP 3 — AI Configuration ════════════════════════════════════════ -->
     <div id="step-3" class="hidden">
       <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center mx-auto mb-4 shadow-2xl">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mx-auto mb-4 shadow-2xl">
           <i class="fas fa-brain text-white text-2xl"></i>
         </div>
         <h1 class="text-3xl font-black text-white mb-2">Configure the AI</h1>
@@ -200,11 +200,11 @@ export const renderOnboarding = (c: Context) => {
         <div>
           <div class="flex items-center justify-between mb-2">
             <label class="text-sm font-semibold text-white">Max Daily Budget per Campaign</label>
-            <span class="text-emerald-400 font-black text-lg" id="budget-display">$5,000</span>
+            <span class="text-brand-400 font-black text-lg" id="budget-display">$5,000</span>
           </div>
           <input type="range" min="100" max="50000" step="100" value="5000" id="budget-slider"
             oninput="document.getElementById('budget-display').textContent = '$' + parseInt(this.value).toLocaleString()"
-            class="w-full accent-emerald-500 h-2"/>
+            class="w-full accent-brand-500 h-2"/>
           <div class="flex justify-between text-xs text-slate-600 mt-1"><span>$100</span><span>$10K</span><span>$50K</span></div>
         </div>
         <!-- AI modules -->
@@ -232,7 +232,7 @@ export const renderOnboarding = (c: Context) => {
       </div>
       <div class="flex justify-between items-center mt-6">
         <button onclick="goStep(2)" class="glass hover:bg-white/10 text-slate-400 px-6 py-2.5 rounded-xl text-sm transition-all">← Back</button>
-        <button onclick="goStep(4)" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
+        <button onclick="goStep(4)" class="bg-gradient-to-r from-brand-600 to-brand-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
           Continue <i class="fas fa-arrow-right"></i>
         </button>
       </div>
@@ -241,7 +241,7 @@ export const renderOnboarding = (c: Context) => {
     <!-- ═══ STEP 4 — Invite Team ══════════════════════════════════════════════ -->
     <div id="step-4" class="hidden">
       <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mx-auto mb-4 shadow-2xl">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-orange-600 flex items-center justify-center mx-auto mb-4 shadow-2xl">
           <i class="fas fa-users text-white text-2xl"></i>
         </div>
         <h1 class="text-3xl font-black text-white mb-2">Invite your team</h1>
@@ -254,8 +254,8 @@ export const renderOnboarding = (c: Context) => {
             <select class="input-field rounded-xl px-3 py-2.5 text-xs w-32">
               <option>Admin</option><option>Editor</option><option selected>Viewer</option>
             </select>
-            <button onclick="removeInvite(this)" class="w-8 h-9 rounded-xl glass flex items-center justify-center hover:bg-red-500/10 transition-all flex-shrink-0">
-              <i class="fas fa-times text-red-400 text-xs"></i>
+            <button onclick="removeInvite(this)" class="w-8 h-9 rounded-xl glass flex items-center justify-center hover:bg-slate-500/10 transition-all flex-shrink-0">
+              <i class="fas fa-times text-slate-400 text-xs"></i>
             </button>
           </div>
         </div>
@@ -271,7 +271,7 @@ export const renderOnboarding = (c: Context) => {
         <button onclick="goStep(3)" class="glass hover:bg-white/10 text-slate-400 px-6 py-2.5 rounded-xl text-sm transition-all">← Back</button>
         <div class="flex items-center gap-3">
           <button onclick="goStep(5)" class="glass hover:bg-white/10 text-slate-400 px-5 py-2.5 rounded-xl text-sm transition-all">Skip for now</button>
-          <button onclick="sendInvitesAndContinue()" class="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
+          <button onclick="sendInvitesAndContinue()" class="bg-gradient-to-r from-brand-500 to-orange-600 text-white px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
             Send Invites <i class="fas fa-paper-plane"></i>
           </button>
         </div>
@@ -280,7 +280,7 @@ export const renderOnboarding = (c: Context) => {
 
     <!-- ═══ STEP 5 — Launch ══════════════════════════════════════════════════ -->
     <div id="step-5" class="hidden text-center">
-      <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-6 shadow-2xl pulse-glow">
+      <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center mx-auto mb-6 shadow-2xl pulse-glow">
         <i class="fas fa-rocket text-white text-3xl"></i>
       </div>
       <h1 class="text-4xl font-black text-white mb-3">You're all set!</h1>
@@ -288,16 +288,16 @@ export const renderOnboarding = (c: Context) => {
 
       <!-- Summary chips -->
       <div class="flex flex-wrap justify-center gap-2 mb-8" id="setup-summary">
-        <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-emerald-400"><i class="fas fa-check mr-1"></i> Workspace configured</span>
-        <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-blue-400" id="summary-platforms"><i class="fas fa-plug mr-1"></i> 0 platforms connected</span>
+        <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-brand-400"><i class="fas fa-check mr-1"></i> Workspace configured</span>
+        <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-slate-400" id="summary-platforms"><i class="fas fa-plug mr-1"></i> 0 platforms connected</span>
         <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-brand-400"><i class="fas fa-brain mr-1"></i> AI configured</span>
-        <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-amber-400" id="summary-team"><i class="fas fa-users mr-1"></i> 0 invites sent</span>
+        <span class="glass rounded-full px-4 py-1.5 text-xs font-medium text-brand-400" id="summary-team"><i class="fas fa-users mr-1"></i> 0 invites sent</span>
       </div>
 
       <!-- AI init animation -->
       <div class="glass rounded-2xl p-6 mb-8 max-w-md mx-auto border border-brand-500/20">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
             <i class="fas fa-brain text-white text-sm"></i>
           </div>
           <div class="text-left">
@@ -306,7 +306,7 @@ export const renderOnboarding = (c: Context) => {
           </div>
           <div class="ml-auto">
             <div class="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full spin" id="ai-spinner"></div>
-            <i class="fas fa-check-circle text-emerald-400 hidden text-xl" id="ai-done-icon"></i>
+            <i class="fas fa-check-circle text-brand-400 hidden text-xl" id="ai-done-icon"></i>
           </div>
         </div>
         <div class="space-y-2" id="init-steps">
@@ -329,7 +329,7 @@ export const renderOnboarding = (c: Context) => {
       </div>
 
       <button id="launch-btn" onclick="launchDashboard()" disabled
-        class="opacity-50 cursor-not-allowed bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-10 py-4 rounded-2xl font-black text-lg shadow-2xl transition-all flex items-center gap-3 mx-auto">
+        class="opacity-50 cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-600 text-white px-10 py-4 rounded-2xl font-black text-lg shadow-2xl transition-all flex items-center gap-3 mx-auto">
         <i class="fas fa-rocket"></i> Launch Dashboard
       </button>
     </div>
@@ -337,7 +337,7 @@ export const renderOnboarding = (c: Context) => {
   </main>
 
   <script>
-  tailwind.config = { darkMode:'class', theme:{ extend:{ colors:{ brand:{ 400:'#818cf8',500:'#6366f1',600:'#4f46e5',900:'#1e1b4b',950:'#0f0d27' } } } } }
+  tailwind.config = { darkMode:'class', theme:{ extend:{ colors:{ brand:{ 400:'#818cf8',500:'#FF4D00',600:'#4f46e5',900:'#1e1b4b',950:'#0f0d27' } } } } }
 
   let currentStep = 1;
   let connectedPlatforms = [];
@@ -350,7 +350,7 @@ export const renderOnboarding = (c: Context) => {
       const company = document.getElementById('ws-company').value.trim();
       if (n > currentStep && !company) {
         document.getElementById('ws-company').focus();
-        document.getElementById('ws-company').style.borderColor = '#ef4444';
+        document.getElementById('ws-company').style.borderColor = '#7A7A7A';
         return;
       }
     }
@@ -361,8 +361,8 @@ export const renderOnboarding = (c: Context) => {
     // Update dots
     for (let i = 0; i < 5; i++) {
       const dot = document.getElementById('dot-' + i);
-      if (i < n) { dot.style.background = '#6366f1'; dot.style.width = '10px'; dot.style.height = '10px'; }
-      else if (i === n - 1) { dot.style.background = '#6366f1'; }
+      if (i < n) { dot.style.background = '#FF4D00'; dot.style.width = '10px'; dot.style.height = '10px'; }
+      else if (i === n - 1) { dot.style.background = '#FF4D00'; }
       else { dot.style.background = 'rgba(255,255,255,0.2)'; dot.style.width = '8px'; dot.style.height = '8px'; }
     }
     document.getElementById('step-label').textContent = n;
@@ -403,7 +403,7 @@ export const renderOnboarding = (c: Context) => {
     setTimeout(() => {
       card.classList.remove('oauth-connecting');
       card.classList.add('selected');
-      btn.className = 'connect-icon fas fa-check text-emerald-400 text-xs';
+      btn.className = 'connect-icon fas fa-check text-brand-400 text-xs';
       connectedPlatforms.push(id);
       document.getElementById('connect-status-text').textContent = '✓ ' + name + ' connected successfully — syncing campaigns...';
       updateSummaryPlatforms();
@@ -425,8 +425,8 @@ export const renderOnboarding = (c: Context) => {
       <select class="input-field rounded-xl px-3 py-2.5 text-xs w-32">
         <option>Admin</option><option>Editor</option><option selected>Viewer</option>
       </select>
-      <button onclick="removeInvite(this)" class="w-8 h-9 rounded-xl glass flex items-center justify-center hover:bg-red-500/10 transition-all flex-shrink-0">
-        <i class="fas fa-times text-red-400 text-xs"></i>
+      <button onclick="removeInvite(this)" class="w-8 h-9 rounded-xl glass flex items-center justify-center hover:bg-slate-500/10 transition-all flex-shrink-0">
+        <i class="fas fa-times text-slate-400 text-xs"></i>
       </button>
     \`;
     list.appendChild(div);
@@ -451,7 +451,7 @@ export const renderOnboarding = (c: Context) => {
     dots.forEach((dot, i) => {
       const delay = parseInt(rows[i].dataset.delay) || (i * 700);
       setTimeout(() => {
-        dot.style.background = '#6366f1';
+        dot.style.background = '#FF4D00';
         rows[i].style.color = '#cbd5e1';
         if (i === dots.length - 1) {
           setTimeout(() => {

@@ -1,219 +1,171 @@
 import type { Context } from 'hono'
+import { themeMeta, themeFontLinks, themeBaseCss } from '../lib/theme'
 
 export const renderRegister = (c: Context) => {
   return c.html(`<!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Start Free Trial — AdNova AI</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-  <style>
-    body { background: #040812; font-family: 'Inter', sans-serif; }
-    .glass { background:rgba(255,255,255,0.03); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08); }
-    .input-field { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#e2e8f0; transition:all 0.2s; width:100%; }
-    .input-field:focus { outline:none; border-color:#6366f1; background:rgba(99,102,241,0.05); box-shadow:0 0 0 3px rgba(99,102,241,0.15); }
-    .input-field::placeholder { color: #475569; }
-    .btn-primary { background: linear-gradient(135deg,#6366f1,#8b5cf6); transition:all 0.2s; }
-    .btn-primary:hover { opacity:0.9; transform:translateY(-1px); }
-    .btn-primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
-    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 30px rgba(99,102,241,0.2)} 50%{box-shadow:0 0 60px rgba(99,102,241,0.4)} }
-    .pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
-    .grid-bg { background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px); background-size: 50px 50px; }
-    .strength-bar { height: 3px; border-radius: 2px; transition: width 0.3s, background 0.3s; }
-  </style>
+${themeMeta({ title: 'Start free trial', description: 'Create your AdNova AI workspace in 30 seconds. No credit card required. 14-day free trial.', path: '/register' })}
+${themeFontLinks()}
+<style>
+${themeBaseCss()}
+
+.auth-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+.auth-mesh{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 700px 400px at 50% -10%,rgba(255,77,0,0.10),transparent 70%),radial-gradient(ellipse 500px 300px at 20% 80%,rgba(255,77,0,0.05),transparent 65%)}
+.auth-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 30%,transparent 100%)}
+.auth-back{position:absolute;top:24px;left:24px;z-index:1;font-size:13px;color:var(--muted2);transition:color 0.2s;display:inline-flex;align-items:center;gap:6px}
+.auth-back:hover{color:var(--white)}
+
+.auth-card{position:relative;z-index:1;width:100%;max-width:480px}
+.auth-brand{text-align:center;margin-bottom:32px}
+.auth-brand .logo{font-size:22px;display:inline-block;margin-bottom:24px}
+.auth-brand h1{font-size:34px;font-weight:800;letter-spacing:-0.035em;line-height:1;margin-bottom:10px}
+.auth-brand h1 em{font-size:36px}
+.auth-brand p{font-size:15px;color:var(--muted2);font-weight:400;letter-spacing:-0.005em}
+.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px}
+.auth-form{display:flex;flex-direction:column;gap:16px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-row .field{margin:0}
+.terms-row{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--muted2);line-height:1.55;cursor:pointer;user-select:none}
+.terms-row input{width:14px;height:14px;accent-color:var(--orange);cursor:pointer;flex-shrink:0;margin-top:1px}
+.terms-row a{color:var(--orange2);transition:color 0.2s}
+.terms-row a:hover{color:var(--orange)}
+.auth-foot{text-align:center;margin-top:22px;font-size:13px;color:var(--muted)}
+.auth-foot a{color:var(--orange2);font-weight:600;transition:color 0.2s}
+.auth-foot a:hover{color:var(--orange)}
+
+.perks{display:flex;justify-content:center;gap:24px;margin-top:18px;flex-wrap:wrap}
+.perk{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);letter-spacing:0.02em}
+.perk-dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+
+@media(max-width:480px){.field-row{grid-template-columns:1fr}}
+</style>
 </head>
-<body class="text-slate-200 min-h-screen grid-bg py-12 px-4">
-  <div class="max-w-lg mx-auto">
-    <div class="text-center mb-8">
-      <a href="/" class="inline-flex items-center gap-3 mb-4">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl pulse-glow">
-          <i class="fas fa-bolt text-white text-xl"></i>
-        </div>
-        <span class="font-black text-white text-2xl">AdNova AI</span>
-      </a>
-      <h1 class="text-3xl font-black text-white">Start Your Free Trial</h1>
-      <p class="text-slate-400 mt-2">14 days free. No credit card required.</p>
+<body>
+<a href="/" class="auth-back">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  Back to home
+</a>
+
+<div class="auth-shell">
+  <div class="auth-mesh"></div>
+  <div class="auth-grid"></div>
+
+  <div class="auth-card">
+    <div class="auth-brand">
+      <a href="/" class="logo">AdNova<span>.</span></a>
+      <h1>Start your <em>free trial.</em></h1>
+      <p>Create your workspace in 30 seconds. No credit card.</p>
     </div>
 
-    <!-- Benefits -->
-    <div class="grid grid-cols-3 gap-3 mb-6">
-      <div class="glass rounded-xl p-3 text-center">
-        <i class="fas fa-robot text-indigo-400 mb-2 text-lg"></i>
-        <div class="text-xs font-semibold text-white">AI-powered</div>
-        <div class="text-xs text-slate-500">campaigns</div>
-      </div>
-      <div class="glass rounded-xl p-3 text-center">
-        <i class="fas fa-plug text-indigo-400 mb-2 text-lg"></i>
-        <div class="text-xs font-semibold text-white">5 platforms</div>
-        <div class="text-xs text-slate-500">connected</div>
-      </div>
-      <div class="glass rounded-xl p-3 text-center">
-        <i class="fas fa-shield-halved text-indigo-400 mb-2 text-lg"></i>
-        <div class="text-xs font-semibold text-white">SOC2</div>
-        <div class="text-xs text-slate-500">compliant</div>
-      </div>
-    </div>
-
-    <div class="glass rounded-2xl p-8">
-      <div id="global-error" class="hidden mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
-        <i class="fas fa-circle-exclamation flex-shrink-0"></i>
-        <span id="global-error-text">An error occurred.</span>
+    <div class="auth-box">
+      <div id="auth-error" class="alert alert-error" style="display:none;margin-bottom:16px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span id="auth-error-text">Something went wrong</span>
       </div>
 
-      <form id="register-form" class="space-y-4" onsubmit="handleRegister(event)">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="text-xs font-semibold text-slate-400 mb-1.5 block" for="first-name">First Name</label>
-            <input type="text" id="first-name" name="firstName" placeholder="John"
-              class="input-field rounded-xl px-4 py-3 text-sm" required/>
+      <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+        <div class="field-row">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Sarah" autocomplete="given-name" required/>
           </div>
-          <div>
-            <label class="text-xs font-semibold text-slate-400 mb-1.5 block" for="last-name">Last Name</label>
-            <input type="text" id="last-name" name="lastName" placeholder="Doe"
-              class="input-field rounded-xl px-4 py-3 text-sm" required/>
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Lin" autocomplete="family-name" required/>
           </div>
         </div>
-        <div>
-          <label class="text-xs font-semibold text-slate-400 mb-1.5 block" for="reg-email">Work Email</label>
-          <div class="relative">
-            <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm pointer-events-none"></i>
-            <input type="email" id="reg-email" name="email" placeholder="you@company.com"
-              class="input-field rounded-xl px-4 py-3 pl-11 text-sm" autocomplete="email" required/>
-          </div>
+        <div class="field">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" placeholder="Your company name" autocomplete="organization" required/>
         </div>
-        <div>
-          <label class="text-xs font-semibold text-slate-400 mb-1.5 block" for="company">Company Name</label>
-          <div class="relative">
-            <i class="fas fa-building absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm pointer-events-none"></i>
-            <input type="text" id="company" name="company" placeholder="Acme Corp"
-              class="input-field rounded-xl px-4 py-3 pl-11 text-sm" required/>
-          </div>
+        <div class="field">
+          <label for="email">Work email</label>
+          <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required/>
         </div>
-        <div>
-          <label class="text-xs font-semibold text-slate-400 mb-1.5 block" for="adspend">Monthly Ad Spend</label>
-          <select id="adspend" name="adSpend" class="input-field rounded-xl px-4 py-3 text-sm bg-transparent cursor-pointer">
-            <option value="<10k">Less than $10K</option>
-            <option value="10k-50k">$10K - $50K</option>
-            <option value="50k-200k" selected>$50K - $200K</option>
-            <option value="200k-1m">$200K - $1M</option>
-            <option value="1m+">$1M+</option>
-          </select>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="At least 8 characters" autocomplete="new-password" required minlength="8"/>
+          <span class="field-hint">Minimum 8 characters. Use a mix of letters, numbers and symbols.</span>
         </div>
-        <div>
-          <label class="text-xs font-semibold text-slate-400 mb-1.5 block" for="reg-password">Password</label>
-          <div class="relative">
-            <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm pointer-events-none"></i>
-            <input type="password" id="reg-password" name="password" placeholder="Min. 8 characters"
-              class="input-field rounded-xl px-4 py-3 pl-11 pr-11 text-sm" autocomplete="new-password"
-              oninput="checkStrength(this.value)" required minlength="8"/>
-            <button type="button" onclick="toggleRegPass()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
-              <i class="fas fa-eye text-sm" id="reg-eye"></i>
-            </button>
-          </div>
-          <div class="mt-2 flex gap-1">
-            <div class="flex-1 bg-white/10 rounded-full h-0.5 overflow-hidden"><div id="s1" class="strength-bar h-full"></div></div>
-            <div class="flex-1 bg-white/10 rounded-full h-0.5 overflow-hidden"><div id="s2" class="strength-bar h-full"></div></div>
-            <div class="flex-1 bg-white/10 rounded-full h-0.5 overflow-hidden"><div id="s3" class="strength-bar h-full"></div></div>
-            <div class="flex-1 bg-white/10 rounded-full h-0.5 overflow-hidden"><div id="s4" class="strength-bar h-full"></div></div>
-          </div>
-          <div class="text-xs text-slate-600 mt-1" id="strength-label">Enter a password</div>
-        </div>
-        <label class="flex items-start gap-2 text-xs text-slate-400 cursor-pointer select-none">
-          <input type="checkbox" id="terms" class="mt-0.5 rounded border-slate-600 bg-transparent flex-shrink-0" required/>
-          <span>I agree to the <a href="#" class="text-indigo-400 hover:text-indigo-300">Terms of Service</a> and <a href="#" class="text-indigo-400 hover:text-indigo-300">Privacy Policy</a></span>
+        <label class="terms-row">
+          <input type="checkbox" id="terms" required/>
+          <span>I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</span>
         </label>
-        <button type="submit" id="register-btn"
-          class="btn-primary w-full py-4 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2">
-          <i class="fas fa-rocket" id="reg-icon"></i>
-          <span id="reg-text">Create Free Account</span>
+        <button type="submit" id="register-btn" class="btn-primary" style="width:100%">
+          <span id="register-text">Create account</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
       </form>
-      <p class="text-center text-sm text-slate-500 mt-4">
-        Already have an account?
-        <a href="/login" class="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">Sign in</a>
-      </p>
+
+      <p class="auth-foot">Already have an account? <a href="/login">Sign in</a></p>
+    </div>
+
+    <div class="perks">
+      <span class="perk"><span class="perk-dot"></span>14-day free trial</span>
+      <span class="perk"><span class="perk-dot"></span>No credit card</span>
+      <span class="perk"><span class="perk-dot"></span>Cancel anytime</span>
     </div>
   </div>
+</div>
 
-  <script>
-    function toggleRegPass() {
-      const p = document.getElementById('reg-password');
-      const icon = document.getElementById('reg-eye');
-      p.type = p.type === 'password' ? 'text' : 'password';
-      icon.className = p.type === 'password' ? 'fas fa-eye text-sm' : 'fas fa-eye-slash text-sm';
+<script>
+(function(){
+  function showError(msg){
+    var el = document.getElementById('auth-error');
+    document.getElementById('auth-error-text').textContent = msg;
+    el.style.display = 'flex';
+  }
+  function hideError(){ document.getElementById('auth-error').style.display = 'none'; }
+  function setLoading(loading){
+    var btn = document.getElementById('register-btn');
+    var text = document.getElementById('register-text');
+    btn.disabled = loading;
+    text.textContent = loading ? 'Creating your workspace…' : 'Create account';
+  }
+
+  window.handleRegister = async function(e){
+    e.preventDefault();
+    hideError();
+    var body = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      company: document.getElementById('company').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value,
+    };
+    if(!body.firstName || !body.lastName || !body.company || !body.email || !body.password){
+      showError('Please fill in all fields.'); return;
     }
-
-    function checkStrength(val) {
-      const s = [
-        val.length >= 8,
-        /[A-Z]/.test(val),
-        /[0-9]/.test(val),
-        /[^A-Za-z0-9]/.test(val)
-      ];
-      const score = s.filter(Boolean).length;
-      const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
-      const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById('s' + i).style.background = i <= score ? colors[score] : 'transparent';
-        document.getElementById('s' + i).style.width = i <= score ? '100%' : '0%';
+    if(body.password.length < 8){
+      showError('Password must be at least 8 characters.'); return;
+    }
+    if(!document.getElementById('terms').checked){
+      showError('Please accept the Terms of Service and Privacy Policy.'); return;
+    }
+    setLoading(true);
+    try{
+      var res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      var data = await res.json();
+      if(res.ok && data.success){
+        localStorage.setItem('adnova_token', data.token);
+        localStorage.setItem('adnova_user', JSON.stringify(data.user));
+        window.location.href = '/onboarding';
+      } else {
+        showError(data.error || 'Registration failed. Please try again.');
+        setLoading(false);
       }
-      document.getElementById('strength-label').textContent = val ? labels[score] : 'Enter a password';
-      document.getElementById('strength-label').style.color = colors[score] || '#64748b';
+    } catch(err){
+      showError('Connection error. Please try again.');
+      setLoading(false);
     }
-
-    function showError(msg) {
-      const el = document.getElementById('global-error');
-      document.getElementById('global-error-text').textContent = msg;
-      el.classList.remove('hidden');
-    }
-
-    async function handleRegister(e) {
-      e.preventDefault();
-      document.getElementById('global-error').classList.add('hidden');
-      const btn = document.getElementById('register-btn');
-      const icon = document.getElementById('reg-icon');
-      const text = document.getElementById('reg-text');
-      btn.disabled = true;
-      icon.className = 'fas fa-spinner fa-spin';
-      text.textContent = 'Setting up your account...';
-      const payload = {
-        firstName: document.getElementById('first-name').value.trim(),
-        lastName: document.getElementById('last-name').value.trim(),
-        email: document.getElementById('reg-email').value.trim(),
-        company: document.getElementById('company').value.trim(),
-        adSpend: document.getElementById('adspend').value,
-        password: document.getElementById('reg-password').value,
-      };
-      try {
-        const res = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          localStorage.setItem('adnova_token', data.token);
-          localStorage.setItem('adnova_user', JSON.stringify(data.user));
-          icon.className = 'fas fa-check';
-          text.textContent = 'Account created! Redirecting...';
-          setTimeout(() => { window.location.href = '/dashboard'; }, 800);
-        } else {
-          showError(data.error || 'Registration failed. Please try again.');
-          btn.disabled = false;
-          icon.className = 'fas fa-rocket';
-          text.textContent = 'Create Free Account';
-        }
-      } catch (err) {
-        showError('Connection error. Please try again.');
-        btn.disabled = false;
-        icon.className = 'fas fa-rocket';
-        text.textContent = 'Create Free Account';
-      }
-    }
-  </script>
+  };
+})();
+</script>
 </body>
 </html>`)
 }

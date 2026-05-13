@@ -137,11 +137,11 @@ export function renderPlatforms(lang: Lang = 'en'): string {
       : `<span class="badge-live text-xs px-2 py-0.5 rounded-full font-medium"><i class="fas fa-circle text-xs mr-1"></i>${t(lang, 'connected')}</span>`
 
     const pixelBadge = p.pixel
-      ? `<span class="text-xs text-emerald-400 flex items-center gap-1"><i class="fas fa-dot-circle text-xs"></i>${t(lang, 'pixel_active')}</span>`
+      ? `<span class="text-xs text-brand-400 flex items-center gap-1"><i class="fas fa-dot-circle text-xs"></i>${t(lang, 'pixel_active')}</span>`
       : `<span class="text-xs text-slate-500 flex items-center gap-1"><i class="far fa-circle text-xs"></i>${t(lang, 'pixel_inactive')}</span>`
 
     const actionBtn = isWarning
-      ? `<button onclick="reconnectPlatform('${p.id}')" class="flex-1 text-xs font-semibold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-lg px-3 py-2 transition-all flex items-center justify-center gap-1.5"><i class="fas fa-link text-xs"></i>${t(lang, 'reconnect')}</button>`
+      ? `<button onclick="reconnectPlatform('${p.id}')" class="flex-1 text-xs font-semibold text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 rounded-lg px-3 py-2 transition-all flex items-center justify-center gap-1.5"><i class="fas fa-link text-xs"></i>${t(lang, 'reconnect')}</button>`
       : `<button onclick="configurePlatform('${p.id}')" class="flex-1 text-xs font-semibold text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 rounded-lg px-3 py-2 transition-all flex items-center justify-center gap-1.5"><i class="fas fa-sliders text-xs"></i>${t(lang, 'configure')}</button>`
 
     return `
@@ -167,7 +167,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
           <div class="text-xs text-slate-500 mt-0.5">${t(lang, 'monthly_spend')}</div>
         </div>
         <div class="glass rounded-xl p-3 text-center">
-          <div class="text-base font-bold text-emerald-400">${p.roas}</div>
+          <div class="text-base font-bold text-brand-400">${p.roas}</div>
           <div class="text-xs text-slate-500 mt-0.5">${t(lang, 'roas')}</div>
         </div>
         <div class="glass rounded-xl p-3 text-center">
@@ -188,7 +188,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
         <button onclick="syncPlatform('${p.id}', this)" class="glass hover:bg-white/5 text-xs font-semibold text-slate-400 hover:text-white border border-white/10 rounded-lg px-3 py-2 transition-all flex items-center gap-1.5">
           <i class="fas fa-arrows-rotate text-xs"></i>${t(lang, 'sync')}
         </button>
-        <button onclick="disconnectPlatform('${p.id}')" class="glass hover:bg-red-500/10 text-xs text-slate-600 hover:text-red-400 border border-white/10 hover:border-red-500/30 rounded-lg px-2 py-2 transition-all">
+        <button onclick="disconnectPlatform('${p.id}')" class="glass hover:bg-slate-500/10 text-xs text-slate-600 hover:text-slate-400 border border-white/10 hover:border-slate-500/30 rounded-lg px-2 py-2 transition-all">
           <i class="fas fa-unlink text-xs"></i>
         </button>
       </div>
@@ -202,7 +202,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
       <h2 class="text-xl font-black text-white">${t(lang, 'platform_integrations')}</h2>
       <p class="text-sm text-slate-500 mt-1">${t(lang, 'overview')} — ${connectedCount} ${t(lang, 'connected').toLowerCase()} / ${connected.length} platforms</p>
     </div>
-    <button onclick="addNewPlatform()" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 transition-all shadow-lg">
+    <button onclick="addNewPlatform()" class="bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 transition-all shadow-lg">
       <i class="fas fa-plus text-xs"></i>${t(lang, 'connect')}
     </button>
   </div>
@@ -212,12 +212,12 @@ export function renderPlatforms(lang: Lang = 'en'): string {
     <div class="glass card-hover rounded-2xl p-4">
       <div class="text-xs text-slate-500 mb-1">${t(lang, 'total_spend')}</div>
       <div class="text-2xl font-black text-white">$${(totalSpend/1000).toFixed(0)}K</div>
-      <div class="text-xs text-emerald-400 mt-1"><i class="fas fa-arrow-up mr-1"></i>+18.4%</div>
+      <div class="text-xs text-brand-400 mt-1"><i class="fas fa-arrow-up mr-1"></i>+18.4%</div>
     </div>
     <div class="glass card-hover rounded-2xl p-4">
       <div class="text-xs text-slate-500 mb-1">${t(lang, 'roas')}</div>
-      <div class="text-2xl font-black text-emerald-400">${avgRoas}x</div>
-      <div class="text-xs text-emerald-400 mt-1"><i class="fas fa-arrow-up mr-1"></i>+0.3x</div>
+      <div class="text-2xl font-black text-brand-400">${avgRoas}x</div>
+      <div class="text-xs text-brand-400 mt-1"><i class="fas fa-arrow-up mr-1"></i>+0.3x</div>
     </div>
     <div class="glass card-hover rounded-2xl p-4">
       <div class="text-xs text-slate-500 mb-1">${t(lang, 'active_campaigns')}</div>
@@ -226,8 +226,8 @@ export function renderPlatforms(lang: Lang = 'en'): string {
     </div>
     <div class="glass card-hover rounded-2xl p-4">
       <div class="text-xs text-slate-500 mb-1">${t(lang, 'platform_speed')}</div>
-      <div class="text-2xl font-black text-purple-400">9<span class="text-base">ms</span></div>
-      <div class="text-xs text-emerald-400 mt-1"><i class="fas fa-circle mr-1"></i>Optimal</div>
+      <div class="text-2xl font-black text-brand-400">9<span class="text-base">ms</span></div>
+      <div class="text-xs text-brand-400 mt-1"><i class="fas fa-circle mr-1"></i>Optimal</div>
     </div>
   </div>
 
@@ -262,7 +262,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
       if (!ctx) return;
       const isDark = document.documentElement.classList.contains('dark');
       const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
-      const textColor = isDark ? '#64748b' : '#94a3b8';
+      const textColor = isDark ? '#7A7A7A' : '#7A7A7A';
 
       window._platformChart = new Chart(ctx, {
         type: 'bar',
@@ -276,7 +276,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
               'rgba(255,0,80,0.7)', 'rgba(0,119,181,0.7)', 'rgba(255,0,0,0.7)',
               'rgba(20,23,26,0.7)', 'rgba(230,0,35,0.7)', 'rgba(255,252,0,0.7)'
             ],
-            borderColor: ['#1877f2','#4285f4','#f58529','#ff0050','#0077b5','#ff0000','#14171a','#e60023','#fffc00'],
+            borderColor: ['#1877f2','#4285f4','#f58529','#A8A8A8','#A8A8A8','#A8A8A8','#14171a','#e60023','#fffc00'],
             borderWidth: 1, borderRadius: 6, borderSkipped: false,
           }]
         },
@@ -296,7 +296,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
       if (!window._platformChart) return;
       const isDark = theme === 'dark';
       const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
-      const textColor = isDark ? '#64748b' : '#94a3b8';
+      const textColor = isDark ? '#7A7A7A' : '#7A7A7A';
       window._platformChart.options.scales.x.grid.color = gridColor;
       window._platformChart.options.scales.x.ticks.color = textColor;
       window._platformChart.options.scales.y.grid.color = gridColor;
@@ -395,23 +395,23 @@ export function renderPlatforms(lang: Lang = 'en'): string {
         // Add card to grid
         const grid = document.getElementById('platforms-grid');
         const icons = {twitter:'fab fa-x-twitter',pinterest:'fab fa-pinterest-p',reddit:'fab fa-reddit-alien'};
-        const grads = {twitter:'platform-tw',pinterest:'platform-pi',reddit:'bg-gradient-to-br from-orange-600 to-red-700'};
+        const grads = {twitter:'platform-tw',pinterest:'platform-pi',reddit:'bg-gradient-to-br from-orange-600 to-slate-700'};
         const card = document.createElement('div');
-        card.className = 'glass card-hover rounded-2xl p-5 border border-emerald-500/20 animate-fadeIn';
+        card.className = 'glass card-hover rounded-2xl p-5 border border-brand-500/20 animate-fadeIn';
         card.id = 'card-' + id;
         card.innerHTML = '<div class="flex items-center justify-between mb-4">' +
           '<div class="flex items-center gap-3">' +
-          '<div class="w-10 h-10 ' + (grads[id]||'bg-gradient-to-br from-brand-500 to-purple-600') + ' rounded-xl flex items-center justify-center">' +
+          '<div class="w-10 h-10 ' + (grads[id]||'bg-gradient-to-br from-brand-500 to-brand-600') + ' rounded-xl flex items-center justify-center">' +
           '<i class="' + (icons[id]||'fas fa-ad') + ' text-white"></i></div>' +
           '<div><div class="font-bold text-white text-sm">' + name + '</div><div class="text-xs text-slate-500">ID: ' + accountId + '</div></div></div>' +
           '<span class="badge-live text-xs px-2 py-0.5 rounded-full"><i class="fas fa-circle text-xs mr-1"></i>Connected</span></div>' +
           '<div class="grid grid-cols-3 gap-3 mb-4">' +
           '<div class="glass rounded-xl p-3 text-center"><div class="text-base font-bold text-white">$0</div><div class="text-xs text-slate-500">Spend</div></div>' +
-          '<div class="glass rounded-xl p-3 text-center"><div class="text-base font-bold text-emerald-400">—</div><div class="text-xs text-slate-500">ROAS</div></div>' +
+          '<div class="glass rounded-xl p-3 text-center"><div class="text-base font-bold text-brand-400">—</div><div class="text-xs text-slate-500">ROAS</div></div>' +
           '<div class="glass rounded-xl p-3 text-center"><div class="text-base font-bold text-brand-400">0</div><div class="text-xs text-slate-500">Campaigns</div></div></div>' +
           '<div class="flex gap-2"><button onclick="configurePlatform(\\'' + id + '\\')" class="flex-1 text-xs font-semibold text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 rounded-lg px-3 py-2 transition-all"><i class="fas fa-sliders text-xs mr-1"></i>Configure</button>' +
           '<button onclick="syncPlatform(\\'' + id + '\\',this)" class="glass hover:bg-white/5 text-xs font-semibold text-slate-400 hover:text-white border border-white/10 rounded-lg px-3 py-2 transition-all"><i class="fas fa-arrows-rotate text-xs"></i></button>' +
-          '<button onclick="disconnectPlatform(\\'' + id + '\\')" class="glass hover:bg-red-500/10 text-xs text-slate-600 hover:text-red-400 border border-white/10 hover:border-red-500/30 rounded-lg px-2 py-2 transition-all"><i class="fas fa-unlink text-xs"></i></button></div>';
+          '<button onclick="disconnectPlatform(\\'' + id + '\\')" class="glass hover:bg-slate-500/10 text-xs text-slate-600 hover:text-slate-400 border border-white/10 hover:border-slate-500/30 rounded-lg px-2 py-2 transition-all"><i class="fas fa-unlink text-xs"></i></button></div>';
         grid.appendChild(card);
         btn.innerHTML = '<i class="fas fa-link mr-2"></i>Se connecter via OAuth';
         btn.disabled = false;
@@ -441,23 +441,23 @@ export function renderPlatforms(lang: Lang = 'en'): string {
             <span class="text-xs text-slate-300 font-medium">X (Twitter)</span>
           </button>
           <button onclick="selectNewPlatform('pinterest','Pinterest','fab fa-pinterest-p')" class="glass hover:bg-white/10 rounded-xl p-4 flex flex-col items-center gap-2 transition-all hover:border-brand-500/40">
-            <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center"><i class="fab fa-pinterest-p text-white"></i></div>
+            <div class="w-10 h-10 bg-slate-600 rounded-xl flex items-center justify-center"><i class="fab fa-pinterest-p text-white"></i></div>
             <span class="text-xs text-slate-300 font-medium">Pinterest</span>
           </button>
           <button onclick="selectNewPlatform('reddit','Reddit','fab fa-reddit-alien')" class="glass hover:bg-white/10 rounded-xl p-4 flex flex-col items-center gap-2 transition-all hover:border-brand-500/40">
-            <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center"><i class="fab fa-reddit-alien text-white"></i></div>
+            <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-slate-600 rounded-xl flex items-center justify-center"><i class="fab fa-reddit-alien text-white"></i></div>
             <span class="text-xs text-slate-300 font-medium">Reddit Ads</span>
           </button>
           <button onclick="selectNewPlatform('spotify','Spotify Ads','fab fa-spotify')" class="glass hover:bg-white/10 rounded-xl p-4 flex flex-col items-center gap-2 transition-all hover:border-brand-500/40">
-            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center"><i class="fab fa-spotify text-white"></i></div>
+            <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center"><i class="fab fa-spotify text-white"></i></div>
             <span class="text-xs text-slate-300 font-medium">Spotify Ads</span>
           </button>
           <button onclick="selectNewPlatform('amazon','Amazon Ads','fab fa-amazon')" class="glass hover:bg-white/10 rounded-xl p-4 flex flex-col items-center gap-2 transition-all hover:border-brand-500/40">
-            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center"><i class="fab fa-amazon text-white"></i></div>
+            <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center"><i class="fab fa-amazon text-white"></i></div>
             <span class="text-xs text-slate-300 font-medium">Amazon Ads</span>
           </button>
           <button onclick="selectNewPlatform('microsoft','Microsoft Ads','fab fa-windows')" class="glass hover:bg-white/10 rounded-xl p-4 flex flex-col items-center gap-2 transition-all hover:border-brand-500/40">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center"><i class="fab fa-windows text-white"></i></div>
+            <div class="w-10 h-10 bg-slate-600 rounded-xl flex items-center justify-center"><i class="fab fa-windows text-white"></i></div>
             <span class="text-xs text-slate-300 font-medium">Microsoft Ads</span>
           </button>
         </div>
@@ -469,7 +469,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
           <i class="fas fa-arrow-left text-xs"></i> Retour
         </button>
         <div class="flex items-center gap-3 mb-5 p-3 glass rounded-xl">
-          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center">
             <i id="selected-platform-icon" class="fas fa-ad text-white text-lg"></i>
           </div>
           <div>
@@ -493,7 +493,7 @@ export function renderPlatforms(lang: Lang = 'en'): string {
         </div>
         <div class="flex gap-2 mt-4">
           <button onclick="closeAddPlatformModal()" class="flex-1 glass hover:bg-white/10 text-slate-400 py-3 rounded-xl text-sm transition-all">Annuler</button>
-          <button id="connect-btn" onclick="connectNewPlatform()" class="flex-1 bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold transition-all">
+          <button id="connect-btn" onclick="connectNewPlatform()" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-600 hover:opacity-90 text-white py-3 rounded-xl text-sm font-bold transition-all">
             <i class="fas fa-link mr-2"></i>Se connecter via OAuth
           </button>
         </div>

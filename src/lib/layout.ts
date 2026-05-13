@@ -25,7 +25,7 @@ export function shell(
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin/>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,300;1,14..32,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..900&family=Fraunces:ital,opsz,wght@1,144,300..500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
@@ -46,16 +46,16 @@ export function shell(
         extend: {
           colors: {
             brand: {
-              50: '#f0f4ff', 100: '#e0e9ff', 200: '#c7d7fe',
-              300: '#a5bbfc', 400: '#8194f8', 500: '#6366f1',
-              600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+              50: '#FFF4ED', 100: '#FFE6D5', 200: '#FFCBA8',
+              300: '#FFA876', 400: '#FF8042', 500: '#FF4D00',
+              600: '#E64500', 700: '#B83700', 800: '#8A2A00', 900: '#5C1C00',
             },
             surface: {
               50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0',
-              800: '#1e293b', 850: '#172033', 900: '#0f172a', 950: '#080e1a',
+              800: '#141428', 850: '#111120', 900: '#0D0D18', 950: '#08080F',
             }
           },
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          fontFamily: { sans: ['Geist', 'system-ui', 'sans-serif'], display: ['Geist', 'system-ui', 'sans-serif'] },
           animation: {
             'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
             'spin-slow': 'spin 3s linear infinite',
@@ -93,27 +93,29 @@ export function shell(
     /* ── Base & Scrollbar ── */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.6); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,77,0,0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,77,0,0.6); }
 
     /* ── Body ── */
     .dark body {
-      background: #03050d;
-      color: #e2e8f0;
-      font-family: 'Inter', sans-serif;
+      background: #08080F;
+      color: #C0C0D8;
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      font-feature-settings: "ss01","ss03","cv11";
+      letter-spacing: -0.005em;
       background-image:
-        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(99,102,241,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139,92,246,0.10) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 30% at 50% 50%, rgba(59,130,246,0.06) 0%, transparent 70%);
+        radial-gradient(ellipse 80% 65% at 8% -5%, rgba(255,77,0,0.10) 0%, transparent 58%),
+        radial-gradient(ellipse 65% 55% at 92% 28%, rgba(255,77,0,0.06) 0%, transparent 52%),
+        radial-gradient(ellipse 55% 45% at 50% 95%, rgba(255,77,0,0.04) 0%, transparent 48%);
       min-height: 100vh;
     }
     .light body {
-      background: #f0f4ff;
-      color: #0f172a;
-      font-family: 'Inter', sans-serif;
+      background: #FFF4ED;
+      color: #0A0A0A;
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
       background-image:
-        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(99,102,241,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 55%);
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(255,77,0,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,107,43,0.06) 0%, transparent 55%);
     }
 
     /* ══ LIQUID GLASS CORE ══ */
@@ -152,13 +154,13 @@ export function shell(
       border: 1px solid rgba(255,255,255,0.90);
       border-top-color: rgba(255,255,255,1);
       box-shadow:
-        0 8px 32px rgba(99,102,241,0.08),
+        0 8px 32px rgba(255,77,0,0.08),
         0 2px 8px rgba(0,0,0,0.06),
         inset 0 1px 0 rgba(255,255,255,0.95),
         inset 0 -1px 0 rgba(0,0,0,0.04);
     }
 
-    /* --- Prism highlight (top edge rainbow) --- */
+    /* --- Prism highlight (top edge — orange glow) --- */
     .dark .glass::before {
       content: '';
       position: absolute;
@@ -167,11 +169,9 @@ export function shell(
       background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(139,92,246,0.6) 20%,
-        rgba(99,102,241,0.8) 35%,
-        rgba(59,130,246,0.6) 50%,
-        rgba(16,185,129,0.5) 65%,
-        rgba(99,102,241,0.4) 80%,
+        rgba(255,77,0,0.5) 25%,
+        rgba(255,107,43,0.85) 50%,
+        rgba(255,77,0,0.5) 75%,
         transparent 100%
       );
       border-radius: 0 0 50% 50%;
@@ -200,11 +200,11 @@ export function shell(
     .dark .sidebar-bg {
       background: linear-gradient(
         180deg,
-        rgba(5,8,20,0.97) 0%,
-        rgba(8,12,28,0.95) 100%
+        rgba(8,8,15,0.97) 0%,
+        rgba(13,13,24,0.95) 100%
       );
       backdrop-filter: blur(40px) saturate(1.5);
-      border-color: rgba(99,102,241,0.12);
+      border-color: rgba(255,77,0,0.12);
       box-shadow:
         inset -1px 0 0 rgba(255,255,255,0.05),
         4px 0 40px rgba(0,0,0,0.5);
@@ -219,11 +219,11 @@ export function shell(
     .dark .topbar-bg {
       background: linear-gradient(
         90deg,
-        rgba(3,5,13,0.92) 0%,
-        rgba(5,8,20,0.88) 100%
+        rgba(8,8,15,0.92) 0%,
+        rgba(13,13,24,0.88) 100%
       );
       backdrop-filter: blur(30px) saturate(1.6);
-      border-color: rgba(99,102,241,0.10);
+      border-color: rgba(255,77,0,0.10);
       box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4);
     }
     .light .topbar-bg {
@@ -241,10 +241,10 @@ export function shell(
         rgba(255,255,255,0.03) 50%,
         rgba(255,255,255,0.06) 100%
       );
-      border-color: rgba(99,102,241,0.25);
+      border-color: rgba(255,77,0,0.25);
       box-shadow:
         0 12px 40px rgba(0,0,0,0.4),
-        0 4px 12px rgba(99,102,241,0.08),
+        0 4px 12px rgba(255,77,0,0.08),
         inset 0 1px 0 rgba(255,255,255,0.18),
         inset 0 -1px 0 rgba(0,0,0,0.12);
       transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
@@ -259,13 +259,13 @@ export function shell(
       transform: translateY(-3px) scale(1.005);
       box-shadow:
         0 24px 48px rgba(0,0,0,0.45),
-        0 8px 16px rgba(99,102,241,0.12),
+        0 8px 16px rgba(255,77,0,0.12),
         inset 0 1px 0 rgba(255,255,255,0.22);
     }
     .light .card-hover:hover {
       transform: translateY(-3px) scale(1.005);
       box-shadow:
-        0 20px 40px rgba(99,102,241,0.12),
+        0 20px 40px rgba(255,77,0,0.12),
         0 4px 12px rgba(0,0,0,0.06);
     }
 
@@ -281,58 +281,58 @@ export function shell(
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(99,102,241,0.04));
+      background: linear-gradient(90deg, transparent, rgba(255,77,0,0.04));
       opacity: 0;
       transition: opacity 0.2s;
       pointer-events: none;
     }
     .dark .sidebar-link:hover::before, .dark .sidebar-link.active::before { opacity: 1; }
     .dark .sidebar-link:hover, .dark .sidebar-link.active {
-      background: rgba(99,102,241,0.12);
-      border-${isRTL ? 'right' : 'left'}-color: #6366f1;
-      color: #a5b4fc;
-      box-shadow: inset 0 0 20px rgba(99,102,241,0.06);
+      background: rgba(255,77,0,0.12);
+      border-${isRTL ? 'right' : 'left'}-color: #FF4D00;
+      color: #FFCBA8;
+      box-shadow: inset 0 0 20px rgba(255,77,0,0.06);
     }
     .dark .sidebar-link.active {
-      background: linear-gradient(90deg, rgba(99,102,241,0.18), rgba(99,102,241,0.08));
-      color: #c7d2fe;
+      background: linear-gradient(90deg, rgba(255,77,0,0.20), rgba(255,107,43,0.10));
+      color: #FFE6D5;
     }
     .light .sidebar-link:hover, .light .sidebar-link.active {
-      background: rgba(99,102,241,0.08);
-      border-${isRTL ? 'right' : 'left'}-color: #6366f1;
-      color: #4f46e5;
+      background: rgba(255,77,0,0.08);
+      border-${isRTL ? 'right' : 'left'}-color: #FF4D00;
+      color: #E64500;
     }
-    .light .sidebar-link.active { background: rgba(99,102,241,0.12); color: #4338ca; }
+    .light .sidebar-link.active { background: rgba(255,77,0,0.12); color: #B83700; }
 
     /* ══ BADGE STYLES — Liquid tint ══ */
     .badge-live {
-      background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(52,211,153,0.10));
-      color: #34d399;
-      border: 1px solid rgba(52,211,153,0.30);
-      box-shadow: 0 0 12px rgba(52,211,153,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(255,77,0,0.18), rgba(255,77,0,0.10));
+      color: #FF4D00;
+      border: 1px solid rgba(255,77,0,0.30);
+      box-shadow: 0 0 12px rgba(255,77,0,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
     }
     .badge-paused {
-      background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(251,191,36,0.10));
-      color: #fbbf24;
-      border: 1px solid rgba(251,191,36,0.28);
-      box-shadow: 0 0 12px rgba(251,191,36,0.10), inset 0 1px 0 rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(255,107,43,0.18), rgba(255,107,43,0.10));
+      color: #FF6B2B;
+      border: 1px solid rgba(255,107,43,0.28);
+      box-shadow: 0 0 12px rgba(255,107,43,0.10), inset 0 1px 0 rgba(255,255,255,0.08);
     }
     .badge-draft {
       background: linear-gradient(135deg, rgba(148,163,184,0.15), rgba(203,213,225,0.08));
-      color: #94a3b8;
+      color: #7A7A7A;
       border: 1px solid rgba(148,163,184,0.25);
     }
     .badge-killed {
-      background: linear-gradient(135deg, rgba(239,68,68,0.18), rgba(248,113,113,0.10));
-      color: #f87171;
-      border: 1px solid rgba(248,113,113,0.28);
-      box-shadow: 0 0 12px rgba(239,68,68,0.10), inset 0 1px 0 rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(122,122,122,0.18), rgba(122,122,122,0.10));
+      color: #7A7A7A;
+      border: 1px solid rgba(122,122,122,0.28);
+      box-shadow: 0 0 12px rgba(122,122,122,0.10), inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .badge-scaling {
-      background: linear-gradient(135deg, rgba(99,102,241,0.20), rgba(139,92,246,0.12));
-      color: #a5b4fc;
-      border: 1px solid rgba(99,102,241,0.32);
-      box-shadow: 0 0 12px rgba(99,102,241,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(255,77,0,0.22), rgba(255,107,43,0.12));
+      color: #FFA876;
+      border: 1px solid rgba(255,77,0,0.32);
+      box-shadow: 0 0 12px rgba(255,77,0,0.14), inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
     /* ══ PROGRESS BAR — Liquid fill ══ */
@@ -359,9 +359,9 @@ export function shell(
       box-shadow: 0 0 8px currentColor;
     }
 
-    /* ══ GRADIENT TEXT ══ */
+    /* ══ GRADIENT TEXT (orange ramp) ══ */
     .gradient-text {
-      background: linear-gradient(135deg, #818cf8, #a78bfa, #f472b6, #38bdf8);
+      background: linear-gradient(135deg, #FF4D00, #FF6B2B, #FF8042, #FFA876);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -375,11 +375,11 @@ export function shell(
 
     /* ══ NEON BORDER ══ */
     .neon-border {
-      border: 1px solid rgba(99,102,241,0.4);
+      border: 1px solid rgba(255,77,0,0.4);
       box-shadow:
-        0 0 20px rgba(99,102,241,0.15),
-        0 0 40px rgba(99,102,241,0.06),
-        inset 0 0 20px rgba(99,102,241,0.03);
+        0 0 20px rgba(255,77,0,0.15),
+        0 0 40px rgba(255,77,0,0.06),
+        inset 0 0 20px rgba(255,77,0,0.03);
     }
 
     /* ══ ANIMATIONS ══ */
@@ -394,29 +394,29 @@ export function shell(
     /* ══ PLATFORM ICONS ══ */
     .platform-fb { background: linear-gradient(135deg,#1877f2,#0d5dbf); }
     .platform-ig { background: linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); }
-    .platform-tt { background: linear-gradient(135deg,#010101,#ff0050,#00f2ea); }
+    .platform-tt { background: linear-gradient(135deg,#010101,#A8A8A8,#00f2ea); }
     .platform-sc { background: linear-gradient(135deg,#fffc00,#f5c400); }
     .platform-gl { background: linear-gradient(135deg,#4285f4,#34a853,#fbbc05,#ea4335); }
     .platform-pi { background: linear-gradient(135deg,#e60023,#ad081b); }
     .platform-tw { background: linear-gradient(135deg,#000000,#14171a); }
-    .platform-li { background: linear-gradient(135deg,#0077b5,#005885); }
-    .platform-yt { background: linear-gradient(135deg,#ff0000,#cc0000); }
+    .platform-li { background: linear-gradient(135deg,#A8A8A8,#005885); }
+    .platform-yt { background: linear-gradient(135deg,#A8A8A8,#cc0000); }
 
     /* ══ TABLE ROWS ══ */
     .dark .table-row { transition: all 0.2s ease; }
     .dark .table-row:hover {
-      background: linear-gradient(90deg, rgba(99,102,241,0.05), rgba(139,92,246,0.03), transparent);
-      box-shadow: inset 0 0 0 1px rgba(99,102,241,0.08);
+      background: linear-gradient(90deg, rgba(255,77,0,0.05), rgba(255,107,43,0.03), transparent);
+      box-shadow: inset 0 0 0 1px rgba(255,77,0,0.08);
     }
-    .light .table-row:hover { background: rgba(99,102,241,0.04); }
+    .light .table-row:hover { background: rgba(255,77,0,0.04); }
 
     /* ══ LIGHT MODE OVERRIDES ══ */
     .light .text-slate-200 { color: #1e293b !important; }
     .light .text-slate-300 { color: #334155 !important; }
-    .light .text-slate-400 { color: #475569 !important; }
-    .light .text-slate-500 { color: #64748b !important; }
-    .light .text-slate-600 { color: #94a3b8 !important; }
-    .light .text-white { color: #0f172a !important; }
+    .light .text-slate-400 { color: #7A7A7A !important; }
+    .light .text-slate-500 { color: #7A7A7A !important; }
+    .light .text-slate-600 { color: #7A7A7A !important; }
+    .light .text-white { color: #000000 !important; }
 
     /* ══ LIQUID ICON BUTTONS ══ */
     .icon-btn {
@@ -448,16 +448,16 @@ export function shell(
     }
     .dark input:focus, .dark select:focus, .dark textarea:focus {
       outline: none;
-      border-color: rgba(99,102,241,0.5) !important;
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.10), inset 0 1px 0 rgba(255,255,255,0.05);
+      border-color: rgba(255,77,0,0.5) !important;
+      box-shadow: 0 0 0 3px rgba(255,77,0,0.10), inset 0 1px 0 rgba(255,255,255,0.05);
     }
 
     /* ══ TOOLTIP ══ */
     .tooltip { position: relative; }
     .tooltip-text {
       position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-      background: rgba(15,23,42,0.95); backdrop-filter: blur(12px);
-      color: #e2e8f0; font-size: 11px; white-space: nowrap;
+      background: rgba(13,13,24,0.95); backdrop-filter: blur(12px);
+      color: #F5F5FF; font-size: 11px; white-space: nowrap;
       padding: 5px 10px; border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
@@ -505,7 +505,7 @@ export function shell(
       .sidebar-desktop .text-xs[style*="rgba(148"] { display: none; }
 
       /* Bottom nav active state */
-      #bottom-nav a.text-brand-400 { background: rgba(99,102,241,0.12); }
+      #bottom-nav a.text-brand-400 { background: rgba(255,77,0,0.12); }
 
       /* Reduce mb-6 in content */
       .mb-6 { margin-bottom: 10px; }
@@ -540,14 +540,14 @@ export function shell(
     /* ══ LIQUID GLOW on brand elements ══ */
     .liquid-glow {
       box-shadow:
-        0 0 24px rgba(99,102,241,0.30),
-        0 0 48px rgba(99,102,241,0.12),
-        0 0 80px rgba(99,102,241,0.06);
+        0 0 24px rgba(255,77,0,0.30),
+        0 0 48px rgba(255,77,0,0.12),
+        0 0 80px rgba(255,77,0,0.06);
     }
 
     /* ══ FROSTED PANEL (deeper blur) ══ */
     .dark .frosted {
-      background: rgba(3,5,13,0.80);
+      background: rgba(8,8,15,0.82);
       backdrop-filter: blur(40px) saturate(1.8);
       border: 1px solid rgba(255,255,255,0.08);
       box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
@@ -555,8 +555,8 @@ export function shell(
 
     /* ══ AI Engine pulsing orb ══ */
     @keyframes orbPulse {
-      0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
-      50% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+      0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,77,0,0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(255,77,0,0); }
     }
     .orb-pulse { animation: orbPulse 3s ease infinite; }
   </style>
@@ -567,24 +567,17 @@ export function shell(
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
-  <aside id="main-sidebar" class="sidebar-desktop sidebar-bg w-64 min-h-screen border-r flex flex-col fixed ${isRTL ? 'right-0' : 'left-0'} top-0 z-40" style="border-color:rgba(99,102,241,0.10);">
-    <!-- Logo -->
-    <div class="p-5 border-b" style="border-color:rgba(255,255,255,0.05);">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-lg liquid-glow flex-shrink-0 orb-pulse">
-          <i class="fas fa-bolt text-white"></i>
-        </div>
-        <div>
-          <div class="font-black text-white text-base tracking-tight">${BRAND.name}</div>
-          <div class="text-xs" style="color:rgba(148,163,184,0.6);">${BRAND.tagline}</div>
-        </div>
-      </div>
-    </div>
+  <aside id="main-sidebar" class="sidebar-desktop sidebar-bg w-64 min-h-screen border-r flex flex-col fixed ${isRTL ? 'right-0' : 'left-0'} top-0 z-40" style="border-color:rgba(255,77,0,0.10);">
+    <!-- Logo — text-only "AdNova." matching landing page identity -->
+    <a href="/" class="block p-5 border-b" style="border-color:rgba(255,255,255,0.05);text-decoration:none">
+      <div class="font-black text-white" style="font-size:22px;letter-spacing:-0.03em;line-height:1">${BRAND.name.replace(' AI', '')}<span style="color:var(--orange)">.</span></div>
+      <div class="text-xs mt-1" style="color:rgba(168,168,168,0.6);letter-spacing:0.04em">${BRAND.tagline}</div>
+    </a>
 
     <!-- Tenant Selector -->
     <div class="px-4 py-3 border-b" style="border-color:rgba(255,255,255,0.04);">
       <button onclick="toggleTenantMenu()" id="tenant-btn" class="w-full glass rounded-xl px-3 py-2 flex items-center gap-2 text-sm transition-all">
-        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0" id="tenant-abbr">A</div>
+        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-600 to-brand-400 flex items-center justify-center text-xs font-bold text-white flex-shrink-0" id="tenant-abbr">A</div>
         <span class="flex-1 text-left text-slate-300 font-medium truncate" id="tenant-name">Acme Corp</span>
         <i class="fas fa-chevron-down text-slate-600 text-xs"></i>
       </button>
@@ -592,31 +585,33 @@ export function shell(
 
     <!-- Navigation -->
     <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
-      <div class="text-xs font-semibold uppercase tracking-widest px-3 py-2" style="color:rgba(99,102,241,0.5);">${t(lang, 'overview')}</div>
+      <div class="text-xs font-semibold uppercase tracking-widest px-3 py-2" style="color:rgba(255,77,0,0.5);">${t(lang, 'overview')}</div>
       ${navLink('/dashboard', 'fa-chart-line', t(lang, 'dashboard'), activePage)}
       ${navLink('/campaigns', 'fa-bullhorn', t(lang, 'campaigns'), activePage)}
       ${navLink('/creatives', 'fa-wand-magic-sparkles', t(lang, 'creatives'), activePage)}
       ${navLink('/analytics', 'fa-chart-bar', t(lang, 'analytics'), activePage)}
-      <div class="text-xs font-semibold uppercase tracking-widest px-3 py-2 mt-3" style="color:rgba(99,102,241,0.5);">${t(lang, 'ai_engine')} & ${t(lang, 'automation')}</div>
+      <div class="text-xs font-semibold uppercase tracking-widest px-3 py-2 mt-3" style="color:rgba(255,77,0,0.5);">${t(lang, 'ai_engine')} & ${t(lang, 'automation')}</div>
       ${navLink('/ai-engine', 'fa-brain', t(lang, 'ai_engine'), activePage)}
+      ${navLink('/decisions', 'fa-clock-rotate-left', 'Decision Log', activePage)}
       ${navLink('/automation', 'fa-gears', t(lang, 'automation'), activePage)}
       ${navLink('/audiences', 'fa-users', t(lang, 'audiences'), activePage)}
-      <div class="text-xs font-semibold uppercase tracking-widest px-3 py-2 mt-3" style="color:rgba(99,102,241,0.5);">${t(lang, 'settings')}</div>
+      <div class="text-xs font-semibold uppercase tracking-widest px-3 py-2 mt-3" style="color:rgba(255,77,0,0.5);">${t(lang, 'settings')}</div>
       ${navLink('/platforms', 'fa-plug', t(lang, 'platforms'), activePage)}
       ${navLink('/billing', 'fa-credit-card', t(lang, 'billing'), activePage)}
+      ${navLink('/affiliate', 'fa-handshake', 'Programme Partenaire', activePage)}
       ${navLink('/settings', 'fa-gear', t(lang, 'settings'), activePage)}
     </nav>
 
     <!-- AI Status -->
     <div class="p-4 border-t" style="border-color:rgba(255,255,255,0.04);">
-      <div class="glass rounded-xl p-3" style="background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.05));border-color:rgba(99,102,241,0.18);">
+      <div class="glass rounded-xl p-3" style="background:linear-gradient(135deg,rgba(255,77,0,0.08),rgba(255,107,43,0.05));border-color:rgba(255,77,0,0.18);">
         <div class="flex items-center gap-2 mb-2">
-          <div class="w-2 h-2 rounded-full bg-emerald-400 blink flex-shrink-0" style="box-shadow:0 0 6px #34d399;"></div>
-          <span class="text-xs font-bold" style="color:#6ee7b7;letter-spacing:0.08em;">AI ENGINE ACTIF</span>
+          <div class="w-2 h-2 rounded-full bg-brand-400 blink flex-shrink-0" style="box-shadow:0 0 6px #FF4D00;"></div>
+          <span class="text-xs font-bold" style="color:#FF6B2B;letter-spacing:0.08em;">AI ENGINE ACTIF</span>
         </div>
         <div class="text-xs text-slate-500" id="ai-status-text">${t(lang, 'active_campaigns')}: 47</div>
         <div class="progress-bar mt-2">
-          <div class="progress-fill bg-gradient-to-r from-brand-500 to-purple-500" style="width:73%" id="ai-progress"></div>
+          <div class="progress-fill bg-gradient-to-r from-brand-600 to-brand-400" style="width:73%" id="ai-progress"></div>
         </div>
       </div>
     </div>
@@ -635,7 +630,7 @@ export function shell(
     <!-- User Profile -->
     <div class="p-4 border-t" style="border-color:rgba(255,255,255,0.04);">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0" id="user-avatar">JD</div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-brand-300 flex items-center justify-center text-xs font-bold text-white flex-shrink-0" id="user-avatar">JD</div>
         <div class="flex-1 min-w-0">
           <div class="text-sm font-semibold text-white truncate" id="user-name">John Doe</div>
           <div class="text-xs truncate" style="color:rgba(148,163,184,0.5);" id="user-email">john@acmecorp.com</div>
@@ -648,7 +643,7 @@ export function shell(
   </aside>
 
   <!-- ── Bottom Navigation (mobile only) ── -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-2" style="background:rgba(3,5,13,0.96);backdrop-filter:saturate(1.8) blur(20px);border-top:1px solid rgba(255,255,255,0.07);" id="bottom-nav">
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-2" style="background:rgba(8,8,15,0.96);backdrop-filter:saturate(1.8) blur(20px);border-top:1px solid rgba(255,255,255,0.07);" id="bottom-nav">
     <a href="/dashboard" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${activePage==='dashboard'?'text-brand-400':'text-slate-500 hover:text-slate-300'}">
       <i class="fas fa-chart-line text-base"></i>
       <span class="text-[10px] font-medium">Dashboard</span>
@@ -688,16 +683,16 @@ export function shell(
         <button id="theme-toggle" onclick="toggleTheme()" class="theme-toggle glass rounded-lg w-8 h-8 flex items-center justify-center transition-all icon-btn" title="${t(lang, 'dark_mode')} / ${t(lang, 'light_mode')}">
           <i id="theme-icon" class="fas fa-moon text-slate-400 text-xs"></i>
         </button>
-        <button class="hidden sm:flex glass rounded-xl px-3 py-1.5 text-xs items-center gap-2 transition-all" onclick="showAIStatus()" style="border-color:rgba(99,102,241,0.15);">
+        <button class="hidden sm:flex glass rounded-xl px-3 py-1.5 text-xs items-center gap-2 transition-all" onclick="showAIStatus()" style="border-color:rgba(255,77,0,0.15);">
           <i class="fas fa-robot text-brand-400 text-xs"></i>
           <span class="text-slate-300">AI</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 blink" style="box-shadow:0 0 4px #34d399;"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-400 blink" style="box-shadow:0 0 4px #FF4D00;"></span>
         </button>
         <button class="glass rounded-lg w-8 h-8 flex items-center justify-center transition-all relative icon-btn" onclick="toggleNotifications()" id="notif-btn">
           <i class="fas fa-bell text-slate-400 text-xs"></i>
-          <span class="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-red-500" style="border:1.5px solid #03050d;box-shadow:0 0 6px rgba(239,68,68,0.6);" id="notif-badge"></span>
+          <span class="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-slate-500" style="border:1.5px solid #08080F;box-shadow:0 0 6px rgba(122,122,122,0.6);" id="notif-badge"></span>
         </button>
-        <a href="/campaigns" class="bg-gradient-to-r from-brand-600 to-purple-600 hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all" style="box-shadow:0 4px 14px rgba(99,102,241,0.3);">
+        <a href="/campaigns" class="bg-gradient-to-r from-brand-700 to-brand-500 hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all" style="box-shadow:0 4px 14px rgba(255,77,0,0.3);">
           <i class="fas fa-plus text-xs"></i>
           <span class="hidden sm:inline">${t(lang, 'new_campaign')}</span>
         </a>
@@ -729,30 +724,30 @@ export function shell(
     <div class="glass frosted neon-border rounded-2xl w-full max-w-2xl p-6 animate-fadeIn" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between mb-5">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center flex-shrink-0 liquid-glow">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-600 to-brand-400 flex items-center justify-center flex-shrink-0 liquid-glow">
             <i class="fas fa-brain text-white text-sm"></i>
           </div>
           <div>
             <h3 class="font-bold text-white">AI Engine Status</h3>
-            <p class="text-xs text-emerald-400">All systems operational</p>
+            <p class="text-xs text-brand-400">All systems operational</p>
           </div>
         </div>
         <button onclick="closeAIStatus()" class="text-slate-500 hover:text-slate-300 transition-colors icon-btn w-7 h-7 glass rounded-lg flex items-center justify-center"><i class="fas fa-times text-xs"></i></button>
       </div>
       <div class="grid grid-cols-2 gap-4 mb-5">
         ${aiStatusCard('Campaign Optimizer', '94.2%', 'accuracy', 'fa-chart-line', 'brand')}
-        ${aiStatusCard('Creative Generator', 'Active', 'generating 3 creatives', 'fa-wand-magic-sparkles', 'purple')}
-        ${aiStatusCard('Budget Allocator', '$12,450', 'managed today', 'fa-dollar-sign', 'emerald')}
-        ${aiStatusCard('Audience Predictor', '87.6%', 'CTR prediction accuracy', 'fa-bullseye', 'amber')}
+        ${aiStatusCard('Creative Generator', 'Active', 'generating 3 creatives', 'fa-wand-magic-sparkles', 'brand')}
+        ${aiStatusCard('Budget Allocator', '$12,450', 'managed today', 'fa-dollar-sign', 'brand')}
+        ${aiStatusCard('Audience Predictor', '87.6%', 'CTR prediction accuracy', 'fa-bullseye', 'brand')}
       </div>
-      <div class="glass rounded-xl p-4" style="background:rgba(99,102,241,0.04);border-color:rgba(99,102,241,0.12);">
+      <div class="glass rounded-xl p-4" style="background:rgba(255,77,0,0.04);border-color:rgba(255,77,0,0.12);">
         <div class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">${t(lang, 'overview')}</div>
         <div class="space-y-2 text-xs">
           ${aiLogEntry('Scaled "Summer Sale" budget +10% — ROAS improved to 4.2x', 'brand', '2 min')}
-          ${aiLogEntry('Killed 2 underperforming creatives (CTR < 0.8%) in TikTok', 'red', '8 min')}
-          ${aiLogEntry('Generated 4 new UGC video variants for "Product Launch"', 'purple', '15 min')}
-          ${aiLogEntry('Detected audience saturation — expanding lookalike to 3%', 'amber', '23 min')}
-          ${aiLogEntry('Reallocated $500 Facebook → Google — predicted +18% ROAS', 'emerald', '31 min')}
+          ${aiLogEntry('Killed 2 underperforming creatives (CTR < 0.8%) in TikTok', 'slate', '8 min')}
+          ${aiLogEntry('Generated 4 new UGC video variants for "Product Launch"', 'brand', '15 min')}
+          ${aiLogEntry('Detected audience saturation — expanding lookalike to 3%', 'brand', '23 min')}
+          ${aiLogEntry('Reallocated $500 Facebook → Google — predicted +18% ROAS', 'brand', '31 min')}
         </div>
       </div>
     </div>
@@ -762,20 +757,20 @@ export function shell(
   <div id="tenant-menu" class="hidden fixed ${isRTL ? 'right-4' : 'left-4'} z-50 animate-fadeIn" style="top: 88px;">
     <div class="w-60 glass frosted rounded-xl shadow-2xl">
       <div class="p-3 border-b" style="border-color:rgba(255,255,255,0.06);">
-        <div class="text-xs font-semibold uppercase tracking-widest" style="color:rgba(99,102,241,0.6);">${t(lang, 'workspace')}</div>
+        <div class="text-xs font-semibold uppercase tracking-widest" style="color:rgba(255,77,0,0.6);">${t(lang, 'workspace')}</div>
       </div>
       <div class="p-2 space-y-1">
-        <button onclick="switchTenant('Acme Corp','A','from-brand-500 to-purple-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all" style="background:rgba(99,102,241,0.10);border:1px solid rgba(99,102,241,0.15);">
-          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">A</div>
+        <button onclick="switchTenant('Acme Corp','A','from-brand-600 to-brand-400')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all" style="background:rgba(255,77,0,0.10);border:1px solid rgba(255,77,0,0.15);">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-brand-600 to-brand-400 flex items-center justify-center text-xs font-bold text-white">A</div>
           <span class="text-sm text-slate-300 font-medium">Acme Corp</span>
           <i class="fas fa-check text-brand-400 text-xs ml-auto"></i>
         </button>
-        <button onclick="switchTenant('TechStart Inc','T','from-emerald-500 to-teal-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-all">
-          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold text-white">T</div>
+        <button onclick="switchTenant('TechStart Inc','T','from-brand-500 to-brand-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-all">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-xs font-bold text-white">T</div>
           <span class="text-sm text-slate-300 font-medium">TechStart Inc</span>
         </button>
-        <button onclick="switchTenant('Fashion Brand','F','from-pink-500 to-rose-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-all">
-          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-xs font-bold text-white">F</div>
+        <button onclick="switchTenant('Fashion Brand','F','from-brand-500 to-brand-600')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-all">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-xs font-bold text-white">F</div>
           <span class="text-sm text-slate-300 font-medium">Fashion Brand</span>
         </button>
         <div class="border-t pt-2 mt-2" style="border-color:rgba(255,255,255,0.06);">
@@ -808,7 +803,7 @@ export function shell(
       const icon = document.getElementById('theme-icon');
       if (theme === 'light') {
         html.classList.remove('dark'); html.classList.add('light');
-        if (icon) icon.className = 'fas fa-sun text-amber-400 text-xs';
+        if (icon) icon.className = 'fas fa-sun text-brand-400 text-xs';
       } else {
         html.classList.remove('light'); html.classList.add('dark');
         if (icon) icon.className = 'fas fa-moon text-slate-400 text-xs';
@@ -883,8 +878,8 @@ export function shell(
 function navLink(href: string, icon: string, label: string, active: string): string {
   const isActive = active === href
   const badges: Record<string, string> = {
-    '/campaigns': '<span class="ml-auto text-xs px-1.5 py-0.5 rounded-full font-semibold" style="background:rgba(99,102,241,0.18);color:#a5b4fc;">47</span>',
-    '/ai-engine': '<span class="ml-auto text-xs px-1.5 py-0.5 rounded-full blink font-semibold" style="background:rgba(52,211,153,0.15);color:#6ee7b7;">Live</span>',
+    '/campaigns': '<span class="ml-auto text-xs px-1.5 py-0.5 rounded-full font-semibold" style="background:rgba(255,77,0,0.18);color:#a5b4fc;">47</span>',
+    '/ai-engine': '<span class="ml-auto text-xs px-1.5 py-0.5 rounded-full blink font-semibold" style="background:rgba(255,77,0,0.15);color:#FF6B2B;">Live</span>',
   }
   return `<a href="${href}" class="sidebar-link ${isActive ? 'active' : ''} flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500">
     <i class="fas ${icon} w-4 text-center flex-shrink-0 ${isActive ? 'text-brand-400' : 'text-slate-600'}"></i>
@@ -895,11 +890,11 @@ function navLink(href: string, icon: string, label: string, active: string): str
 
 function notificationsHTML(): string {
   const items = [
-    { icon: 'fa-arrow-trend-up', color: 'emerald', text: 'Campaign "Summer Sale" scaled +10% — ROAS 4.2x', time: '2 min' },
-    { icon: 'fa-triangle-exclamation', color: 'amber', text: 'Budget warning: Google Ads at 85% daily limit', time: '15 min' },
-    { icon: 'fa-scissors', color: 'red', text: '3 creatives paused — CTR below 0.8% threshold', time: '32 min' },
-    { icon: 'fa-wand-magic-sparkles', color: 'purple', text: 'AI generated 6 new video creatives ready', time: '1h' },
-    { icon: 'fa-users', color: 'blue', text: 'New lookalike audience: 2.3M potential reach', time: '2h' },
+    { icon: 'fa-arrow-trend-up', color: 'brand', text: 'Campaign "Summer Sale" scaled +10% — ROAS 4.2x', time: '2 min' },
+    { icon: 'fa-triangle-exclamation', color: 'brand', text: 'Budget warning: Google Ads at 85% daily limit', time: '15 min' },
+    { icon: 'fa-scissors', color: 'slate', text: '3 creatives paused — CTR below 0.8% threshold', time: '32 min' },
+    { icon: 'fa-wand-magic-sparkles', color: 'brand', text: 'AI generated 6 new video creatives ready', time: '1h' },
+    { icon: 'fa-users', color: 'slate', text: 'New lookalike audience: 2.3M potential reach', time: '2h' },
   ]
   return items.map(i => `
     <div class="flex items-start gap-3 p-3 glass rounded-xl hover:bg-white/5 cursor-pointer transition-all card-hover">

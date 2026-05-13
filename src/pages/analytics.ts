@@ -28,7 +28,7 @@ export function renderAnalytics(lang: Lang = 'en'): string {
         <i class="fas fa-file-csv text-xs"></i> CSV
       </button>
       <button onclick="exportPDF()" class="glass hover:bg-white/10 text-slate-400 text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all">
-        <i class="fas fa-file-pdf text-xs text-red-400"></i> PDF
+        <i class="fas fa-file-pdf text-xs text-slate-400"></i> PDF
       </button>
     </div>
   </div>
@@ -36,10 +36,10 @@ export function renderAnalytics(lang: Lang = 'en'): string {
 
   <!-- Top KPIs -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    ${analyticsKPI('Total Revenue', '$601,225', '+24.3%', 'fa-dollar-sign', 'emerald', 'vs last period')}
+    ${analyticsKPI('Total Revenue', '$601,225', '+24.3%', 'fa-dollar-sign', 'brand', 'vs last period')}
     ${analyticsKPI('Total Ad Spend', '$124,850', '+18.4%', 'fa-credit-card', 'brand', 'vs last period')}
-    ${analyticsKPI('Blended ROAS', '4.82x', '+0.6x', 'fa-chart-line', 'blue', 'revenue/spend')}
-    ${analyticsKPI('Total Conversions', '8,294', '+22.1%', 'fa-check-circle', 'amber', 'all platforms')}
+    ${analyticsKPI('Blended ROAS', '4.82x', '+0.6x', 'fa-chart-line', 'slate', 'revenue/spend')}
+    ${analyticsKPI('Total Conversions', '8,294', '+22.1%', 'fa-check-circle', 'brand', 'all platforms')}
   </div>
 
   <!-- Charts Row -->
@@ -48,17 +48,17 @@ export function renderAnalytics(lang: Lang = 'en'): string {
     <div class="glass rounded-2xl p-5">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-bold text-white">ROAS Over Time</h3>
-        <span class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-1 rounded-full">↑ 14.2%</span>
+        <span class="text-xs text-brand-400 font-semibold bg-brand-500/10 px-2 py-1 rounded-full">↑ 14.2%</span>
       </div>
-      <canvas id="roasChart" height="200"></canvas>
+      <div style="position:relative;height:240px"><canvas id="roasChart"></canvas></div>
     </div>
     <!-- CPA Trend -->
     <div class="glass rounded-2xl p-5">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-bold text-white">Cost Per Acquisition</h3>
-        <span class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-1 rounded-full">↓ 8.6%</span>
+        <span class="text-xs text-brand-400 font-semibold bg-brand-500/10 px-2 py-1 rounded-full">↓ 8.6%</span>
       </div>
-      <canvas id="cpaChart" height="200"></canvas>
+      <div style="position:relative;height:240px"><canvas id="cpaChart"></canvas></div>
     </div>
   </div>
 
@@ -67,10 +67,10 @@ export function renderAnalytics(lang: Lang = 'en'): string {
     <h3 class="font-bold text-white mb-4">Conversion Funnel — All Platforms</h3>
     <div class="grid grid-cols-5 gap-3">
       ${funnelStep('Impressions', '2.4M', '100%', 'brand', true)}
-      ${funnelStep('Clicks', '72,340', '3.01%', 'blue', true)}
-      ${funnelStep('Landing Page', '58,872', '81.4%', 'purple', true)}
-      ${funnelStep('Add to Cart', '18,438', '31.3%', 'amber', true)}
-      ${funnelStep('Purchase', '8,294', '45.0%', 'emerald', false)}
+      ${funnelStep('Clicks', '72,340', '3.01%', 'slate', true)}
+      ${funnelStep('Landing Page', '58,872', '81.4%', 'brand', true)}
+      ${funnelStep('Add to Cart', '18,438', '31.3%', 'brand', true)}
+      ${funnelStep('Purchase', '8,294', '45.0%', 'brand', false)}
     </div>
   </div>
 
@@ -93,11 +93,11 @@ export function renderAnalytics(lang: Lang = 'en'): string {
           </tr>
         </thead>
         <tbody id="platform-table-body">
-          ${platformRow('Facebook', 'fab fa-facebook', '#1877F2', '$42,350', '$173,635', '4.10x', '$0.84', '3.1%', '3,420', '$12.38', [3.8,3.9,4.0,4.2,4.1,4.3,4.1])}
-          ${platformRow('Google', 'fab fa-google', '#4285F4', '$35,100', '$182,520', '5.20x', '$1.12', '4.8%', '2,810', '$12.49', [4.8,5.0,4.9,5.1,5.3,5.2,5.2])}
-          ${platformRow('Instagram', 'fab fa-instagram', '#E1306C', '$25,200', '$95,760', '3.80x', '$0.71', '2.7%', '1,402', '$17.97', [3.4,3.6,3.8,3.7,3.9,3.8,3.8])}
+          ${platformRow('Facebook', 'fab fa-facebook', '#A8A8A8', '$42,350', '$173,635', '4.10x', '$0.84', '3.1%', '3,420', '$12.38', [3.8,3.9,4.0,4.2,4.1,4.3,4.1])}
+          ${platformRow('Google', 'fab fa-google', '#A8A8A8', '$35,100', '$182,520', '5.20x', '$1.12', '4.8%', '2,810', '$12.49', [4.8,5.0,4.9,5.1,5.3,5.2,5.2])}
+          ${platformRow('Instagram', 'fab fa-instagram', '#A8A8A8', '$25,200', '$95,760', '3.80x', '$0.71', '2.7%', '1,402', '$17.97', [3.4,3.6,3.8,3.7,3.9,3.8,3.8])}
           ${platformRow('TikTok', 'fab fa-tiktok', '#010101', '$15,400', '$70,840', '4.60x', '$0.43', '8.2%', '418', '$36.84', [4.0,4.2,4.4,4.5,4.6,4.7,4.6])}
-          ${platformRow('Snapchat', 'fab fa-snapchat', '#FFFC00', '$6,800', '$14,280', '2.10x', '$0.36', '1.9%', '244', '$27.87', [2.2,2.0,1.9,2.1,2.0,1.8,2.1])}
+          ${platformRow('Snapchat', 'fab fa-snapchat', '#A8A8A8', '$6,800', '$14,280', '2.10x', '$0.36', '1.9%', '244', '$27.87', [2.2,2.0,1.9,2.1,2.0,1.8,2.1])}
         </tbody>
       </table>
     </div>
@@ -112,9 +112,9 @@ export function renderAnalytics(lang: Lang = 'en'): string {
       <h3 class="font-bold text-white">AI Analytics Insights</h3>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      ${insightCard('fa-arrow-trend-up', 'emerald', 'Growth Opportunity', 'TikTok ROAS trending up 18% — increase budget by $5K/day predicted to yield +$23K revenue this week.')}
-      ${insightCard('fa-triangle-exclamation', 'amber', 'Budget Alert', 'Google CPC increased 12% this week. AI recommends shifting 15% of budget to Instagram for better ROAS.')}
-      ${insightCard('fa-lightbulb', 'purple', 'Creative Insight', 'Video creatives outperforming static by 2.8x CTR. Recommend converting 4 top static ads to video format.')}
+      ${insightCard('fa-arrow-trend-up', 'brand', 'Growth Opportunity', 'TikTok ROAS trending up 18% — increase budget by $5K/day predicted to yield +$23K revenue this week.')}
+      ${insightCard('fa-triangle-exclamation', 'brand', 'Budget Alert', 'Google CPC increased 12% this week. AI recommends shifting 15% of budget to Instagram for better ROAS.')}
+      ${insightCard('fa-lightbulb', 'brand', 'Creative Insight', 'Video creatives outperforming static by 2.8x CTR. Recommend converting 4 top static ads to video format.')}
     </div>
   </div>
 
@@ -126,18 +126,18 @@ export function renderAnalytics(lang: Lang = 'en'): string {
       labels: ['W1','W2','W3','W4','W5','W6','W7','W8'],
       datasets: [{
         label: 'Blended ROAS', data: [3.8, 4.0, 4.1, 3.9, 4.3, 4.5, 4.7, 4.82],
-        borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.15)', fill: true,
-        tension: 0.4, pointRadius: 4, borderWidth: 2.5, pointBackgroundColor: '#6366f1'
+        borderColor: '#FF4D00', backgroundColor: 'rgba(99,102,241,0.15)', fill: true,
+        tension: 0.4, pointRadius: 4, borderWidth: 2.5, pointBackgroundColor: '#FF4D00'
       },{
         label: 'Target ROAS', data: [3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.5],
-        borderColor: '#ef4444', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false
+        borderColor: '#7A7A7A', borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false
       }]
     },
     options: { responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } },
+      plugins: { legend: { labels: { color: '#7A7A7A', font: { size: 10 } } } },
       scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', font: { size: 10 }, callback: v => v + 'x' } }
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7A7A7A', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7A7A7A', font: { size: 10 }, callback: v => v + 'x' } }
       }
     }
   });
@@ -155,8 +155,8 @@ export function renderAnalytics(lang: Lang = 'en'): string {
     options: { responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', font: { size: 10 }, callback: v => '$' + v } }
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7A7A7A', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7A7A7A', font: { size: 10 }, callback: v => '$' + v } }
       }
     }
   });
@@ -230,7 +230,7 @@ export function renderAnalytics(lang: Lang = 'en'): string {
   }
 
   function showToast(msg, type) {
-    const colors = { success:'bg-emerald-500/20 border-emerald-500/30 text-emerald-300', error:'bg-red-500/20 border-red-500/30 text-red-300', info:'bg-brand-500/20 border-brand-500/30 text-brand-300' }
+    const colors = { success:'bg-brand-500/20 border-brand-500/30 text-brand-300', error:'bg-slate-500/20 border-slate-500/30 text-slate-300', info:'bg-brand-500/20 border-brand-500/30 text-brand-300' }
     const t = document.createElement('div')
     t.className = 'fixed bottom-5 right-5 z-[9999] px-4 py-3 rounded-xl border text-sm font-semibold backdrop-blur-xl ' + (colors[type]||colors.success)
     t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000)
@@ -251,7 +251,7 @@ function analyticsKPI(label: string, value: string, change: string, icon: string
       <div class="w-10 h-10 rounded-xl bg-${color}-500/20 flex items-center justify-center">
         <i class="fas ${icon} text-${color}-400"></i>
       </div>
-      <span class="text-xs font-bold ${pos ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'} px-2 py-1 rounded-full">${change}</span>
+      <span class="text-xs font-bold ${pos ? 'text-brand-400 bg-brand-500/10' : 'text-slate-400 bg-slate-500/10'} px-2 py-1 rounded-full">${change}</span>
     </div>
     <div class="text-2xl font-black text-white">${value}</div>
     <div class="text-sm text-slate-400 mt-0.5">${label}</div>
@@ -272,7 +272,7 @@ function funnelStep(label: string, value: string, rate: string, color: string, a
 
 function platformRow(name: string, icon: string, color: string, spend: string, rev: string, roas: string, cpc: string, ctr: string, conv: string, cpa: string, trend: number[]): string {
   const roasNum = parseFloat(roas)
-  const roasColor = roasNum >= 4.5 ? 'text-emerald-400' : roasNum >= 3.5 ? 'text-blue-400' : 'text-amber-400'
+  const roasColor = roasNum >= 4.5 ? 'text-brand-400' : roasNum >= 3.5 ? 'text-slate-400' : 'text-brand-400'
   const trendUp = trend[trend.length - 1] >= trend[0]
   return `<tr class="border-b border-white/5 hover:bg-white/3 transition-all" data-platform="${name}">
     <td class="py-3">
@@ -282,14 +282,14 @@ function platformRow(name: string, icon: string, color: string, spend: string, r
       </div>
     </td>
     <td class="py-3 text-right text-slate-400">${spend}</td>
-    <td class="py-3 text-right font-semibold text-emerald-400">${rev}</td>
+    <td class="py-3 text-right font-semibold text-brand-400">${rev}</td>
     <td class="py-3 text-right font-bold ${roasColor}">${roas}</td>
     <td class="py-3 text-right text-slate-400">${cpc}</td>
     <td class="py-3 text-right text-slate-400">${ctr}</td>
     <td class="py-3 text-right text-slate-300">${conv}</td>
     <td class="py-3 text-right text-slate-400">${cpa}</td>
     <td class="py-3 pl-4">
-      <span class="text-xs ${trendUp ? 'text-emerald-400' : 'text-red-400'}">
+      <span class="text-xs ${trendUp ? 'text-brand-400' : 'text-slate-400'}">
         <i class="fas fa-arrow-${trendUp ? 'up' : 'down'} mr-1"></i>${trendUp ? '+' : ''}${((trend[trend.length-1] - trend[0]) / trend[0] * 100).toFixed(1)}%
       </span>
     </td>

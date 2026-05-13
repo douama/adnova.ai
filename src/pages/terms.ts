@@ -16,7 +16,7 @@ export function renderTerms(): string {
 <nav class="nav-blur fixed top-0 left-0 right-0 z-50" style="height:64px">
   <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
     <a href="/" class="flex items-center gap-2" aria-label="AdNova AI Home">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M16 7 L9 23 L16 18 L23 23 Z" fill="white" opacity="0.95"/><path d="M16 7 L16 18 L23 23 Z" fill="white" opacity="0.5"/></svg>
       <span class="font-bold text-white text-lg" style="font-family:'Space Grotesk',sans-serif">AdNova AI</span>
     </a>
     <div class="flex items-center gap-4">
@@ -30,23 +30,23 @@ export function renderTerms(): string {
 <main class="max-w-4xl mx-auto px-6 pt-28 pb-24">
   <!-- Header -->
   <div class="mb-12">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-indigo-300 border border-indigo-500/20 mb-6">
-      <i class="fas fa-file-contract text-indigo-400"></i>
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-slate-300 border border-slate-500/20 mb-6">
+      <i class="fas fa-file-contract text-slate-400"></i>
       Legal Document
     </div>
     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif">
       Terms of <span class="glow-text">Service</span>
     </h1>
     <p class="text-slate-400 text-lg">Last updated: April 2, 2026 · Effective: April 2, 2026</p>
-    <div class="mt-6 p-4 rounded-xl glass border border-amber-500/20 flex gap-3">
-      <i class="fas fa-info-circle text-amber-400 mt-0.5 flex-shrink-0"></i>
+    <div class="mt-6 p-4 rounded-xl glass border border-brand-500/20 flex gap-3">
+      <i class="fas fa-info-circle text-brand-400 mt-0.5 flex-shrink-0"></i>
       <p class="text-slate-300 text-sm">Please read these Terms of Service carefully before using AdNova AI. By accessing or using our platform, you agree to be bound by these terms.</p>
     </div>
   </div>
 
   <!-- TOC -->
   <div class="glass-card rounded-2xl p-6 mb-10">
-    <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><i class="fas fa-list text-indigo-400"></i> Table of Contents</h2>
+    <h2 class="text-white font-semibold mb-4 flex items-center gap-2"><i class="fas fa-list text-slate-400"></i> Table of Contents</h2>
     <ol class="grid md:grid-cols-2 gap-2 text-sm">
       ${[
         ['1', 'Acceptance of Terms'],
@@ -65,7 +65,7 @@ export function renderTerms(): string {
         ['14', 'Governing Law'],
         ['15', 'Changes to Terms'],
         ['16', 'Contact Us'],
-      ].map(([n, t]) => `<li><a href="#section-${n}" class="text-indigo-400 hover:text-indigo-300 transition-colors">${n}. ${t}</a></li>`).join('')}
+      ].map(([n, t]) => `<li><a href="#section-${n}" class="text-slate-400 hover:text-slate-300 transition-colors">${n}. ${t}</a></li>`).join('')}
     </ol>
   </div>
 
@@ -115,13 +115,13 @@ export function renderTerms(): string {
       <p class="mb-4">AdNova AI offers the following subscription tiers:</p>
       <div class="grid md:grid-cols-3 gap-4 mb-6">
         <div class="glass-card rounded-xl p-4">
-          <div class="text-indigo-400 font-semibold mb-2">Starter</div>
+          <div class="text-slate-400 font-semibold mb-2">Starter</div>
           <div class="text-2xl font-bold text-white mb-1">$299<span class="text-sm text-slate-400">/mo</span></div>
           <ul class="text-sm text-slate-400 space-y-1">
             <li>10 campaigns</li><li>$10K ad spend/mo</li><li>2 platforms</li><li>2 team members</li>
           </ul>
         </div>
-        <div class="glass-card rounded-xl p-4 border-indigo-500/30">
+        <div class="glass-card rounded-xl p-4 border-slate-500/30">
           <div class="text-orange-400 font-semibold mb-2">Growth</div>
           <div class="text-2xl font-bold text-white mb-1">$799<span class="text-sm text-slate-400">/mo</span></div>
           <ul class="text-sm text-slate-400 space-y-1">
@@ -129,7 +129,7 @@ export function renderTerms(): string {
           </ul>
         </div>
         <div class="glass-card rounded-xl p-4">
-          <div class="text-emerald-400 font-semibold mb-2">Enterprise</div>
+          <div class="text-brand-400 font-semibold mb-2">Enterprise</div>
           <div class="text-2xl font-bold text-white mb-1">Custom</div>
           <ul class="text-sm text-slate-400 space-y-1">
             <li>Unlimited campaigns</li><li>Unlimited spend</li><li>All platforms</li><li>Unlimited seats</li>
@@ -172,7 +172,7 @@ export function renderTerms(): string {
 
     <section id="section-7">
       <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-3"><span class="section-num">7</span> Data Privacy & Security</h2>
-      <p class="mb-4">Your privacy is important to us. Our collection, use, and disclosure of personal information is governed by our <a href="/privacy" class="text-indigo-400 hover:underline">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+      <p class="mb-4">Your privacy is important to us. Our collection, use, and disclosure of personal information is governed by our <a href="/privacy" class="text-slate-400 hover:underline">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
       <p class="mb-4"><strong class="text-white">Data Security:</strong> We implement industry-standard security measures including AES-256 encryption at rest, TLS 1.3 in transit, SOC 2 Type II compliance, and GDPR compliance. However, no method of transmission over the Internet is 100% secure.</p>
       <p class="mb-4"><strong class="text-white">Ad Platform Data:</strong> When you connect Ad Platform accounts, you grant us access to campaign data, performance metrics, and audience information necessary to provide the Service. We do not sell this data to third parties.</p>
       <p><strong class="text-white">Data Retention:</strong> We retain your data for the duration of your subscription and for up to 90 days after termination to allow for data export. Some aggregated, anonymized data may be retained for longer periods to improve our AI models.</p>
@@ -264,25 +264,25 @@ export function renderTerms(): string {
       <p class="mb-4">If you have any questions about these Terms of Service, please contact us:</p>
       <div class="glass-card rounded-xl p-6 grid md:grid-cols-3 gap-6">
         <div class="text-center">
-          <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-2">
-            <i class="fas fa-envelope text-indigo-400"></i>
+          <div class="w-10 h-10 rounded-full bg-slate-500/20 flex items-center justify-center mx-auto mb-2">
+            <i class="fas fa-envelope text-slate-400"></i>
           </div>
           <div class="text-white font-medium text-sm">Email</div>
-          <a href="mailto:legal@adnova.ai" class="text-indigo-400 hover:underline text-sm">legal@adnova.ai</a>
+          <a href="mailto:legal@adnova.ai" class="text-slate-400 hover:underline text-sm">legal@adnova.ai</a>
         </div>
         <div class="text-center">
-          <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
-            <i class="fas fa-building text-purple-400"></i>
+          <div class="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center mx-auto mb-2">
+            <i class="fas fa-building text-brand-400"></i>
           </div>
           <div class="text-white font-medium text-sm">Address</div>
           <p class="text-slate-400 text-sm">AdNova AI, Inc.<br>251 Little Falls Drive<br>Wilmington, DE 19808</p>
         </div>
         <div class="text-center">
-          <div class="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center mx-auto mb-2">
-            <i class="fas fa-headset text-cyan-400"></i>
+          <div class="w-10 h-10 rounded-full bg-slate-500/20 flex items-center justify-center mx-auto mb-2">
+            <i class="fas fa-headset text-slate-400"></i>
           </div>
           <div class="text-white font-medium text-sm">Support</div>
-          <a href="mailto:support@adnova.ai" class="text-indigo-400 hover:underline text-sm">support@adnova.ai</a>
+          <a href="mailto:support@adnova.ai" class="text-slate-400 hover:underline text-sm">support@adnova.ai</a>
         </div>
       </div>
     </section>
@@ -293,8 +293,8 @@ export function renderTerms(): string {
   <div class="mt-16 pt-10 border-t border-white/10">
     <h3 class="text-white font-semibold mb-4">Related Legal Documents</h3>
     <div class="flex flex-wrap gap-3">
-      <a href="/privacy" class="glass px-4 py-2 rounded-lg text-indigo-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
-      <a href="/" class="glass px-4 py-2 rounded-lg text-indigo-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-home"></i> Back to Home</a>
+      <a href="/privacy" class="glass px-4 py-2 rounded-lg text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+      <a href="/" class="glass px-4 py-2 rounded-lg text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2"><i class="fas fa-home"></i> Back to Home</a>
       <a href="/register" class="btn-primary px-4 py-2 rounded-lg text-white text-sm font-semibold flex items-center gap-2"><i class="fas fa-rocket"></i> Start Free Trial</a>
     </div>
   </div>
@@ -302,14 +302,14 @@ export function renderTerms(): string {
 
 <!-- FOOTER MINIMAL -->
 <footer class="border-t border-white/10 py-8 text-center text-slate-500 text-sm">
-  <p>© 2026 AdNova AI, Inc. All rights reserved. · <a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy Policy</a> · <a href="/terms" class="text-indigo-400">Terms of Service</a></p>
+  <p>© 2026 AdNova AI, Inc. All rights reserved. · <a href="/privacy" class="hover:text-slate-400 transition-colors">Privacy Policy</a> · <a href="/terms" class="text-slate-400">Terms of Service</a></p>
 </footer>
 
 <style>
 .page-bg-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:-1}
 .orb-1{width:600px;height:600px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(99,102,241,0.12),transparent 70%)}
 .orb-2{width:400px;height:400px;bottom:0;left:-100px;background:radial-gradient(circle,rgba(168,85,247,0.08),transparent 70%)}
-.section-num{width:2rem;height:2rem;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:white;flex-shrink:0}
+.section-num{width:2rem;height:2rem;background:linear-gradient(135deg,#FF4D00,#a855f7);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:white;flex-shrink:0}
 section{scroll-margin-top:80px}
 </style>
 </body>
