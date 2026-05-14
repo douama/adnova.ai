@@ -126,34 +126,35 @@ export function Footer() {
               Autonomous advertising for modern brands. Built on Claude.
             </p>
 
-            {/* Status indicator */}
-            <a
-              href="https://status.adnova.ai"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/[0.05] px-3 py-1.5 text-xs text-emerald-400 transition-colors hover:border-emerald-500/40"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              </span>
-              All systems operational
-            </a>
+            {/* Status pill + socials : single row on mobile + desktop */}
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-3 sm:mt-6">
+              <a
+                href="https://status.adnova.ai"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-9 items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/[0.05] px-3 text-xs text-emerald-400 transition-colors hover:border-emerald-500/40"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                <span className="whitespace-nowrap">All systems operational</span>
+              </a>
 
-            {/* Socials */}
-            <div className="mt-6 flex items-center gap-2">
-              {SOCIAL.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.label}
-                  className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-white/[0.02] text-muted-strong transition-all hover:-translate-y-0.5 hover:border-orange/40 hover:bg-orange/[0.06] hover:text-orange"
-                >
-                  {s.svg}
-                </a>
-              ))}
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {SOCIAL.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={s.label}
+                    className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-white/[0.02] text-muted-strong transition-all hover:-translate-y-0.5 hover:border-orange/40 hover:bg-orange/[0.06] hover:text-orange"
+                  >
+                    {s.svg}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
