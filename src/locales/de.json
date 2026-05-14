@@ -223,7 +223,15 @@
     "monthlyRevenueLabel": "Monatlicher Umsatz gesteuert",
     "monthlyRevenueSub": "Via KI-Entscheidungen in den letzten 30 Tagen.",
     "savedLabel": "Gespart pro Marketer / Monat",
-    "savedSub": "Median über 2.412 aktive Marken."
+    "savedSub": "Median über 2.412 aktive Marken.",
+    "items": [
+      { "quote": "AdNova ging in zwei Wochen von null darauf, 2 Mio. $ unseres monatlichen Meta-Spendings zu steuern. Der ROAS sprang im ersten Monat von 2,8× auf 5,1×. Ich habe den Ads Manager seither nicht mehr geöffnet.", "role": "Head of Growth, Lemonade" },
+      { "quote": "Allein der UGC-Generator hat uns letztes Quartal 40.000 $ Produktionskosten gespart. TikTok-CPM um 42 % gesunken, Konversionsrate verdoppelt. Das ist die Zukunft des Performance Marketings.", "role": "CMO, Glossier" },
+      { "quote": "Wir managen 38 Kundenkonten mit einem 3er-Team. AdNova übernimmt die Optimierung — wir konzentrieren uns auf Strategie. Umsatz pro Kopf in 6 Monaten verdreifacht. Absoluter Game Changer.", "role": "Founder, Waveform Agency" },
+      { "quote": "Wir haben den Meta-CAC in drei Monaten um 47 % gesenkt. Allein die automatische Budget-Umverteilung hat AdNovas Jahresvertrag in den ersten sechs Wochen bezahlt. Der Preis ist fast peinlich.", "role": "Performance Marketing Lead, Notion" },
+      { "quote": "Was früher zwei Tage dauerte — Reports ziehen, Plattformen abgleichen, Zusammenfassungen schreiben — landet jetzt jeden Montag um 8 Uhr in meinem Posteingang. Fertig. Besser als das, was wir früher geschrieben haben.", "role": "Director of Acquisition, Allbirds" },
+      { "quote": "Vier andere Plattformen vor AdNova ausprobiert. Das ist die einzige, bei der die KI sich wirklich wie ein Teammitglied anfühlt, nicht wie ein Feature. ROAS +38 %, Headcount unverändert.", "role": "CEO, Patreon" }
+    ]
   },
   "plans": {
     "ctaStartTrial": "Kostenlos testen",

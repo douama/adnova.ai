@@ -223,7 +223,15 @@
     "monthlyRevenueLabel": "Receita mensal encaminhada",
     "monthlyRevenueSub": "Via decisões IA nos últimos 30 dias.",
     "savedLabel": "Poupadas por marketer / mês",
-    "savedSub": "Mediana em 2 412 marcas ativas."
+    "savedSub": "Mediana em 2 412 marcas ativas.",
+    "items": [
+      { "quote": "A AdNova passou de zero a gerir 2 M$ do nosso gasto mensal Meta em duas semanas. O ROAS saltou de 2,8× para 5,1× no primeiro mês. Não voltei a abrir o Ads Manager desde então.", "role": "Head of Growth, Lemonade" },
+      { "quote": "Só o gerador UGC poupou-nos 40.000 $ em custos de produção no último trimestre. CPM TikTok desceu 42 % e a taxa de conversão duplicou. Este é o futuro do performance marketing.", "role": "CMO, Glossier" },
+      { "quote": "Gerimos 38 contas-cliente com uma equipa de 3. A AdNova trata da otimização — nós focamos na estratégia. Receita per capita triplicou em 6 meses. Game changer absoluto.", "role": "Fundadora, Waveform Agency" },
+      { "quote": "Cortámos o CAC Meta em 47 % em três meses. Só a realocação automática de orçamento pagou o contrato anual da AdNova em seis semanas. O preço é quase embaraçoso.", "role": "Performance Marketing Lead, Notion" },
+      { "quote": "O que demorava dois dias — tirar relatórios, reconciliar plataformas, escrever resumos — chega agora à minha caixa todas as segundas às 8h. Feito. Melhor do que o que escrevíamos.", "role": "Director of Acquisition, Allbirds" },
+      { "quote": "Testei quatro plataformas antes da AdNova. Esta é a única onde a IA se sente como um membro de equipa, não uma feature. ROAS +38 %, headcount intacto.", "role": "CEO, Patreon" }
+    ]
   },
   "plans": {
     "ctaStartTrial": "Teste grátis",

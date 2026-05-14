@@ -3,10 +3,19 @@ import { Quote, Star, TrendingUp } from "lucide-react";
 import { Container } from "../ui/container";
 import { TESTIMONIALS } from "../../data/testimonials";
 
+type LocalisedTestimonial = { quote: string; role: string };
+
 export function Testimonials() {
   const { t } = useTranslation();
-  const featured = TESTIMONIALS[0]!;
-  const rest = TESTIMONIALS.slice(1, 5);
+  const items = t("testimonials.items", { returnObjects: true }) as LocalisedTestimonial[];
+  // Zip locale data with the canonical name/photo from TESTIMONIALS
+  const localised = TESTIMONIALS.map((base, i) => ({
+    ...base,
+    quote: items[i]?.quote ?? base.quote,
+    role: items[i]?.role ?? base.role,
+  }));
+  const featured = localised[0]!;
+  const rest = localised.slice(1, 5);
 
   return (
     <section className="pb-14 pt-6 sm:pb-20 sm:pt-10">
