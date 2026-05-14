@@ -2,8 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Design tokens (3-color system: white / black / orange) ────────────── */
+/* ─── Design tokens — Light mode (default) ────────────────────────────── */
 :root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --card2: #f4f4f5;
+  --border: rgba(0, 0, 0, 0.08);
+  --border2: rgba(0, 0, 0, 0.14);
+  --orange: #ff4d00;
+  --orange2: #ff6b2b;
+  /* "white" in dark = "ink" — under light it's deep near-black for max contrast */
+  --white: #0a0a0a;
+  --text: #2a2a2a;
+  --muted: #6a6a6a;
+  --muted2: #4a4a4a;
+}
+
+/* ─── Design tokens — Dark mode ────────────────────────────────────────── */
+.dark {
   --bg: #000000;
   --surface: #0a0a0a;
   --card: #111111;
@@ -117,4 +134,19 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+}
+
+/* ─── Light mode polish ─────────────────────────────────────────────────
+   Many tints throughout the app are literal `bg-white/[0.03]` (a white
+   wash that shows up on dark surfaces but is invisible on white).
+   These overrides invert the wash in light mode so cards, hover-states
+   and subtle glass surfaces still pop. */
+:root:not(.dark) [class*="bg-white/[0.0"] {
+  background-color: rgba(0, 0, 0, 0.035) !important;
+}
+:root:not(.dark) [class*="hover:bg-white/[0.0"]:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+:root:not(.dark) body {
+  background: var(--bg);
 }

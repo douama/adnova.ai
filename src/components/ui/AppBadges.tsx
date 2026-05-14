@@ -1,6 +1,7 @@
 // App Store + Google Play badges. SVG glyphs are public marks (CC0 / fair-use
 // reproduction for store linking). Both badges link to a "coming soon" anchor
 // for now since the native apps ship in a later phase.
+import { useTranslation } from "react-i18next";
 
 type BadgeProps = {
   className?: string;
@@ -9,6 +10,7 @@ type BadgeProps = {
 };
 
 export function AppStoreBadge({ className = "", href, soon = false }: BadgeProps) {
+  const { t } = useTranslation();
   const Wrapper = href ? "a" : "div";
   const wrapperProps = href
     ? { href, target: "_blank" as const, rel: "noreferrer" }
@@ -24,7 +26,7 @@ export function AppStoreBadge({ className = "", href, soon = false }: BadgeProps
       </svg>
       <div className="flex min-w-0 flex-col items-start leading-none">
         <span className="text-[8px] font-medium uppercase tracking-wider text-white/70 sm:text-[9px]">
-          {soon ? "Coming soon" : "Download on the"}
+          {soon ? t("footer.mobileApp.comingSoon") : "Download on the"}
         </span>
         <span className="text-sm font-semibold text-white sm:text-base">App Store</span>
       </div>
@@ -33,6 +35,7 @@ export function AppStoreBadge({ className = "", href, soon = false }: BadgeProps
 }
 
 export function GooglePlayBadge({ className = "", href, soon = false }: BadgeProps) {
+  const { t } = useTranslation();
   const Wrapper = href ? "a" : "div";
   const wrapperProps = href
     ? { href, target: "_blank" as const, rel: "noreferrer" }
@@ -63,7 +66,7 @@ export function GooglePlayBadge({ className = "", href, soon = false }: BadgePro
       </svg>
       <div className="flex min-w-0 flex-col items-start leading-none">
         <span className="text-[8px] font-medium uppercase tracking-wider text-white/70 sm:text-[9px]">
-          {soon ? "Coming soon" : "Get it on"}
+          {soon ? t("footer.mobileApp.comingSoon") : "Get it on"}
         </span>
         <span className="text-sm font-semibold text-white sm:text-base">Google Play</span>
       </div>

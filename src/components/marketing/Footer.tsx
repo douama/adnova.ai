@@ -1,39 +1,43 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Logo } from "../ui/logo";
 import { Container } from "../ui/container";
 import { AppStoreBadge, GooglePlayBadge } from "../ui/AppBadges";
 
 type Col = { title: string; links: { to: string; label: string }[] };
 
-const COLS: Col[] = [
-  {
-    title: "Product",
-    links: [
-      { to: "/#features", label: "Features" },
-      { to: "/pricing", label: "Pricing" },
-      { to: "/customers", label: "Customers" },
-      { to: "/vs-smartly", label: "vs Smartly" },
-      { to: "/blog", label: "Blog" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { to: "/about", label: "About" },
-      { to: "/careers", label: "Careers" },
-      { to: "/partners", label: "Partners" },
-      { to: "/affiliate/apply", label: "Become an affiliate" },
-      { to: "/press-kit", label: "Press kit" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { to: "/terms", label: "Terms" },
-      { to: "/privacy", label: "Privacy" },
-    ],
-  },
-];
+function useFooterCols(): Col[] {
+  const { t } = useTranslation();
+  return [
+    {
+      title: t("footer.cols.product"),
+      links: [
+        { to: "/#features", label: t("footer.links.features") },
+        { to: "/pricing", label: t("footer.links.pricing") },
+        { to: "/customers", label: t("footer.links.customers") },
+        { to: "/vs-smartly", label: t("footer.links.vsSmartly") },
+        { to: "/blog", label: t("footer.links.blog") },
+      ],
+    },
+    {
+      title: t("footer.cols.company"),
+      links: [
+        { to: "/about", label: t("footer.links.about") },
+        { to: "/careers", label: t("footer.links.careers") },
+        { to: "/partners", label: t("footer.links.partners") },
+        { to: "/affiliate/apply", label: t("footer.links.affiliate") },
+        { to: "/press-kit", label: t("footer.links.pressKit") },
+      ],
+    },
+    {
+      title: t("footer.cols.legal"),
+      links: [
+        { to: "/terms", label: t("footer.links.terms") },
+        { to: "/privacy", label: t("footer.links.privacy") },
+      ],
+    },
+  ];
+}
 
 const SOCIAL: { label: string; href: string; svg: React.ReactNode }[] = [
   {
@@ -75,6 +79,8 @@ const SOCIAL: { label: string; href: string; svg: React.ReactNode }[] = [
 ];
 
 export function Footer() {
+  const { t } = useTranslation();
+  const cols = useFooterCols();
   return (
     <footer className="relative overflow-hidden border-t border-border">
       {/* Subtle orange glow accent */}
@@ -100,14 +106,13 @@ export function Footer() {
           <div className="relative flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-orange">
-                Mobile app
+                {t("footer.mobileApp.kicker")}
               </p>
               <h3 className="mt-2 text-2xl font-bold tracking-tighter text-ink sm:text-3xl">
-                AdNova in <em>your pocket</em>.
+                {t("footer.mobileApp.title1")} <em>{t("footer.mobileApp.title2")}</em>.
               </h3>
               <p className="mt-2 max-w-md text-sm text-body">
-                Push notifications on every AI decision. Approve / reject from your home
-                screen. Native iOS + Android, launching Q3 2026.
+                {t("footer.mobileApp.subtitle")}
               </p>
             </div>
             <div className="flex w-full shrink-0 items-center gap-2 sm:w-auto sm:gap-3">
@@ -122,9 +127,7 @@ export function Footer() {
         <div className="mt-14 flex flex-col gap-10 md:grid md:grid-cols-[1.6fr_repeat(3,1fr)] md:gap-12">
           <div>
             <Logo />
-            <p className="mt-4 max-w-xs text-sm text-muted">
-              Autonomous advertising for modern brands. Built on Claude.
-            </p>
+            <p className="mt-4 max-w-xs text-sm text-muted">{t("footer.tagline")}</p>
 
             {/* Status pill + socials : single row on mobile + desktop */}
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-3 sm:mt-6">
@@ -138,7 +141,7 @@ export function Footer() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
-                <span className="whitespace-nowrap">All systems operational</span>
+                <span className="whitespace-nowrap">{t("footer.status")}</span>
               </a>
 
               <div className="flex items-center gap-1.5 sm:gap-2">
@@ -161,7 +164,7 @@ export function Footer() {
           {/* Nav columns : forced 3-col on mobile so Product / Company / Legal
               stay on a single horizontal row; flow into the parent grid on md+. */}
           <div className="grid grid-cols-3 gap-4 sm:gap-8 md:contents">
-            {COLS.map((col) => (
+            {cols.map((col) => (
               <FooterCol key={col.title} col={col} />
             ))}
           </div>
@@ -170,22 +173,22 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col-reverse items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:gap-3">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted">
-            <span>© 2026 AdNova AI. All rights reserved.</span>
+            <span>{t("footer.copyright")}</span>
             <span className="hidden h-3 w-px bg-border sm:inline-block" />
-            <span>Made with care · Paris × San Francisco</span>
+            <span>{t("footer.credit")}</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Link
               to="/login"
               className="rounded-lg px-2.5 py-1.5 text-xs text-muted-strong transition-colors hover:bg-white/[0.04] hover:text-ink"
             >
-              Sign in
+              {t("footer.signIn")}
             </Link>
             <Link
               to="/register"
               className="inline-flex items-center gap-1.5 rounded-lg border border-orange/40 bg-orange/[0.08] px-2.5 py-1.5 text-xs font-medium text-orange transition-colors hover:bg-orange/[0.14]"
             >
-              Get started <span aria-hidden>→</span>
+              {t("footer.getStarted")} <span aria-hidden>→</span>
             </Link>
           </div>
         </div>

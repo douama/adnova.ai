@@ -1,0 +1,106 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "customers": "Customers",
+    "blog": "Blog",
+    "vsSmartly": "vs Smartly",
+    "signIn": "Sign in",
+    "getStarted": "Get started",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "theme": {
+      "toggleToLight": "Switch to light mode",
+      "toggleToDark": "Switch to dark mode"
+    }
+  },
+  "hero": {
+    "badge": "Live · 2,412 brands scaling on AdNova",
+    "title1": "Your acquisition lead,",
+    "title2": "in an API",
+    "subtitle": "AdNova runs your campaigns across 9 platforms, generates creatives, optimizes spend and writes reports — while you sleep.",
+    "metric": "Average ROAS: 4.82×",
+    "ctaPrimary": "Start free trial",
+    "ctaSecondary": "See how it works",
+    "trialNote": "14-day free trial · No credit card · Cancel anytime"
+  },
+  "cta": {
+    "title1": "Ready to let AI",
+    "title2": "run your ads",
+    "subtitle": "Join 2,400+ brands shaving manual campaign work, spending smarter and scaling faster — powered by Claude.",
+    "primary": "Start free trial",
+    "secondary": "See pricing",
+    "note": "14-day free trial · No credit card · Cancel anytime"
+  },
+  "footer": {
+    "tagline": "Autonomous advertising for modern brands. Built on Claude.",
+    "status": "All systems operational",
+    "mobileApp": {
+      "kicker": "Mobile app",
+      "title1": "AdNova in",
+      "title2": "your pocket",
+      "subtitle": "Push notifications on every AI decision. Approve / reject from your home screen. Native iOS + Android, launching Q3 2026.",
+      "comingSoon": "Coming soon"
+    },
+    "cols": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "customers": "Customers",
+      "vsSmartly": "vs Smartly",
+      "blog": "Blog",
+      "about": "About",
+      "careers": "Careers",
+      "partners": "Partners",
+      "affiliate": "Become an affiliate",
+      "pressKit": "Press kit",
+      "terms": "Terms",
+      "privacy": "Privacy"
+    },
+    "copyright": "© 2026 AdNova AI. All rights reserved.",
+    "credit": "Made with care · Paris × San Francisco",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
+  },
+  "auth": {
+    "login": {
+      "title1": "Welcome",
+      "title2": "back",
+      "subtitle": "Sign in to your AdNova workspace.",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "you@brand.com",
+      "passwordPlaceholder": "Your password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "noAccount": "Don't have an account?",
+      "register": "Create one"
+    },
+    "register": {
+      "title1": "Start your",
+      "title2": "free trial",
+      "subtitle": "14 days. No credit card. Cancel anytime.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "company": "Company",
+      "email": "Work email",
+      "password": "Password",
+      "passwordHint": "Min 8 characters",
+      "submit": "Create my workspace",
+      "submitting": "Creating…",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "error": "Something went wrong"
+  }
+}

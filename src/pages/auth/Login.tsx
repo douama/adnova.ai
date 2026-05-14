@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthError } from "@supabase/supabase-js";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../stores/authStore";
 import { Logo } from "../../components/ui/logo";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { signIn, signInWithMagicLink } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,10 +59,10 @@ export function LoginPage() {
         <Logo />
 
         <h1 className="mt-12 text-center text-4xl font-bold tracking-tighter text-ink">
-          Welcome <em>back</em>.
+          {t("auth.login.title1")} <em>{t("auth.login.title2")}</em>.
         </h1>
         <p className="mt-3 text-center text-sm text-muted-strong">
-          Sign in to your AdNova workspace.
+          {t("auth.login.subtitle")}
         </p>
 
         <form
@@ -68,18 +70,18 @@ export function LoginPage() {
           className="mt-10 w-full rounded-2xl border border-border bg-card p-7"
         >
           <div className="flex flex-col gap-5">
-            <Field label="Work email">
+            <Field label={t("auth.login.email")}>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 required
-                placeholder="you@company.com"
+                placeholder={t("auth.login.emailPlaceholder")}
                 className="field-input"
               />
             </Field>
-            <Field label="Password">
+            <Field label={t("auth.login.password")}>
               <input
                 type="password"
                 value={password}
@@ -87,7 +89,7 @@ export function LoginPage() {
                 autoComplete="current-password"
                 required
                 minLength={8}
-                placeholder="At least 8 characters"
+                placeholder={t("auth.login.passwordPlaceholder")}
                 className="field-input"
               />
             </Field>
@@ -108,7 +110,8 @@ export function LoginPage() {
               disabled={submitting}
               className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-55 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             >
-              {submitting ? "Signing in…" : "Sign in"} <span aria-hidden>→</span>
+              {submitting ? t("auth.login.submitting") : t("auth.login.submit")}{" "}
+              <span aria-hidden>→</span>
             </button>
 
             <button
@@ -123,9 +126,9 @@ export function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-strong">
-          New to AdNova?{" "}
+          {t("auth.login.noAccount")}{" "}
           <Link to="/register" className="font-bold text-orange hover:text-orange-hover">
-            Start your free trial
+            {t("auth.login.register")}
           </Link>
         </p>
       </div>

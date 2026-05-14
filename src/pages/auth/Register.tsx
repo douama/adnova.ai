@@ -1,12 +1,14 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthError } from "@supabase/supabase-js";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../stores/authStore";
 import { supabase } from "../../lib/supabase";
 import { Logo } from "../../components/ui/logo";
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { signUp } = useAuth();
   const [form, setForm] = useState({
     firstName: "",
@@ -75,10 +77,10 @@ export function RegisterPage() {
         <Logo />
 
         <h1 className="mt-12 text-center text-4xl font-bold tracking-tighter text-ink sm:text-5xl">
-          Start your <em>free trial</em>.
+          {t("auth.register.title1")} <em>{t("auth.register.title2")}</em>.
         </h1>
         <p className="mt-3 text-center text-sm text-muted-strong">
-          Create your workspace in 30 seconds. No credit card.
+          {t("auth.register.subtitle")}
         </p>
 
         <form
@@ -87,7 +89,7 @@ export function RegisterPage() {
         >
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-4">
-              <Field label="First name">
+              <Field label={t("auth.register.firstName")}>
                 <input
                   type="text"
                   value={form.firstName}
@@ -98,7 +100,7 @@ export function RegisterPage() {
                   className="field-input"
                 />
               </Field>
-              <Field label="Last name">
+              <Field label={t("auth.register.lastName")}>
                 <input
                   type="text"
                   value={form.lastName}
@@ -111,7 +113,7 @@ export function RegisterPage() {
               </Field>
             </div>
 
-            <Field label="Company">
+            <Field label={t("auth.register.company")}>
               <input
                 type="text"
                 value={form.company}
@@ -123,7 +125,7 @@ export function RegisterPage() {
               />
             </Field>
 
-            <Field label="Work email">
+            <Field label={t("auth.register.email")}>
               <input
                 type="email"
                 value={form.email}
@@ -135,7 +137,7 @@ export function RegisterPage() {
               />
             </Field>
 
-            <Field label="Password">
+            <Field label={t("auth.register.password")}>
               <input
                 type="password"
                 value={form.password}
@@ -182,7 +184,7 @@ export function RegisterPage() {
               disabled={submitting}
               className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-55 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             >
-              {submitting ? "Creating account…" : "Create account"}{" "}
+              {submitting ? t("auth.register.submitting") : t("auth.register.submit")}{" "}
               <span aria-hidden>→</span>
             </button>
           </div>

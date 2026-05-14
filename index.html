@@ -20,6 +20,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..900&family=Fraunces:ital,opsz,wght@1,144,300..500&display=swap" rel="stylesheet" />
+    <script>
+      // Theme bootstrap — apply class before paint to avoid FOUC
+      (function () {
+        try {
+          var s = localStorage.getItem("adnova:theme");
+          var t = s === "light" || s === "dark"
+            ? s
+            : window.matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+          if (t === "dark") document.documentElement.classList.add("dark");
+        } catch (_) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
