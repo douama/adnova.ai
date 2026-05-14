@@ -14,6 +14,7 @@ import {
   Megaphone,
   Image as ImageIcon,
   Handshake,
+  KeyRound,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
 import { ThemeToggle } from "../ui/ThemeToggle";
@@ -36,6 +37,7 @@ const NAV_SECTIONS: { title: string; items: NavItem[] }[] = [
       { to: "/admin/campaigns", label: "Campaigns", icon: Megaphone },
       { to: "/admin/creatives", label: "Creatives", icon: ImageIcon },
       { to: "/admin/integrations", label: "AI Integrations", icon: Plug },
+      { to: "/admin/oauth-apps", label: "OAuth Apps", icon: KeyRound },
     ],
   },
   {

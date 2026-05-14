@@ -280,12 +280,48 @@ function ConnectModal({
 }) {
   const def = PLATFORMS.find((p) => p.id === platform);
   const hint = CREDENTIAL_HINTS[platform] ?? CREDENTIAL_HINTS.meta!;
+  const [oauthConfigured, setOauthConfigured] = useState<boolean | null>(null);
+  const [showManual, setShowManual] = useState(false);
   const [accessToken, setAccessToken] = useState("");
   const [accountId, setAccountId] = useState("");
   const [accountName, setAccountName] = useState("");
-  const [busy, setBusy] = useState<"test" | "create" | null>(null);
+  const [busy, setBusy] = useState<"test" | "create" | "oauth" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [testResult, setTestResult] = useState<string | null>(null);
+
+  // Probe whether OAuth is configured for this platform
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.rpc("is_oauth_configured", { p_platform: platform });
+      if (!cancelled) setOauthConfigured(Boolean(data));
+    })();
+    return () => { cancelled = true; };
+  }, [platform]);
+
+  async function startOAuth() {
+    setError(null);
+    setBusy("oauth");
+    try {
+      const redirectUri = `${window.location.origin}/oauth/callback`;
+      const { data, error } = await supabase.functions.invoke<{
+        ok?: boolean;
+        authorize_url?: string;
+        not_configured?: boolean;
+        error?: string;
+      }>("oauth-start", {
+        body: { tenant_id: tenantId, provider: platform, redirect_uri: redirectUri },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.authorize_url) throw new Error("No authorize URL returned");
+      // Hard navigate so the platform redirect back lands on our callback route
+      window.location.href = data.authorize_url;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "OAuth start failed");
+      setBusy(null);
+    }
+  }
 
   async function testIt() {
     setError(null);
@@ -372,6 +408,41 @@ function ConnectModal({
         </div>
 
         <div className="space-y-4 px-6 py-5">
+          {/* Primary CTA — Sign in with the platform via OAuth */}
+          {oauthConfigured ? (
+            <button
+              type="button"
+              onClick={startOAuth}
+              disabled={busy !== null}
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-orange text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow-sm hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              <PlatformIcon platform={platform} variant="mono" className="h-4 w-4" />
+              {busy === "oauth" ? "Redirecting…" : `Sign in with ${def?.name}`}
+            </button>
+          ) : oauthConfigured === false ? (
+            <div className="rounded-xl border border-orange/30 bg-orange/[0.04] px-4 py-3 text-xs text-body">
+              <strong className="text-orange">OAuth not yet active for {def?.name}.</strong>{" "}
+              The AdNova team is finalising the developer-app registration. Meanwhile you can
+              paste an access token from your {def?.name} developer dashboard below.
+            </div>
+          ) : null}
+
+          {oauthConfigured ? (
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-border" />
+              <button
+                type="button"
+                onClick={() => setShowManual((s) => !s)}
+                className="text-[10px] font-bold uppercase tracking-wider text-muted-strong hover:text-ink"
+              >
+                {showManual ? "Hide" : "Use access token instead"}
+              </button>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+          ) : null}
+
+          {(!oauthConfigured || showManual) ? (
+          <>
           <label className="block">
             <span className="text-xs font-medium text-muted-strong">{hint.tokenLabel}</span>
             <input
@@ -428,6 +499,8 @@ function ConnectModal({
               </span>
             </div>
           ) : null}
+          </>
+          ) : null}
 
           {error ? (
             <div className="rounded-xl border border-muted/30 bg-muted/[0.08] px-3 py-2 text-xs text-muted-strong">
@@ -443,14 +516,20 @@ function ConnectModal({
         </div>
 
         <div className="flex items-center justify-between gap-2 border-t border-border bg-bg/40 px-6 py-3">
-          <button
-            type="button"
-            onClick={testIt}
-            disabled={busy !== null || !accessToken}
-            className="inline-flex h-9 items-center rounded-lg border border-border bg-white/[0.03] px-3 text-xs font-medium text-body transition-colors hover:border-border-strong disabled:opacity-50"
-          >
-            {busy === "test" ? "Testing…" : "Test"}
-          </button>
+          {!oauthConfigured || showManual ? (
+            <button
+              type="button"
+              onClick={testIt}
+              disabled={busy !== null || !accessToken}
+              className="inline-flex h-9 items-center rounded-lg border border-border bg-white/[0.03] px-3 text-xs font-medium text-body transition-colors hover:border-border-strong disabled:opacity-50"
+            >
+              {busy === "test" ? "Testing…" : "Test"}
+            </button>
+          ) : (
+            <span className="text-[10px] text-muted">
+              You'll be redirected to {def?.name} to authorise.
+            </span>
+          )}
           <div className="flex gap-2">
             <button
               type="button"
@@ -460,13 +539,15 @@ function ConnectModal({
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={busy !== null || !accessToken}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-orange px-3.5 text-xs font-bold text-white transition-all hover:bg-orange-hover disabled:opacity-50"
-            >
-              {busy === "create" ? "Connecting…" : "Connect"}
-            </button>
+            {(!oauthConfigured || showManual) ? (
+              <button
+                type="submit"
+                disabled={busy !== null || !accessToken}
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-orange px-3.5 text-xs font-bold text-white transition-all hover:bg-orange-hover disabled:opacity-50"
+              >
+                {busy === "create" ? "Connecting…" : "Connect"}
+              </button>
+            ) : null}
           </div>
         </div>
       </form>

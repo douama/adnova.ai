@@ -1520,6 +1520,36 @@ export type Database = {
         Args: { p_affiliate_id: string; p_new_code?: string | null }
         Returns: Json
       }
+      set_oauth_app: {
+        Args: {
+          p_platform: string
+          p_client_id: string
+          p_client_secret: string
+          p_scopes?: string | null
+          p_notes?: string | null
+        }
+        Returns: Json
+      }
+      list_oauth_apps: {
+        Args: never
+        Returns: {
+          platform: string
+          client_id_preview: string
+          scopes: string
+          is_active: boolean
+          configured_at: string
+          configured_by_email: string | null
+          notes: string | null
+        }[]
+      }
+      delete_oauth_app: {
+        Args: { p_platform: string }
+        Returns: Json
+      }
+      is_oauth_configured: {
+        Args: { p_platform: string }
+        Returns: boolean
+      }
       list_ecommerce_connections: {
         Args: { _tenant_id: string }
         Returns: {

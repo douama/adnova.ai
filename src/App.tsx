@@ -27,6 +27,7 @@ import { AffiliateApplyPage } from "./pages/public/AffiliateApply";
 import { LoginPage } from "./pages/auth/Login";
 import { RegisterPage } from "./pages/auth/Register";
 import { AuthCallback } from "./pages/auth/AuthCallback";
+import { OAuthCallbackPage } from "./pages/auth/OAuthCallback";
 import { OnboardingPage } from "./pages/auth/Onboarding";
 
 // Tenant app
@@ -42,6 +43,7 @@ import { AffiliateDashboardPage } from "./pages/tenant/Affiliate";
 import { AdminLoginPage } from "./pages/admin/AdminLogin";
 import { AdminOverview } from "./pages/admin/Overview";
 import { AdminIntegrations } from "./pages/admin/Integrations";
+import { AdminOAuthApps } from "./pages/admin/OAuthApps";
 import { AdminTenants } from "./pages/admin/Tenants";
 import { AdminUsers } from "./pages/admin/Users";
 import { AdminAIMonitor } from "./pages/admin/AIMonitor";
@@ -106,6 +108,7 @@ export function App() {
         element={session ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
       />
       <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
       <Route
         path="/onboarding"
         element={
@@ -148,6 +151,7 @@ export function App() {
         <Route path="/admin/campaigns" element={<AdminCampaigns />} />
         <Route path="/admin/creatives" element={<AdminCreatives />} />
         <Route path="/admin/integrations" element={<AdminIntegrations />} />
+        <Route path="/admin/oauth-apps" element={<AdminOAuthApps />} />
         <Route path="/admin/tenants" element={<AdminTenants />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/affiliates" element={<AdminAffiliates />} />
