@@ -16,6 +16,8 @@ import {
   Handshake,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
+import { ThemeToggle } from "../ui/ThemeToggle";
+import { LanguageToggle } from "../ui/LanguageToggle";
 import { useAuth } from "../../stores/authStore";
 
 const NAV_SECTIONS: { title: string; items: NavItem[] }[] = [
@@ -132,19 +134,22 @@ function Topbar() {
     "?";
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-border bg-bg/60 px-6 backdrop-blur-xl sm:px-10">
+    <header className="glass-strong sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border px-6 sm:px-10">
       <div className="flex items-center gap-2 text-sm text-muted-strong">
         <Shield className="h-4 w-4 text-orange" strokeWidth={1.75} />
         <span>Super-admin console</span>
       </div>
 
-      <div className="relative">
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="grid h-9 w-9 place-items-center rounded-full border border-orange/30 bg-orange/[0.08] text-sm font-bold text-orange transition-colors hover:bg-orange/[0.12]"
-        >
-          {initial}
-        </button>
+      <div className="flex items-center gap-2">
+        <LanguageToggle />
+        <ThemeToggle />
+        <div className="relative">
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="grid h-9 w-9 place-items-center rounded-full border border-orange/30 bg-orange/[0.08] text-sm font-bold text-orange transition-colors hover:bg-orange/[0.12]"
+          >
+            {initial}
+          </button>
         {open ? (
           <>
             <div
@@ -173,6 +178,7 @@ function Topbar() {
             </div>
           </>
         ) : null}
+        </div>
       </div>
     </header>
   );

@@ -13,6 +13,8 @@ import {
   Handshake,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
+import { ThemeToggle } from "../ui/ThemeToggle";
+import { LanguageToggle } from "../ui/LanguageToggle";
 import { useAuth } from "../../stores/authStore";
 import { useCurrentTenant, useTenants } from "../../stores/tenantStore";
 
@@ -85,9 +87,13 @@ function Sidebar() {
 
 function Topbar() {
   return (
-    <header className="flex h-16 items-center justify-between border-b border-border bg-bg/60 px-6 backdrop-blur-xl sm:px-10">
+    <header className="glass-strong sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border px-6 sm:px-10">
       <TenantSwitcher />
-      <UserMenu />
+      <div className="flex items-center gap-2">
+        <LanguageToggle />
+        <ThemeToggle />
+        <UserMenu />
+      </div>
     </header>
   );
 }
