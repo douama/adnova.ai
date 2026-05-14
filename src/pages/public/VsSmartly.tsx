@@ -18,7 +18,7 @@ const ROWS: Row[] = [
   { feature: "Decision log + replay", smartly: "no", adnova: "yes" },
   { feature: "1-click rollback", smartly: "no", adnova: "yes" },
   { feature: "Live activity feed (Realtime)", smartly: "no", adnova: "yes" },
-  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$59–$599/mo" },
+  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$79–$799/mo" },
   { feature: "Annual contract required", smartly: "yes", adnova: "no", note: "Cancel anytime" },
   { feature: "Setup time", smartly: "partial", adnova: "yes", note: "30 sec, no demo call" },
   { feature: "% of ad spend pricing", smartly: "partial", adnova: "no", note: "Flat SaaS pricing" },
@@ -46,7 +46,7 @@ const USE_CASES = [
   },
   {
     title: "DTC brands scaling past $50K/mo",
-    body: "You outgrew Boost / RetailX / Triple Whale but Smartly is overkill. AdNova hits the sweet spot at $159/mo.",
+    body: "You outgrew Boost / RetailX / Triple Whale but Smartly is overkill. AdNova hits the sweet spot at $179/mo.",
   },
 ];
 
