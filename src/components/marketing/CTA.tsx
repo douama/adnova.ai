@@ -21,16 +21,16 @@ export function CTA() {
               Join 2,400+ brands shaving manual campaign work, spending smarter and scaling faster
               — powered by Claude.
             </p>
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-row items-stretch justify-center gap-2 sm:gap-3">
               <Link
                 to="/register"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange px-8 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5"
+                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-orange px-4 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5 sm:flex-none sm:px-8"
               >
                 Start free trial <span aria-hidden>→</span>
               </Link>
               <Link
                 to="/pricing"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border-strong bg-white/[0.03] px-7 text-sm font-medium text-body transition-all hover:border-white/25 hover:text-ink hover:bg-white/[0.06]"
+                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border-strong bg-white/[0.03] px-4 text-sm font-medium text-body transition-all hover:border-white/25 hover:text-ink hover:bg-white/[0.06] sm:flex-none sm:px-7"
               >
                 See pricing
               </Link>
