@@ -107,21 +107,33 @@ export function LoginPage() {
   );
 }
 
-// Mappe les codes d'erreur Supabase Auth → messages utilisateur lisibles
+// Mappe les codes d'erreur Supabase Auth → messages utilisateur lisibles.
+// IMPORTANT : Supabase renvoie 400 pour deux cas distincts qu'il faut différencier :
+//   - "Invalid login credentials" → mauvais email/password
+//   - "Email not confirmed" → user existe mais doit cliquer le lien de confirmation
+// Avant ce fix, les deux étaient affichés comme "incorrect" — confusion garantie.
 function mapAuthError(err: unknown): string {
   if (err instanceof AuthError) {
-    switch (err.status) {
-      case 400:
-        return err.message.toLowerCase().includes("invalid login")
-          ? "Email ou mot de passe incorrect."
-          : err.message;
-      case 422:
-        return "Email invalide ou compte non confirmé. Vérifie ta boîte mail.";
-      case 429:
-        return "Trop de tentatives. Réessaye dans quelques minutes.";
-      default:
-        return err.message || "Échec de connexion.";
+    const code = err.code ?? "";
+    const msg = err.message.toLowerCase();
+
+    // Email pas confirmé → message explicite avec next step
+    if (code === "email_not_confirmed" || msg.includes("email not confirmed")) {
+      return "Email non confirmé. Vérifie ta boîte mail (et les spams) pour le lien Supabase.";
     }
+    // Bad password ou bad email
+    if (code === "invalid_credentials" || msg.includes("invalid login")) {
+      return "Email ou mot de passe incorrect.";
+    }
+    // Email signup confirmé mais déjà existant
+    if (code === "email_address_invalid" || (err.status === 422 && msg.includes("invalid"))) {
+      return "Email invalide.";
+    }
+    // Rate limit
+    if (err.status === 429 || code === "over_request_rate_limit") {
+      return "Trop de tentatives. Réessaye dans quelques minutes.";
+    }
+    return err.message || "Échec de connexion.";
   }
   return "Erreur réseau. Réessaye.";
 }
