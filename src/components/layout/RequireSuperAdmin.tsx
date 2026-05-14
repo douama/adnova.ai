@@ -1,8 +1,15 @@
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../../stores/authStore";
 import { useIsSuperAdmin } from "../../lib/superAdmin";
 
 export function RequireSuperAdmin({ children }: { children: React.ReactNode }) {
+  const session = useAuth((s) => s.session);
   const state = useIsSuperAdmin();
+
+  // Not authenticated at all → send to admin login (separate UX from tenant)
+  if (!session) {
+    return <Navigate to="/admin/login" replace />;
+  }
 
   if (state.status === "loading") {
     return (
@@ -15,10 +22,10 @@ export function RequireSuperAdmin({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // Authenticated but NOT super-admin → show admin login with error
+  // (cleaner UX than redirecting to /dashboard which feels random)
   if (state.status === "error" || !state.isSuperAdmin) {
-    // Non-admins are redirected to the regular tenant dashboard.
-    // Server-side RLS will block them from data anyway.
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   return <>{children}</>;

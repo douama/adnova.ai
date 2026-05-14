@@ -37,6 +37,7 @@ import { AutomationPage } from "./pages/tenant/Automation";
 import { SettingsPage } from "./pages/tenant/Settings";
 
 // Super admin
+import { AdminLoginPage } from "./pages/admin/AdminLogin";
 import { AdminOverview } from "./pages/admin/Overview";
 import { AdminIntegrations } from "./pages/admin/Integrations";
 import { AdminTenants } from "./pages/admin/Tenants";
@@ -123,14 +124,15 @@ export function App() {
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
-      {/* Super-admin console */}
+      {/* Super-admin login (full-bleed, no admin layout) */}
+      <Route path="/admin/login" element={<AdminLoginPage />} />
+
+      {/* Super-admin console (gated by is_super_admin RPC) */}
       <Route
         element={
-          <RequireAuth>
-            <RequireSuperAdmin>
-              <AdminLayout />
-            </RequireSuperAdmin>
-          </RequireAuth>
+          <RequireSuperAdmin>
+            <AdminLayout />
+          </RequireSuperAdmin>
         }
       >
         <Route path="/admin" element={<AdminOverview />} />
