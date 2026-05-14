@@ -16,7 +16,7 @@ createRoot(root).render(
   <StrictMode>
     {env.isConfigured ? (
       <ErrorBoundary>
-        <BrowserRouter>
+        <BrowserRouter basename="/app">
           <App />
         </BrowserRouter>
       </ErrorBoundary>
