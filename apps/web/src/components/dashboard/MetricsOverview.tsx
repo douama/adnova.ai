@@ -1,52 +1,66 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
-import { TrendingUp, Users, DollarSign, Activity } from "lucide-react";
+import { TrendingUp, Megaphone, DollarSign, Activity } from "lucide-react";
+import { useTenantKpis } from "../../lib/queries";
+
+function fmtUsd(n: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(n);
+}
+
+function fmtNum(n: number) {
+  return new Intl.NumberFormat("en-US").format(Math.round(n));
+}
 
 export function MetricsOverview() {
+  const { data, loading, error } = useTenantKpis();
+
   const metrics = [
     {
-      title: "Total Spend (30d)",
-      value: "$12,450.00",
-      change: "+15.2%",
+      title: "Total Spend",
+      value: data ? fmtUsd(data.totalSpend) : "—",
       icon: DollarSign,
+      sub: loading ? "Chargement…" : error ? "Erreur" : "Cumul vie du compte",
     },
     {
-      title: "Average ROAS",
-      value: "2.84x",
-      change: "+0.4x",
+      title: "ROAS moyen",
+      value: data ? `${data.avgRoas.toFixed(2)}×` : "—",
       icon: TrendingUp,
+      sub: data && data.avgRoas >= 3.5 ? "Au-dessus du seuil" : "Sous le seuil 3.5×",
     },
     {
-      title: "Total Conversions",
-      value: "1,245",
-      change: "+12%",
+      title: "Conversions",
+      value: data ? fmtNum(data.totalConversions) : "—",
       icon: Activity,
+      sub: "Toutes campagnes",
     },
     {
-      title: "Active Campaigns",
-      value: "14",
-      change: "+2",
-      icon: Users,
+      title: "Campagnes actives",
+      value: data ? String(data.activeCampaigns) : "—",
+      icon: Megaphone,
+      sub: data ? "Live + Scaling" : "—",
     },
   ];
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {metrics.map((metric) => (
-        <Card key={metric.title}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {metric.title}
-            </CardTitle>
-            <metric.icon className="h-4 w-4 text-slate-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metric.value}</div>
-            <p className="text-xs text-brand-600 font-medium mt-1">
-              {metric.change} from last month
-            </p>
-          </CardContent>
-        </Card>
-      ))}
+      {metrics.map((metric) => {
+        const Icon = metric.icon;
+        return (
+          <Card key={metric.title}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
+              <Icon className="h-4 w-4 text-slate-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metric.value}</div>
+              <p className="mt-1 text-xs text-slate-500">{metric.sub}</p>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }
