@@ -2,9 +2,6 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Star, TrendingUp, Check } from "lucide-react";
 import { Container } from "../ui/container";
-import { PlatformIcon } from "../ui/PlatformIcon";
-
-const PROOF_PLATFORMS = ["meta", "google", "tiktok", "linkedin", "youtube", "pinterest"];
 
 export function Hero() {
   const { t } = useTranslation();
@@ -108,20 +105,6 @@ export function Hero() {
             </span>
           </div>
 
-          {/* Platform proof strip */}
-          <div className="mt-7">
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
-              {t("hero.worksWith")}
-            </p>
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 opacity-90">
-              {PROOF_PLATFORMS.map((p) => (
-                <PlatformIcon key={p} platform={p} className="h-9 w-9" />
-              ))}
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
-                +3
-              </span>
-            </div>
-          </div>
         </div>
       </Container>
     </section>
