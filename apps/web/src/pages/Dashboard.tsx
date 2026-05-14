@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCurrentTenant, useCurrentTenantId } from "../stores/tenantStore";
 import { MetricsOverview } from "../components/dashboard/MetricsOverview";
 import { CampaignsTable } from "../components/dashboard/CampaignsTable";
+import { AIModeBadge } from "../components/dashboard/AIModeBadge";
 import { Button } from "../components/ui/button";
 import { supabase } from "../lib/supabase";
 
@@ -71,16 +72,19 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
           <p className="mt-1 text-sm text-slate-500">
             {tenant ? `Workspace : ${tenant.name} · plan ${tenant.plan}` : "Chargement du workspace…"}
           </p>
         </div>
-        <Button onClick={askAI} disabled={running || !tenantId}>
-          {running ? "Claude analyse…" : "Demander à l'IA"}
-        </Button>
+        <div className="flex items-center gap-3">
+          <AIModeBadge />
+          <Button onClick={askAI} disabled={running || !tenantId}>
+            {running ? "Claude analyse…" : "Demander à l'IA"}
+          </Button>
+        </div>
       </div>
 
       {feedback ? (

@@ -1,27 +1,22 @@
-// ─── claude-decide ──────────────────────────────────────────────────────────
-// Le cœur de l'USP AdNova : Claude lit les KPIs des campagnes actives d'un
-// tenant et produit des décisions structurées (scale / kill / budget_realloc /
-// audience_expand). Chaque décision est tracée dans public.ai_decisions avec
-// raison, signals, confidence, et tags — la base du Decision Log.
+// ─── claude-decide v3 ──────────────────────────────────────────────────────
+// AdNova's AI ops engine. Two modes :
+//   - USER mode    : called by React client with a user JWT
+//                    → verifies membership via my_tenants RPC
+//                    → operates on body.tenant_id
+//   - SERVICE mode : called by pg_cron with Bearer <service_role_key>
+//                    → skips membership check
+//                    → still verifies tenant exists + ai_mode='autonomous'
+//                    → protection against infinite loop if tenant churned
 //
-// Auth flow :
-//   1. Frontend envoie le JWT user dans Authorization: Bearer <token>
-//   2. verify_jwt=true côté Supabase garantit que le token est valide
-//   3. On utilise le JWT user pour LIRE (RLS filtre par tenant)
-//   4. On utilise le service_role pour ÉCRIRE (avec validation manuelle
-//      du tenant_id en double sécurité)
-//
-// Secrets requis (Supabase Edge Function secrets) :
-//   - ANTHROPIC_API_KEY  (à set via le dashboard ou supabase secrets set)
-//   - Les ${SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY,
-//     SUPABASE_DB_URL} sont auto-injectés par le runtime Supabase.
+// Auth detection : compare Bearer token to SUPABASE_SERVICE_ROLE_KEY.
+// Exact match → service mode. Otherwise → user mode (verify_jwt server-side
+// guarantees the JWT is valid).
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const CLAUDE_MODEL = "claude-sonnet-4-5";
 
-// ─── CORS helpers ───────────────────────────────────────────────────────────
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -35,7 +30,6 @@ function jsonResponse(data: unknown, status = 200) {
   });
 }
 
-// ─── Tool schema exposé à Claude pour qu'il renvoie des décisions structurées
 const DECISION_TOOL = {
   name: "submit_decisions",
   description:
@@ -64,36 +58,12 @@ const DECISION_TOOL = {
                 "resume",
               ],
             },
-            action: {
-              type: "object",
-              description:
-                'Free-form action payload — e.g. {"op":"scale","pct":10,"new_budget":924}',
-            },
-            reason: {
-              type: "string",
-              description:
-                "Human-readable explanation (1-3 sentences) of WHY this decision was made, citing the metrics.",
-            },
-            confidence: {
-              type: "number",
-              minimum: 0,
-              maximum: 1,
-              description: "How confident in this decision (0-1).",
-            },
-            tags: {
-              type: "array",
-              items: { type: "string" },
-              description:
-                "Short tags like 'rule:auto-scale', 'guardrail:roas-min-3.5', 'confidence:94%'.",
-            },
-            revenue_uplift_usd: {
-              type: "number",
-              description: "Estimated revenue uplift in USD (optional).",
-            },
-            budget_saved_usd: {
-              type: "number",
-              description: "Estimated budget saved in USD (optional).",
-            },
+            action: { type: "object", description: 'e.g. {"op":"scale","pct":10}' },
+            reason: { type: "string" },
+            confidence: { type: "number", minimum: 0, maximum: 1 },
+            tags: { type: "array", items: { type: "string" } },
+            revenue_uplift_usd: { type: "number" },
+            budget_saved_usd: { type: "number" },
           },
           required: ["campaign_id", "type", "action", "reason", "confidence", "tags"],
         },
@@ -115,14 +85,9 @@ type ClaudeDecision = {
 };
 
 Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: CORS_HEADERS });
-  }
-  if (req.method !== "POST") {
-    return jsonResponse({ error: "Method not allowed" }, 405);
-  }
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS });
+  if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
 
-  // ─── 1. Parse + validate inputs ────────────────────────────────────────
   let body: { tenant_id?: string };
   try {
     body = await req.json();
@@ -134,7 +99,6 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: "tenant_id required" }, 400);
   }
 
-  // ─── 2. Secrets ────────────────────────────────────────────────────────
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -143,35 +107,66 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: "Server misconfigured (Supabase env missing)" }, 500);
   }
   if (!anthropicKey) {
-    return jsonResponse(
-      {
-        error:
-          "ANTHROPIC_API_KEY not set. Add via: supabase secrets set ANTHROPIC_API_KEY=sk-ant-...",
-      },
-      500
-    );
+    return jsonResponse({ error: "ANTHROPIC_API_KEY not set" }, 500);
   }
 
-  // ─── 3. Verify tenant access via user JWT (RLS-gated read) ────────────
-  const authHeader = req.headers.get("Authorization") ?? "";
-  const userClient = createClient(supabaseUrl, anonKey, {
-    global: { headers: { Authorization: authHeader } },
+  const adminClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false },
   });
 
-  const { data: tenants, error: tErr } = await userClient.rpc("my_tenants");
-  if (tErr) {
-    return jsonResponse({ error: `Auth check failed: ${tErr.message}` }, 401);
-  }
-  const isMember = (tenants ?? []).some(
-    (t: { tenant_id: string }) => t.tenant_id === tenantId
-  );
-  if (!isMember) {
-    return jsonResponse({ error: "You are not a member of this tenant" }, 403);
+  // ─── Auth mode detection ───────────────────────────────────────────────
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const bearer = authHeader.replace(/^Bearer\s+/i, "").trim();
+  const isServiceCall = bearer.length > 0 && bearer === serviceKey;
+
+  let readClient: SupabaseClient;
+
+  if (isServiceCall) {
+    // SERVICE mode — check tenant exists + ai_mode=autonomous + not churned
+    const { data: tenant, error: tErr } = await adminClient
+      .from("tenants")
+      .select("id, ai_mode, status")
+      .eq("id", tenantId)
+      .maybeSingle();
+
+    if (tErr) {
+      return jsonResponse({ error: `Tenant lookup failed: ${tErr.message}` }, 500);
+    }
+    if (!tenant) {
+      return jsonResponse({ error: "Tenant not found" }, 404);
+    }
+    if (tenant.status === "churned") {
+      return jsonResponse({ skipped: true, reason: "tenant churned" });
+    }
+    if (tenant.ai_mode !== "autonomous") {
+      return jsonResponse({
+        skipped: true,
+        reason: `tenant ai_mode is '${tenant.ai_mode}', not 'autonomous'`,
+      });
+    }
+    readClient = adminClient;
+  } else {
+    // USER mode — verify membership via my_tenants RPC
+    const userClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false },
+    });
+
+    const { data: tenants, error: tErr } = await userClient.rpc("my_tenants");
+    if (tErr) {
+      return jsonResponse({ error: `Auth check failed: ${tErr.message}` }, 401);
+    }
+    const isMember = (tenants ?? []).some(
+      (t: { tenant_id: string }) => t.tenant_id === tenantId
+    );
+    if (!isMember) {
+      return jsonResponse({ error: "You are not a member of this tenant" }, 403);
+    }
+    readClient = userClient;
   }
 
-  // ─── 4. Fetch campaigns to analyze ────────────────────────────────────
-  const { data: campaigns, error: cErr } = await userClient
+  // ─── Fetch campaigns ───────────────────────────────────────────────────
+  const { data: campaigns, error: cErr } = await readClient
     .from("campaigns")
     .select(
       "id, name, platform, status, daily_budget_usd, spend_total, revenue_total, impressions_total, clicks_total, conversions_total, roas, ctr, cpa"
@@ -187,11 +182,12 @@ Deno.serve(async (req: Request) => {
   if (!campaigns || campaigns.length === 0) {
     return jsonResponse({
       decisions: [],
-      message: "No active campaigns to analyze. Load demo data from the dashboard.",
+      mode: isServiceCall ? "cron" : "user",
+      message: "No active campaigns to analyze.",
     });
   }
 
-  // ─── 5. Build prompt + call Claude ────────────────────────────────────
+  // ─── Call Claude ───────────────────────────────────────────────────────
   const campaignsBrief = campaigns.map((c) => ({
     id: c.id,
     name: c.name,
@@ -218,10 +214,11 @@ Deno.serve(async (req: Request) => {
     "- Kill creatives/campaigns with CTR < 0.8% after 500+ impressions\n" +
     "- Reallocate budget from low-ROAS campaigns to high-ROAS ones (cross-platform OK)\n" +
     "- Confidence must be honest — low if the data is thin (<1000 impressions or <30 conversions)\n" +
-    "\nReturn 2-6 decisions max. Quality over quantity.";
+    "\nReturn 2-6 decisions max. Quality over quantity. If nothing meaningful to do, return empty array.";
 
   const userPrompt =
-    `Tenant ID: ${tenantId}\n\n` +
+    `Tenant ID: ${tenantId}\n` +
+    `Mode: ${isServiceCall ? "AUTONOMOUS LOOP (no user reviewing)" : "USER-TRIGGERED"}\n\n` +
     `Active campaigns (${campaigns.length}):\n` +
     JSON.stringify(campaignsBrief, null, 2) +
     "\n\nAnalyze these campaigns and submit your decisions via the submit_decisions tool.";
@@ -255,33 +252,26 @@ Deno.serve(async (req: Request) => {
   const claudeOutput = await anthropicRes.json();
   const toolUse = claudeOutput.content?.find((b: { type: string }) => b.type === "tool_use");
   if (!toolUse) {
-    return jsonResponse(
-      { error: "Claude did not return tool_use output", raw: claudeOutput },
-      502
-    );
+    return jsonResponse({ error: "Claude did not return tool_use", raw: claudeOutput }, 502);
   }
   const proposedDecisions = (toolUse.input?.decisions ?? []) as ClaudeDecision[];
   if (proposedDecisions.length === 0) {
-    return jsonResponse({ decisions: [], message: "Claude returned no decisions." });
+    return jsonResponse({
+      decisions: [],
+      mode: isServiceCall ? "cron" : "user",
+      message: "Claude returned no decisions — all campaigns appear optimal.",
+    });
   }
 
-  // ─── 6. Validate decisions against tenant's actual campaigns ──────────
+  // ─── Validate against tenant's actual campaigns ───────────────────────
   const tenantCampaignIds = new Set(campaigns.map((c) => c.id));
   const validDecisions = proposedDecisions.filter((d) => tenantCampaignIds.has(d.campaign_id));
 
   if (validDecisions.length === 0) {
-    return jsonResponse({
-      decisions: [],
-      message: "Claude proposed decisions but none matched the tenant's campaigns.",
-    });
+    return jsonResponse({ decisions: [], message: "No valid decisions matched tenant's campaigns." });
   }
 
-  // ─── 7. Insert decisions via service role (bypasses RLS — but we just
-  //         validated tenant_id, so this is safe) ───────────────────────
-  const adminClient = createClient(supabaseUrl, serviceKey, {
-    auth: { persistSession: false },
-  });
-
+  // ─── Insert via service role ───────────────────────────────────────────
   const inserts = validDecisions.map((d) => ({
     tenant_id: tenantId,
     campaign_id: d.campaign_id,
@@ -292,8 +282,8 @@ Deno.serve(async (req: Request) => {
     ai_mode: "autonomous" as const,
     status: "executed" as const,
     executed_at: new Date().toISOString(),
-    executed_by: "ai",
-    tags: d.tags,
+    executed_by: isServiceCall ? "cron" : "ai",
+    tags: [...d.tags, isServiceCall ? "trigger:cron" : "trigger:user"],
     revenue_uplift_usd: d.revenue_uplift_usd ?? null,
     budget_saved_usd: d.budget_saved_usd ?? null,
   }));
@@ -312,6 +302,7 @@ Deno.serve(async (req: Request) => {
     decisions: inserted ?? [],
     proposed_count: proposedDecisions.length,
     valid_count: validDecisions.length,
+    mode: isServiceCall ? "cron" : "user",
     model: CLAUDE_MODEL,
   });
 });
