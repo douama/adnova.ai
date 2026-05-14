@@ -11,8 +11,8 @@ type Row = {
 const ROWS: Row[] = [
   { feature: "Multi-platform sync (Meta, Google, TikTok, LinkedIn…)", smartly: "yes", adnova: "yes" },
   { feature: "9 platforms native support", smartly: "partial", adnova: "yes", note: "+ Pinterest, Snapchat, X, Amazon, YouTube" },
-  { feature: "AI creative generation (image)", smartly: "partial", adnova: "yes", note: "SDXL" },
-  { feature: "AI creative generation (UGC video)", smartly: "no", adnova: "yes", note: "HeyGen/Runway" },
+  { feature: "AI creative generation (image)", smartly: "partial", adnova: "yes", note: "AdNova Image Studio" },
+  { feature: "AI creative generation (UGC video)", smartly: "no", adnova: "yes", note: "AdNova Avatar + Video" },
   { feature: "Autonomous bid optimization", smartly: "yes", adnova: "yes" },
   { feature: "Cross-run memory (compounding-safe)", smartly: "no", adnova: "yes", note: "pgvector recall" },
   { feature: "Decision log + replay", smartly: "no", adnova: "yes" },
@@ -26,7 +26,7 @@ const ROWS: Row[] = [
   { feature: "White-label option", smartly: "yes", adnova: "yes" },
   { feature: "Self-serve (no salescall to start)", smartly: "no", adnova: "yes" },
   { feature: "Open-source visibility / GitHub", smartly: "no", adnova: "yes", note: "Source available" },
-  { feature: "Built on Claude", smartly: "no", adnova: "yes" },
+  { feature: "Proprietary autonomous reasoning", smartly: "no", adnova: "yes" },
 ];
 
 function Cell({ value }: { value: Row["smartly"] }) {

@@ -1,5 +1,5 @@
 // Bibliothèque de créatifs du tenant courant.
-// Upload manual + AI image generation via OpenAI gpt-image-1 (Edge Function).
+// Upload manual + AI image generation via the AdNova Image Studio (Edge Function).
 import { useEffect, useRef, useState } from "react";
 import { Upload, Trash2, Image as ImageIcon, Sparkles } from "lucide-react";
 import { useCreatives } from "../../lib/queries";
@@ -74,7 +74,7 @@ export function CreativesPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tighter text-ink">Creative Studio</h1>
           <p className="mt-1 text-sm text-muted-strong">
-            Workspace asset library · manual upload + AI generation (OpenAI gpt-image-1)
+            Workspace asset library · manual upload + AdNova Image Studio generation
           </p>
         </div>
         <input

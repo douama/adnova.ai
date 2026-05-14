@@ -7,7 +7,7 @@ type Item = { q: string; a: string };
 const FAQS: Item[] = [
   {
     q: "How autonomous is AdNova really?",
-    a: "Every 30 minutes Claude analyses your live campaigns, applies hard guardrails (no scaling under 3.5× ROAS, no daily lift over 15%, kill creatives under 0.8% CTR after 500 impressions), and either logs proposals or executes directly depending on your AI mode. You set the autonomy level per workspace.",
+    a: "Every 30 minutes our autonomous engine analyses your live campaigns, applies hard guardrails (no scaling under 3.5× ROAS, no daily lift over 15%, kill creatives under 0.8% CTR after 500 impressions), and either logs proposals or executes directly depending on your AI mode. You set the autonomy level per workspace.",
   },
   {
     q: "What happens if the AI makes a bad call?",
@@ -19,7 +19,7 @@ const FAQS: Item[] = [
   },
   {
     q: "Which AI models power the platform?",
-    a: "Decisions run on Claude Sonnet 4.5 (Anthropic). Image creatives use OpenAI gpt-image-1. Video on Runway Gen-4. UGC avatars on HeyGen Avatar IV. Costs are billed to your own provider accounts when you bring your keys, or via your AdNova subscription otherwise.",
+    a: "AdNova runs a tuned reasoning engine for autonomous decisions, a proprietary image studio for visuals, an in-house video synthesis pipeline for motion, and an avatar engine for UGC. The orchestration is our IP; the underlying weights stay under the hood. Enterprise customers can bring their own model keys for cost transparency.",
   },
   {
     q: "Can I cancel anytime?",
@@ -27,7 +27,7 @@ const FAQS: Item[] = [
   },
   {
     q: "Is it safe for my data?",
-    a: "Every workspace is RLS-locked at the database level (Postgres row-level security on Supabase). API keys for OpenAI / Runway / HeyGen never round-trip to the browser — only their last-4-char preview. We are SOC 2 Type II in audit, GDPR-aligned, and EU residency is available on Enterprise.",
+    a: "Every workspace is RLS-locked at the database level. Provider API keys never round-trip to the browser — only their last-4-char preview. We are SOC 2 Type II in audit, GDPR-aligned, and EU residency is available on Enterprise.",
   },
   {
     q: "How long until I see results?",

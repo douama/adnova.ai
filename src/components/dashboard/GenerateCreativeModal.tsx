@@ -279,7 +279,7 @@ export function GenerateCreativeModal({
               Generate with AI
             </h2>
             <p className="mt-0.5 text-xs text-muted">
-              Image: OpenAI · Video: Runway · UGC: HeyGen · demo mode if API key absent
+              Image Studio · Video Engine · Avatar Studio · demo mode while keys provision
             </p>
           </div>
           <button
@@ -303,21 +303,21 @@ export function GenerateCreativeModal({
                 onClick={() => setEngine("image")}
                 icon={<ImageIcon className="h-4 w-4" strokeWidth={1.75} />}
                 label="Image"
-                sub="OpenAI gpt-image-1"
+                sub="AdNova Image Studio"
               />
               <EngineBtn
                 active={engine === "video"}
                 onClick={() => setEngine("video")}
                 icon={<Video className="h-4 w-4" strokeWidth={1.75} />}
                 label="Video"
-                sub="Runway · 4-8s"
+                sub="AdNova Video Engine · 4-8s"
               />
               <EngineBtn
                 active={engine === "ugc"}
                 onClick={() => setEngine("ugc")}
                 icon={<Camera className="h-4 w-4" strokeWidth={1.75} />}
                 label="UGC video"
-                sub="HeyGen avatar"
+                sub="AdNova Avatar Studio"
               />
             </div>
           </div>
@@ -587,8 +587,8 @@ export function GenerateCreativeModal({
               </FormField>
               <div className="rounded-xl border border-border bg-bg p-3 text-xs text-muted">
                 Avatar &amp; voice selection — coming soon. Default avatar (female, US English) is
-                used. With HeyGen API key, you'll be able to pick from 100+ avatars + your own
-                custom-trained ones.
+                used. Once Avatar Studio is fully enabled, you'll be able to pick from 100+
+                avatars + your own custom-trained ones.
               </div>
             </>
           ) : null}

@@ -32,7 +32,7 @@ export const CUSTOMERS: CaseStudy[] = [
     metric3: "€2.4M",
     metric3label: "Revenue FY25 sur paid",
     quote:
-      "On payait Smartly $5K/mois + agence créa $7K/mois. Migration AdNova en 6 jours, économies de €4 200/mois, et ROAS +34% en 6 mois. Le mode Autonomous de Claude bat les règles Smartly à plate couture sur des budgets sous $200K/m.",
+      "On payait Smartly $5K/mois + agence créa $7K/mois. Migration AdNova en 6 jours, économies de €4 200/mois, et ROAS +34% en 6 mois. Le mode Autonomous bat les règles Smartly à plate couture sur des budgets sous $200K/m.",
     author: "Camille Roussel",
     authorRole: "Head of Acquisition",
     authorPhoto: "https://randomuser.me/api/portraits/women/65.jpg",
@@ -172,7 +172,7 @@ export const CUSTOMERS: CaseStudy[] = [
     challenge:
       "Marque PT bootstrappée, founder solo, budget marketing initial €3K/mois. Pas d'expertise paid. Croissance organique plafonnée.",
     solution:
-      "AdNova Starter ($299) en mode Autonomous. IA teste TikTok malgré scepticisme founder — TikTok devient canal #1 en mois 3. Génère 40 vidéos UGC/mois via HeyGen.",
+      "AdNova Starter ($299) en mode Autonomous. IA teste TikTok malgré scepticisme founder — TikTok devient canal #1 en mois 3. Génère 40 vidéos UGC/mois via Avatar Studio.",
     results: [
       "Revenue annuel : €48K → €240K (×5)",
       "TikTok = 64% du revenue paid",

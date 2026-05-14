@@ -87,9 +87,9 @@ export async function seedDemoData(tenantId: string): Promise<void> {
       campaignIndex: 1,
       type: "create",
       action: { op: "generate_variants", count: 4, format: "video" },
-      reason: 'Hook actuel "Découvrez notre nouveauté" performe à 1.2% CTR (médiane catégorie 2.8%). 4 hooks alternatifs générés via Claude + Runway pour A/B test.',
+      reason: 'Hook actuel "Découvrez notre nouveauté" performe à 1.2% CTR (médiane catégorie 2.8%). 4 hooks alternatifs générés via AdNova Creative Engine pour A/B test.',
       confidence: 0.81,
-      tags: ["rule:creative-refresh", "engine:claude+runway"],
+      tags: ["rule:creative-refresh", "engine:adnova-creative"],
     },
     {
       campaignIndex: 3,

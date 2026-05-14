@@ -162,7 +162,7 @@ export function AIActivityPanel() {
       {runs && runs.length > 0 ? (
         <div className="border-t border-border bg-surface px-5 py-2 text-[10px] text-muted">
           {runs.length} runs · cumulative {formatCost(summary.totalUsd)} ·{" "}
-          {summary.totalTokens.toLocaleString()} tokens · Sonnet 4.5 @ $3/$15 per Mtok
+          {summary.totalTokens.toLocaleString()} tokens
         </div>
       ) : null}
     </div>

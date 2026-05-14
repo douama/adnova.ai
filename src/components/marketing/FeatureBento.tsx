@@ -44,7 +44,7 @@ export function FeatureBento() {
                 The AI never <em>sleeps</em>.
               </h3>
               <p className="mt-2 max-w-md text-sm leading-relaxed text-body">
-                Claude analyses every campaign every 30 minutes — kills losers, scales winners,
+                Our autonomous engine analyses every campaign every 30 minutes — kills losers, scales winners,
                 rewrites creatives. You approve milestones, not micro-decisions.
               </p>
 
@@ -128,7 +128,7 @@ export function FeatureBento() {
                 Images, videos, UGC — at scale.
               </h3>
               <p className="mt-1 text-xs text-muted-strong">
-                gpt-image-1 · Runway Gen-4 · HeyGen Avatar IV
+                Image Studio · Video Engine · Avatar Studio
               </p>
               <div className="mt-auto grid grid-cols-3 gap-2">
                 <CreativeMini

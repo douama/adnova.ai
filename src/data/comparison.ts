@@ -29,10 +29,10 @@ export const COMPARISON_SCORE = { adnova: 9.2, smartly: 7.8 };
 
 export const COMPARISON_ROWS: ComparisonRow[] = [
   { feat: "Multi-canal (Meta, Google, TikTok, LinkedIn…)", smartly: "yes", smartlyNote: "9+ plateformes", adnova: "yes", adnovaNote: "9 plateformes" },
-  { feat: "Automation média-buying", smartly: "yes", smartlyNote: "Rules-based", adnova: "yes", adnovaNote: "Claude reasoning" },
-  { feat: "Génération créatifs (DCO)", smartly: "yes", smartlyNote: "Templates + DCO", adnova: "yes", adnovaNote: "SDXL · Runway · HeyGen" },
+  { feat: "Automation média-buying", smartly: "yes", smartlyNote: "Rules-based", adnova: "yes", adnovaNote: "Autonomous reasoning" },
+  { feat: "Génération créatifs (DCO)", smartly: "yes", smartlyNote: "Templates + DCO", adnova: "yes", adnovaNote: "AdNova Creative Engine" },
   { feat: "Attribution multi-touch · CAPI", smartly: "partial", smartlyNote: "Via partenaires", adnova: "yes", adnovaNote: "Natif inclus" },
-  { feat: "AI chat conversationnel (raisonnement)", smartly: "no", adnova: "yes", adnovaNote: "Built on Claude" },
+  { feat: "AI chat conversationnel (raisonnement)", smartly: "no", adnova: "yes", adnovaNote: "Built on AdNova AI" },
   { feat: "Decision log auditable + Replay", sub: "Chaque action IA tracée et rejouable", smartly: "no", adnova: "yes", adnovaNote: "Audit-ready · rollback 1-clic" },
   { feat: "Pricing transparent affiché", smartly: "no", smartlyNote: "Sales-led only", adnova: "yes", adnovaNote: "$299 / $799 / Enterprise" },
   { feat: "Essai gratuit sans CB", smartly: "no", smartlyNote: "Demo + RFP", adnova: "yes", adnovaNote: "14 jours · self-serve" },
@@ -42,7 +42,7 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   { feat: "Plan pour < $1M ARR", smartly: "no", smartlyNote: "Trop cher", adnova: "yes", adnovaNote: "Starter $299/m" },
   { feat: "Hébergement EU · GDPR-native", sub: "Serveurs Paris/Francfort, DPA inclus", smartly: "partial", smartlyNote: "Bureau Helsinki, infra mixte", adnova: "yes" },
   { feat: "Multilingue (FR/EN/ES/DE/IT)", smartly: "partial", smartlyNote: "EN-first", adnova: "yes" },
-  { feat: "Sub-processeurs Anthropic listés", smartly: "no", adnova: "yes" },
+  { feat: "Sub-processeurs listés + auditables", smartly: "no", adnova: "yes" },
   { feat: "Modes IA paramétrables (Advisory/Guardrails/Autonomous)", smartly: "partial", smartlyNote: "Rules manuelles", adnova: "yes", adnovaNote: "3 niveaux switchables" },
   { feat: "Account manager dédié", smartly: "yes", smartlyNote: "Inclus (lourd)", adnova: "partial", adnovaNote: "Plan Enterprise uniquement" },
   { feat: "Programme partenaire 20% à vie", smartly: "no", adnova: "yes", adnovaNote: "Sans plafond" },
@@ -73,7 +73,7 @@ export const USE_CASES: UseCase[] = [
   {
     who: "Marque EU sensible GDPR",
     adnova:
-      "Hébergement Cloudflare EU (Paris + Francfort). DPA inclus. Sub-processeurs limités (Anthropic) et listés. Compliance DPO en 1h.",
+      "Hébergement Cloudflare EU (Paris + Francfort). DPA inclus. Sub-processeurs limités et listés. Compliance DPO en 1h.",
     smartly:
       "Smartly est finlandais (Helsinki) donc OK théoriquement, mais infra hybride US/EU et sub-processeurs nombreux. DPO doit creuser.",
   },
@@ -93,15 +93,15 @@ export const FAQ: FaqItem[] = [
   },
   {
     q: "Pourquoi Smartly coûte 10× plus cher qu'AdNova ?",
-    a: "Smartly est sales-led et inclut un account manager dédié + setup engineering custom. Ces coûts humains sont répercutés sur votre facture. AdNova est self-serve, automatisé, et utilise Claude pour les décisions IA — donc nos coûts marginaux sont proches de zéro. Économies → vous.",
+    a: "Smartly est sales-led et inclut un account manager dédié + setup engineering custom. Ces coûts humains sont répercutés sur votre facture. AdNova est self-serve, automatisé, et utilise notre moteur IA propriétaire pour les décisions — donc nos coûts marginaux sont proches de zéro. Économies → vous.",
   },
   {
     q: "Combien de temps prend la migration depuis Smartly ?",
     a: "5 à 7 jours typiquement. Vos campagnes existantes sont importées via les APIs natives Meta/Google/TikTok. Vos templates créatifs Smartly se réimportent dans notre Creative Studio. Pas de downtime sur vos campagnes actives. Différence majeure : pas de SOW à négocier, pas de meeting d'onboarding obligatoire — vous migrez à votre rythme.",
   },
   {
-    q: "Quelle est la différence entre \"rules-based\" et \"Claude reasoning\" ?",
-    a: "Smartly automatise via des règles que vous écrivez (<strong>\"Si CTR < 0.8% et impressions > 500 → pause\"</strong>). AdNova utilise Claude pour <strong>raisonner</strong> sur chaque décision : pourquoi cette créa baisse, quel segment est saturé, quel canal a le ROAS marginal le plus élevé maintenant. Résultat : les règles ne capturent que ce que vous avez prévu ; le raisonnement capture les patterns que vous n'aviez pas vus.",
+    q: "Quelle est la différence entre \"rules-based\" et le moteur AdNova ?",
+    a: "Smartly automatise via des règles que vous écrivez (<strong>\"Si CTR < 0.8% et impressions > 500 → pause\"</strong>). AdNova utilise un moteur IA propriétaire pour <strong>raisonner</strong> sur chaque décision : pourquoi cette créa baisse, quel segment est saturé, quel canal a le ROAS marginal le plus élevé maintenant. Résultat : les règles ne capturent que ce que vous avez prévu ; le raisonnement capture les patterns que vous n'aviez pas vus.",
   },
   {
     q: "Smartly a-t-il du Decision Log auditable ?",
@@ -109,7 +109,7 @@ export const FAQ: FaqItem[] = [
   },
   {
     q: "Mes données restent-elles confidentielles ?",
-    a: "Oui. Hébergement Cloudflare EU (Paris + Francfort), chiffrement at-rest, vos données ne servent jamais à entraîner les modèles, DPA inclus, sub-processeurs limités (Anthropic pour Claude) et listés. SOC 2 Type II audit en cours (Q3 2026). Smartly est compliant aussi — mais leur infra mixte US/EU demande une analyse plus poussée côté DPO.",
+    a: "Oui. Hébergement Cloudflare EU (Paris + Francfort), chiffrement at-rest, vos données ne servent jamais à entraîner les modèles, DPA inclus, sub-processeurs limités et listés. SOC 2 Type II audit en cours (Q3 2026). Smartly est compliant aussi — mais leur infra mixte US/EU demande une analyse plus poussée côté DPO.",
   },
   {
     q: "Quel ROI typique vs Smartly ?",

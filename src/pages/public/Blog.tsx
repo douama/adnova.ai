@@ -15,7 +15,7 @@ export function BlogPage() {
             </h1>
             <p className="mt-5 text-base text-body sm:text-lg">
               Deep-dives on autonomous bidding, creative testing, multi-platform attribution,
-              and what we learn running thousands of campaigns with Claude.
+              and what we learn running thousands of campaigns with AdNova AI.
             </p>
           </div>
         </Container>

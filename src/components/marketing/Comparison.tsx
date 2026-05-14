@@ -4,7 +4,7 @@ type Row = { feature: string; smartly: "yes" | "no" | "partial"; adnova: "yes" |
 
 const ROWS: Row[] = [
   { feature: "Multi-platform sync (9 platforms)", smartly: "yes", adnova: "yes" },
-  { feature: "AI creative generation (UGC video incl.)", smartly: "partial", adnova: "yes", note: "Sonnet 4.5 + SDXL" },
+  { feature: "AI creative generation (UGC video incl.)", smartly: "partial", adnova: "yes", note: "AdNova Creative Engine" },
   { feature: "Autonomous bid optimization", smartly: "yes", adnova: "yes" },
   { feature: "Cross-run memory (compounding-safe)", smartly: "no", adnova: "yes", note: "pgvector recall" },
   { feature: "Decision log + replay", smartly: "no", adnova: "yes" },

@@ -12,7 +12,7 @@ export function AboutPage() {
               About AdNova
             </p>
             <h1 className="mt-4 text-5xl font-bold tracking-tighter text-ink sm:text-6xl">
-              Built on <em>Claude</em>.<br />Designed for the next thousand.
+              Built for <em>autonomy</em>.<br />Designed for the next thousand.
             </h1>
             <p className="mt-5 text-base text-body sm:text-lg">
               AdNova AI is rebuilding ad operations as a software discipline. We think the
