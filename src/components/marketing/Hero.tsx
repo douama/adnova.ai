@@ -3,7 +3,7 @@ import { Container } from "../ui/container";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-24 sm:pt-40 sm:pb-32">
+    <section className="relative overflow-hidden pt-20 pb-16 sm:pt-32 sm:pb-24 md:pt-40 md:pb-32">
       {/* Background grid */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.15]"
@@ -21,23 +21,22 @@ export function Hero() {
 
       <Container className="relative">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-white/[0.03] px-4 py-1.5 text-xs font-medium text-muted-strong">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-white/[0.03] px-3 py-1.5 text-[11px] font-medium text-muted-strong sm:px-4 sm:text-xs">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange" />
-            Live · 2,412 brands scaling on AdNova
+            <span className="whitespace-nowrap">Live · 2,412 brands scaling on AdNova</span>
           </div>
 
-          <h1 className="mt-7 text-5xl font-bold leading-[1.05] tracking-tighter text-ink sm:text-7xl">
-            Your acquisition lead,
-            <br />
-            <em>in an API</em>.
+          <h1 className="mt-5 text-[2.5rem] font-bold leading-[1.05] tracking-tighter text-ink sm:mt-7 sm:text-6xl md:text-7xl">
+            Your acquisition lead, <em>in an API</em>.
           </h1>
 
-          <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-body sm:text-xl">
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-body sm:mt-7 sm:text-lg md:text-xl">
             AdNova runs your campaigns across 9 platforms, generates creatives, optimizes
-            spend and writes reports — while you sleep. <span className="text-ink font-medium">Average ROAS: 4.82×</span>.
+            spend and writes reports — while you sleep.{" "}
+            <span className="text-ink font-medium">Average ROAS: 4.82×</span>.
           </p>
 
-          <div className="mt-10 flex flex-row items-stretch justify-center gap-2 sm:gap-3">
+          <div className="mt-8 flex flex-row items-stretch justify-center gap-2 sm:mt-10 sm:gap-3">
             <Link
               to="/register"
               className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-orange px-4 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5 sm:flex-none sm:px-8"
