@@ -3,6 +3,7 @@ import { User, Building2, Plug } from "lucide-react";
 import { useAuth } from "../../stores/authStore";
 import { useCurrentTenant } from "../../stores/tenantStore";
 import { PLATFORMS } from "../../data/platforms";
+import { PlatformIcon } from "../../components/ui/PlatformIcon";
 
 type Tab = "account" | "workspace" | "integrations";
 
@@ -127,10 +128,7 @@ function IntegrationsTab() {
             className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-5"
           >
             <div className="flex items-center gap-3">
-              <span
-                className="block h-8 w-8 rounded-md opacity-80"
-                style={{ background: p.accent }}
-              />
+              <PlatformIcon platform={p.id} className="h-9 w-9" />
               <div>
                 <div className="text-sm font-bold text-ink">{p.name}</div>
                 <div className="text-[10px] uppercase tracking-wider text-muted">

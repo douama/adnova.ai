@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { PLATFORMS } from "../../data/platforms";
+import { PlatformIcon } from "../../components/ui/PlatformIcon";
 
 type Stat = {
   platform: string;
@@ -145,10 +146,7 @@ export function AdminPlatforms() {
                 >
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <span
-                        className="block h-7 w-7 rounded-md opacity-80"
-                        style={{ background: p.accent }}
-                      />
+                      <PlatformIcon platform={p.id} className="h-8 w-8" />
                       <span className="font-medium text-ink">{p.name}</span>
                     </div>
                   </td>

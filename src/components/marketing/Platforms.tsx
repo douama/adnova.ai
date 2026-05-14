@@ -1,5 +1,6 @@
 import { Container } from "../ui/container";
 import { PLATFORMS } from "../../data/platforms";
+import { PlatformIcon } from "../ui/PlatformIcon";
 
 export function Platforms() {
   return (
@@ -25,9 +26,9 @@ export function Platforms() {
               className="group relative flex aspect-square items-center justify-center rounded-xl border border-border bg-card transition-all hover:border-border-strong hover:-translate-y-0.5"
               title={p.name}
             >
-              <span
-                className="block h-7 w-7 rounded-full opacity-80 transition-opacity group-hover:opacity-100"
-                style={{ background: p.accent }}
+              <PlatformIcon
+                platform={p.id}
+                className="h-12 w-12 transition-transform group-hover:scale-110"
               />
             </div>
           ))}
