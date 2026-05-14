@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react";
 import { Container } from "../ui/container";
 import { PLANS } from "../../data/plans";
@@ -13,32 +14,33 @@ function yearlyMonthlyPrice(monthly: number): number {
 }
 
 export function Pricing() {
+  const { t } = useTranslation();
   const [billing, setBilling] = useState<Billing>("monthly");
 
   return (
     <section id="pricing" className="pb-14 pt-6 sm:pb-20 sm:pt-10">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">Four plans.</p>
-          <h2 className="mt-4 text-4xl font-bold tracking-tighter text-ink sm:text-5xl">
-            <em>Pick yours</em>.
-          </h2>
-          <p className="mt-4 text-base text-body">
-            Every plan includes a 14-day free trial. No credit card. Cancel anytime.
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
+            {t("pricing.kicker")}
           </p>
+          <h2 className="mt-4 text-4xl font-bold tracking-tighter text-ink sm:text-5xl">
+            <em>{t("pricing.title")}</em>.
+          </h2>
+          <p className="mt-4 text-base text-body">{t("pricing.subtitle")}</p>
 
           {/* Billing toggle */}
           <div className="mt-8 inline-flex items-center gap-1.5 rounded-full glass p-1">
             <BillingBtn
               active={billing === "monthly"}
               onClick={() => setBilling("monthly")}
-              label="Monthly"
+              label={t("pricing.billingMonthly")}
             />
             <BillingBtn
               active={billing === "yearly"}
               onClick={() => setBilling("yearly")}
-              label="Yearly"
-              badge="Save 20%"
+              label={t("pricing.billingYearly")}
+              badge={t("pricing.save20")}
             />
           </div>
         </div>
@@ -65,7 +67,7 @@ export function Pricing() {
               >
                 {isPopular ? (
                   <div className="absolute -top-3 right-6 rounded-full bg-orange px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-glow-sm">
-                    Most popular
+                    {t("pricing.mostPopular")}
                   </div>
                 ) : null}
 
@@ -74,23 +76,23 @@ export function Pricing() {
 
                 <div className="mt-5 flex items-baseline gap-1">
                   {isCustom ? (
-                    <span className="text-3xl font-bold tracking-tighter text-ink">Custom</span>
+                    <span className="text-3xl font-bold tracking-tighter text-ink">{t("pricing.custom")}</span>
                   ) : (
                     <>
                       <span className="text-4xl font-bold tracking-tighter text-ink">
                         ${displayPrice}
                       </span>
-                      <span className="text-sm text-muted-strong">/month</span>
+                      <span className="text-sm text-muted-strong">{t("pricing.perMonth")}</span>
                     </>
                   )}
                 </div>
 
                 {!isCustom && billing === "yearly" ? (
                   <p className="mt-1.5 text-[11px] text-orange">
-                    Billed ${annualTotal}/year · save ${(p.price * 12 - annualTotal).toFixed(0)}
+                    {t("pricing.billedYearlyPrefix")} ${annualTotal}{t("pricing.billedYearlySuffix")} ${(p.price * 12 - annualTotal).toFixed(0)}
                   </p>
                 ) : !isCustom ? (
-                  <p className="mt-1.5 text-[11px] text-muted">Billed monthly</p>
+                  <p className="mt-1.5 text-[11px] text-muted">{t("pricing.billedMonthly")}</p>
                 ) : null}
 
                 <ul className="mt-5 flex-1 space-y-3">
@@ -119,11 +121,11 @@ export function Pricing() {
 
         {billing === "yearly" ? (
           <p className="mt-8 text-center text-xs text-muted">
-            Yearly plans are billed upfront. Want to switch later?{" "}
+            {t("pricing.yearlyNote1")}{" "}
             <Link to="/about" className="text-orange hover:text-orange-hover">
-              Email us
+              {t("pricing.yearlyNoteLink")}
             </Link>{" "}
-            anytime — pro-rated refund, no questions.
+            {t("pricing.yearlyNote2")}
           </p>
         ) : null}
       </Container>

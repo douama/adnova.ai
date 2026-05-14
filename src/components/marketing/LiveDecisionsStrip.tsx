@@ -1,34 +1,15 @@
+import { useTranslation } from "react-i18next";
 import { ArrowUp, Activity } from "lucide-react";
 import { Container } from "../ui/container";
 
-const STATS = [
-  {
-    value: "+$12,840",
-    label: "Revenue · 24h",
-    sub: "Maison Aubergine · Meta",
-    delta: "+18.4%",
-  },
-  {
-    value: "$284K",
-    label: "Monthly spend",
-    sub: "Across 9 platforms",
-    delta: "+5.1%",
-  },
-  {
-    value: "$1.37M",
-    label: "Monthly revenue",
-    sub: "From AI decisions",
-    delta: "+22.7%",
-  },
-  {
-    value: "4.82×",
-    label: "Average ROAS",
-    sub: "Up from 2.1× before AdNova",
-    delta: "+129%",
-  },
-];
-
 export function LiveDecisionsStrip() {
+  const { t } = useTranslation();
+  const STATS = [
+    { value: "+$12,840", label: t("liveDecisions.stat1Label"), sub: t("liveDecisions.stat1Sub"), delta: "+18.4%" },
+    { value: "$284K",    label: t("liveDecisions.stat2Label"), sub: t("liveDecisions.stat2Sub"), delta: "+5.1%" },
+    { value: "$1.37M",   label: t("liveDecisions.stat3Label"), sub: t("liveDecisions.stat3Sub"), delta: "+22.7%" },
+    { value: "4.82×",    label: t("liveDecisions.stat4Label"), sub: t("liveDecisions.stat4Sub"), delta: "+129%" },
+  ];
   return (
     <section className="-mt-4 pb-6 pt-0 sm:-mt-6 sm:pb-8">
       <Container>
@@ -59,7 +40,7 @@ export function LiveDecisionsStrip() {
                 {i === 0 ? (
                   <div className="absolute right-2 top-2 inline-flex items-center gap-1 text-[10px] text-orange">
                     <Activity className="h-3 w-3 animate-pulse" strokeWidth={2} />
-                    <span className="font-bold uppercase tracking-wider">Live</span>
+                    <span className="font-bold uppercase tracking-wider">{t("liveDecisions.live")}</span>
                   </div>
                 ) : null}
               </div>

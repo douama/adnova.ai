@@ -1,47 +1,45 @@
+import { useTranslation } from "react-i18next";
 import { Container } from "../ui/container";
 
-type Row = { feature: string; smartly: "yes" | "no" | "partial"; adnova: "yes" | "no" | "partial"; note?: string };
+type Verdict = "yes" | "no" | "partial";
+type Row = { featureKey: string; smartly: Verdict; adnova: Verdict; noteKey?: string };
 
 const ROWS: Row[] = [
-  { feature: "Multi-platform sync (9 platforms)", smartly: "yes", adnova: "yes" },
-  { feature: "AI creative generation (UGC video incl.)", smartly: "partial", adnova: "yes", note: "AdNova Creative Engine" },
-  { feature: "Autonomous bid optimization", smartly: "yes", adnova: "yes" },
-  { feature: "Cross-run memory (compounding-safe)", smartly: "no", adnova: "yes", note: "pgvector recall" },
-  { feature: "Decision log + replay", smartly: "no", adnova: "yes" },
-  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$79–$999/mo" },
-  { feature: "Setup time", smartly: "partial", adnova: "yes", note: "30 sec, no demo call" },
-  { feature: "Annual contract required", smartly: "yes", adnova: "no", note: "Cancel anytime" },
+  { featureKey: "row1", smartly: "yes",     adnova: "yes" },
+  { featureKey: "row2", smartly: "partial", adnova: "yes", noteKey: "row2Note" },
+  { featureKey: "row3", smartly: "yes",     adnova: "yes" },
+  { featureKey: "row4", smartly: "no",      adnova: "yes", noteKey: "row4Note" },
+  { featureKey: "row5", smartly: "no",      adnova: "yes" },
+  { featureKey: "row6", smartly: "no",      adnova: "yes", noteKey: "row6Note" },
+  { featureKey: "row7", smartly: "partial", adnova: "yes", noteKey: "row7Note" },
+  { featureKey: "row8", smartly: "yes",     adnova: "no",  noteKey: "row8Note" },
 ];
 
-function Cell({ value }: { value: Row["smartly"] }) {
-  if (value === "yes")
-    return <span className="text-orange">●</span>;
-  if (value === "partial")
-    return <span className="text-muted-strong">◐</span>;
+function Cell({ value }: { value: Verdict }) {
+  if (value === "yes") return <span className="text-orange">●</span>;
+  if (value === "partial") return <span className="text-muted-strong">◐</span>;
   return <span className="text-muted">○</span>;
 }
 
 export function Comparison() {
+  const { t } = useTranslation();
   return (
     <section className="pb-14 pt-6 sm:pb-20 sm:pt-10">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
-            Smartly le fait. AdNova le fait <em>aussi</em>.
+            {t("comparison.kicker1")} <em>{t("comparison.kicker2")}</em>.
           </p>
           <h2 className="mt-4 text-4xl font-bold tracking-tighter text-ink sm:text-5xl">
-            Au tiers du prix.
+            {t("comparison.title")}
           </h2>
-          <p className="mt-4 text-base text-body">
-            Same surface area. Cleaner agentic engine. No annual contract. No 30-min demo call to
-            see pricing.
-          </p>
+          <p className="mt-4 text-base text-body">{t("comparison.subtitle")}</p>
         </div>
 
         <div className="mx-auto mt-14 max-w-4xl overflow-hidden rounded-2xl border border-border bg-card">
           <div className="grid grid-cols-[1fr_auto_auto] gap-px bg-border text-sm">
             <div className="bg-surface px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-strong">
-              Feature
+              {t("comparison.headerFeature")}
             </div>
             <div className="bg-surface px-6 py-4 text-center text-xs font-bold uppercase tracking-wider text-muted-strong">
               Smartly
@@ -51,11 +49,11 @@ export function Comparison() {
             </div>
 
             {ROWS.map((r) => (
-              <div className="contents" key={r.feature}>
+              <div className="contents" key={r.featureKey}>
                 <div className="bg-card px-6 py-4 text-body">
-                  {r.feature}
-                  {r.note ? (
-                    <div className="mt-0.5 text-xs text-muted">{r.note}</div>
+                  {t(`comparison.${r.featureKey}`)}
+                  {r.noteKey ? (
+                    <div className="mt-0.5 text-xs text-muted">{t(`comparison.${r.noteKey}`)}</div>
                   ) : null}
                 </div>
                 <div className="bg-card px-6 py-4 text-center text-lg">
