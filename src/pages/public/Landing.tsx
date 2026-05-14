@@ -3,7 +3,6 @@ import { LiveDecisionsStrip } from "../../components/marketing/LiveDecisionsStri
 import { FeatureBento } from "../../components/marketing/FeatureBento";
 import { Comparison } from "../../components/marketing/Comparison";
 import { HowItWorks } from "../../components/marketing/HowItWorks";
-import { Platforms } from "../../components/marketing/Platforms";
 import { Pricing } from "../../components/marketing/Pricing";
 import { Testimonials } from "../../components/marketing/Testimonials";
 import { FAQ } from "../../components/marketing/FAQ";
@@ -16,7 +15,6 @@ export function LandingPage() {
       <LiveDecisionsStrip />
       <FeatureBento />
       <HowItWorks />
-      <Platforms />
       <Comparison />
       <Testimonials />
       <Pricing />
