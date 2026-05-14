@@ -13,12 +13,6 @@ function formatRelative(iso: string): string {
   return `${Math.floor(h / 24)}d ago`;
 }
 
-function formatCost(usd: number | null): string {
-  if (usd == null) return "—";
-  if (usd < 0.01) return `<$0.01`;
-  return `$${usd.toFixed(usd < 1 ? 3 : 2)}`;
-}
-
 const STATUS_STYLES: Record<string, { bg: string; text: string; dot?: string }> = {
   pending: { bg: "bg-orange/[0.08]", text: "text-orange", dot: "bg-orange" },
   completed: { bg: "bg-orange/[0.08]", text: "text-orange" },
@@ -44,31 +38,28 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function summarizeCost(runs: AIRunLog[]) {
+// Costs are hidden from tenants — only activity volume + token counts are
+// surfaced here. Admin can see costs under /admin/ai-monitor.
+function summarizeActivity(runs: AIRunLog[]) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const cutoff = today.getTime();
 
-  let totalUsd = 0;
   let totalTokens = 0;
-  let todayUsd = 0;
   let todayRuns = 0;
   for (const r of runs) {
-    const cost = Number(r.cost_usd_estimate ?? 0);
     const tokens = Number(r.input_tokens ?? 0) + Number(r.output_tokens ?? 0);
-    totalUsd += cost;
     totalTokens += tokens;
     if (new Date(r.started_at).getTime() >= cutoff) {
-      todayUsd += cost;
       todayRuns += 1;
     }
   }
-  return { totalUsd, totalTokens, todayUsd, todayRuns };
+  return { totalTokens, todayRuns };
 }
 
 export function AIActivityPanel() {
   const { data: runs, loading, error } = useAIRunLog({ limit: 10 });
-  const summary = summarizeCost(runs ?? []);
+  const summary = summarizeActivity(runs ?? []);
 
   return (
     <div className="rounded-2xl border border-border bg-card">
@@ -82,8 +73,7 @@ export function AIActivityPanel() {
             Today
           </div>
           <div className="text-sm font-bold tabular-nums text-ink">
-            {formatCost(summary.todayUsd)}
-            <span className="ml-1 text-muted">· {summary.todayRuns} runs</span>
+            {summary.todayRuns} runs
           </div>
         </div>
       </div>
@@ -108,16 +98,11 @@ export function AIActivityPanel() {
             const tokens = (r.input_tokens ?? 0) + (r.output_tokens ?? 0);
             return (
               <li key={r.id} className="px-5 py-3 text-sm">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={r.status} />
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-strong">
-                      {TRIGGER_LABEL[r.trigger_source] ?? r.trigger_source}
-                    </span>
-                  </div>
-                  <div className="text-xs font-bold tabular-nums text-ink">
-                    {formatCost(Number(r.cost_usd_estimate))}
-                  </div>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={r.status} />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-strong">
+                    {TRIGGER_LABEL[r.trigger_source] ?? r.trigger_source}
+                  </span>
                 </div>
 
                 <div className="mt-1 text-xs text-body">
@@ -161,8 +146,7 @@ export function AIActivityPanel() {
 
       {runs && runs.length > 0 ? (
         <div className="border-t border-border bg-surface px-5 py-2 text-[10px] text-muted">
-          {runs.length} runs · cumulative {formatCost(summary.totalUsd)} ·{" "}
-          {summary.totalTokens.toLocaleString()} tokens
+          {runs.length} runs · {summary.totalTokens.toLocaleString()} tokens
         </div>
       ) : null}
     </div>

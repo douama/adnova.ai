@@ -29,9 +29,9 @@ const STYLES = [
 ];
 
 const SIZES = [
-  { id: "1024x1024", label: "Square 1:1", desc: "Feed · $0.04" },
-  { id: "1024x1536", label: "Portrait 2:3", desc: "Story · $0.06" },
-  { id: "1536x1024", label: "Landscape 3:2", desc: "Banner · $0.06" },
+  { id: "1024x1024", label: "Square 1:1", desc: "Feed" },
+  { id: "1024x1536", label: "Portrait 2:3", desc: "Story" },
+  { id: "1536x1024", label: "Landscape 3:2", desc: "Banner" },
 ] as const;
 
 const ASPECTS = [
@@ -41,8 +41,8 @@ const ASPECTS = [
 ] as const;
 
 const DURATIONS = [
-  { id: 4, label: "4 sec", desc: "Quick — $0.50" },
-  { id: 8, label: "8 sec", desc: "Standard — $0.95" },
+  { id: 4, label: "4 sec", desc: "Quick" },
+  { id: 8, label: "8 sec", desc: "Standard" },
 ];
 
 export function GenerateCreativeModal({
@@ -606,8 +606,6 @@ export function GenerateCreativeModal({
               </div>
               <div className="text-xs text-body">
                 Engine: <strong className="text-ink">{success.engine}</strong>
-                {" · "}
-                Cost: <strong className="text-ink">${success.cost.toFixed(2)}</strong>
                 {success.isDemo ? (
                   <>
                     {" · "}

@@ -107,7 +107,7 @@ export function AIModeBadge() {
             ) : null}
             <div className="border-t border-border bg-surface px-4 py-2 text-[10px] leading-relaxed text-muted">
               <strong className="text-orange">Autonomous</strong> runs the AdNova engine every
-              30 min on your active campaigns. Estimated cost ~$1/day per tenant.
+              30 min on your active campaigns.
             </div>
           </div>
         </>
