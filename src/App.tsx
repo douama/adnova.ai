@@ -38,6 +38,7 @@ import { SettingsPage } from "./pages/tenant/Settings";
 
 // Super admin
 import { AdminOverview } from "./pages/admin/Overview";
+import { AdminIntegrations } from "./pages/admin/Integrations";
 import { AdminTenants } from "./pages/admin/Tenants";
 import { AdminUsers } from "./pages/admin/Users";
 import { AdminAIMonitor } from "./pages/admin/AIMonitor";
@@ -133,6 +134,7 @@ export function App() {
         }
       >
         <Route path="/admin" element={<AdminOverview />} />
+        <Route path="/admin/integrations" element={<AdminIntegrations />} />
         <Route path="/admin/tenants" element={<AdminTenants />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/ai-monitor" element={<AdminAIMonitor />} />

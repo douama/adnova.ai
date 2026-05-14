@@ -9,12 +9,14 @@ import {
   AlertCircle,
   LogOut,
   Shield,
+  Plug,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
 import { useAuth } from "../../stores/authStore";
 
 const NAV = [
   { to: "/admin", label: "Overview", icon: Gauge, end: true },
+  { to: "/admin/integrations", label: "AI Integrations", icon: Plug },
   { to: "/admin/tenants", label: "Tenants", icon: Building2 },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/ai-monitor", label: "AI Monitor", icon: Sparkles },
