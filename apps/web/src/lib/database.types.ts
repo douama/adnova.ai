@@ -288,6 +288,68 @@ export type Database = {
           },
         ]
       }
+      ai_run_log: {
+        Row: {
+          claude_model: string | null
+          completed_at: string | null
+          cost_usd_estimate: number | null
+          decisions_count: number
+          duration_ms: number | null
+          error_message: string | null
+          http_status_code: number | null
+          id: string
+          input_tokens: number | null
+          output_tokens: number | null
+          pg_net_request_id: number | null
+          started_at: string
+          status: string
+          tenant_id: string
+          trigger_source: string
+        }
+        Insert: {
+          claude_model?: string | null
+          completed_at?: string | null
+          cost_usd_estimate?: number | null
+          decisions_count?: number
+          duration_ms?: number | null
+          error_message?: string | null
+          http_status_code?: number | null
+          id?: string
+          input_tokens?: number | null
+          output_tokens?: number | null
+          pg_net_request_id?: number | null
+          started_at?: string
+          status?: string
+          tenant_id: string
+          trigger_source: string
+        }
+        Update: {
+          claude_model?: string | null
+          completed_at?: string | null
+          cost_usd_estimate?: number | null
+          decisions_count?: number
+          duration_ms?: number | null
+          error_message?: string | null
+          http_status_code?: number | null
+          id?: string
+          input_tokens?: number | null
+          output_tokens?: number | null
+          pg_net_request_id?: number | null
+          started_at?: string
+          status?: string
+          tenant_id?: string
+          trigger_source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_run_log_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audiences: {
         Row: {
           created_at: string

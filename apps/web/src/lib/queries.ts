@@ -16,6 +16,7 @@ import type { Database } from "./database.types";
 type Campaign = Database["public"]["Tables"]["campaigns"]["Row"];
 type Creative = Database["public"]["Tables"]["creatives"]["Row"];
 type AIDecisionFeed = Database["public"]["Views"]["ai_decisions_feed"]["Row"];
+export type AIRunLog = Database["public"]["Tables"]["ai_run_log"]["Row"];
 
 type AsyncState<T> = {
   data: T | null;
@@ -197,6 +198,60 @@ export function useDecisionsFeed(opts?: { limit?: number }): AsyncState<AIDecisi
           // Refresh complet — cheap car LIMIT 50.
           fetch();
         }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [tenantId, fetch]);
+
+  return { data, loading, error, refresh: fetch };
+}
+
+// ─── AI Run Log (observabilité de la boucle Claude) ───────────────────────
+// Stream live des invocations claude-decide (cron + user-triggered).
+// REPLICA IDENTITY FULL sur ai_run_log → on capte aussi les UPDATE
+// (passage pending → completed) pour rafraîchir les métriques en direct.
+export function useAIRunLog(opts?: { limit?: number }): AsyncState<AIRunLog[]> {
+  const tenantId = useCurrentTenantId();
+  const [data, setData] = useState<AIRunLog[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const limit = opts?.limit ?? 10;
+
+  const fetch = useCallback(async () => {
+    if (!tenantId) return;
+    setLoading(true);
+    setError(null);
+    const { data: rows, error: err } = await supabase
+      .from("ai_run_log")
+      .select("*")
+      .eq("tenant_id", tenantId)
+      .order("started_at", { ascending: false })
+      .limit(limit);
+    if (err) setError(err.message);
+    else setData(rows as AIRunLog[]);
+    setLoading(false);
+  }, [tenantId, limit]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  useEffect(() => {
+    if (!tenantId) return;
+    const channel = supabase
+      .channel(`ai_run_log:${tenantId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*", // INSERT (loop fires) + UPDATE (pending → completed)
+          schema: "public",
+          table: "ai_run_log",
+          filter: `tenant_id=eq.${tenantId}`,
+        },
+        () => fetch()
       )
       .subscribe();
 

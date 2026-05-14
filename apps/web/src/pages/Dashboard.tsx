@@ -3,6 +3,7 @@ import { useCurrentTenant, useCurrentTenantId } from "../stores/tenantStore";
 import { MetricsOverview } from "../components/dashboard/MetricsOverview";
 import { CampaignsTable } from "../components/dashboard/CampaignsTable";
 import { AIModeBadge } from "../components/dashboard/AIModeBadge";
+import { AIActivityPanel } from "../components/dashboard/AIActivityPanel";
 import { Button } from "../components/ui/button";
 import { supabase } from "../lib/supabase";
 
@@ -104,8 +105,11 @@ export function DashboardPage() {
       <MetricsOverview />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-3">
+        <div className="space-y-6 lg:col-span-2">
           <CampaignsTable />
+        </div>
+        <div className="lg:col-span-1">
+          <AIActivityPanel />
         </div>
       </div>
     </div>
