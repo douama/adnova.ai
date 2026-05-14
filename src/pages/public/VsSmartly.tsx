@@ -18,7 +18,7 @@ const ROWS: Row[] = [
   { feature: "Decision log + replay", smartly: "no", adnova: "yes" },
   { feature: "1-click rollback", smartly: "no", adnova: "yes" },
   { feature: "Live activity feed (Realtime)", smartly: "no", adnova: "yes" },
-  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$79–$799/mo" },
+  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$79–$999/mo" },
   { feature: "Annual contract required", smartly: "yes", adnova: "no", note: "Cancel anytime" },
   { feature: "Setup time", smartly: "partial", adnova: "yes", note: "30 sec, no demo call" },
   { feature: "% of ad spend pricing", smartly: "partial", adnova: "no", note: "Flat SaaS pricing" },

@@ -8,7 +8,7 @@ const ROWS: Row[] = [
   { feature: "Autonomous bid optimization", smartly: "yes", adnova: "yes" },
   { feature: "Cross-run memory (compounding-safe)", smartly: "no", adnova: "yes", note: "pgvector recall" },
   { feature: "Decision log + replay", smartly: "no", adnova: "yes" },
-  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$79–$799/mo" },
+  { feature: "Pricing transparency", smartly: "no", adnova: "yes", note: "$79–$999/mo" },
   { feature: "Setup time", smartly: "partial", adnova: "yes", note: "30 sec, no demo call" },
   { feature: "Annual contract required", smartly: "yes", adnova: "no", note: "Cancel anytime" },
 ];

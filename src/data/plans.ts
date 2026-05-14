@@ -52,7 +52,7 @@ export const PLANS: Plan[] = [
   {
     id: "agency",
     name: "Agency",
-    price: 799,
+    price: 999,
     period: "month",
     popular: false,
     cta: "Start free trial",
