@@ -425,8 +425,14 @@ app.post('/api/track', async (c) => {
 // PAGE ROUTES
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/', renderLanding)
-app.get('/login', renderLogin)
-app.get('/register', renderRegister)
+
+// /login and /register on the marketing domain redirect to the React SPA
+// (Supabase Auth lives on /app/*). The legacy Hono renderLogin/renderRegister
+// pages relied on Cloudflare D1 which is unavailable on Vercel — they would
+// 500 on form submit. The SPA pages at /app/login + /app/register use
+// Supabase Auth and actually work in prod.
+app.get('/login', (c) => c.redirect('/app/login', 302))
+app.get('/register', (c) => c.redirect('/app/register', 302))
 
 // ─── Public Marketing Pages ────────────────────────────────────────────────
 app.get('/terms',      (c) => c.html(renderTerms()))
