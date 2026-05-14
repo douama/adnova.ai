@@ -179,6 +179,95 @@
     "q8Q": "Do you offer agency / white-label pricing?",
     "q8A": "Yes — the Agency plan ($999/mo, or $799/mo annually) gives you unlimited ad accounts, unlimited AI creatives, white-label dashboards for your clients, and the private API. Enterprise contracts add custom volume + dedicated CSM."
   },
+  "featureBento": {
+    "kicker": "The platform",
+    "title1": "Everything an",
+    "title2": "ad agency",
+    "title3": "does. In one API.",
+    "tile1Badge": "Live AI decisions",
+    "tile1Sub": "Last 24h · 1,284 actions",
+    "tile1Title1": "The AI never",
+    "tile1Title2": "sleeps",
+    "tile1Desc": "Our autonomous engine analyses every campaign every 30 minutes — kills losers, scales winners, rewrites creatives. You approve milestones, not micro-decisions.",
+    "feedScale": "Scale",
+    "feedPause": "Pause",
+    "feedCreate": "Create",
+    "tile2Badge": "9 ad platforms",
+    "tile2Title": "One workspace, every channel.",
+    "tile3Badge": "Performance",
+    "tile3Sub": "Average ROAS across 2,412 brands",
+    "tile3SubSmall": "Up from 2.1× before AdNova",
+    "tile4Badge": "AI creatives",
+    "tile4Title": "Images, videos, UGC — at scale.",
+    "tile4Sub": "Image Studio · Video Engine · Avatar Studio",
+    "tile5Badge": "Developer first",
+    "tile5Title": "Embed AdNova in your own product.",
+    "tile5Sub": "SOC 2 · GDPR · RLS-locked tenants"
+  },
+  "howItWorks": {
+    "kicker": "Three steps.",
+    "title1": "Then it runs",
+    "title2": "itself",
+    "step1Title": "Connect",
+    "step1Body": "Plug your ad accounts in 30 seconds. OAuth to Meta, Google, TikTok, LinkedIn, YouTube, Pinterest, Snapchat, X, Amazon — no SDK to install.",
+    "step2Title": "Train",
+    "step2Body": "AdNova ingests your campaign history, learns what works for your brand, ICP and creative voice. Ready in under 10 minutes.",
+    "step3Title": "Scale",
+    "step3Body": "The agent runs 24/7 — generates creatives, reallocates budget, kills losers, scales winners. You approve milestones, not micro-decisions."
+  },
+  "testimonials": {
+    "kicker": "Trusted by 2,412",
+    "title1": "High-growth",
+    "title2": "brands.",
+    "roasSuffix": "after 90 days",
+    "monthlyRevenueLabel": "Monthly revenue routed",
+    "monthlyRevenueSub": "Through AI decisions in the last 30 days.",
+    "savedLabel": "Saved per marketer / month",
+    "savedSub": "Median across 2,412 active brands."
+  },
+  "plans": {
+    "ctaStartTrial": "Start free trial",
+    "ctaContactSales": "Contact sales",
+    "starterSummary": "3 ad accounts · 20 creatives/mo",
+    "starterFeatures": [
+      "3 connected ad accounts",
+      "20 AI creatives / month",
+      "2 platforms (Meta + Google)",
+      "Basic analytics dashboard",
+      "Standard AI optimization",
+      "Email support"
+    ],
+    "proSummary": "15 ad accounts · 100 creatives/mo",
+    "proFeatures": [
+      "15 connected ad accounts",
+      "100 AI creatives / month",
+      "All 9 platforms",
+      "Full AI engine (UGC video incl.)",
+      "A/B testing automation",
+      "Lookalike audience builder",
+      "Advanced analytics + reports",
+      "Priority support (4h)"
+    ],
+    "agencySummary": "Unlimited · White-label · API",
+    "agencyFeatures": [
+      "Unlimited ad accounts",
+      "Unlimited AI creatives",
+      "All platforms + custom integrations",
+      "Unlimited team members",
+      "White-label solution",
+      "Private API access",
+      "Dedicated CSM + custom reports"
+    ],
+    "enterpriseSummary": "SLA · Dedicated · Custom agents",
+    "enterpriseFeatures": [
+      "Custom volume + 99.9% SLA",
+      "Custom AI agents on your data",
+      "Dedicated support team",
+      "SSO + advanced security",
+      "On-premise deployment option",
+      "Quarterly business reviews"
+    ]
+  },
   "common": {
     "loading": "Loading…",
     "save": "Save",

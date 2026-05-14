@@ -179,6 +179,95 @@
     "q8Q": "Têm preços agência / white-label?",
     "q8A": "Sim — o plano Agency (999 $/mês, ou 799 $/mês anual) inclui contas pub ilimitadas, criativos IA ilimitados, dashboards white-label para os seus clientes, e a API privada. Contratos Enterprise adicionam volume sob medida + CSM dedicado."
   },
+  "featureBento": {
+    "kicker": "A plataforma",
+    "title1": "Tudo o que uma",
+    "title2": "agência publicitária",
+    "title3": "faz. Numa única API.",
+    "tile1Badge": "Decisões IA ao vivo",
+    "tile1Sub": "Últimas 24h · 1 284 ações",
+    "tile1Title1": "A IA nunca",
+    "tile1Title2": "dorme",
+    "tile1Desc": "O nosso motor autónomo analisa cada campanha a cada 30 min — mata perdedores, escala vencedores, reescreve criativos. Aprova marcos, não micro-decisões.",
+    "feedScale": "Escalar",
+    "feedPause": "Pausar",
+    "feedCreate": "Criar",
+    "tile2Badge": "9 plataformas pub",
+    "tile2Title": "Um workspace, cada canal.",
+    "tile3Badge": "Desempenho",
+    "tile3Sub": "ROAS médio em 2 412 marcas",
+    "tile3SubSmall": "Vindo de 2,1× antes da AdNova",
+    "tile4Badge": "Criativos IA",
+    "tile4Title": "Imagens, vídeos, UGC — em escala.",
+    "tile4Sub": "Image Studio · Video Engine · Avatar Studio",
+    "tile5Badge": "Developer first",
+    "tile5Title": "Integre a AdNova no seu próprio produto.",
+    "tile5Sub": "SOC 2 · RGPD · tenants bloqueados em RLS"
+  },
+  "howItWorks": {
+    "kicker": "Três passos.",
+    "title1": "E corre",
+    "title2": "sozinho",
+    "step1Title": "Conecte",
+    "step1Body": "Ligue as suas contas pub em 30 segundos. OAuth para Meta, Google, TikTok, LinkedIn, YouTube, Pinterest, Snapchat, X, Amazon — sem SDK para instalar.",
+    "step2Title": "Treine",
+    "step2Body": "A AdNova absorve o seu histórico de campanhas, aprende o que funciona para a sua marca, ICP e voz criativa. Pronta em menos de 10 minutos.",
+    "step3Title": "Escale",
+    "step3Body": "O agente corre 24/7 — gera criativos, realoca orçamentos, mata perdedores, escala vencedores. Aprova marcos, não micro-decisões."
+  },
+  "testimonials": {
+    "kicker": "Confiança de 2 412",
+    "title1": "marcas em",
+    "title2": "alto crescimento.",
+    "roasSuffix": "após 90 dias",
+    "monthlyRevenueLabel": "Receita mensal encaminhada",
+    "monthlyRevenueSub": "Via decisões IA nos últimos 30 dias.",
+    "savedLabel": "Poupadas por marketer / mês",
+    "savedSub": "Mediana em 2 412 marcas ativas."
+  },
+  "plans": {
+    "ctaStartTrial": "Teste grátis",
+    "ctaContactSales": "Contactar vendas",
+    "starterSummary": "3 contas pub · 20 criativos/mês",
+    "starterFeatures": [
+      "3 contas pub conectadas",
+      "20 criativos IA / mês",
+      "2 plataformas (Meta + Google)",
+      "Dashboard analytics básico",
+      "Otimização IA standard",
+      "Suporte email"
+    ],
+    "proSummary": "15 contas pub · 100 criativos/mês",
+    "proFeatures": [
+      "15 contas pub conectadas",
+      "100 criativos IA / mês",
+      "As 9 plataformas",
+      "Motor IA completo (vídeo UGC incl.)",
+      "Automação A/B testing",
+      "Builder de audiências lookalike",
+      "Analytics avançado + relatórios",
+      "Suporte prioritário (4h)"
+    ],
+    "agencySummary": "Ilimitado · White-label · API",
+    "agencyFeatures": [
+      "Contas pub ilimitadas",
+      "Criativos IA ilimitados",
+      "Todas as plataformas + integrações custom",
+      "Membros de equipa ilimitados",
+      "Solução white-label",
+      "Acesso API privada",
+      "CSM dedicado + relatórios custom"
+    ],
+    "enterpriseSummary": "SLA · Dedicado · Agentes custom",
+    "enterpriseFeatures": [
+      "Volume custom + SLA 99,9 %",
+      "Agentes IA custom nos seus dados",
+      "Equipa de suporte dedicada",
+      "SSO + segurança avançada",
+      "Opção de implementação on-premise",
+      "Business reviews trimestrais"
+    ]
+  },
   "common": {
     "loading": "A carregar…",
     "save": "Guardar",

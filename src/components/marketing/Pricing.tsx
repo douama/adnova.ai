@@ -72,7 +72,7 @@ export function Pricing() {
                 ) : null}
 
                 <h3 className="text-lg font-bold text-ink">{p.name}</h3>
-                <p className="mt-1 text-xs text-muted-strong">{p.summary}</p>
+                <p className="mt-1 text-xs text-muted-strong">{t(`plans.${p.id}Summary`)}</p>
 
                 <div className="mt-5 flex items-baseline gap-1">
                   {isCustom ? (
@@ -96,7 +96,7 @@ export function Pricing() {
                 ) : null}
 
                 <ul className="mt-5 flex-1 space-y-3">
-                  {p.features.map((f) => (
+                  {(t(`plans.${p.id}Features`, { returnObjects: true }) as string[]).map((f) => (
                     <li key={f} className="flex items-start gap-2 text-xs text-body">
                       <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange" />
                       <span>{f}</span>
@@ -112,7 +112,7 @@ export function Pricing() {
                       : "glass-soft text-body hover:text-ink hover:-translate-y-0.5"
                   }`}
                 >
-                  {p.cta}
+                  {p.id === "enterprise" ? t("plans.ctaContactSales") : t("plans.ctaStartTrial")}
                 </Link>
               </div>
             );

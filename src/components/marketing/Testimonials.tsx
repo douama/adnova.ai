@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { Quote, Star, TrendingUp } from "lucide-react";
 import { Container } from "../ui/container";
 import { TESTIMONIALS } from "../../data/testimonials";
 
 export function Testimonials() {
+  const { t } = useTranslation();
   const featured = TESTIMONIALS[0]!;
   const rest = TESTIMONIALS.slice(1, 5);
 
@@ -11,10 +13,10 @@ export function Testimonials() {
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
-            Trusted by 2,412
+            {t("testimonials.kicker")}
           </p>
           <h2 className="mt-4 text-4xl font-bold tracking-tighter text-ink sm:text-5xl">
-            <em>High-growth</em> brands.
+            <em>{t("testimonials.title1")}</em> {t("testimonials.title2")}
           </h2>
         </div>
 
@@ -53,7 +55,7 @@ export function Testimonials() {
               <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/[0.06] px-3 py-1.5 text-xs text-emerald-400">
                 <TrendingUp className="h-3.5 w-3.5" />
                 <span>
-                  ROAS <strong className="font-bold">6.4×</strong> after 90 days
+                  ROAS <strong className="font-bold">6.4×</strong> {t("testimonials.roasSuffix")}
                 </span>
               </div>
             </div>
@@ -63,13 +65,13 @@ export function Testimonials() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
             <StatCard
               big="$1.37M"
-              label="Monthly revenue routed"
-              sub="Through AI decisions in the last 30 days."
+              label={t("testimonials.monthlyRevenueLabel")}
+              sub={t("testimonials.monthlyRevenueSub")}
             />
             <StatCard
               big="42 hrs"
-              label="Saved per marketer / month"
-              sub="Median across 2,412 active brands."
+              label={t("testimonials.savedLabel")}
+              sub={t("testimonials.savedSub")}
             />
           </div>
         </div>

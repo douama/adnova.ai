@@ -179,6 +179,95 @@
     "q8Q": "Bietet ihr Agentur- / White-Label-Preise?",
     "q8A": "Ja — der Agency-Plan (999 $/Monat oder 799 $/Monat jährlich) bietet unbegrenzte Ad-Konten, unbegrenzte KI-Creatives, White-Label-Dashboards für deine Kunden und die private API. Enterprise-Verträge ergänzen individuelles Volumen + dedizierten CSM."
   },
+  "featureBento": {
+    "kicker": "Die Plattform",
+    "title1": "Alles, was eine",
+    "title2": "Werbeagentur",
+    "title3": "macht. In einer API.",
+    "tile1Badge": "Live KI-Entscheidungen",
+    "tile1Sub": "Letzte 24h · 1.284 Aktionen",
+    "tile1Title1": "Die KI schläft",
+    "tile1Title2": "nie",
+    "tile1Desc": "Unsere autonome Engine analysiert jede Kampagne alle 30 Min — stoppt Verlierer, skaliert Gewinner, schreibt Creatives um. Du genehmigst Meilensteine, keine Mikroentscheidungen.",
+    "feedScale": "Skalieren",
+    "feedPause": "Pause",
+    "feedCreate": "Erstellen",
+    "tile2Badge": "9 Werbeplattformen",
+    "tile2Title": "Ein Workspace, jeder Kanal.",
+    "tile3Badge": "Leistung",
+    "tile3Sub": "Durchschnitts-ROAS über 2.412 Marken",
+    "tile3SubSmall": "Vorher 2,1× ohne AdNova",
+    "tile4Badge": "KI-Creatives",
+    "tile4Title": "Bilder, Videos, UGC — in Skala.",
+    "tile4Sub": "Image Studio · Video Engine · Avatar Studio",
+    "tile5Badge": "Developer first",
+    "tile5Title": "Binde AdNova in dein eigenes Produkt ein.",
+    "tile5Sub": "SOC 2 · DSGVO · RLS-geschützte Tenants"
+  },
+  "howItWorks": {
+    "kicker": "Drei Schritte.",
+    "title1": "Dann läuft es",
+    "title2": "von selbst",
+    "step1Title": "Verbinden",
+    "step1Body": "Verbinde deine Werbekonten in 30 Sekunden. OAuth zu Meta, Google, TikTok, LinkedIn, YouTube, Pinterest, Snapchat, X, Amazon — kein SDK zu installieren.",
+    "step2Title": "Trainieren",
+    "step2Body": "AdNova nimmt deine Kampagnenhistorie auf, lernt, was für deine Marke, ICP und Creative-Stimme funktioniert. Bereit in unter 10 Minuten.",
+    "step3Title": "Skalieren",
+    "step3Body": "Der Agent läuft 24/7 — generiert Creatives, verteilt Budgets, stoppt Verlierer, skaliert Gewinner. Du genehmigst Meilensteine, keine Mikroentscheidungen."
+  },
+  "testimonials": {
+    "kicker": "Vertraut von 2.412",
+    "title1": "Marken im",
+    "title2": "Hyperwachstum.",
+    "roasSuffix": "nach 90 Tagen",
+    "monthlyRevenueLabel": "Monatlicher Umsatz gesteuert",
+    "monthlyRevenueSub": "Via KI-Entscheidungen in den letzten 30 Tagen.",
+    "savedLabel": "Gespart pro Marketer / Monat",
+    "savedSub": "Median über 2.412 aktive Marken."
+  },
+  "plans": {
+    "ctaStartTrial": "Kostenlos testen",
+    "ctaContactSales": "Vertrieb kontaktieren",
+    "starterSummary": "3 Werbekonten · 20 Creatives/Monat",
+    "starterFeatures": [
+      "3 verbundene Werbekonten",
+      "20 KI-Creatives / Monat",
+      "2 Plattformen (Meta + Google)",
+      "Basis Analytics Dashboard",
+      "Standard KI-Optimierung",
+      "E-Mail-Support"
+    ],
+    "proSummary": "15 Werbekonten · 100 Creatives/Monat",
+    "proFeatures": [
+      "15 verbundene Werbekonten",
+      "100 KI-Creatives / Monat",
+      "Alle 9 Plattformen",
+      "Volle KI-Engine (UGC-Video inkl.)",
+      "A/B-Testing-Automatisierung",
+      "Lookalike-Audience-Builder",
+      "Erweiterte Analytics + Berichte",
+      "Priority Support (4h)"
+    ],
+    "agencySummary": "Unbegrenzt · White-Label · API",
+    "agencyFeatures": [
+      "Unbegrenzte Werbekonten",
+      "Unbegrenzte KI-Creatives",
+      "Alle Plattformen + individuelle Integrationen",
+      "Unbegrenzte Teammitglieder",
+      "White-Label-Lösung",
+      "Privater API-Zugang",
+      "Dedizierter CSM + individuelle Berichte"
+    ],
+    "enterpriseSummary": "SLA · Dediziert · Custom Agents",
+    "enterpriseFeatures": [
+      "Individuelles Volumen + 99,9 % SLA",
+      "Custom KI-Agents auf deinen Daten",
+      "Dediziertes Support-Team",
+      "SSO + erweiterte Sicherheit",
+      "On-Premise-Deployment-Option",
+      "Quartalsweise Business Reviews"
+    ]
+  },
   "common": {
     "loading": "Laden…",
     "save": "Speichern",

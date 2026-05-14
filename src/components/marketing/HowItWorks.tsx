@@ -1,43 +1,23 @@
+import { useTranslation } from "react-i18next";
 import { Plug, Brain, Rocket } from "lucide-react";
 import { Container } from "../ui/container";
 
-const STEPS = [
-  {
-    n: "01",
-    title: "Connect",
-    body:
-      "Plug your ad accounts in 30 seconds. OAuth to Meta, Google, TikTok, LinkedIn, YouTube, Pinterest, Snapchat, X, Amazon — no SDK to install.",
-    icon: Plug,
-    duration: "~30s",
-  },
-  {
-    n: "02",
-    title: "Train",
-    body:
-      "AdNova ingests your campaign history, learns what works for your brand, ICP and creative voice. Ready in under 10 minutes.",
-    icon: Brain,
-    duration: "~10 min",
-  },
-  {
-    n: "03",
-    title: "Scale",
-    body:
-      "The agent runs 24/7 — generates creatives, reallocates budget, kills losers, scales winners. You approve milestones, not micro-decisions.",
-    icon: Rocket,
-    duration: "24 / 7",
-  },
-];
-
 export function HowItWorks() {
+  const { t } = useTranslation();
+  const STEPS = [
+    { n: "01", titleKey: "howItWorks.step1Title", bodyKey: "howItWorks.step1Body", icon: Plug,   duration: "~30s" },
+    { n: "02", titleKey: "howItWorks.step2Title", bodyKey: "howItWorks.step2Body", icon: Brain,  duration: "~10 min" },
+    { n: "03", titleKey: "howItWorks.step3Title", bodyKey: "howItWorks.step3Body", icon: Rocket, duration: "24 / 7" },
+  ];
   return (
     <section id="how-it-works" className="pb-14 pt-6 sm:pb-20 sm:pt-10">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
-            Three steps.
+            {t("howItWorks.kicker")}
           </p>
           <h2 className="mt-4 text-4xl font-bold tracking-tighter text-ink sm:text-5xl">
-            Then it runs <em>itself</em>.
+            {t("howItWorks.title1")} <em>{t("howItWorks.title2")}</em>.
           </h2>
         </div>
 
@@ -75,9 +55,9 @@ export function HowItWorks() {
                     {s.n}
                   </div>
                   <h3 className="mt-1.5 text-2xl font-bold tracking-tighter text-ink">
-                    {s.title}
+                    {t(s.titleKey)}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-body">{s.body}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-body">{t(s.bodyKey)}</p>
                 </div>
               );
             })}

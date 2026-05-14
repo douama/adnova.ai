@@ -179,6 +179,95 @@
     "q8Q": "Proposez-vous des tarifs agence / white-label ?",
     "q8A": "Oui — le plan Agency (999 $/mois, ou 799 $/mois en annuel) donne accès à des comptes pub illimités, des créas IA illimitées, des dashboards white-label pour vos clients, et l'API privée. Les contrats Enterprise ajoutent volume sur mesure + CSM dédié."
   },
+  "featureBento": {
+    "kicker": "La plateforme",
+    "title1": "Tout ce qu'une",
+    "title2": "agence pub",
+    "title3": "fait. En une seule API.",
+    "tile1Badge": "Décisions IA en direct",
+    "tile1Sub": "Dernières 24h · 1 284 actions",
+    "tile1Title1": "L'IA ne dort",
+    "tile1Title2": "jamais",
+    "tile1Desc": "Notre moteur autonome analyse chaque campagne toutes les 30 min — kill les perdants, scale les gagnants, réécrit les créas. Vous validez les jalons, pas les micro-décisions.",
+    "feedScale": "Scaler",
+    "feedPause": "Pause",
+    "feedCreate": "Créer",
+    "tile2Badge": "9 plateformes pub",
+    "tile2Title": "Un seul workspace, chaque canal.",
+    "tile3Badge": "Performance",
+    "tile3Sub": "ROAS moyen sur 2 412 marques",
+    "tile3SubSmall": "Contre 2,1× avant AdNova",
+    "tile4Badge": "Créas IA",
+    "tile4Title": "Images, vidéos, UGC — à grande échelle.",
+    "tile4Sub": "Image Studio · Video Engine · Avatar Studio",
+    "tile5Badge": "Developer first",
+    "tile5Title": "Intégrez AdNova dans votre propre produit.",
+    "tile5Sub": "SOC 2 · RGPD · tenants verrouillés en RLS"
+  },
+  "howItWorks": {
+    "kicker": "Trois étapes.",
+    "title1": "Et ça tourne",
+    "title2": "tout seul",
+    "step1Title": "Connectez",
+    "step1Body": "Branchez vos comptes pub en 30 secondes. OAuth vers Meta, Google, TikTok, LinkedIn, YouTube, Pinterest, Snapchat, X, Amazon — aucun SDK à installer.",
+    "step2Title": "Entraînez",
+    "step2Body": "AdNova ingère votre historique de campagnes, apprend ce qui marche pour votre marque, ICP et ton créa. Prêt en moins de 10 minutes.",
+    "step3Title": "Scalez",
+    "step3Body": "L'agent tourne 24/7 — génère les créas, réalloue les budgets, kill les perdants, scale les gagnants. Vous validez les jalons, pas les micro-décisions."
+  },
+  "testimonials": {
+    "kicker": "Adoptée par 2 412",
+    "title1": "marques en",
+    "title2": "hypercroissance.",
+    "roasSuffix": "après 90 jours",
+    "monthlyRevenueLabel": "Revenus mensuels pilotés",
+    "monthlyRevenueSub": "Via les décisions IA sur les 30 derniers jours.",
+    "savedLabel": "Économisées par marketeur / mois",
+    "savedSub": "Médiane sur 2 412 marques actives."
+  },
+  "plans": {
+    "ctaStartTrial": "Essai gratuit",
+    "ctaContactSales": "Contacter le commercial",
+    "starterSummary": "3 comptes pub · 20 créas/mois",
+    "starterFeatures": [
+      "3 comptes pub connectés",
+      "20 créas IA / mois",
+      "2 plateformes (Meta + Google)",
+      "Dashboard analytics de base",
+      "Optimisation IA standard",
+      "Support email"
+    ],
+    "proSummary": "15 comptes pub · 100 créas/mois",
+    "proFeatures": [
+      "15 comptes pub connectés",
+      "100 créas IA / mois",
+      "Les 9 plateformes",
+      "Moteur IA complet (vidéo UGC incl.)",
+      "Automatisation A/B testing",
+      "Builder d'audiences lookalike",
+      "Analytics avancés + rapports",
+      "Support prioritaire (4h)"
+    ],
+    "agencySummary": "Illimité · White-label · API",
+    "agencyFeatures": [
+      "Comptes pub illimités",
+      "Créas IA illimitées",
+      "Toutes plateformes + intégrations custom",
+      "Membres d'équipe illimités",
+      "Solution white-label",
+      "Accès API privée",
+      "CSM dédié + rapports custom"
+    ],
+    "enterpriseSummary": "SLA · Dédié · Agents custom",
+    "enterpriseFeatures": [
+      "Volume custom + SLA 99,9 %",
+      "Agents IA custom sur vos données",
+      "Équipe support dédiée",
+      "SSO + sécurité avancée",
+      "Option déploiement on-premise",
+      "Business reviews trimestrielles"
+    ]
+  },
   "common": {
     "loading": "Chargement…",
     "save": "Enregistrer",
