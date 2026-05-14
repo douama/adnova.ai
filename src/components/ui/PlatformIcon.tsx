@@ -4,6 +4,7 @@
 // Each <Logo> renders only the path; the wrapping <svg> + color is handled by
 // PlatformIcon below so callers can pass `size` + `color` (or a brand color
 // from PLATFORMS.accent) uniformly.
+import { useTheme } from "../../lib/theme";
 
 type LogoProps = { className?: string };
 
@@ -88,10 +89,11 @@ const LOGOS: Record<string, (props: LogoProps) => JSX.Element> = {
   amazon: Amazon,
 };
 
-// Brand colors per platform. Google ignores this (it's multi-color natively).
-// Snapchat yellow + X white stay native; everything else uses its brand color
-// over a soft tinted background.
-const BRAND_COLOR: Record<string, string> = {
+// Brand colors per platform. Three brands break on light mode if we use the
+// native white/yellow brand colors (TikTok, X, Snapchat all disappear on a
+// white background) — so we keep the white/yellow for dark mode and swap to
+// black/dark variants for light mode.
+const BRAND_COLOR_DARK: Record<string, string> = {
   meta: "#0866FF",
   google: "currentColor", // unused — Google is multi-color
   tiktok: "#FFFFFF",
@@ -100,6 +102,17 @@ const BRAND_COLOR: Record<string, string> = {
   pinterest: "#E60023",
   snapchat: "#FFFC00",
   x: "#FFFFFF",
+  amazon: "#FF9900",
+};
+const BRAND_COLOR_LIGHT: Record<string, string> = {
+  meta: "#0866FF",
+  google: "currentColor",
+  tiktok: "#000000",
+  linkedin: "#0A66C2",
+  youtube: "#FF0000",
+  pinterest: "#E60023",
+  snapchat: "#1A1A1A", // ghost glyph stays readable; native bg is yellow
+  x: "#000000",
   amazon: "#FF9900",
 };
 
@@ -113,6 +126,7 @@ type Props = {
 };
 
 export function PlatformIcon({ platform, className = "", variant = "solid" }: Props) {
+  const { theme } = useTheme();
   const Logo = LOGOS[platform];
   if (!Logo) {
     return (
@@ -128,15 +142,24 @@ export function PlatformIcon({ platform, className = "", variant = "solid" }: Pr
   }
 
   const isGoogle = platform === "google";
-  const color = BRAND_COLOR[platform] ?? "#FFFFFF";
+  const palette = theme === "dark" ? BRAND_COLOR_DARK : BRAND_COLOR_LIGHT;
+  // Background uses the *visual* brand color (still yellow for Snapchat etc.)
+  // so the badge feels on-brand. Foreground is the readable variant.
+  const bgColor = BRAND_COLOR_DARK[platform] ?? "#FFFFFF";
+  const fgColor = palette[platform] ?? "#FFFFFF";
 
   return (
     <span
       className={`inline-grid place-items-center rounded-lg ${className}`}
       style={
         isGoogle
-          ? { background: "rgba(255,255,255,0.04)" }
-          : { background: `${color}1F`, color }
+          ? {
+              background:
+                theme === "dark"
+                  ? "rgba(255,255,255,0.04)"
+                  : "rgba(0,0,0,0.04)",
+            }
+          : { background: `${bgColor}1F`, color: fgColor }
       }
     >
       <Logo className="h-1/2 w-1/2" />
