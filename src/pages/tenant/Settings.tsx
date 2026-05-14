@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { User, Building2, Plug } from "lucide-react";
+import { User, Building2, Plug, ShoppingBag } from "lucide-react";
 import { useAuth } from "../../stores/authStore";
 import { useCurrentTenant } from "../../stores/tenantStore";
 import { PLATFORMS } from "../../data/platforms";
 import { PlatformIcon } from "../../components/ui/PlatformIcon";
+import { EcommerceTab } from "../../components/dashboard/EcommerceTab";
 
-type Tab = "account" | "workspace" | "integrations";
+type Tab = "account" | "workspace" | "integrations" | "ecommerce";
 
 export function SettingsPage() {
   const [tab, setTab] = useState<Tab>("account");
@@ -27,7 +28,10 @@ export function SettingsPage() {
           Workspace
         </TabBtn>
         <TabBtn active={tab === "integrations"} onClick={() => setTab("integrations")} icon={<Plug className="h-3.5 w-3.5" />}>
-          Integrations
+          Ad platforms
+        </TabBtn>
+        <TabBtn active={tab === "ecommerce"} onClick={() => setTab("ecommerce")} icon={<ShoppingBag className="h-3.5 w-3.5" />}>
+          E-commerce
         </TabBtn>
       </div>
 
@@ -35,6 +39,7 @@ export function SettingsPage() {
         {tab === "account" && <AccountTab />}
         {tab === "workspace" && <WorkspaceTab />}
         {tab === "integrations" && <IntegrationsTab />}
+        {tab === "ecommerce" && <EcommerceTab />}
       </div>
     </div>
   );

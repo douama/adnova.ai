@@ -45,19 +45,37 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
-  let body: { tenant_id?: string; prompt?: string; duration?: number; aspect?: string };
+  let body: {
+    tenant_id?: string;
+    prompt?: string;
+    duration?: number;
+    aspect?: string;
+    product_image_url?: string;
+    product_url?: string;
+    product_title?: string;
+    product_description?: string;
+  };
   try {
     body = await req.json();
   } catch {
     return json({ error: "Invalid JSON" }, 400);
   }
   const tenantId = body.tenant_id;
-  const prompt = body.prompt?.trim();
+  const rawPrompt = body.prompt?.trim();
+  const productImageUrl = body.product_image_url?.trim() || null;
+  const productUrl = body.product_url?.trim() || null;
+  const productTitle = body.product_title?.trim() || null;
+  const productDescription = body.product_description?.trim() || null;
+  const prompt = [
+    productTitle ? `Product: ${productTitle}.` : null,
+    productDescription ? `${productDescription.slice(0, 250)}` : null,
+    rawPrompt,
+  ].filter(Boolean).join(" ");
   const duration = body.duration === 8 ? 8 : 4;
   const aspect = ["16:9", "9:16", "1:1"].includes(body.aspect ?? "") ? body.aspect! : "16:9";
 
   if (!tenantId || typeof tenantId !== "string") return json({ error: "tenant_id required" }, 400);
-  if (!prompt || prompt.length < 5) return json({ error: "prompt too short (min 5 chars)" }, 400);
+  if (!rawPrompt || rawPrompt.length < 5) return json({ error: "prompt too short (min 5 chars)" }, 400);
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
@@ -207,6 +225,9 @@ Deno.serve(async (req: Request) => {
         duration_ms: durationMs,
         bytes: bytes.length,
         is_demo: isDemo,
+        product_url: productUrl,
+        product_image_url: productImageUrl,
+        product_title: productTitle,
       },
       created_by: member.user_id ?? null,
     })

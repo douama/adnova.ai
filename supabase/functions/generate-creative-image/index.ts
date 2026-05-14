@@ -41,7 +41,16 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
-  let body: { tenant_id?: string; prompt?: string; style?: string; size?: string };
+  let body: {
+    tenant_id?: string;
+    prompt?: string;
+    style?: string;
+    size?: string;
+    product_image_url?: string;
+    product_url?: string;
+    product_title?: string;
+    product_description?: string;
+  };
   try {
     body = await req.json();
   } catch {
@@ -51,6 +60,10 @@ Deno.serve(async (req: Request) => {
   const prompt = body.prompt?.trim();
   const style = body.style?.trim() ?? "";
   const size = (body.size && COST[body.size] ? body.size : "1024x1024") as keyof typeof COST;
+  const productImageUrl = body.product_image_url?.trim() || null;
+  const productUrl = body.product_url?.trim() || null;
+  const productTitle = body.product_title?.trim() || null;
+  const productDescription = body.product_description?.trim() || null;
 
   if (!tenantId || typeof tenantId !== "string") return json({ error: "tenant_id required" }, 400);
   if (!prompt || prompt.length < 5) return json({ error: "prompt too short (min 5 chars)" }, 400);
@@ -93,9 +106,20 @@ Deno.serve(async (req: Request) => {
   if (!member) return json({ error: "You are not a member of this tenant" }, 403);
 
   // ─── Call OpenAI Images ───────────────────────────────────────────────
-  const fullPrompt = style
-    ? `${prompt}\n\nStyle: ${style}. High-quality advertising creative, clean composition, professional product photography aesthetic, no text overlay unless requested.`
-    : `${prompt}\n\nHigh-quality advertising creative, clean composition, professional product photography aesthetic, no text overlay unless requested.`;
+  // Enrich prompt with product context if provided
+  const productContext = [
+    productTitle ? `Product: ${productTitle}` : null,
+    productDescription ? `Description: ${productDescription.slice(0, 400)}` : null,
+    productUrl ? `Source: ${productUrl}` : null,
+    productImageUrl ? `Reference image available — match the product appearance accurately.` : null,
+  ].filter(Boolean).join("\n");
+
+  const fullPrompt = [
+    productContext,
+    prompt,
+    style ? `Style: ${style}.` : null,
+    "High-quality advertising creative, clean composition, professional product photography aesthetic, no text overlay unless requested.",
+  ].filter(Boolean).join("\n\n");
 
   const t0 = Date.now();
   const openaiRes = await fetch(OPENAI_IMAGES_URL, {
@@ -178,6 +202,9 @@ Deno.serve(async (req: Request) => {
         cost_usd: costUsd,
         duration_ms: durationMs,
         bytes: bytes.length,
+        product_url: productUrl,
+        product_image_url: productImageUrl,
+        product_title: productTitle,
       },
       created_by: member.user_id ?? null,
     })

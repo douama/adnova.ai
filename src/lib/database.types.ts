@@ -1017,6 +1017,108 @@ export type Database = {
           },
         ]
       }
+      ecommerce_connections: {
+        Row: {
+          id: string
+          tenant_id: string
+          provider: string
+          shop_domain: string
+          api_token: string
+          api_secret: string | null
+          is_active: boolean
+          last_synced_at: string | null
+          last_sync_status: string | null
+          last_sync_error: string | null
+          product_count: number
+          created_at: string
+          created_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          tenant_id: string
+          provider: string
+          shop_domain: string
+          api_token: string
+          api_secret?: string | null
+          is_active?: boolean
+          last_synced_at?: string | null
+          last_sync_status?: string | null
+          last_sync_error?: string | null
+          product_count?: number
+          created_at?: string
+          created_by?: string | null
+          updated_at?: string
+        }
+        Update: Partial<{
+          id: string
+          tenant_id: string
+          provider: string
+          shop_domain: string
+          api_token: string
+          api_secret: string | null
+          is_active: boolean
+          last_synced_at: string | null
+          last_sync_status: string | null
+          last_sync_error: string | null
+          product_count: number
+          created_at: string
+          created_by: string | null
+          updated_at: string
+        }>
+        Relationships: []
+      }
+      products: {
+        Row: {
+          id: string
+          tenant_id: string
+          connection_id: string | null
+          external_id: string
+          title: string
+          description: string | null
+          price_usd: number | null
+          currency: string | null
+          image_url: string | null
+          source_url: string | null
+          sku: string | null
+          status: string | null
+          synced_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          tenant_id: string
+          connection_id?: string | null
+          external_id: string
+          title: string
+          description?: string | null
+          price_usd?: number | null
+          currency?: string | null
+          image_url?: string | null
+          source_url?: string | null
+          sku?: string | null
+          status?: string | null
+          synced_at?: string
+          created_at?: string
+        }
+        Update: Partial<{
+          id: string
+          tenant_id: string
+          connection_id: string | null
+          external_id: string
+          title: string
+          description: string | null
+          price_usd: number | null
+          currency: string | null
+          image_url: string | null
+          source_url: string | null
+          sku: string | null
+          status: string | null
+          synced_at: string
+          created_at: string
+        }>
+        Relationships: []
+      }
       provider_credentials: {
         Row: {
           api_key: string
@@ -1417,6 +1519,21 @@ export type Database = {
       approve_affiliate: {
         Args: { p_affiliate_id: string; p_new_code?: string | null }
         Returns: Json
+      }
+      list_ecommerce_connections: {
+        Args: { _tenant_id: string }
+        Returns: {
+          id: string
+          provider: string
+          shop_domain: string
+          token_preview: string
+          is_active: boolean
+          last_synced_at: string | null
+          last_sync_status: string | null
+          last_sync_error: string | null
+          product_count: number
+          created_at: string
+        }[]
       }
     }
     Enums: {
