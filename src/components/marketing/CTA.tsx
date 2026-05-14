@@ -5,7 +5,7 @@ import { Container } from "../ui/container";
 export function CTA() {
   const { t } = useTranslation();
   return (
-    <section className="py-14 sm:py-20">
+    <section className="pb-14 pt-6 sm:pb-20 sm:pt-10">
       <Container>
         <div className="glass glass-highlight relative overflow-hidden rounded-3xl px-8 py-12 text-center sm:px-16 sm:py-16">
           <div
