@@ -16,11 +16,16 @@
     }
   },
   "hero": {
-    "badge": "Ao vivo · 2 412 marcas a escalar na AdNova",
+    "badge": "Ao vivo · 2 412 marcas a escalar na AdNova agora",
     "title1": "O seu diretor de aquisição,",
     "title2": "numa API",
-    "subtitle": "A AdNova gere as suas campanhas em 9 plataformas, gera criativos, otimiza investimento e redige relatórios — enquanto dorme.",
-    "metric": "ROAS médio: 4,82×",
+    "subtitle": "Substitua o seu media buyer, a sua agência criativa e a sua equipa de relatórios por uma única IA autónoma — a funcionar 24/7 nas 9 plataformas publicitárias.",
+    "value1": "Operacional em 24h",
+    "value2": "ROAS garantido ou reembolso",
+    "value3": "Cancele em 1 clique",
+    "metric": "ROAS médio 4,82×",
+    "brandsScaling": "marcas ativas",
+    "worksWith": "Compatível nativamente com",
     "ctaPrimary": "Teste grátis",
     "ctaSecondary": "Ver como funciona",
     "trialNote": "14 dias grátis · Sem cartão · Cancele quando quiser"

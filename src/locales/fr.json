@@ -16,11 +16,16 @@
     }
   },
   "hero": {
-    "badge": "En direct · 2 412 marques sur AdNova",
+    "badge": "En direct · 2 412 marques scalent sur AdNova maintenant",
     "title1": "Votre responsable acquisition,",
     "title2": "en API",
-    "subtitle": "AdNova gère vos campagnes sur 9 plateformes, génère vos créas, optimise vos budgets et rédige vos rapports — pendant que vous dormez.",
-    "metric": "ROAS moyen : 4,82×",
+    "subtitle": "Remplacez votre média buyer, votre agence créa et votre équipe reporting par une seule IA autonome — qui tourne 24/7 sur les 9 plateformes pub.",
+    "value1": "Opérationnel en 24h",
+    "value2": "ROAS garanti ou remboursé",
+    "value3": "Annulation en 1 clic",
+    "metric": "ROAS moyen 4,82×",
+    "brandsScaling": "marques actives",
+    "worksWith": "Compatible nativement avec",
     "ctaPrimary": "Essai gratuit",
     "ctaSecondary": "Voir comment ça marche",
     "trialNote": "14 jours d'essai · Sans carte bancaire · Annulation à tout moment"

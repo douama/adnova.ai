@@ -16,11 +16,16 @@
     }
   },
   "hero": {
-    "badge": "Live · 2,412 brands scaling on AdNova",
+    "badge": "Live · 2,412 brands scaling on AdNova right now",
     "title1": "Your acquisition lead,",
     "title2": "in an API",
-    "subtitle": "AdNova runs your campaigns across 9 platforms, generates creatives, optimizes spend and writes reports — while you sleep.",
-    "metric": "Average ROAS: 4.82×",
+    "subtitle": "Replace your media buyer, your creative agency and your reporting team with one autonomous AI — running 24/7 across all 9 ad platforms.",
+    "value1": "Live in 24 hours",
+    "value2": "ROAS guaranteed or refund",
+    "value3": "Cancel in 1 click",
+    "metric": "4.82× average ROAS",
+    "brandsScaling": "active brands",
+    "worksWith": "Works natively with",
     "ctaPrimary": "Start free trial",
     "ctaSecondary": "See how it works",
     "trialNote": "14-day free trial · No credit card · Cancel anytime"

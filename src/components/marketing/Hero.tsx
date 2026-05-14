@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Star, TrendingUp, Check } from "lucide-react";
 import { Container } from "../ui/container";
+import { PlatformIcon } from "../ui/PlatformIcon";
+
+const PROOF_PLATFORMS = ["meta", "google", "tiktok", "linkedin", "youtube", "pinterest"];
 
 export function Hero() {
   const { t } = useTranslation();
@@ -23,28 +27,51 @@ export function Hero() {
 
       <Container className="relative">
         <div className="mx-auto max-w-3xl text-center">
+          {/* Trust pill — live activity + brand count */}
           <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-medium text-muted-strong sm:px-4 sm:text-xs">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange" />
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-orange" />
+            </span>
             <span className="whitespace-nowrap">{t("hero.badge")}</span>
           </div>
 
+          {/* Main headline */}
           <h1 className="mt-5 text-[clamp(1.5rem,6.5vw,2.5rem)] font-bold leading-[1.1] tracking-tighter text-ink sm:mt-7 sm:text-6xl sm:leading-[1.05] md:text-7xl">
             <span className="whitespace-nowrap">{t("hero.title1")}</span>
             <br />
             <em>{t("hero.title2")}</em>.
           </h1>
 
+          {/* Subhead */}
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-body sm:mt-7 sm:text-lg md:text-xl">
-            {t("hero.subtitle")}{" "}
-            <span className="text-ink font-medium">{t("hero.metric")}</span>.
+            {t("hero.subtitle")}
           </p>
 
-          <div className="mt-8 flex flex-row items-stretch justify-center gap-2 sm:mt-10 sm:gap-3">
+          {/* Value bullets — concrete promises that lift conversion */}
+          <ul className="mx-auto mt-5 inline-flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-strong sm:text-sm">
+            <li className="inline-flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-orange" strokeWidth={2.5} />
+              {t("hero.value1")}
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-orange" strokeWidth={2.5} />
+              {t("hero.value2")}
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-orange" strokeWidth={2.5} />
+              {t("hero.value3")}
+            </li>
+          </ul>
+
+          {/* CTAs */}
+          <div className="mt-8 flex flex-row items-stretch justify-center gap-2 sm:mt-9 sm:gap-3">
             <Link
               to="/register"
-              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-orange px-4 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5 sm:flex-none sm:px-8"
+              className="group inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-orange px-4 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow hover:-translate-y-0.5 sm:flex-none sm:px-8"
             >
-              {t("hero.ctaPrimary")} <span aria-hidden>→</span>
+              {t("hero.ctaPrimary")}
+              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
             </Link>
             <a
               href="#how-it-works"
@@ -54,7 +81,47 @@ export function Hero() {
             </a>
           </div>
 
-          <p className="mt-6 text-xs text-muted">{t("hero.trialNote")}</p>
+          <p className="mt-5 text-xs text-muted">{t("hero.trialNote")}</p>
+
+          {/* Social proof — stars + ROAS metric */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] text-muted-strong sm:text-xs">
+            <div className="inline-flex items-center gap-1.5">
+              <div className="flex items-center gap-0.5 text-orange">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3 w-3 fill-current" strokeWidth={0} />
+                ))}
+              </div>
+              <span>
+                <strong className="text-ink">4.9/5</strong> — 1 284 reviews
+              </span>
+            </div>
+            <span className="hidden h-3 w-px bg-border sm:block" />
+            <div className="inline-flex items-center gap-1.5">
+              <TrendingUp className="h-3 w-3 text-emerald-400" strokeWidth={2.5} />
+              <span>
+                <strong className="text-ink">{t("hero.metric")}</strong>
+              </span>
+            </div>
+            <span className="hidden h-3 w-px bg-border sm:block" />
+            <span className="inline-flex items-center gap-1.5">
+              <strong className="text-ink">2 412</strong> {t("hero.brandsScaling")}
+            </span>
+          </div>
+
+          {/* Platform proof strip */}
+          <div className="mt-7">
+            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
+              {t("hero.worksWith")}
+            </p>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 opacity-90">
+              {PROOF_PLATFORMS.map((p) => (
+                <PlatformIcon key={p} platform={p} className="h-9 w-9" />
+              ))}
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted">
+                +3
+              </span>
+            </div>
+          </div>
         </div>
       </Container>
     </section>
