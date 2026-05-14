@@ -1,0 +1,106 @@
+{
+  "nav": {
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "customers": "Kunden",
+    "blog": "Blog",
+    "vsSmartly": "vs Smartly",
+    "signIn": "Anmelden",
+    "getStarted": "Loslegen",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "language": "Sprache",
+    "theme": {
+      "toggleToLight": "Zum hellen Modus wechseln",
+      "toggleToDark": "Zum dunklen Modus wechseln"
+    }
+  },
+  "hero": {
+    "badge": "Live · 2.412 Marken skalieren auf AdNova",
+    "title1": "Dein Head of Growth,",
+    "title2": "als API",
+    "subtitle": "AdNova steuert deine Kampagnen auf 9 Plattformen, erstellt Creatives, optimiert Budgets und schreibt Reports — während du schläfst.",
+    "metric": "Durchschnittlicher ROAS: 4,82×",
+    "ctaPrimary": "Kostenlos testen",
+    "ctaSecondary": "So funktioniert's",
+    "trialNote": "14 Tage gratis · Keine Kreditkarte · Jederzeit kündbar"
+  },
+  "cta": {
+    "title1": "Lass die KI",
+    "title2": "deine Ads steuern",
+    "subtitle": "Schließe dich 2.400+ Marken an, die manuelle Arbeit eliminieren, smarter ausgeben und schneller skalieren — mit AdNova AI.",
+    "primary": "Kostenlos testen",
+    "secondary": "Preise ansehen",
+    "note": "14 Tage gratis · Keine Kreditkarte · Jederzeit kündbar"
+  },
+  "footer": {
+    "tagline": "Autonome Werbung für moderne Marken. Powered by AdNova AI.",
+    "status": "Alle Systeme einsatzbereit",
+    "mobileApp": {
+      "kicker": "Mobile App",
+      "title1": "AdNova in",
+      "title2": "deiner Tasche",
+      "subtitle": "Push-Benachrichtigungen bei jeder KI-Entscheidung. Genehmigen oder ablehnen direkt vom Homescreen. Native iOS + Android, Launch Q3 2026.",
+      "comingSoon": "Bald"
+    },
+    "cols": {
+      "product": "Produkt",
+      "company": "Unternehmen",
+      "legal": "Rechtliches"
+    },
+    "links": {
+      "features": "Funktionen",
+      "pricing": "Preise",
+      "customers": "Kunden",
+      "vsSmartly": "vs Smartly",
+      "blog": "Blog",
+      "about": "Über uns",
+      "careers": "Karriere",
+      "partners": "Partner",
+      "affiliate": "Affiliate werden",
+      "pressKit": "Press Kit",
+      "terms": "AGB",
+      "privacy": "Datenschutz"
+    },
+    "copyright": "© 2026 AdNova AI. Alle Rechte vorbehalten.",
+    "credit": "Made with care · Paris × San Francisco",
+    "signIn": "Anmelden",
+    "getStarted": "Loslegen"
+  },
+  "auth": {
+    "login": {
+      "title1": "Willkommen",
+      "title2": "zurück",
+      "subtitle": "Melde dich in deinem AdNova-Workspace an.",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "emailPlaceholder": "du@marke.com",
+      "passwordPlaceholder": "Dein Passwort",
+      "submit": "Anmelden",
+      "submitting": "Anmelden…",
+      "noAccount": "Noch kein Konto?",
+      "register": "Erstellen"
+    },
+    "register": {
+      "title1": "Starte deinen",
+      "title2": "kostenlosen Test",
+      "subtitle": "14 Tage. Keine Kreditkarte. Jederzeit kündbar.",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "company": "Unternehmen",
+      "email": "Business-E-Mail",
+      "password": "Passwort",
+      "passwordHint": "Mindestens 8 Zeichen",
+      "submit": "Workspace erstellen",
+      "submitting": "Erstelle…",
+      "hasAccount": "Schon ein Konto?",
+      "signIn": "Anmelden"
+    }
+  },
+  "common": {
+    "loading": "Laden…",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "error": "Etwas ist schiefgelaufen"
+  }
+}
