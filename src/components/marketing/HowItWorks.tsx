@@ -30,7 +30,7 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-14 sm:py-20">
+    <section id="how-it-works" className="pb-14 pt-6 sm:pb-20 sm:pt-10">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
@@ -41,7 +41,7 @@ export function HowItWorks() {
           </h2>
         </div>
 
-        <div className="relative mt-16">
+        <div className="relative mt-10">
           {/* Connecting dotted line on desktop */}
           <div
             aria-hidden
