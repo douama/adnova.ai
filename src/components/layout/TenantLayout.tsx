@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronsUpDown,
   Check,
+  Handshake,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
 import { useAuth } from "../../stores/authStore";
@@ -21,6 +22,7 @@ const NAV = [
   { to: "/creatives", label: "Creatives", icon: ImageIcon },
   { to: "/audiences", label: "Audiences", icon: Users },
   { to: "/automation", label: "Automation", icon: Workflow },
+  { to: "/affiliate", label: "Partner", icon: Handshake },
   { to: "/settings", label: "Settings", icon: SettingsIcon },
 ];
 

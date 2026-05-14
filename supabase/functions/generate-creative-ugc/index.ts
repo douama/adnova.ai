@@ -49,7 +49,6 @@ Deno.serve(async (req: Request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const heygenKey = Deno.env.get("HEYGEN_API_KEY");
   if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: "Supabase env missing" }, 500);
 
   // Tenant membership
@@ -64,6 +63,17 @@ Deno.serve(async (req: Request) => {
   if (!member) return json({ error: "You are not a member of this tenant" }, 403);
 
   const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
+
+  // HeyGen key : DB-stored credential first, env var fallback. Falls back
+  // to demo Mixkit clips if neither is configured.
+  let heygenKey: string | null = null;
+  try {
+    const { data } = await adminClient.rpc("get_provider_credential", {
+      p_provider: "heygen",
+    });
+    if (typeof data === "string" && data.length > 10) heygenKey = data;
+  } catch (_) { /* fall through */ }
+  if (!heygenKey) heygenKey = Deno.env.get("HEYGEN_API_KEY") ?? null;
 
   const t0 = Date.now();
   let bytes: Uint8Array;

@@ -1017,6 +1017,39 @@ export type Database = {
           },
         ]
       }
+      provider_credentials: {
+        Row: {
+          api_key: string
+          created_at: string
+          is_active: boolean
+          key_preview: string
+          last_rotated_at: string
+          notes: string | null
+          provider: string
+          rotated_by: string | null
+        }
+        Insert: {
+          api_key: string
+          created_at?: string
+          is_active?: boolean
+          key_preview: string
+          last_rotated_at?: string
+          notes?: string | null
+          provider: string
+          rotated_by?: string | null
+        }
+        Update: {
+          api_key?: string
+          created_at?: string
+          is_active?: boolean
+          key_preview?: string
+          last_rotated_at?: string
+          notes?: string | null
+          provider?: string
+          rotated_by?: string | null
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
           affiliate_id: string
@@ -1345,6 +1378,45 @@ export type Database = {
           status: Database["public"]["Enums"]["tenant_status"]
           tenant_id: string
         }[]
+      }
+      set_provider_credential: {
+        Args: { p_provider: string; p_api_key: string; p_notes?: string | null }
+        Returns: Json
+      }
+      list_provider_credentials: {
+        Args: never
+        Returns: {
+          provider: string
+          key_preview: string
+          is_active: boolean
+          last_rotated_at: string
+          rotated_by_email: string | null
+          notes: string | null
+        }[]
+      }
+      delete_provider_credential: {
+        Args: { p_provider: string }
+        Returns: Json
+      }
+      toggle_provider_credential: {
+        Args: { p_provider: string; p_is_active: boolean }
+        Returns: Json
+      }
+      apply_as_affiliate: {
+        Args: {
+          p_display_name: string
+          p_email: string
+          p_channel?: string | null
+          p_channel_url?: string | null
+          p_audience_size?: number | null
+          p_payout_method?: string
+          p_payout_account_ref?: string | null
+        }
+        Returns: Json
+      }
+      approve_affiliate: {
+        Args: { p_affiliate_id: string; p_new_code?: string | null }
+        Returns: Json
       }
     }
     Enums: {

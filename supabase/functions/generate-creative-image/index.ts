@@ -59,12 +59,26 @@ Deno.serve(async (req: Request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
   if (!supabaseUrl || !anonKey || !serviceKey) {
     return json({ error: "Supabase env missing" }, 500);
   }
+
+  // Resolve OpenAI key : DB-stored credential first, env var fallback.
+  const lookupClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false },
+  });
+  let openaiKey: string | null = null;
+  try {
+    const { data } = await lookupClient.rpc("get_provider_credential", {
+      p_provider: "openai",
+    });
+    if (typeof data === "string" && data.length > 10) openaiKey = data;
+  } catch (_) {
+    /* fall through */
+  }
+  if (!openaiKey) openaiKey = Deno.env.get("OPENAI_API_KEY") ?? null;
   if (!openaiKey) {
-    return json({ error: "OPENAI_API_KEY not configured on this Edge Function" }, 500);
+    return json({ error: "OpenAI key not configured (DB credential or env var)" }, 500);
   }
 
   // ─── Tenant membership check ──────────────────────────────────────────

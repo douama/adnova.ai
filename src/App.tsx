@@ -21,6 +21,7 @@ import { PressKitPage } from "./pages/public/PressKit";
 import { PartnersPage } from "./pages/public/Partners";
 import { TermsPage } from "./pages/public/Terms";
 import { PrivacyPage } from "./pages/public/Privacy";
+import { AffiliateApplyPage } from "./pages/public/AffiliateApply";
 
 // Auth
 import { LoginPage } from "./pages/auth/Login";
@@ -35,6 +36,7 @@ import { CreativesPage } from "./pages/tenant/Creatives";
 import { AudiencesPage } from "./pages/tenant/Audiences";
 import { AutomationPage } from "./pages/tenant/Automation";
 import { SettingsPage } from "./pages/tenant/Settings";
+import { AffiliateDashboardPage } from "./pages/tenant/Affiliate";
 
 // Super admin
 import { AdminLoginPage } from "./pages/admin/AdminLogin";
@@ -91,6 +93,7 @@ export function App() {
         <Route path="/partners" element={<PartnersPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/affiliate/apply" element={<AffiliateApplyPage />} />
       </Route>
 
       {/* Auth (full-bleed dark, no PublicLayout chrome) */}
@@ -125,6 +128,7 @@ export function App() {
         <Route path="/creatives" element={<CreativesPage />} />
         <Route path="/audiences" element={<AudiencesPage />} />
         <Route path="/automation" element={<AutomationPage />} />
+        <Route path="/affiliate" element={<AffiliateDashboardPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 

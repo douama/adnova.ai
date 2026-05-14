@@ -64,18 +64,29 @@ Deno.serve(async (req: Request) => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
   if (!supabaseUrl || !serviceKey) {
     return jsonResponse({ error: "Supabase env missing" }, 500);
-  }
-  if (!openaiKey) {
-    // Graceful degradation : function is wired but key not yet configured.
-    return jsonResponse({ skipped: true, reason: "OPENAI_API_KEY not set" });
   }
 
   const adminClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false },
   });
+
+  // OpenAI key : DB-stored credential first, env var fallback. Graceful
+  // skip if neither is configured (claude-decide falls back to rule-based).
+  let openaiKey: string | null = null;
+  try {
+    const { data } = await adminClient.rpc("get_provider_credential", {
+      p_provider: "openai",
+    });
+    if (typeof data === "string" && data.length > 10) openaiKey = data;
+  } catch (_) {
+    /* fall through */
+  }
+  if (!openaiKey) openaiKey = Deno.env.get("OPENAI_API_KEY") ?? null;
+  if (!openaiKey) {
+    return jsonResponse({ skipped: true, reason: "OpenAI key not configured" });
+  }
 
   const { data: decision, error: dErr } = await adminClient
     .from("ai_decisions")

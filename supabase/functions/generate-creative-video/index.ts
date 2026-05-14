@@ -62,7 +62,6 @@ Deno.serve(async (req: Request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const runwayKey = Deno.env.get("RUNWAY_API_KEY");
   if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: "Supabase env missing" }, 500);
 
   // ─── Tenant membership check ──────────────────────────────────────────
@@ -79,6 +78,17 @@ Deno.serve(async (req: Request) => {
   const adminClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false },
   });
+
+  // Runway key : DB-stored credential first, env var fallback. If absent
+  // entirely, the function still serves demo Mixkit clips.
+  let runwayKey: string | null = null;
+  try {
+    const { data } = await adminClient.rpc("get_provider_credential", {
+      p_provider: "runway",
+    });
+    if (typeof data === "string" && data.length > 10) runwayKey = data;
+  } catch (_) { /* fall through */ }
+  if (!runwayKey) runwayKey = Deno.env.get("RUNWAY_API_KEY") ?? null;
 
   const t0 = Date.now();
   let bytes: Uint8Array;

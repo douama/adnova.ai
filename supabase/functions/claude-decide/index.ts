@@ -212,6 +212,26 @@ function buildSituationQuery(campaigns: CampaignBrief[]): string {
   return `Ad ops analysis of ${campaigns.length} campaigns: ${summary}`;
 }
 
+// Resolve a provider's API key. Reads the DB-stored credential first (managed
+// from /admin/integrations) so super-admins can rotate keys without redeploying
+// the function. Falls back to the env var if no DB row is configured.
+async function getProviderKey(
+  // deno-lint-ignore no-explicit-any
+  client: any,
+  provider: "anthropic" | "openai" | "runway" | "heygen",
+  envName: string
+): Promise<string | null> {
+  try {
+    const { data, error } = await client.rpc("get_provider_credential", {
+      p_provider: provider,
+    });
+    if (!error && typeof data === "string" && data.length > 10) return data;
+  } catch (_) {
+    /* swallow and fall through to env */
+  }
+  return Deno.env.get(envName) ?? null;
+}
+
 async function embedQuery(text: string, openaiKey: string): Promise<number[] | null> {
   const res = await fetch(OPENAI_EMBEDDINGS_URL, {
     method: "POST",
@@ -250,17 +270,19 @@ Deno.serve(async (req: Request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const anthropicKey = Deno.env.get("ANTHROPIC_API_KEY");
   if (!supabaseUrl || !anonKey || !serviceKey) {
     return jsonResponse({ error: "Server misconfigured (Supabase env missing)" }, 500);
-  }
-  if (!anthropicKey) {
-    return jsonResponse({ error: "ANTHROPIC_API_KEY not set" }, 500);
   }
 
   const adminClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false },
   });
+
+  // Resolve Anthropic key : DB-stored credential first, env var fallback.
+  const anthropicKey = await getProviderKey(adminClient, "anthropic", "ANTHROPIC_API_KEY");
+  if (!anthropicKey) {
+    return jsonResponse({ error: "Anthropic API key not configured (DB or env)" }, 500);
+  }
 
   const authHeader = req.headers.get("Authorization") ?? "";
   const bearer = authHeader.replace(/^Bearer\s+/i, "").trim();
@@ -442,8 +464,8 @@ Deno.serve(async (req: Request) => {
   }
   const recent = (recentRaw ?? []) as RecentDecision[];
 
-  // Semantic recall — best-effort, skipped if OPENAI_API_KEY missing or call fails.
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
+  // Semantic recall — best-effort, skipped if OpenAI key not configured.
+  const openaiKey = await getProviderKey(adminClient, "openai", "OPENAI_API_KEY");
   let semantic: SemanticDecision[] = [];
   if (openaiKey) {
     const queryText = buildSituationQuery(

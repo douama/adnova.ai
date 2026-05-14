@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Container } from "../../components/ui/container";
 import { CTA } from "../../components/marketing/CTA";
 
@@ -24,6 +25,20 @@ export function PartnersPage() {
               20% lifetime commission on every paid plan from day one. Climb tiers and earn up
               to 40%. Cashout monthly via Stripe Connect, PayPal, SEPA or Wise.
             </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/affiliate/apply"
+                className="inline-flex h-12 items-center gap-2 rounded-xl bg-orange px-6 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:-translate-y-0.5 hover:shadow-glow"
+              >
+                Apply now <span aria-hidden>→</span>
+              </Link>
+              <a
+                href="#how-it-works"
+                className="inline-flex h-12 items-center rounded-xl border border-border-strong bg-white/[0.03] px-5 text-sm font-medium text-body transition-colors hover:border-white/25 hover:text-ink"
+              >
+                How it works
+              </a>
+            </div>
           </div>
         </Container>
       </section>
@@ -50,7 +65,7 @@ export function PartnersPage() {
         </Container>
       </section>
 
-      <section className="py-16">
+      <section id="how-it-works" className="py-16">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tighter text-ink sm:text-4xl">
@@ -60,8 +75,8 @@ export function PartnersPage() {
           <div className="mx-auto mt-12 grid max-w-4xl gap-5 md:grid-cols-3">
             <Step
               n="01"
-              title="Sign up"
-              body="Email us at partners@adnova.ai or apply via the dashboard once your account is created. Approved in 24h."
+              title="Apply"
+              body="Fill the partner form (under 2 min). Approved within 24h by our partnerships team."
             />
             <Step
               n="02"
@@ -73,6 +88,14 @@ export function PartnersPage() {
               title="Get paid monthly"
               body="Every 1st of the month — we sum your commission, deduct churn, payout via your chosen method."
             />
+          </div>
+          <div className="mt-12 text-center">
+            <Link
+              to="/affiliate/apply"
+              className="inline-flex h-11 items-center gap-2 rounded-xl bg-orange px-5 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:-translate-y-0.5 hover:shadow-glow"
+            >
+              Start earning 20% <span aria-hidden>→</span>
+            </Link>
           </div>
         </Container>
       </section>

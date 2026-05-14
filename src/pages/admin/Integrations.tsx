@@ -1,172 +1,298 @@
-import { useEffect, useState } from "react";
-import { CheckCircle2, AlertCircle, ExternalLink, Image as ImageIcon, Video, Camera, Sparkles } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import {
+  CheckCircle2,
+  AlertCircle,
+  ExternalLink,
+  Image as ImageIcon,
+  Video,
+  Camera,
+  Sparkles,
+  Lock,
+  KeyRound,
+  Trash2,
+  Pencil,
+  ShieldCheck,
+} from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
-type IntegrationStatus = "live" | "demo" | "missing-required";
+type ProviderId = "anthropic" | "openai" | "runway" | "heygen";
 
-type Integration = {
-  id: string;
+type ProviderDef = {
+  id: ProviderId;
   name: string;
-  provider: string;
-  envVar: string;
+  vendor: string;
   purpose: string;
   required: boolean;
   icon: React.ElementType;
   setupUrl: string;
-  // Filled at runtime by counting recent rows
-  recentCount?: number;
-  recentCost?: number;
-  status?: IntegrationStatus;
+  keyHint: string; // expected prefix to display in form (e.g. "sk-...")
 };
 
-const INTEGRATIONS: Integration[] = [
+type StoredCredential = {
+  provider: string;
+  key_preview: string;
+  is_active: boolean;
+  last_rotated_at: string;
+  rotated_by_email: string | null;
+  notes: string | null;
+};
+
+const PROVIDERS: ProviderDef[] = [
   {
     id: "anthropic",
-    name: "Claude Sonnet 4.5",
-    provider: "Anthropic",
-    envVar: "ANTHROPIC_API_KEY",
-    purpose: "Decision engine (claude-decide) · the AI ops brain",
+    name: "Anthropic — Claude Sonnet 4.5",
+    vendor: "Anthropic",
+    purpose: "Autonomous decision engine (claude-decide). Required for the AI ops loop.",
     required: true,
     icon: Sparkles,
     setupUrl: "https://console.anthropic.com/settings/keys",
+    keyHint: "sk-ant-...",
   },
   {
-    id: "openai-embed",
-    name: "OpenAI Embeddings",
-    provider: "OpenAI",
-    envVar: "OPENAI_API_KEY",
-    purpose: "Cross-run semantic memory (embed-decision)",
-    required: false,
-    icon: Sparkles,
-    setupUrl: "https://platform.openai.com/api-keys",
-  },
-  {
-    id: "openai-image",
-    name: "OpenAI gpt-image-1",
-    provider: "OpenAI",
-    envVar: "OPENAI_API_KEY",
-    purpose: "AI image creative generation",
+    id: "openai",
+    name: "OpenAI — Embeddings + gpt-image-1",
+    vendor: "OpenAI",
+    purpose: "Semantic memory (embed-decision) + AI image creative generation.",
     required: false,
     icon: ImageIcon,
     setupUrl: "https://platform.openai.com/api-keys",
+    keyHint: "sk-...",
   },
   {
     id: "runway",
-    name: "Runway Gen-4",
-    provider: "Runway",
-    envVar: "RUNWAY_API_KEY",
-    purpose: "AI video creative generation (4-8s clips)",
+    name: "Runway — Gen-4 Video",
+    vendor: "Runway",
+    purpose: "AI video creative (4-8s clips). Without a key, falls back to demo Mixkit clips.",
     required: false,
     icon: Video,
     setupUrl: "https://app.runwayml.com/account",
+    keyHint: "key_...",
   },
   {
     id: "heygen",
-    name: "HeyGen Avatar IV",
-    provider: "HeyGen",
-    envVar: "HEYGEN_API_KEY",
-    purpose: "AI UGC video creative (talking-head avatar)",
+    name: "HeyGen — Avatar IV",
+    vendor: "HeyGen",
+    purpose: "AI UGC video (talking-head avatar). Without a key, falls back to demo Mixkit clips.",
     required: false,
     icon: Camera,
     setupUrl: "https://app.heygen.com/settings/api",
+    keyHint: "...",
   },
 ];
 
 const PROJECT_REF = "jrfxmgxtnftbcxoqzagz";
 const SECRETS_URL = `https://supabase.com/dashboard/project/${PROJECT_REF}/functions/secrets`;
 
+function fmtAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60_000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
 export function AdminIntegrations() {
+  const [credentials, setCredentials] = useState<Record<string, StoredCredential>>({});
   const [counts, setCounts] = useState<Record<string, { count: number; cost: number }>>({});
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState<ProviderId | null>(null);
+  const [formKey, setFormKey] = useState("");
+  const [formNotes, setFormNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-        // creatives.generation_engine + generation_meta.cost_usd
-        const { data } = await supabase
+  const reload = useCallback(async () => {
+    setLoading(true);
+    try {
+      const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const [creds, creatives] = await Promise.all([
+        supabase.rpc("list_provider_credentials"),
+        supabase
           .from("creatives")
           .select("generation_engine, generation_meta")
           .not("generation_engine", "is", null)
-          .gte("created_at", since);
-        if (cancelled) return;
-        const map: Record<string, { count: number; cost: number }> = {};
-        for (const c of data ?? []) {
-          const engine = c.generation_engine ?? "unknown";
-          const meta = c.generation_meta as { cost_usd?: number } | null;
-          const cost = Number(meta?.cost_usd ?? 0);
-          if (!map[engine]) map[engine] = { count: 0, cost: 0 };
-          map[engine].count += 1;
-          map[engine].cost += cost;
+          .gte("created_at", since),
+      ]);
+      if (creds.error) {
+        setError(`Credentials lookup failed: ${creds.error.message}`);
+      } else {
+        const map: Record<string, StoredCredential> = {};
+        for (const c of (creds.data ?? []) as StoredCredential[]) {
+          map[c.provider] = c;
         }
-        setCounts(map);
-      } finally {
-        if (!cancelled) setLoading(false);
+        setCredentials(map);
       }
-    })();
-    return () => {
-      cancelled = true;
-    };
+
+      const cmap: Record<string, { count: number; cost: number }> = {};
+      for (const c of creatives.data ?? []) {
+        const engine = c.generation_engine ?? "unknown";
+        const meta = c.generation_meta as { cost_usd?: number } | null;
+        const cost = Number(meta?.cost_usd ?? 0);
+        if (!cmap[engine]) cmap[engine] = { count: 0, cost: 0 };
+        cmap[engine].count += 1;
+        cmap[engine].cost += cost;
+      }
+      setCounts(cmap);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  function openEdit(id: ProviderId) {
+    setEditing(id);
+    setFormKey("");
+    setFormNotes(credentials[id]?.notes ?? "");
+    setError(null);
+    setSuccess(null);
+  }
+
+  function closeEdit() {
+    setEditing(null);
+    setFormKey("");
+    setFormNotes("");
+    setError(null);
+  }
+
+  async function onSave(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editing) return;
+    if (formKey.trim().length < 10) {
+      setError("API key is too short.");
+      return;
+    }
+    setSubmitting(true);
+    setError(null);
+    try {
+      const { error } = await supabase.rpc("set_provider_credential", {
+        p_provider: editing,
+        p_api_key: formKey.trim(),
+        p_notes: formNotes.trim() || null,
+      });
+      if (error) throw error;
+      setSuccess(`${editing} key saved and active.`);
+      closeEdit();
+      await reload();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to save");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function onRevoke(provider: ProviderId) {
+    if (!confirm(`Revoke ${provider} credential? Edge Functions will fall back to env var (if set) or fail.`)) return;
+    setError(null);
+    try {
+      const { error } = await supabase.rpc("delete_provider_credential", {
+        p_provider: provider,
+      });
+      if (error) throw error;
+      setSuccess(`${provider} credential revoked.`);
+      await reload();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to revoke");
+    }
+  }
+
+  async function onToggle(provider: ProviderId, isActive: boolean) {
+    setError(null);
+    try {
+      const { error } = await supabase.rpc("toggle_provider_credential", {
+        p_provider: provider,
+        p_is_active: isActive,
+      });
+      if (error) throw error;
+      await reload();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to toggle");
+    }
+  }
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tighter text-ink">AI Integrations</h1>
         <p className="mt-1 text-sm text-muted-strong">
-          Manage the API keys that power AdNova's AI engines. Demo mode lets you preview the
-          flow before paying.
+          Manage provider API keys directly from the admin console. Keys are stored RLS-locked
+          in the database; only Edge Functions running with the service role can read them.
         </p>
       </div>
 
+      {error ? (
+        <div className="rounded-xl border border-muted/30 bg-muted/[0.08] px-4 py-3 text-sm text-muted-strong">
+          {error}
+        </div>
+      ) : null}
+      {success ? (
+        <div className="rounded-xl border border-orange/30 bg-orange/[0.06] px-4 py-3 text-sm text-orange">
+          {success}
+        </div>
+      ) : null}
+
       <div className="rounded-2xl border border-orange/30 bg-orange/[0.05] p-5">
         <h2 className="flex items-center gap-2 text-base font-bold text-ink">
-          <CheckCircle2 className="h-4 w-4 text-orange" strokeWidth={2} />
-          How to switch from demo to production
+          <ShieldCheck className="h-4 w-4 text-orange" strokeWidth={2} />
+          How key storage works
         </h2>
-        <ol className="mt-3 space-y-2 text-sm text-body">
+        <ul className="mt-3 space-y-2 text-sm text-body">
           <li>
-            <strong className="text-ink">1.</strong> Get an API key from the provider's
-            dashboard (links below).
+            · <strong className="text-ink">Resolution order</strong> : DB credential first,{" "}
+            <code className="rounded bg-card px-1 text-orange">Deno.env.get()</code> fallback,
+            then demo mode (where applicable).
           </li>
           <li>
-            <strong className="text-ink">2.</strong> Open{" "}
+            · <strong className="text-ink">RLS-locked</strong> : the{" "}
+            <code className="rounded bg-card px-1 text-orange">provider_credentials</code>{" "}
+            table has zero policies — anon and authenticated reads are blocked. Only the
+            Supabase service role can decrypt them via the{" "}
+            <code className="rounded bg-card px-1 text-orange">get_provider_credential</code>{" "}
+            internal RPC.
+          </li>
+          <li>
+            · <strong className="text-ink">Audit trail</strong> : every rotation logs the admin
+            who triggered it + a UTC timestamp. Plain-text keys are never returned to the
+            browser — only a 5-char prefix / 4-char suffix preview.
+          </li>
+          <li>
+            · <strong className="text-ink">Or use Edge Function secrets</strong> for legacy
+            workflows :{" "}
             <a
               href={SECRETS_URL}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-orange hover:underline"
             >
-              Supabase → Edge Functions → Secrets
+              Supabase dashboard
               <ExternalLink className="h-3 w-3" />
             </a>
             .
           </li>
-          <li>
-            <strong className="text-ink">3.</strong> Add a secret with the exact env var name
-            (e.g. <code className="rounded bg-card px-1 text-orange">RUNWAY_API_KEY</code>).
-          </li>
-          <li>
-            <strong className="text-ink">4.</strong> The Edge Function auto-detects the new
-            key on the next call — no redeploy needed.
-          </li>
-        </ol>
+        </ul>
       </div>
 
       <div className="grid gap-4">
-        {INTEGRATIONS.map((it) => {
-          const Icon = it.icon;
-          // Engine name maps to creatives.generation_engine
-          const engineMap: Record<string, string[]> = {
-            "openai-image": ["gpt-image-1"],
+        {PROVIDERS.map((p) => {
+          const Icon = p.icon;
+          const cred = credentials[p.id];
+
+          // Demo / production indicator from creatives.generation_engine
+          const engineMap: Record<ProviderId, string[]> = {
+            anthropic: [],
+            openai: ["gpt-image-1"],
             runway: ["runway-gen4", "demo-video"],
             heygen: ["heygen-avatar-iv", "demo-ugc"],
           };
-          const engineKeys = engineMap[it.id] ?? [];
+          const engineKeys = engineMap[p.id] ?? [];
           const stats = engineKeys.reduce(
-            (acc, key) => {
-              const c = counts[key];
+            (acc, k) => {
+              const c = counts[k];
               if (c) {
                 acc.count += c.count;
                 acc.cost += c.cost;
@@ -180,30 +306,58 @@ export function AdminIntegrations() {
             (k) => !k.startsWith("demo-") && counts[k],
           );
 
+          const live = cred?.is_active;
+
           return (
-            <div
-              key={it.id}
-              className="rounded-2xl border border-border bg-card p-6"
-            >
+            <div key={p.id} className="rounded-2xl border border-border bg-card p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
-                  <div className="grid h-10 w-10 place-items-center rounded-lg bg-orange/[0.12] text-orange">
+                  <div
+                    className={`grid h-10 w-10 place-items-center rounded-lg ${
+                      live
+                        ? "bg-orange/[0.12] text-orange"
+                        : "bg-white/[0.05] text-muted-strong"
+                    }`}
+                  >
                     <Icon className="h-5 w-5" strokeWidth={1.75} />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-base font-bold text-ink">{it.name}</h3>
-                      {it.required ? (
-                        <span className="rounded-md border border-muted/30 bg-muted/[0.08] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-strong">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-base font-bold text-ink">{p.name}</h3>
+                      {p.required ? (
+                        <span className="rounded-md border border-orange/30 bg-orange/[0.08] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange">
                           Required
                         </span>
                       ) : null}
+                      {live ? (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/[0.08] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                          <Lock className="h-2.5 w-2.5" />
+                          Vault active
+                        </span>
+                      ) : null}
                     </div>
-                    <p className="mt-1 text-xs text-muted-strong">{it.provider}</p>
-                    <p className="mt-2 text-sm text-body">{it.purpose}</p>
-                    <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-border bg-bg px-2.5 py-1 font-mono text-[11px] text-muted-strong">
-                      env · <span className="text-orange">{it.envVar}</span>
-                    </div>
+                    <p className="mt-1 text-xs text-muted-strong">{p.vendor}</p>
+                    <p className="mt-2 text-sm text-body">{p.purpose}</p>
+
+                    {cred ? (
+                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+                        <code className="rounded-md border border-orange/30 bg-orange/[0.06] px-2 py-1 font-mono text-orange">
+                          {cred.key_preview}
+                        </code>
+                        <span className="text-muted">
+                          rotated {fmtAgo(cred.last_rotated_at)}
+                          {cred.rotated_by_email ? ` · by ${cred.rotated_by_email}` : ""}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-border bg-bg px-2.5 py-1 font-mono text-[11px] text-muted-strong">
+                        no DB credential · falls back to env var
+                      </div>
+                    )}
+
+                    {cred?.notes ? (
+                      <p className="mt-2 text-[11px] italic text-muted">{cred.notes}</p>
+                    ) : null}
                   </div>
                 </div>
 
@@ -217,25 +371,58 @@ export function AdminIntegrations() {
                     <span className="inline-flex items-center gap-1 rounded-md border border-muted/40 bg-muted/[0.08] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-strong">
                       Demo mode
                     </span>
-                  ) : it.required ? (
+                  ) : p.required && !cred ? (
                     <span className="inline-flex items-center gap-1 rounded-md border border-muted/40 bg-muted/[0.12] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-strong">
                       <AlertCircle className="h-3 w-3" />
                       Configure
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1 rounded-md border border-border bg-white/[0.03] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted">
-                      Not used
+                      {cred ? "Standby" : "Not used"}
                     </span>
                   )}
-                  <a
-                    href={it.setupUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-muted transition-colors hover:text-orange"
-                  >
-                    Get API key
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
+
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    <button
+                      onClick={() => openEdit(p.id)}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-orange/40 bg-orange/[0.08] px-2.5 text-xs font-medium text-orange transition-colors hover:bg-orange/[0.14]"
+                    >
+                      {cred ? (
+                        <>
+                          <Pencil className="h-3 w-3" /> Rotate
+                        </>
+                      ) : (
+                        <>
+                          <KeyRound className="h-3 w-3" /> Add key
+                        </>
+                      )}
+                    </button>
+                    {cred ? (
+                      <>
+                        <button
+                          onClick={() => onToggle(p.id, !cred.is_active)}
+                          className="inline-flex h-8 items-center rounded-lg border border-border bg-white/[0.03] px-2.5 text-xs font-medium text-body transition-colors hover:border-border-strong hover:text-ink"
+                        >
+                          {cred.is_active ? "Disable" : "Enable"}
+                        </button>
+                        <button
+                          onClick={() => onRevoke(p.id)}
+                          className="inline-flex h-8 items-center rounded-lg border border-muted/30 bg-muted/[0.05] px-2.5 text-xs font-medium text-muted-strong transition-colors hover:border-muted/50 hover:text-ink"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </>
+                    ) : null}
+                    <a
+                      href={p.setupUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] text-muted transition-colors hover:text-orange"
+                    >
+                      Get key
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
                 </div>
               </div>
 
@@ -264,24 +451,93 @@ export function AdminIntegrations() {
         })}
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-5">
-        <h2 className="text-base font-bold text-ink">Why demo mode exists</h2>
-        <p className="mt-2 text-sm leading-relaxed text-body">
-          Letting users see the full creative-generation flow before plugging real provider
-          credentials reduces friction during sales demos and team onboarding. Demo mode
-          serves royalty-free Mixkit clips and stores them as normal creatives — they show up
-          in the workspace grid, on campaigns, in the AI Activity feed. The only difference
-          is the <code className="rounded bg-bg px-1 text-orange">is_demo</code> flag in{" "}
-          <code className="rounded bg-bg px-1 text-orange">creatives.generation_meta</code>.
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-body">
-          When you set <code className="rounded bg-bg px-1 text-orange">RUNWAY_API_KEY</code>{" "}
-          or <code className="rounded bg-bg px-1 text-orange">HEYGEN_API_KEY</code>, the
-          corresponding Edge Function automatically calls the real provider on the next
-          generation. No redeploy. No code change. The Production badge above will light up
-          as soon as the first real generation lands.
-        </p>
-      </div>
+      <p className="text-[11px] text-muted">
+        Edge Functions affected: <code className="text-body">claude-decide</code>,{" "}
+        <code className="text-body">embed-decision</code>,{" "}
+        <code className="text-body">generate-creative-image</code>,{" "}
+        <code className="text-body">generate-creative-video</code>,{" "}
+        <code className="text-body">generate-creative-ugc</code>,{" "}
+        <code className="text-body">healthcheck</code>. They look up{" "}
+        <code className="text-body">provider_credentials</code> first, then fall back to Edge
+        Function secrets.
+      </p>
+
+      {/* Modal */}
+      {editing ? (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeEdit();
+          }}
+        >
+          <form
+            onSubmit={onSave}
+            className="w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
+          >
+            <div className="border-b border-border px-6 py-4">
+              <h2 className="text-base font-bold text-ink">
+                {credentials[editing] ? "Rotate" : "Add"}{" "}
+                {PROVIDERS.find((p) => p.id === editing)?.name}
+              </h2>
+              <p className="mt-1 text-xs text-muted">
+                The key is sent over TLS, stored in an RLS-locked table, and never returned to
+                the browser again. Only Edge Functions can read it.
+              </p>
+            </div>
+            <div className="space-y-4 px-6 py-5">
+              <label className="block">
+                <span className="text-xs font-medium text-muted-strong">API key</span>
+                <input
+                  type="password"
+                  value={formKey}
+                  onChange={(e) => setFormKey(e.target.value)}
+                  required
+                  autoFocus
+                  placeholder={PROVIDERS.find((p) => p.id === editing)?.keyHint ?? ""}
+                  className="field-input mt-1.5 font-mono"
+                  autoComplete="off"
+                  spellCheck={false}
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs font-medium text-muted-strong">
+                  Notes <span className="text-muted">(optional, e.g. "team Stripe acct")</span>
+                </span>
+                <input
+                  type="text"
+                  value={formNotes}
+                  onChange={(e) => setFormNotes(e.target.value)}
+                  maxLength={200}
+                  className="field-input mt-1.5"
+                />
+              </label>
+              {error ? (
+                <div className="rounded-xl border border-muted/30 bg-muted/[0.08] px-3 py-2 text-xs text-muted-strong">
+                  {error}
+                </div>
+              ) : null}
+            </div>
+            <div className="flex items-center justify-end gap-2 border-t border-border bg-bg/40 px-6 py-3">
+              <button
+                type="button"
+                onClick={closeEdit}
+                disabled={submitting}
+                className="inline-flex h-9 items-center rounded-lg border border-border bg-white/[0.03] px-3 text-sm font-medium text-body transition-colors hover:border-border-strong hover:text-ink"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting || formKey.length < 10}
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-orange px-3.5 text-sm font-bold text-white transition-all hover:bg-orange-hover disabled:opacity-50"
+              >
+                <Lock className="h-3.5 w-3.5" />
+                {submitting ? "Saving…" : credentials[editing] ? "Rotate" : "Save"}
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
     </div>
   );
 }

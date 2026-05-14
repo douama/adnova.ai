@@ -51,9 +51,25 @@ async function checkDb(): Promise<CheckResult> {
   }
 }
 
+async function lookupProviderKey(provider: string): Promise<string | null> {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supabaseUrl || !serviceKey) return null;
+  try {
+    const client = createClient(supabaseUrl, serviceKey, {
+      auth: { persistSession: false },
+    });
+    const { data } = await client.rpc("get_provider_credential", { p_provider: provider });
+    return typeof data === "string" && data.length > 10 ? data : null;
+  } catch {
+    return null;
+  }
+}
+
 async function checkAnthropic(): Promise<CheckResult> {
-  const key = Deno.env.get("ANTHROPIC_API_KEY");
-  if (!key) return { status: "down", detail: "ANTHROPIC_API_KEY not set" };
+  const key =
+    (await lookupProviderKey("anthropic")) ?? Deno.env.get("ANTHROPIC_API_KEY");
+  if (!key) return { status: "down", detail: "Anthropic key not configured (DB or env)" };
 
   // Models list endpoint — cheap, doesn't consume credits.
   const t0 = Date.now();
@@ -78,8 +94,9 @@ async function checkAnthropic(): Promise<CheckResult> {
 }
 
 async function checkOpenAI(): Promise<CheckResult> {
-  const key = Deno.env.get("OPENAI_API_KEY");
-  if (!key) return { status: "skipped", detail: "OPENAI_API_KEY not set (semantic memory disabled)" };
+  const key =
+    (await lookupProviderKey("openai")) ?? Deno.env.get("OPENAI_API_KEY");
+  if (!key) return { status: "skipped", detail: "OpenAI key not configured (semantic memory disabled)" };
 
   const t0 = Date.now();
   try {

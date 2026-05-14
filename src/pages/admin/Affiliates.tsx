@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Users, DollarSign, MousePointerClick, CheckCircle2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Users, DollarSign, MousePointerClick, CheckCircle2, BadgeCheck } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import type { Database } from "../../lib/database.types";
 
@@ -40,82 +40,89 @@ export function AdminAffiliates() {
     "all",
   );
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const [affRes, refRes, comRes, payRes] = await Promise.all([
-          supabase
-            .from("affiliates")
-            .select("*")
-            .order("created_at", { ascending: false }),
-          supabase
-            .from("referrals")
-            .select("affiliate_id, signed_up_at, converted_at"),
-          supabase
-            .from("commission_earnings")
-            .select("affiliate_id, amount_usd, payout_id"),
-          supabase
-            .from("payouts")
-            .select("affiliate_id, amount_usd, status"),
-        ]);
-        if (cancelled) return;
-        if (affRes.error) {
-          setError(affRes.error.message);
-          return;
-        }
-
-        const refsByAff = new Map<string, Referral[]>();
-        for (const r of (refRes.data ?? []) as Referral[]) {
-          const arr = refsByAff.get(r.affiliate_id) ?? [];
-          arr.push(r);
-          refsByAff.set(r.affiliate_id, arr);
-        }
-
-        const comsByAff = new Map<string, Commission[]>();
-        for (const c of (comRes.data ?? []) as Commission[]) {
-          const arr = comsByAff.get(c.affiliate_id) ?? [];
-          arr.push(c);
-          comsByAff.set(c.affiliate_id, arr);
-        }
-
-        const paysByAff = new Map<string, Payout[]>();
-        for (const p of (payRes.data ?? []) as Payout[]) {
-          const arr = paysByAff.get(p.affiliate_id) ?? [];
-          arr.push(p);
-          paysByAff.set(p.affiliate_id, arr);
-        }
-
-        const rows: AffiliateRow[] = ((affRes.data ?? []) as Affiliate[]).map((a) => {
-          const refs = refsByAff.get(a.id) ?? [];
-          const coms = comsByAff.get(a.id) ?? [];
-          const pays = paysByAff.get(a.id) ?? [];
-          const earnedUsd = coms.reduce((s, c) => s + Number(c.amount_usd ?? 0), 0);
-          const paidUsd = pays
-            .filter((p) => p.status === "paid")
-            .reduce((s, p) => s + Number(p.amount_usd ?? 0), 0);
-          return {
-            ...a,
-            clicks: refs.length,
-            signups: refs.filter((r) => r.signed_up_at).length,
-            conversions: refs.filter((r) => r.converted_at).length,
-            earnedUsd,
-            paidUsd,
-            pendingUsd: Math.max(0, earnedUsd - paidUsd),
-          };
-        });
-        setAffiliates(rows);
-      } catch (e) {
-        if (cancelled) return;
-        setError(e instanceof Error ? e.message : "Failed to load");
-      } finally {
-        if (!cancelled) setLoading(false);
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [affRes, refRes, comRes, payRes] = await Promise.all([
+        supabase
+          .from("affiliates")
+          .select("*")
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("referrals")
+          .select("affiliate_id, signed_up_at, converted_at"),
+        supabase
+          .from("commission_earnings")
+          .select("affiliate_id, amount_usd, payout_id"),
+        supabase
+          .from("payouts")
+          .select("affiliate_id, amount_usd, status"),
+      ]);
+      if (affRes.error) {
+        setError(affRes.error.message);
+        return;
       }
-    })();
-    return () => {
-      cancelled = true;
-    };
+
+      const refsByAff = new Map<string, Referral[]>();
+      for (const r of (refRes.data ?? []) as Referral[]) {
+        const arr = refsByAff.get(r.affiliate_id) ?? [];
+        arr.push(r);
+        refsByAff.set(r.affiliate_id, arr);
+      }
+
+      const comsByAff = new Map<string, Commission[]>();
+      for (const c of (comRes.data ?? []) as Commission[]) {
+        const arr = comsByAff.get(c.affiliate_id) ?? [];
+        arr.push(c);
+        comsByAff.set(c.affiliate_id, arr);
+      }
+
+      const paysByAff = new Map<string, Payout[]>();
+      for (const p of (payRes.data ?? []) as Payout[]) {
+        const arr = paysByAff.get(p.affiliate_id) ?? [];
+        arr.push(p);
+        paysByAff.set(p.affiliate_id, arr);
+      }
+
+      const rows: AffiliateRow[] = ((affRes.data ?? []) as Affiliate[]).map((a) => {
+        const refs = refsByAff.get(a.id) ?? [];
+        const coms = comsByAff.get(a.id) ?? [];
+        const pays = paysByAff.get(a.id) ?? [];
+        const earnedUsd = coms.reduce((s, c) => s + Number(c.amount_usd ?? 0), 0);
+        const paidUsd = pays
+          .filter((p) => p.status === "paid")
+          .reduce((s, p) => s + Number(p.amount_usd ?? 0), 0);
+        return {
+          ...a,
+          clicks: refs.length,
+          signups: refs.filter((r) => r.signed_up_at).length,
+          conversions: refs.filter((r) => r.converted_at).length,
+          earnedUsd,
+          paidUsd,
+          pendingUsd: Math.max(0, earnedUsd - paidUsd),
+        };
+      });
+      setAffiliates(rows);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function approve(id: string) {
+    try {
+      const { error } = await supabase.rpc("approve_affiliate", { p_affiliate_id: id });
+      if (error) throw error;
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Approve failed");
+    }
+  }
 
   const filtered = useMemo(() => {
     if (tierFilter === "all") return affiliates;
@@ -273,9 +280,17 @@ export function AdminAffiliates() {
                           Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center rounded-md border border-muted/30 bg-muted/[0.08] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-strong">
-                          Paused
-                        </span>
+                        <div className="flex flex-col items-center gap-1">
+                          <span className="inline-flex items-center rounded-md border border-orange/30 bg-orange/[0.06] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange">
+                            Pending
+                          </span>
+                          <button
+                            onClick={() => approve(a.id)}
+                            className="inline-flex items-center gap-1 rounded-md border border-orange/40 bg-orange/[0.10] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange transition-colors hover:bg-orange/[0.18]"
+                          >
+                            <BadgeCheck className="h-3 w-3" /> Approve
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
