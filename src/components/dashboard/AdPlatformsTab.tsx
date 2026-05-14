@@ -13,7 +13,17 @@ import { PlatformIcon } from "../ui/PlatformIcon";
 import { useCurrentTenant, useCurrentTenantId } from "../../stores/tenantStore";
 import type { Database } from "../../lib/database.types";
 
-type Connection = Database["public"]["Tables"]["platform_connections"]["Row"];
+// View shape returned by list_platform_connections RPC — no token columns.
+type Connection = {
+  id: string;
+  platform: Database["public"]["Enums"]["ad_platform"];
+  account_id: string;
+  account_name: string | null;
+  is_active: boolean;
+  last_synced_at: string | null;
+  expires_at: string | null;
+  created_at: string;
+};
 type PlanTier = Database["public"]["Enums"]["plan_tier"];
 
 // Plan → allowed platforms.
@@ -117,11 +127,12 @@ export function AdPlatformsTab() {
     if (!tenantId) return;
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("platform_connections")
-        .select("*")
-        .eq("tenant_id", tenantId)
-        .order("created_at", { ascending: false });
+      // SECURITY : we use the list_platform_connections RPC instead of
+      // selecting the raw table — access_token / refresh_token are kept
+      // server-side and never round-trip to the browser bundle.
+      const { data, error } = await supabase.rpc("list_platform_connections", {
+        _tenant_id: tenantId,
+      });
       if (error) {
         setError(error.message);
         return;

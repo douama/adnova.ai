@@ -1520,6 +1520,19 @@ export type Database = {
         Args: { p_affiliate_id: string; p_new_code?: string | null }
         Returns: Json
       }
+      list_platform_connections: {
+        Args: { _tenant_id: string }
+        Returns: {
+          id: string
+          platform: Database["public"]["Enums"]["ad_platform"]
+          account_id: string
+          account_name: string | null
+          is_active: boolean
+          last_synced_at: string | null
+          expires_at: string | null
+          created_at: string
+        }[]
+      }
       set_oauth_app: {
         Args: {
           p_platform: string
