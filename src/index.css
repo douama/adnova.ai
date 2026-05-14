@@ -4,7 +4,7 @@
 
 /* ─── Design tokens — Light mode (default) ────────────────────────────── */
 :root {
-  --bg: #fafafa;
+  --bg: #f5f5f7;
   --surface: #ffffff;
   --card: #ffffff;
   --card2: #f4f4f5;
@@ -17,6 +17,14 @@
   --text: #2a2a2a;
   --muted: #6a6a6a;
   --muted2: #4a4a4a;
+
+  /* Liquid glass tokens (light) */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-bg-soft: rgba(255, 255, 255, 0.35);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-highlight: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), 0 1px 0 0 rgba(255, 255, 255, 0.7) inset;
 }
 
 /* ─── Design tokens — Dark mode ────────────────────────────────────────── */
@@ -33,6 +41,14 @@
   --text: #d4d4d4;
   --muted: #7a7a7a;
   --muted2: #a8a8a8;
+
+  /* Liquid glass tokens (dark) */
+  --glass-bg: rgba(24, 24, 28, 0.55);
+  --glass-bg-strong: rgba(24, 24, 28, 0.82);
+  --glass-bg-soft: rgba(24, 24, 28, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 16px 48px rgba(0, 0, 0, 0.55), 0 1px 0 0 rgba(255, 255, 255, 0.05) inset;
 }
 
 @layer base {
@@ -134,19 +150,78 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
+  /* ─── Liquid Glass system ────────────────────────────────────────── */
+  /* Surfaces blur the underlying canvas (orange glow, page gradient)
+     and add a refractive 1-px inset highlight to mimic Apple-style glass. */
+  .glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    backdrop-filter: blur(28px) saturate(190%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .glass-soft {
+    background: var(--glass-bg-soft);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid var(--glass-border);
+  }
+  /* Liquid highlight — apply via wrapper or ::before on cards for the
+     refractive edge effect (top-left → bottom-right). */
+  .glass-highlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .glass-highlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      var(--glass-highlight) 0%,
+      transparent 35%,
+      transparent 65%,
+      var(--glass-highlight) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
-/* ─── Light mode polish ─────────────────────────────────────────────────
-   Many tints throughout the app are literal `bg-white/[0.03]` (a white
-   wash that shows up on dark surfaces but is invisible on white).
-   These overrides invert the wash in light mode so cards, hover-states
-   and subtle glass surfaces still pop. */
+/* ─── Light mode polish — body gradient mesh + tints inversion ─────── */
+:root:not(.dark) body {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 107, 43, 0.08), transparent 45%),
+    radial-gradient(circle at 100% 0%, rgba(120, 119, 198, 0.06), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(255, 77, 0, 0.04), transparent 50%),
+    var(--bg);
+}
 :root:not(.dark) [class*="bg-white/[0.0"] {
   background-color: rgba(0, 0, 0, 0.035) !important;
 }
 :root:not(.dark) [class*="hover:bg-white/[0.0"]:hover {
   background-color: rgba(0, 0, 0, 0.05) !important;
 }
-:root:not(.dark) body {
-  background: var(--bg);
+
+/* Dark mode body : keep the subtle orange aura near the top */
+.dark body {
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255, 77, 0, 0.10), transparent 50%),
+    var(--bg);
 }
+

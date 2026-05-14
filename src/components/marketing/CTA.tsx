@@ -7,7 +7,7 @@ export function CTA() {
   return (
     <section className="py-14 sm:py-20">
       <Container>
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card px-8 py-12 text-center sm:px-16 sm:py-16">
+        <div className="glass glass-highlight relative overflow-hidden rounded-3xl px-8 py-12 text-center sm:px-16 sm:py-16">
           <div
             className="pointer-events-none absolute inset-0 opacity-25"
             style={{
@@ -29,7 +29,7 @@ export function CTA() {
               </Link>
               <Link
                 to="/pricing"
-                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border-strong bg-white/[0.03] px-4 text-sm font-medium text-body transition-all hover:border-white/25 hover:text-ink hover:bg-white/[0.06] sm:flex-none sm:px-7"
+                className="glass-soft inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-body transition-all hover:text-ink hover:-translate-y-0.5 sm:flex-none sm:px-7"
               >
                 {t("cta.secondary")}
               </Link>

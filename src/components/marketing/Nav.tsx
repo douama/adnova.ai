@@ -19,7 +19,7 @@ export function Nav() {
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-2xl">
+    <header className="glass-strong fixed inset-x-0 top-0 z-50 border-b border-border">
       <Container>
         <div className="flex h-16 items-center justify-between">
           <Logo />

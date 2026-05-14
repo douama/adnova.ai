@@ -271,8 +271,8 @@ export function GenerateCreativeModal({
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={generating ? undefined : onClose}
       />
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-card max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card px-6 py-4">
+      <div className="glass-strong glass-highlight relative w-full max-w-2xl overflow-hidden rounded-2xl max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border glass-strong px-6 py-4">
           <div>
             <h2 className="flex items-center gap-2 text-base font-bold text-ink">
               <Sparkles className="h-4 w-4 text-orange" strokeWidth={2} />
@@ -627,7 +627,7 @@ export function GenerateCreativeModal({
           ) : null}
         </div>
 
-        <div className="sticky bottom-0 z-10 flex items-center justify-between border-t border-border bg-surface px-6 py-4">
+        <div className="sticky bottom-0 z-10 flex items-center justify-between border-t border-border glass-strong px-6 py-4">
           <span className="text-[10px] text-muted">
             Stored in your workspace · sync to ad platforms next
           </span>

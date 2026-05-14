@@ -98,7 +98,7 @@ export function Footer() {
 
       <Container>
         {/* App download band — premium hero strip */}
-        <div className="relative -mx-4 mt-14 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent px-6 py-8 sm:mx-0 sm:px-10 sm:py-10">
+        <div className="glass glass-highlight relative -mx-4 mt-14 overflow-hidden rounded-3xl px-6 py-8 sm:mx-0 sm:px-10 sm:py-10">
           <div
             className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-20 blur-3xl"
             style={{ background: "radial-gradient(circle, #FF4D00, transparent 70%)" }}

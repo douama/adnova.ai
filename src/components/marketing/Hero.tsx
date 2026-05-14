@@ -23,7 +23,7 @@ export function Hero() {
 
       <Container className="relative">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-white/[0.03] px-3 py-1.5 text-[11px] font-medium text-muted-strong sm:px-4 sm:text-xs">
+          <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-medium text-muted-strong sm:px-4 sm:text-xs">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange" />
             <span className="whitespace-nowrap">{t("hero.badge")}</span>
           </div>
@@ -48,7 +48,7 @@ export function Hero() {
             </Link>
             <a
               href="#how-it-works"
-              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border-strong bg-white/[0.03] px-4 text-sm font-medium text-body transition-all hover:border-white/25 hover:text-ink hover:bg-white/[0.06] sm:flex-none sm:px-7"
+              className="glass-soft inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium text-body transition-all hover:text-ink hover:-translate-y-0.5 sm:flex-none sm:px-7"
             >
               {t("hero.ctaSecondary")}
             </a>

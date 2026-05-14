@@ -472,7 +472,7 @@ export function AdminIntegrations() {
         >
           <form
             onSubmit={onSave}
-            className="w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
+            className="glass-strong glass-highlight w-full max-w-lg overflow-hidden rounded-2xl"
           >
             <div className="border-b border-border px-6 py-4">
               <h2 className="text-base font-bold text-ink">
