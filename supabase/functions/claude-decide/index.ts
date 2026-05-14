@@ -1,4 +1,4 @@
-// ─── claude-decide v3 ──────────────────────────────────────────────────────
+// ─── claude-decide v4 ──────────────────────────────────────────────────────
 // AdNova's AI ops engine. Two modes :
 //   - USER mode    : called by React client with a user JWT
 //                    → verifies membership via my_tenants RPC
@@ -8,9 +8,10 @@
 //                    → still verifies tenant exists + ai_mode='autonomous'
 //                    → protection against infinite loop if tenant churned
 //
-// Auth detection : compare Bearer token to SUPABASE_SERVICE_ROLE_KEY.
-// Exact match → service mode. Otherwise → user mode (verify_jwt server-side
-// guarantees the JWT is valid).
+// Auth detection : Supabase's gateway has already validated the JWT
+// signature before this function runs (verify_jwt = true by default).
+// We just decode the payload and check the `role` claim — robust to env
+// drift between Vault's service_role_key and SUPABASE_SERVICE_ROLE_KEY.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 
@@ -28,6 +29,22 @@ function jsonResponse(data: unknown, status = 200) {
     status,
     headers: { "Content-Type": "application/json", ...CORS_HEADERS },
   });
+}
+
+// Decode the `role` claim from a JWT payload without verifying the
+// signature — the gateway already did that. Returns null on malformed input.
+function decodeJwtRole(jwt: string): string | null {
+  if (!jwt) return null;
+  const parts = jwt.split(".");
+  if (parts.length !== 3) return null;
+  try {
+    const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+    const payload = JSON.parse(atob(padded));
+    return typeof payload?.role === "string" ? payload.role : null;
+  } catch {
+    return null;
+  }
 }
 
 const DECISION_TOOL = {
@@ -115,9 +132,11 @@ Deno.serve(async (req: Request) => {
   });
 
   // ─── Auth mode detection ───────────────────────────────────────────────
+  // The Supabase gateway already verified the JWT signature before this
+  // handler runs. We just inspect the `role` claim to branch.
   const authHeader = req.headers.get("Authorization") ?? "";
   const bearer = authHeader.replace(/^Bearer\s+/i, "").trim();
-  const isServiceCall = bearer.length > 0 && bearer === serviceKey;
+  const isServiceCall = decodeJwtRole(bearer) === "service_role";
 
   let readClient: SupabaseClient;
 
