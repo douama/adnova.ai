@@ -10,19 +10,49 @@ import {
   LogOut,
   Shield,
   Plug,
+  Network,
+  Megaphone,
+  Image as ImageIcon,
+  Handshake,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
 import { useAuth } from "../../stores/authStore";
 
-const NAV = [
-  { to: "/admin", label: "Overview", icon: Gauge, end: true },
-  { to: "/admin/integrations", label: "AI Integrations", icon: Plug },
-  { to: "/admin/tenants", label: "Tenants", icon: Building2 },
-  { to: "/admin/users", label: "Users", icon: Users },
-  { to: "/admin/ai-monitor", label: "AI Monitor", icon: Sparkles },
-  { to: "/admin/revenue", label: "Revenue", icon: DollarSign },
-  { to: "/admin/logs", label: "Errors", icon: AlertCircle },
+const NAV_SECTIONS: { title: string; items: NavItem[] }[] = [
+  {
+    title: "Operations",
+    items: [
+      { to: "/admin", label: "Overview", icon: Gauge, end: true },
+      { to: "/admin/ai-monitor", label: "AI Monitor", icon: Sparkles },
+      { to: "/admin/logs", label: "Errors", icon: AlertCircle },
+    ],
+  },
+  {
+    title: "Ad infrastructure",
+    items: [
+      { to: "/admin/platforms", label: "Ad Platforms", icon: Network },
+      { to: "/admin/campaigns", label: "Campaigns", icon: Megaphone },
+      { to: "/admin/creatives", label: "Creatives", icon: ImageIcon },
+      { to: "/admin/integrations", label: "AI Integrations", icon: Plug },
+    ],
+  },
+  {
+    title: "Business",
+    items: [
+      { to: "/admin/tenants", label: "Tenants", icon: Building2 },
+      { to: "/admin/users", label: "Users", icon: Users },
+      { to: "/admin/affiliates", label: "Affiliates", icon: Handshake },
+      { to: "/admin/revenue", label: "Revenue", icon: DollarSign },
+    ],
+  },
 ];
+
+type NavItem = {
+  to: string;
+  label: string;
+  icon: React.ElementType;
+  end?: boolean;
+};
 
 export function AdminLayout() {
   return (
@@ -49,29 +79,36 @@ function Sidebar() {
         </span>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
-        {NAV.map((item) => {
-          const isActive = item.end
-            ? location.pathname === item.to
-            : location.pathname === item.to ||
-              location.pathname.startsWith(item.to + "/");
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                isActive
-                  ? "bg-orange/[0.08] text-orange"
-                  : "text-muted-strong hover:bg-white/[0.04] hover:text-ink"
-              }`}
-            >
-              <Icon className="h-4 w-4" strokeWidth={1.75} />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
+      <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.title} className="flex flex-col gap-1">
+            <div className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted">
+              {section.title}
+            </div>
+            {section.items.map((item) => {
+              const isActive = item.end
+                ? location.pathname === item.to
+                : location.pathname === item.to ||
+                  location.pathname.startsWith(item.to + "/");
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                    isActive
+                      ? "bg-orange/[0.08] text-orange"
+                      : "text-muted-strong hover:bg-white/[0.04] hover:text-ink"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" strokeWidth={1.75} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       <div className="border-t border-border px-3 py-3">

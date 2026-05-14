@@ -45,6 +45,10 @@ import { AdminUsers } from "./pages/admin/Users";
 import { AdminAIMonitor } from "./pages/admin/AIMonitor";
 import { AdminRevenue } from "./pages/admin/Revenue";
 import { AdminLogs } from "./pages/admin/Logs";
+import { AdminPlatforms } from "./pages/admin/Platforms";
+import { AdminCampaigns } from "./pages/admin/Campaigns";
+import { AdminCreatives } from "./pages/admin/Creatives";
+import { AdminAffiliates } from "./pages/admin/Affiliates";
 
 export function App() {
   const { session, loading, init } = useAuth();
@@ -136,9 +140,13 @@ export function App() {
         }
       >
         <Route path="/admin" element={<AdminOverview />} />
+        <Route path="/admin/platforms" element={<AdminPlatforms />} />
+        <Route path="/admin/campaigns" element={<AdminCampaigns />} />
+        <Route path="/admin/creatives" element={<AdminCreatives />} />
         <Route path="/admin/integrations" element={<AdminIntegrations />} />
         <Route path="/admin/tenants" element={<AdminTenants />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/affiliates" element={<AdminAffiliates />} />
         <Route path="/admin/ai-monitor" element={<AdminAIMonitor />} />
         <Route path="/admin/revenue" element={<AdminRevenue />} />
         <Route path="/admin/logs" element={<AdminLogs />} />
