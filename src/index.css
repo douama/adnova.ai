@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens (3-color system: white / black / orange) ────────────── */
+:root {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --card: #111111;
+  --card2: #1a1a1a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border2: rgba(255, 255, 255, 0.14);
+  --orange: #ff4d00;
+  --orange2: #ff6b2b;
+  --white: #ffffff;
+  --text: #d4d4d4;
+  --muted: #7a7a7a;
+  --muted2: #a8a8a8;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: "Geist", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    font-feature-settings: "ss01", "ss03", "cv11";
+    letter-spacing: -0.005em;
+    line-height: 1.55;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: "Geist", system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+
+  /* Italic via <em> or .italic-serif → editorial Fraunces accent */
+  em, .italic-serif {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 144;
+    letter-spacing: -0.025em;
+    color: var(--orange);
+  }
+
+  ::selection {
+    background: var(--orange);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+}
+
+/* ─── Reusable components ─────────────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm font-bold text-white transition;
+    background: var(--orange);
+  }
+  .btn-primary:hover {
+    background: var(--orange2);
+    box-shadow: 0 12px 36px rgba(255, 77, 0, 0.4);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium transition;
+    color: var(--text);
+    border: 1px solid var(--border2);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .field-input {
+    @apply w-full rounded-xl px-4 py-3 text-sm transition;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    letter-spacing: -0.005em;
+  }
+  .field-input::placeholder { color: var(--muted); }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--orange);
+    background: var(--card2);
+    box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.12);
+  }
+
+  .glow-text {
+    background: linear-gradient(135deg, #ff4d00 0%, #ff6b2b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
