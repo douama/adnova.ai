@@ -110,15 +110,16 @@ export function Footer() {
                 screen. Native iOS + Android, launching Q3 2026.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <AppStoreBadge soon />
-              <GooglePlayBadge soon />
+            <div className="flex w-full shrink-0 items-center gap-2 sm:w-auto sm:gap-3">
+              <AppStoreBadge soon className="flex-1 sm:flex-none" />
+              <GooglePlayBadge soon className="flex-1 sm:flex-none" />
             </div>
           </div>
         </div>
 
-        {/* Main grid */}
-        <div className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-[1.6fr_repeat(3,1fr)] md:gap-12">
+        {/* Main grid : brand block stacks on top of mobile;
+            the 3 nav columns share one row at every breakpoint. */}
+        <div className="mt-14 flex flex-col gap-10 md:grid md:grid-cols-[1.6fr_repeat(3,1fr)] md:gap-12">
           <div>
             <Logo />
             <p className="mt-4 max-w-xs text-sm text-muted">
@@ -156,9 +157,13 @@ export function Footer() {
             </div>
           </div>
 
-          {COLS.map((col) => (
-            <FooterCol key={col.title} col={col} />
-          ))}
+          {/* Nav columns : forced 3-col on mobile so Product / Company / Legal
+              stay on a single horizontal row; flow into the parent grid on md+. */}
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 md:contents">
+            {COLS.map((col) => (
+              <FooterCol key={col.title} col={col} />
+            ))}
+          </div>
         </div>
 
         {/* Bottom bar */}
