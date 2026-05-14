@@ -26,8 +26,10 @@ export function Hero() {
             <span className="whitespace-nowrap">Live · 2,412 brands scaling on AdNova</span>
           </div>
 
-          <h1 className="mt-5 text-[2.5rem] font-bold leading-[1.05] tracking-tighter text-ink sm:mt-7 sm:text-6xl md:text-7xl">
-            Your acquisition lead, <em>in an API</em>.
+          <h1 className="mt-5 text-[clamp(1.5rem,6.5vw,2.5rem)] font-bold leading-[1.1] tracking-tighter text-ink sm:mt-7 sm:text-6xl sm:leading-[1.05] md:text-7xl">
+            <span className="whitespace-nowrap">Your acquisition lead,</span>
+            <br />
+            <em>in an API</em>.
           </h1>
 
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-body sm:mt-7 sm:text-lg md:text-xl">
