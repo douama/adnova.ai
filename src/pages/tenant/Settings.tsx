@@ -2,9 +2,8 @@ import { useState } from "react";
 import { User, Building2, Plug, ShoppingBag } from "lucide-react";
 import { useAuth } from "../../stores/authStore";
 import { useCurrentTenant } from "../../stores/tenantStore";
-import { PLATFORMS } from "../../data/platforms";
-import { PlatformIcon } from "../../components/ui/PlatformIcon";
 import { EcommerceTab } from "../../components/dashboard/EcommerceTab";
+import { AdPlatformsTab } from "../../components/dashboard/AdPlatformsTab";
 
 type Tab = "account" | "workspace" | "integrations" | "ecommerce";
 
@@ -38,7 +37,7 @@ export function SettingsPage() {
       <div>
         {tab === "account" && <AccountTab />}
         {tab === "workspace" && <WorkspaceTab />}
-        {tab === "integrations" && <IntegrationsTab />}
+        {tab === "integrations" && <AdPlatformsTab />}
         {tab === "ecommerce" && <EcommerceTab />}
       </div>
     </div>
@@ -114,42 +113,6 @@ function WorkspaceTab() {
           panel.
         </p>
       </Card>
-    </div>
-  );
-}
-
-function IntegrationsTab() {
-  return (
-    <div>
-      <p className="text-sm text-muted-strong">
-        Connect your ad accounts. OAuth flows are on the next-up roadmap — meanwhile, you can
-        explore the dashboard end-to-end with the "Load demo data" button on the Campaigns
-        card.
-      </p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {PLATFORMS.map((p) => (
-          <div
-            key={p.id}
-            className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-5"
-          >
-            <div className="flex items-center gap-3">
-              <PlatformIcon platform={p.id} className="h-9 w-9" />
-              <div>
-                <div className="text-sm font-bold text-ink">{p.name}</div>
-                <div className="text-[10px] uppercase tracking-wider text-muted">
-                  not connected
-                </div>
-              </div>
-            </div>
-            <button
-              disabled
-              className="inline-flex h-9 items-center rounded-lg border border-border bg-white/[0.03] px-3 text-xs font-medium text-muted opacity-60"
-            >
-              Coming soon
-            </button>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
