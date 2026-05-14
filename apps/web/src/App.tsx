@@ -9,6 +9,7 @@ import { AuthCallback } from "./pages/AuthCallback";
 import { OnboardingPage } from "./pages/Onboarding";
 import { DashboardPage } from "./pages/Dashboard";
 import { DecisionsPage } from "./pages/Decisions";
+import { CreativesPage } from "./pages/Creatives";
 import { ConnectedAccounts } from "./pages/ConnectedAccounts";
 
 export function App() {
@@ -51,6 +52,7 @@ export function App() {
       <Route path="/" element={session ? <Layout /> : <Navigate to="/login" replace />}>
         <Route index element={<DashboardPage />} />
         <Route path="decisions" element={<DecisionsPage />} />
+        <Route path="creatives" element={<CreativesPage />} />
         <Route path="accounts" element={<ConnectedAccounts />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

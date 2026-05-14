@@ -5,6 +5,7 @@ import { useCurrentTenant, useTenants } from "../stores/tenantStore";
 const nav = [
   { to: "/", label: "Dashboard", end: true },
   { to: "/decisions", label: "Decision Log" },
+  { to: "/creatives", label: "Creatives" },
   { to: "/accounts", label: "Accounts" },
 ];
 

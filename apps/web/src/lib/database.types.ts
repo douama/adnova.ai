@@ -1,6 +1,6 @@
 // Auto-generated from Supabase schema (jrfxmgxtnftbcxoqzagz) — DO NOT EDIT MANUALLY.
 // Regenerate via Supabase MCP (generate_typescript_types) after schema changes.
-// Last generated : 2026-05-14 (Phase 2 — Supabase Auth + multi-tenant)
+// Last generated : 2026-05-14 (Phase 4 — Storage buckets)
 
 export type Json =
   | string
@@ -1221,6 +1221,10 @@ export type Database = {
       }
     }
     Functions: {
+      creative_storage_path: {
+        Args: { _creative_id: string; _extension: string; _tenant_id: string }
+        Returns: string
+      }
       is_super_admin: { Args: never; Returns: boolean }
       is_tenant_admin: { Args: { _tenant_id: string }; Returns: boolean }
       is_tenant_member: { Args: { _tenant_id: string }; Returns: boolean }
