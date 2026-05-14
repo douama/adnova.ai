@@ -88,9 +88,9 @@ export function FeatureBento() {
               <h3 className="mt-3 text-lg font-bold text-ink">
                 {t("featureBento.tile2Title")}
               </h3>
-              <div className="mt-auto grid grid-cols-5 gap-2">
+              <div className="mt-auto grid grid-cols-5 gap-2.5">
                 {PLATFORMS.slice(0, 9).map((p) => (
-                  <PlatformIcon key={p.id} platform={p.id} className="h-11 w-11" />
+                  <PlatformIcon key={p.id} platform={p.id} className="h-14 w-14" />
                 ))}
               </div>
             </div>
