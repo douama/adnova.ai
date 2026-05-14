@@ -43,6 +43,7 @@ Deno.serve(async (req: Request) => {
     product_url?: string;
     product_title?: string;
     product_description?: string;
+    ad_pack_id?: string;
   };
   try { body = await req.json(); } catch { return json({ error: "Invalid JSON" }, 400); }
 
@@ -53,6 +54,7 @@ Deno.serve(async (req: Request) => {
   const productImageUrl = body.product_image_url?.trim() || null;
   const productUrl = body.product_url?.trim() || null;
   const productTitle = body.product_title?.trim() || null;
+  const adPackId = body.ad_pack_id?.trim() || null;
 
   if (!tenantId || typeof tenantId !== "string") return json({ error: "tenant_id required" }, 400);
   if (!script || script.length < 5) return json({ error: "script too short (min 5 chars)" }, 400);
@@ -75,6 +77,21 @@ Deno.serve(async (req: Request) => {
   if (!member) return json({ error: "You are not a member of this tenant" }, 403);
 
   const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
+
+  // ─── Ad pack: validate + enforce per-pack limit (max 1 UGC) ────────
+  if (adPackId) {
+    const { data: pack, error: pErr } = await adminClient
+      .from("ad_packs")
+      .select("id, tenant_id, generated_ugc")
+      .eq("id", adPackId)
+      .maybeSingle();
+    if (pErr) return json({ error: `Ad pack lookup failed: ${pErr.message}` }, 500);
+    if (!pack) return json({ error: "Ad pack not found" }, 404);
+    if (pack.tenant_id !== tenantId) return json({ error: "Ad pack belongs to another tenant" }, 403);
+    if ((pack.generated_ugc ?? 0) >= 1) {
+      return json({ error: "ad_pack_ugc_limit_reached", detail: "Max 1 UGC video per ad pack." }, 402);
+    }
+  }
 
   // HeyGen key : DB-stored credential first, env var fallback. Falls back
   // to demo Mixkit clips if neither is configured.
@@ -175,6 +192,7 @@ Deno.serve(async (req: Request) => {
     .from("creatives")
     .insert({
       tenant_id: tenantId,
+      ad_pack_id: adPackId,
       type: "ugc_video",
       status: "draft",
       headline: script.slice(0, 80),
@@ -205,8 +223,16 @@ Deno.serve(async (req: Request) => {
     return json({ error: `Insert failed: ${insErr.message}` }, 500);
   }
 
+  if (adPackId) {
+    await adminClient.rpc("ad_pack_increment_generated", {
+      _pack_id: adPackId,
+      _kind: "ugc",
+    });
+  }
+
   return json({
     creative: inserted,
+    ad_pack_id: adPackId,
     cost_usd: costUsd,
     duration_ms: durationMs,
     engine,

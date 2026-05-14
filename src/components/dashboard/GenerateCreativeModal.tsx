@@ -10,6 +10,9 @@ import {
   ShoppingBag,
   Search,
   CheckCircle2,
+  Wand2,
+  AlertTriangle,
+  Zap,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useCurrentTenantId } from "../../stores/tenantStore";
@@ -19,6 +22,30 @@ type Engine = "image" | "video" | "ugc";
 type ProductSource = "none" | "upload" | "url" | "catalog";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
+
+type Quota = {
+  used: number;
+  quota: number;
+  unlimited: boolean;
+  plan_id: string;
+};
+
+type AdPack = {
+  id: string;
+  name: string;
+  analysis_prompt: string;
+  prompt_chars: number;
+  engine: string;
+  requested_images: number;
+  requested_videos: number;
+  requested_ugc: number;
+  analysis_meta: Record<string, unknown>;
+};
+
+// Per-pack hard caps (also enforced in Edge Functions for safety)
+const MAX_IMAGES_PER_PACK = 4;
+const MAX_VIDEOS_PER_PACK = 2;
+const MAX_UGC_PER_PACK = 1;
 
 const STYLES = [
   { id: "photoreal", label: "Photoreal", hint: "Studio-quality product shot" },
@@ -87,15 +114,45 @@ export function GenerateCreativeModal({
     duration: number;
     isDemo: boolean;
     engine: string;
+    count: number;
   } | null>(null);
+
+  // Quota + ad pack workflow
+  const [quota, setQuota] = useState<Quota | null>(null);
+  const [pack, setPack] = useState<AdPack | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [imageQty, setImageQty] = useState(2);
+  const [videoQty, setVideoQty] = useState(1);
+  const [ugcQty, setUgcQty] = useState(1);
+  const [genProgress, setGenProgress] = useState<{ done: number; total: number } | null>(null);
 
   useEffect(() => {
     if (open) {
       setError(null);
       setSuccess(null);
       setGenerating(false);
+      setPack(null);
+      setGenProgress(null);
     }
   }, [open]);
+
+  // Load quota status when modal opens
+  useEffect(() => {
+    if (!open || !tenantId) return;
+    let cancelled = false;
+    (async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data, error } = await (supabase.rpc as any)("ad_packs_quota_status", {
+        _tenant_id: tenantId,
+      }).single();
+      if (!cancelled && !error && data) {
+        setQuota(data as Quota);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, tenantId]);
 
   useEffect(() => {
     if (!open) return;
@@ -177,14 +234,95 @@ export function GenerateCreativeModal({
     productSource === "catalog" ? selectedProduct?.source_url ?? null :
     null;
 
+  async function analyzeProduct() {
+    if (!tenantId) return;
+    if (!resolvedProductImageUrl && !resolvedProductUrl) {
+      setError("Upload an image or paste a product URL first.");
+      return;
+    }
+    if (quota && !quota.unlimited && quota.used >= quota.quota) {
+      setError(
+        `Monthly quota reached (${quota.used}/${quota.quota}). Upgrade your plan to generate more ad packs.`,
+      );
+      return;
+    }
+    setAnalyzing(true);
+    setError(null);
+    setPack(null);
+    try {
+      const reqImg = engine === "image" ? imageQty : 0;
+      const reqVid = engine === "video" ? videoQty : 0;
+      const reqUgc = engine === "ugc" ? ugcQty : 0;
+      const { data, error: fnErr } = await supabase.functions.invoke<{
+        ad_pack?: AdPack;
+        quota?: Quota;
+        error?: string;
+        detail?: string;
+      }>("analyze-product", {
+        body: {
+          tenant_id: tenantId,
+          product_image_url: resolvedProductImageUrl,
+          product_url: resolvedProductUrl,
+          engine,
+          requested_images: reqImg,
+          requested_videos: reqVid,
+          requested_ugc: reqUgc,
+        },
+      });
+      if (fnErr) {
+        setError(fnErr.message);
+        return;
+      }
+      if (!data) {
+        setError("No response from analyze-product");
+        return;
+      }
+      if (data.error) {
+        setError(`${data.error}${data.detail ? ` · ${data.detail.slice(0, 120)}` : ""}`);
+        return;
+      }
+      if (data.ad_pack) {
+        setPack(data.ad_pack);
+        // Auto-fill the active textarea with the master prompt
+        if (engine === "image") setPrompt(data.ad_pack.analysis_prompt);
+        if (engine === "video") setVideoPrompt(data.ad_pack.analysis_prompt);
+        if (engine === "ugc") setScript(data.ad_pack.analysis_prompt.slice(0, 2000));
+      }
+      if (data.quota) setQuota(data.quota);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Analyze failed");
+    } finally {
+      setAnalyzing(false);
+    }
+  }
+
   async function generate() {
     if (!tenantId) return;
     setGenerating(true);
     setError(null);
     setSuccess(null);
+    setGenProgress(null);
 
     try {
-      let fnName: string;
+      // Validate the active prompt
+      const activeText =
+        engine === "image" ? prompt : engine === "video" ? videoPrompt : script;
+      if (activeText.trim().length < 5) {
+        setError("Prompt too short (min 5 chars). Tip: hit 'Analyze with AI' first.");
+        return;
+      }
+
+      // Determine the count to generate. With a pack, use the per-engine quantity.
+      // Without a pack, fall back to 1 (legacy single-asset behavior).
+      const count = pack
+        ? engine === "image"
+          ? imageQty
+          : engine === "video"
+          ? videoQty
+          : ugcQty
+        : 1;
+
+      // Build the shared body
       // deno-lint-ignore no-explicit-any
       const baseBody: any = { tenant_id: tenantId };
       if (resolvedProductImageUrl) baseBody.product_image_url = resolvedProductImageUrl;
@@ -193,61 +331,70 @@ export function GenerateCreativeModal({
         baseBody.product_title = selectedProduct.title;
         baseBody.product_description = selectedProduct.description;
       }
+      if (pack) baseBody.ad_pack_id = pack.id;
 
+      let fnName: string;
       if (engine === "image") {
-        if (prompt.trim().length < 5) {
-          setError("Prompt too short (min 5 chars).");
-          return;
-        }
         fnName = "generate-creative-image";
         baseBody.prompt = prompt.trim();
         baseBody.style = STYLES.find((s) => s.id === style)?.label;
         baseBody.size = size;
       } else if (engine === "video") {
-        if (videoPrompt.trim().length < 5) {
-          setError("Prompt too short (min 5 chars).");
-          return;
-        }
         fnName = "generate-creative-video";
         baseBody.prompt = videoPrompt.trim();
         baseBody.duration = duration;
         baseBody.aspect = aspect;
       } else {
-        if (script.trim().length < 5) {
-          setError("Script too short (min 5 chars).");
-          return;
-        }
         fnName = "generate-creative-ugc";
         baseBody.script = script.trim();
       }
 
-      const { data, error: fnErr } = await supabase.functions.invoke<{
-        creative?: { id: string };
+      setGenProgress({ done: 0, total: count });
+
+      // Sequential generation — keeps token spend predictable and lets us
+      // stop early on quota errors (e.g. per-pack cap reached).
+      let lastResult: {
         cost_usd?: number;
         duration_ms?: number;
         is_demo?: boolean;
         engine?: string;
-        error?: string;
-        detail?: string;
-      }>(fnName, { body: baseBody });
+      } = {};
+      let totalCost = 0;
+      let totalDuration = 0;
+      let isDemo = false;
+      let lastEngine = "";
+      let completed = 0;
 
-      if (fnErr) {
-        setError(fnErr.message);
-        return;
+      for (let i = 0; i < count; i++) {
+        const { data, error: fnErr } = await supabase.functions.invoke<{
+          creative?: { id: string };
+          cost_usd?: number;
+          duration_ms?: number;
+          is_demo?: boolean;
+          engine?: string;
+          error?: string;
+          detail?: string;
+        }>(fnName, { body: baseBody });
+
+        if (fnErr) throw new Error(fnErr.message);
+        if (!data) throw new Error("No response from function");
+        if (data.error) throw new Error(`${data.error}${data.detail ? ` · ${data.detail.slice(0, 100)}` : ""}`);
+
+        lastResult = data;
+        totalCost += data.cost_usd ?? 0;
+        totalDuration += data.duration_ms ?? 0;
+        if (data.is_demo) isDemo = true;
+        lastEngine = data.engine ?? lastEngine;
+        completed = i + 1;
+        setGenProgress({ done: completed, total: count });
       }
-      if (!data) {
-        setError("No response from function");
-        return;
-      }
-      if (data.error) {
-        setError(`${data.error}${data.detail ? ` · ${data.detail.slice(0, 100)}` : ""}`);
-        return;
-      }
+
       setSuccess({
-        cost: data.cost_usd ?? 0,
-        duration: (data.duration_ms ?? 0) / 1000,
-        isDemo: data.is_demo ?? false,
-        engine: data.engine ?? "",
+        cost: totalCost,
+        duration: totalDuration / 1000,
+        isDemo,
+        engine: lastEngine || lastResult.engine || "",
+        count: completed,
       });
       onSuccess();
     } catch (e) {
@@ -292,6 +439,45 @@ export function GenerateCreativeModal({
         </div>
 
         <div className="space-y-5 p-6">
+          {/* Quota banner */}
+          {quota ? (
+            <div
+              className={`rounded-xl border px-4 py-2.5 text-xs ${
+                quota.unlimited
+                  ? "border-emerald-500/30 bg-emerald-500/[0.06] text-emerald-300"
+                  : quota.used >= quota.quota
+                  ? "border-orange/50 bg-orange/[0.10] text-orange"
+                  : "border-border bg-white/[0.03] text-muted-strong"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                {quota.unlimited ? (
+                  <Zap className="h-3.5 w-3.5" strokeWidth={2} />
+                ) : quota.used >= quota.quota ? (
+                  <AlertTriangle className="h-3.5 w-3.5" strokeWidth={2} />
+                ) : (
+                  <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
+                )}
+                <span className="font-semibold">
+                  {quota.unlimited
+                    ? `Plan ${quota.plan_id} — unlimited ad packs`
+                    : `Plan ${quota.plan_id} — ${quota.used} / ${quota.quota} ad packs this month`}
+                </span>
+                {!quota.unlimited && quota.used >= quota.quota ? (
+                  <span className="ml-auto text-[10px] uppercase tracking-wider">Upgrade required</span>
+                ) : null}
+              </div>
+              {!quota.unlimited ? (
+                <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div
+                    className="h-full bg-orange transition-all"
+                    style={{ width: `${Math.min(100, (quota.used / Math.max(1, quota.quota)) * 100)}%` }}
+                  />
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
           {/* Engine selector */}
           <div>
             <label className="text-[11px] font-bold uppercase tracking-wider text-muted-strong">
@@ -470,11 +656,89 @@ export function GenerateCreativeModal({
                   className="field-input"
                 />
                 <p className="mt-1 text-[10px] text-muted">
-                  Open Graph metadata will be fetched at generation time to enrich the prompt.
+                  Open Graph metadata + page text are fetched and analyzed by AI.
                 </p>
               </div>
             ) : null}
           </div>
+
+          {/* Analyze with AI — generates an ultra-precise prompt (>=1450 chars) */}
+          {(resolvedProductImageUrl || resolvedProductUrl) && !pack ? (
+            <button
+              type="button"
+              onClick={analyzeProduct}
+              disabled={analyzing || generating || !!(quota && !quota.unlimited && quota.used >= quota.quota)}
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-orange/40 bg-orange/[0.08] text-sm font-bold text-orange transition-all hover:bg-orange/[0.14] hover:shadow-glow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Wand2 className="h-4 w-4" strokeWidth={2} />
+              {analyzing ? "Analyzing product with AI…" : "Analyze with AI — generate the perfect prompt"}
+            </button>
+          ) : null}
+
+          {/* Active pack card */}
+          {pack ? (
+            <div className="rounded-xl border border-orange/30 bg-orange/[0.06] p-4">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-orange">
+                  <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
+                  Ad pack ready · {pack.name}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPack(null)}
+                  className="text-[10px] text-muted hover:text-ink"
+                >
+                  Clear pack
+                </button>
+              </div>
+              <p className="mt-2 text-[10px] text-muted-strong">
+                Prompt: <strong className="text-ink">{pack.prompt_chars} chars</strong> · master prompt
+                applied to all generations in this pack.
+              </p>
+              <div className="mt-3 grid grid-cols-3 gap-2 text-[10px]">
+                <div className="rounded-lg border border-border bg-bg p-2 text-center">
+                  <div className="text-muted">Images</div>
+                  <div className="mt-0.5 text-sm font-bold text-ink">
+                    {pack.requested_images} <span className="text-muted">/ {MAX_IMAGES_PER_PACK}</span>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-border bg-bg p-2 text-center">
+                  <div className="text-muted">Videos</div>
+                  <div className="mt-0.5 text-sm font-bold text-ink">
+                    {pack.requested_videos} <span className="text-muted">/ {MAX_VIDEOS_PER_PACK}</span>
+                  </div>
+                </div>
+                <div className="rounded-lg border border-border bg-bg p-2 text-center">
+                  <div className="text-muted">UGC</div>
+                  <div className="mt-0.5 text-sm font-bold text-ink">
+                    {pack.requested_ugc} <span className="text-muted">/ {MAX_UGC_PER_PACK}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {/* Quantity selector — per engine, only shown when no pack is locked in */}
+          {(resolvedProductImageUrl || resolvedProductUrl) && !pack ? (
+            <div>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-muted-strong">
+                How many assets to generate
+              </label>
+              <div className="mt-2 inline-flex items-center gap-2">
+                {engine === "image" ? (
+                  <QuantityPicker value={imageQty} max={MAX_IMAGES_PER_PACK} onChange={setImageQty} label="images" />
+                ) : engine === "video" ? (
+                  <QuantityPicker value={videoQty} max={MAX_VIDEOS_PER_PACK} onChange={setVideoQty} label="videos" />
+                ) : (
+                  <QuantityPicker value={ugcQty} max={MAX_UGC_PER_PACK} onChange={setUgcQty} label="UGC video" />
+                )}
+              </div>
+              <p className="mt-1 text-[10px] text-muted">
+                One ad pack = up to {MAX_IMAGES_PER_PACK} images, {MAX_VIDEOS_PER_PACK} videos, or{" "}
+                {MAX_UGC_PER_PACK} UGC. Counts against your monthly plan.
+              </p>
+            </div>
+          ) : null}
 
           {/* IMAGE form */}
           {engine === "image" ? (
@@ -599,10 +863,28 @@ export function GenerateCreativeModal({
             </div>
           ) : null}
 
+          {genProgress && generating ? (
+            <div className="rounded-xl border border-orange/30 bg-orange/[0.06] px-4 py-3 text-xs">
+              <div className="flex items-center justify-between font-semibold text-orange">
+                <span>Generating ad pack…</span>
+                <span className="tabular-nums">
+                  {genProgress.done} / {genProgress.total}
+                </span>
+              </div>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                <div
+                  className="h-full bg-orange transition-all"
+                  style={{ width: `${(genProgress.done / Math.max(1, genProgress.total)) * 100}%` }}
+                />
+              </div>
+            </div>
+          ) : null}
+
           {success ? (
             <div className="space-y-1.5 rounded-xl border border-orange/30 bg-orange/[0.08] px-4 py-3 text-sm">
               <div className="font-bold text-orange">
-                ✓ Generated in {success.duration.toFixed(1)}s
+                ✓ Generated {success.count} {success.count > 1 ? "creatives" : "creative"} in{" "}
+                {success.duration.toFixed(1)}s
               </div>
               <div className="text-xs text-body">
                 Engine: <strong className="text-ink">{success.engine}</strong>
@@ -639,11 +921,19 @@ export function GenerateCreativeModal({
             </button>
             <button
               onClick={generate}
-              disabled={generating}
+              disabled={generating || analyzing}
               className="inline-flex h-10 items-center gap-2 rounded-xl bg-orange px-5 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow-sm disabled:opacity-55 disabled:cursor-not-allowed"
             >
               <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
-              {generating ? "Generating…" : "Generate"}
+              {generating
+                ? "Generating…"
+                : pack
+                ? `Generate ${
+                    engine === "image" ? imageQty : engine === "video" ? videoQty : ugcQty
+                  } ${engine === "ugc" ? "UGC" : engine}${
+                    (engine === "image" ? imageQty : engine === "video" ? videoQty : ugcQty) > 1 ? "s" : ""
+                  }`
+                : "Generate"}
             </button>
           </div>
         </div>
@@ -744,6 +1034,42 @@ function EngineBtn({
       <div className="mt-2 text-xs font-bold text-ink">{label}</div>
       <div className="mt-0.5 text-[10px] text-muted">{sub}</div>
     </button>
+  );
+}
+
+function QuantityPicker({
+  value,
+  max,
+  label,
+  onChange,
+}: {
+  value: number;
+  max: number;
+  label: string;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-1">
+      {Array.from({ length: max }).map((_, i) => {
+        const n = i + 1;
+        const active = n === value;
+        return (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            className={`h-9 w-9 rounded-lg border text-sm font-bold transition-colors ${
+              active
+                ? "border-orange/40 bg-orange/[0.10] text-orange"
+                : "border-border bg-white/[0.03] text-body hover:border-border-strong"
+            }`}
+          >
+            {n}
+          </button>
+        );
+      })}
+      <span className="ml-2 text-[11px] text-muted">{label}</span>
+    </div>
   );
 }
 

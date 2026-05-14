@@ -54,6 +54,7 @@ Deno.serve(async (req: Request) => {
     product_url?: string;
     product_title?: string;
     product_description?: string;
+    ad_pack_id?: string;
   };
   try {
     body = await req.json();
@@ -66,6 +67,7 @@ Deno.serve(async (req: Request) => {
   const productUrl = body.product_url?.trim() || null;
   const productTitle = body.product_title?.trim() || null;
   const productDescription = body.product_description?.trim() || null;
+  const adPackId = body.ad_pack_id?.trim() || null;
   const prompt = [
     productTitle ? `Product: ${productTitle}.` : null,
     productDescription ? `${productDescription.slice(0, 250)}` : null,
@@ -96,6 +98,21 @@ Deno.serve(async (req: Request) => {
   const adminClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false },
   });
+
+  // ─── Ad pack: validate + enforce per-pack limit (max 2 videos) ──────
+  if (adPackId) {
+    const { data: pack, error: pErr } = await adminClient
+      .from("ad_packs")
+      .select("id, tenant_id, generated_videos")
+      .eq("id", adPackId)
+      .maybeSingle();
+    if (pErr) return json({ error: `Ad pack lookup failed: ${pErr.message}` }, 500);
+    if (!pack) return json({ error: "Ad pack not found" }, 404);
+    if (pack.tenant_id !== tenantId) return json({ error: "Ad pack belongs to another tenant" }, 403);
+    if ((pack.generated_videos ?? 0) >= 2) {
+      return json({ error: "ad_pack_video_limit_reached", detail: "Max 2 videos per ad pack." }, 402);
+    }
+  }
 
   // Runway key : DB-stored credential first, env var fallback. If absent
   // entirely, the function still serves demo Mixkit clips.
@@ -210,6 +227,7 @@ Deno.serve(async (req: Request) => {
     .from("creatives")
     .insert({
       tenant_id: tenantId,
+      ad_pack_id: adPackId,
       type: "video",
       status: "draft",
       headline: prompt.slice(0, 80),
@@ -239,8 +257,16 @@ Deno.serve(async (req: Request) => {
     return json({ error: `Insert failed: ${insErr.message}` }, 500);
   }
 
+  if (adPackId) {
+    await adminClient.rpc("ad_pack_increment_generated", {
+      _pack_id: adPackId,
+      _kind: "video",
+    });
+  }
+
   return json({
     creative: inserted,
+    ad_pack_id: adPackId,
     cost_usd: costUsd,
     duration_ms: durationMs,
     engine,

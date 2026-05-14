@@ -50,6 +50,7 @@ Deno.serve(async (req: Request) => {
     product_url?: string;
     product_title?: string;
     product_description?: string;
+    ad_pack_id?: string;
   };
   try {
     body = await req.json();
@@ -64,6 +65,7 @@ Deno.serve(async (req: Request) => {
   const productUrl = body.product_url?.trim() || null;
   const productTitle = body.product_title?.trim() || null;
   const productDescription = body.product_description?.trim() || null;
+  const adPackId = body.ad_pack_id?.trim() || null;
 
   if (!tenantId || typeof tenantId !== "string") return json({ error: "tenant_id required" }, 400);
   if (!prompt || prompt.length < 5) return json({ error: "prompt too short (min 5 chars)" }, 400);
@@ -104,6 +106,22 @@ Deno.serve(async (req: Request) => {
   if (tErr) return json({ error: `Auth check failed: ${tErr.message}` }, 401);
   const member = (tenants ?? []).find((t: { tenant_id: string }) => t.tenant_id === tenantId);
   if (!member) return json({ error: "You are not a member of this tenant" }, 403);
+
+  // ─── Ad pack: validate ownership + enforce per-pack limit (max 4 images) ──
+  const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
+  if (adPackId) {
+    const { data: pack, error: pErr } = await adminClient
+      .from("ad_packs")
+      .select("id, tenant_id, generated_images")
+      .eq("id", adPackId)
+      .maybeSingle();
+    if (pErr) return json({ error: `Ad pack lookup failed: ${pErr.message}` }, 500);
+    if (!pack) return json({ error: "Ad pack not found" }, 404);
+    if (pack.tenant_id !== tenantId) return json({ error: "Ad pack belongs to another tenant" }, 403);
+    if ((pack.generated_images ?? 0) >= 4) {
+      return json({ error: "ad_pack_image_limit_reached", detail: "Max 4 images per ad pack." }, 402);
+    }
+  }
 
   // ─── Call OpenAI Images ───────────────────────────────────────────────
   // Enrich prompt with product context if provided
@@ -163,10 +181,6 @@ Deno.serve(async (req: Request) => {
   }
 
   // ─── Upload to Supabase Storage (creatives bucket) ────────────────────
-  const adminClient = createClient(supabaseUrl, serviceKey, {
-    auth: { persistSession: false },
-  });
-
   const filename = `ai-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
   const storagePath = `${tenantId}/${filename}`;
 
@@ -188,6 +202,7 @@ Deno.serve(async (req: Request) => {
     .from("creatives")
     .insert({
       tenant_id: tenantId,
+      ad_pack_id: adPackId,
       type: "image",
       status: "draft",
       headline: prompt.slice(0, 80),
@@ -218,8 +233,17 @@ Deno.serve(async (req: Request) => {
     return json({ error: `Insert failed: ${insErr.message}` }, 500);
   }
 
+  // Increment pack counter (best effort — failure here doesn't void the creative).
+  if (adPackId) {
+    await adminClient.rpc("ad_pack_increment_generated", {
+      _pack_id: adPackId,
+      _kind: "image",
+    });
+  }
+
   return json({
     creative: inserted,
+    ad_pack_id: adPackId,
     cost_usd: costUsd,
     duration_ms: durationMs,
     model: MODEL,
