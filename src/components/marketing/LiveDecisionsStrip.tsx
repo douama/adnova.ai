@@ -30,7 +30,7 @@ const STATS = [
 
 export function LiveDecisionsStrip() {
   return (
-    <section className="py-6 sm:py-8">
+    <section className="-mt-4 pb-6 pt-0 sm:-mt-6 sm:pb-8">
       <Container>
         <div className="glass glass-highlight overflow-hidden rounded-2xl p-1">
           <div className="grid grid-cols-2 md:grid-cols-4">
