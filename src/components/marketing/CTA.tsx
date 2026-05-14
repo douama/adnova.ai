@@ -5,9 +5,9 @@ import { Container } from "../ui/container";
 export function CTA() {
   const { t } = useTranslation();
   return (
-    <section className="py-24">
+    <section className="py-14 sm:py-20">
       <Container>
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card px-8 py-16 text-center sm:px-16 sm:py-20">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-card px-8 py-12 text-center sm:px-16 sm:py-16">
           <div
             className="pointer-events-none absolute inset-0 opacity-25"
             style={{

@@ -5,7 +5,7 @@ import { Container } from "../ui/container";
 export function Hero() {
   const { t } = useTranslation();
   return (
-    <section className="relative overflow-hidden pt-20 pb-16 sm:pt-32 sm:pb-24 md:pt-40 md:pb-32">
+    <section className="relative overflow-hidden pt-20 pb-12 sm:pt-28 sm:pb-16 md:pt-36 md:pb-20">
       {/* Background grid */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.15]"

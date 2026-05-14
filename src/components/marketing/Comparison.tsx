@@ -23,7 +23,7 @@ function Cell({ value }: { value: Row["smartly"] }) {
 
 export function Comparison() {
   return (
-    <section className="py-24">
+    <section className="py-14 sm:py-20">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
