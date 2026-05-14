@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Building2, DollarSign, Sparkles, AlertCircle } from "lucide-react";
+import { Building2, DollarSign, Sparkles, AlertCircle, Image as ImageIcon } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
 type Stats = {
@@ -8,6 +8,8 @@ type Stats = {
   runs24h: number;
   cost24h: number;
   errors24h: number;
+  aiCreatives24h: number;
+  aiCreativesCost24h: number;
 };
 
 function fmtUsd(n: number) {
@@ -29,7 +31,7 @@ export function AdminOverview() {
     (async () => {
       try {
         const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-        const [tenants, autonomous, runs, errors] = await Promise.all([
+        const [tenants, autonomous, runs, errors, aiCreatives] = await Promise.all([
           supabase.from("tenants").select("id", { head: true, count: "exact" }),
           supabase
             .from("tenants")
@@ -43,10 +45,22 @@ export function AdminOverview() {
             .from("client_errors")
             .select("id", { head: true, count: "exact" })
             .gte("created_at", since),
+          supabase
+            .from("creatives")
+            .select("generation_meta", { count: "exact" })
+            .not("generation_engine", "is", null)
+            .gte("created_at", since),
         ]);
         if (cancelled) return;
         const cost = (runs.data ?? []).reduce(
           (acc, r) => acc + Number(r.cost_usd_estimate ?? 0),
+          0,
+        );
+        const creativeCost = (aiCreatives.data ?? []).reduce(
+          (acc, c) => {
+            const meta = c.generation_meta as { cost_usd?: number } | null;
+            return acc + Number(meta?.cost_usd ?? 0);
+          },
           0,
         );
         setStats({
@@ -55,6 +69,8 @@ export function AdminOverview() {
           runs24h: runs.count ?? 0,
           cost24h: cost,
           errors24h: errors.count ?? 0,
+          aiCreatives24h: aiCreatives.count ?? 0,
+          aiCreativesCost24h: creativeCost,
         });
       } catch (e) {
         if (cancelled) return;
@@ -91,17 +107,17 @@ export function AdminOverview() {
           icon={Building2}
         />
         <KPI
-          label="AI runs (24h)"
+          label="Decision runs (24h)"
           value={loading ? "—" : String(stats?.runs24h ?? 0)}
           sub={`Cron + manual`}
           icon={Sparkles}
           highlight
         />
         <KPI
-          label="AI cost (24h)"
-          value={loading ? "—" : fmtUsd(stats?.cost24h ?? 0)}
-          sub="Sonnet 4.5"
-          icon={DollarSign}
+          label="AI creatives (24h)"
+          value={loading ? "—" : String(stats?.aiCreatives24h ?? 0)}
+          sub="OpenAI gpt-image-1"
+          icon={ImageIcon}
         />
         <KPI
           label="Frontend errors (24h)"
@@ -109,6 +125,39 @@ export function AdminOverview() {
           sub="client_errors table"
           icon={AlertCircle}
         />
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-bold text-ink">AI cost breakdown (24h)</h2>
+            <p className="mt-0.5 text-xs text-muted">
+              By provider · billed to your Anthropic + OpenAI accounts
+            </p>
+          </div>
+          <DollarSign className="h-4 w-4 text-orange" strokeWidth={1.75} />
+        </div>
+        <div className="mt-5 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
+          <CostRow
+            label="Claude Sonnet 4.5"
+            sub="Decision engine (claude-decide)"
+            cost={stats?.cost24h ?? 0}
+            loading={loading}
+          />
+          <CostRow
+            label="OpenAI gpt-image-1"
+            sub="AI creative generation"
+            cost={stats?.aiCreativesCost24h ?? 0}
+            loading={loading}
+          />
+          <CostRow
+            label="Total"
+            sub={`${(stats?.runs24h ?? 0) + (stats?.aiCreatives24h ?? 0)} AI ops`}
+            cost={(stats?.cost24h ?? 0) + (stats?.aiCreativesCost24h ?? 0)}
+            loading={loading}
+            highlight
+          />
+        </div>
       </div>
 
       <div className="rounded-2xl border border-border bg-card p-6">
@@ -168,6 +217,34 @@ function KPI({
         {value}
       </div>
       <div className="mt-1 text-xs text-muted">{sub}</div>
+    </div>
+  );
+}
+
+function CostRow({
+  label,
+  sub,
+  cost,
+  loading,
+  highlight = false,
+}: {
+  label: string;
+  sub: string;
+  cost: number;
+  loading: boolean;
+  highlight?: boolean;
+}) {
+  return (
+    <div className={`p-5 ${highlight ? "bg-orange/[0.04]" : "bg-card"}`}>
+      <div className="text-[11px] font-bold uppercase tracking-wider text-muted-strong">
+        {label}
+      </div>
+      <div
+        className={`mt-3 text-2xl font-bold tracking-tighter tabular-nums ${highlight ? "text-orange" : "text-ink"}`}
+      >
+        {loading ? "—" : fmtUsd(cost)}
+      </div>
+      <div className="mt-0.5 text-xs text-muted">{sub}</div>
     </div>
   );
 }

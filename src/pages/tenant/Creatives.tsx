@@ -1,7 +1,7 @@
 // Bibliothèque de créatifs du tenant courant.
-// Upload manual ; génération IA arrivera plus tard (SDXL/Runway via Edge Function).
+// Upload manual + AI image generation via OpenAI gpt-image-1 (Edge Function).
 import { useEffect, useRef, useState } from "react";
-import { Upload, Trash2, Image as ImageIcon } from "lucide-react";
+import { Upload, Trash2, Image as ImageIcon, Sparkles } from "lucide-react";
 import { useCreatives } from "../../lib/queries";
 import { useCurrentTenantId } from "../../stores/tenantStore";
 import {
@@ -10,6 +10,7 @@ import {
   inferCreativeType,
   uploadCreative,
 } from "../../lib/creatives";
+import { GenerateCreativeModal } from "../../components/dashboard/GenerateCreativeModal";
 
 const MAX_BYTES = 100 * 1024 * 1024; // 100 MB (aligned with bucket limit)
 
@@ -19,6 +20,7 @@ export function CreativesPage() {
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export function CreativesPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tighter text-ink">Creative Studio</h1>
           <p className="mt-1 text-sm text-muted-strong">
-            Workspace asset library · manual upload · AI generation coming soon
+            Workspace asset library · manual upload + AI generation (OpenAI gpt-image-1)
           </p>
         </div>
         <input
@@ -83,15 +85,32 @@ export function CreativesPage() {
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
         />
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={uploading}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-orange px-5 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow-sm hover:-translate-y-0.5 disabled:opacity-55"
-        >
-          <Upload className="h-3.5 w-3.5" strokeWidth={2} />
-          {uploading ? "Uploading…" : "Upload creative"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border-strong bg-white/[0.03] px-4 text-sm font-medium text-body transition-all hover:border-white/25 hover:text-ink disabled:opacity-55"
+          >
+            <Upload className="h-3.5 w-3.5" strokeWidth={2} />
+            {uploading ? "Uploading…" : "Upload"}
+          </button>
+          <button
+            onClick={() => setAiOpen(true)}
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-orange px-5 text-sm font-bold text-white transition-all hover:bg-orange-hover hover:shadow-glow-sm hover:-translate-y-0.5"
+          >
+            <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
+            Generate with AI
+          </button>
+        </div>
       </div>
+
+      <GenerateCreativeModal
+        open={aiOpen}
+        onClose={() => setAiOpen(false)}
+        onSuccess={() => {
+          refresh();
+        }}
+      />
 
       {uploadError ? (
         <div className="rounded-xl border border-muted/30 bg-muted/[0.08] px-4 py-3 text-sm text-muted-strong">
@@ -156,8 +175,15 @@ function CreativeCard({
   onDelete: () => void;
 }) {
   const isVideo = creative.type === "video" || creative.type === "ugc_video";
+  const isAI = !!creative.generation_engine;
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-bg transition-colors hover:border-border-strong">
+      {isAI ? (
+        <span className="absolute left-2 top-2 z-10 inline-flex items-center gap-1 rounded-md border border-orange/40 bg-orange/[0.12] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-orange backdrop-blur-sm">
+          <span className="h-1 w-1 rounded-full bg-orange" />
+          AI
+        </span>
+      ) : null}
       <div className="aspect-square bg-surface">
         {url ? (
           isVideo ? (
