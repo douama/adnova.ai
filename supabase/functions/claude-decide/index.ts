@@ -1,4 +1,4 @@
-// ─── claude-decide v5 ──────────────────────────────────────────────────────
+// ─── claude-decide v6 ──────────────────────────────────────────────────────
 // AdNova's AI ops engine. Two modes :
 //   - USER mode    : called by React client with a user JWT
 //                    → verifies membership via my_tenants RPC
@@ -11,15 +11,32 @@
 // Observability : every invocation finalises an ai_run_log row with
 // status, http_status_code, decisions_count, input_tokens, output_tokens,
 // cost_usd_estimate (Sonnet 4.5 pricing), claude_model, duration_ms.
+//
+// Cross-run memory (Phase 7) : before calling Claude, we inject two layers
+// of context to prevent contradictions across runs :
+//   1. Rule-based recent decisions on the analyzed campaigns (last 72h, top
+//      3 per campaign) — always active.
+//   2. Semantic recall via pgvector cosine similarity — top-K past decisions
+//      across the tenant whose embeddings are closest to the current
+//      situation. Skipped gracefully if OPENAI_API_KEY is not set.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const CLAUDE_MODEL = "claude-sonnet-4-5";
 
+const OPENAI_EMBEDDINGS_URL = "https://api.openai.com/v1/embeddings";
+const EMBEDDING_MODEL = "text-embedding-3-small";
+
 // Sonnet 4.5 pricing (per 1M tokens) — keep in sync with anthropic.com/pricing
 const PRICE_INPUT_PER_MTOK = 3;
 const PRICE_OUTPUT_PER_MTOK = 15;
+
+// Memory layer parameters
+const RECENT_PER_CAMPAIGN = 3;     // last N decisions/campaign in rule-based recall
+const RECENT_MAX_AGE_HOURS = 72;
+const SEMANTIC_K = 4;              // top-K semantic neighbours across tenant
+const SEMANTIC_MIN_SIM = 0.55;     // ignore weak matches
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -119,6 +136,99 @@ type FinalizeOpts = {
   cost_usd?: number | null;
   model?: string | null;
 };
+
+type RecentDecision = {
+  campaign_id: string;
+  decision_id: string;
+  decision_type: string;
+  action: unknown;
+  reason: string;
+  confidence: number | null;
+  created_at: string;
+};
+
+type SemanticDecision = {
+  id: string;
+  campaign_id: string | null;
+  decision_type: string;
+  reason: string;
+  confidence: number | null;
+  created_at: string;
+  similarity: number;
+};
+
+type CampaignBrief = {
+  id: string;
+  name: string;
+  platform: string | null;
+  status: string | null;
+  roas: number | null;
+  ctr: number | null;
+};
+
+function formatAge(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const h = Math.floor(diff / 3_600_000);
+  if (h < 1) return `${Math.max(1, Math.floor(diff / 60_000))}m ago`;
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+function formatRecentDecisions(
+  rows: RecentDecision[],
+  campaignNameById: Map<string, string>
+): string {
+  if (rows.length === 0) return "(none in the last 72h)";
+  return rows
+    .map((r) => {
+      const name = campaignNameById.get(r.campaign_id) ?? r.campaign_id;
+      const conf = r.confidence != null ? ` conf=${Number(r.confidence).toFixed(2)}` : "";
+      const reason = r.reason.length > 180 ? r.reason.slice(0, 177) + "…" : r.reason;
+      return `- ${name} — ${formatAge(r.created_at)} [${r.decision_type}]${conf}: "${reason}"`;
+    })
+    .join("\n");
+}
+
+function formatSemanticHits(rows: SemanticDecision[]): string {
+  if (rows.length === 0) return "(no similar past situations found)";
+  return rows
+    .map((r) => {
+      const sim = r.similarity.toFixed(2);
+      const reason = r.reason.length > 180 ? r.reason.slice(0, 177) + "…" : r.reason;
+      return `- ${formatAge(r.created_at)} [${r.decision_type}] sim=${sim}: "${reason}"`;
+    })
+    .join("\n");
+}
+
+function buildSituationQuery(campaigns: CampaignBrief[]): string {
+  const summary = campaigns
+    .map(
+      (c) =>
+        `${c.name} (${c.platform ?? "?"}, ${c.status ?? "?"}, ROAS ${
+          c.roas != null ? Number(c.roas).toFixed(2) + "×" : "n/a"
+        }, CTR ${c.ctr != null ? Number(c.ctr).toFixed(2) + "%" : "n/a"})`
+    )
+    .join("; ");
+  return `Ad ops analysis of ${campaigns.length} campaigns: ${summary}`;
+}
+
+async function embedQuery(text: string, openaiKey: string): Promise<number[] | null> {
+  const res = await fetch(OPENAI_EMBEDDINGS_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${openaiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ input: text, model: EMBEDDING_MODEL }),
+  });
+  if (!res.ok) {
+    console.error("Query embedding failed:", res.status, await res.text());
+    return null;
+  }
+  const json = await res.json();
+  const vec = json.data?.[0]?.embedding;
+  return Array.isArray(vec) && vec.length === 1536 ? vec : null;
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -314,16 +424,77 @@ Deno.serve(async (req: Request) => {
     conversions: c.conversions_total,
   }));
 
+  // ─── Memory : recent + semantic recall ────────────────────────────────
+  const campaignIds = campaigns.map((c) => c.id);
+  const campaignNameById = new Map(campaigns.map((c) => [c.id as string, c.name as string]));
+
+  const { data: recentRaw, error: recentErr } = await readClient.rpc(
+    "recent_decisions_for_campaigns",
+    {
+      _tenant_id: tenantId,
+      _campaign_ids: campaignIds,
+      _per_campaign: RECENT_PER_CAMPAIGN,
+      _max_age_hours: RECENT_MAX_AGE_HOURS,
+    }
+  );
+  if (recentErr) {
+    console.error("recent_decisions_for_campaigns failed:", recentErr);
+  }
+  const recent = (recentRaw ?? []) as RecentDecision[];
+
+  // Semantic recall — best-effort, skipped if OPENAI_API_KEY missing or call fails.
+  const openaiKey = Deno.env.get("OPENAI_API_KEY");
+  let semantic: SemanticDecision[] = [];
+  if (openaiKey) {
+    const queryText = buildSituationQuery(
+      campaigns.map((c) => ({
+        id: c.id as string,
+        name: c.name as string,
+        platform: (c.platform ?? null) as string | null,
+        status: (c.status ?? null) as string | null,
+        roas: (c.roas ?? null) as number | null,
+        ctr: (c.ctr ?? null) as number | null,
+      }))
+    );
+    const queryEmbedding = await embedQuery(queryText, openaiKey);
+    if (queryEmbedding) {
+      const excludeIds = recent.map((r) => r.decision_id); // don't re-surface recent ones
+      const { data: simRaw, error: simErr } = await adminClient.rpc(
+        "similar_decisions_by_embedding",
+        {
+          _tenant_id: tenantId,
+          _query_embedding: `[${queryEmbedding.join(",")}]`,
+          _k: SEMANTIC_K,
+          _exclude_ids: excludeIds,
+          _min_similarity: SEMANTIC_MIN_SIM,
+        }
+      );
+      if (simErr) {
+        console.error("similar_decisions_by_embedding failed:", simErr);
+      } else {
+        semantic = (simRaw ?? []) as SemanticDecision[];
+      }
+    }
+  }
+
+  const memoryBlock =
+    "\n\n## Past actions on these campaigns (last 72h) — do not contradict or duplicate:\n" +
+    formatRecentDecisions(recent, campaignNameById) +
+    "\n\n## Similar past situations across this tenant (semantic recall):\n" +
+    formatSemanticHits(semantic);
+
   const systemPrompt =
     "You are AdNova's AI ad ops engine. You analyze campaign performance and propose " +
     "surgical optimization decisions. You are RUTHLESS about killing underperformers and " +
     "AGGRESSIVE about scaling winners. You always justify decisions with the exact metrics. " +
     "\n\nGuardrails (hard rules):\n" +
     "- Don't scale a campaign with ROAS < 3.5×\n" +
-    "- Don't scale by more than 15% per 24h\n" +
+    "- Don't scale by more than 15% per 24h (CHECK PAST ACTIONS — they compound)\n" +
     "- Kill creatives/campaigns with CTR < 0.8% after 500+ impressions\n" +
     "- Reallocate budget from low-ROAS campaigns to high-ROAS ones (cross-platform OK)\n" +
     "- Confidence must be honest — low if the data is thin (<1000 impressions or <30 conversions)\n" +
+    "- Don't re-propose a decision that was just executed (see 'Past actions' below)\n" +
+    "- Don't reverse a deliberate kill without strong evidence the underlying problem changed\n" +
     "\nReturn 2-6 decisions max. Quality over quantity. If nothing meaningful to do, return empty array.";
 
   const userPrompt =
@@ -331,7 +502,8 @@ Deno.serve(async (req: Request) => {
     `Mode: ${isServiceCall ? "AUTONOMOUS LOOP (no user reviewing)" : "USER-TRIGGERED"}\n\n` +
     `Active campaigns (${campaigns.length}):\n` +
     JSON.stringify(campaignsBrief, null, 2) +
-    "\n\nAnalyze these campaigns and submit your decisions via the submit_decisions tool.";
+    memoryBlock +
+    "\n\nAnalyze these campaigns in light of past actions, and submit your decisions via the submit_decisions tool.";
 
   const anthropicRes = await fetch(ANTHROPIC_API_URL, {
     method: "POST",

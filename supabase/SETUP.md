@@ -9,6 +9,8 @@ Project : `jrfxmgxtnftbcxoqzagz`
 
 ## 1. Edge Function secrets
 
+### 1.a `ANTHROPIC_API_KEY` (required)
+
 The `claude-decide` Edge Function needs Anthropic credentials.
 
 Set in **Dashboard → Edge Functions → Secrets** (or via CLI):
@@ -19,6 +21,30 @@ supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
 
 Required by `supabase/functions/claude-decide/index.ts`. The function fails
 fast at boot if missing (`500 ANTHROPIC_API_KEY not set`).
+
+### 1.b `OPENAI_API_KEY` (optional — enables semantic memory)
+
+If set, two things activate :
+
+1. **`embed-decision` Edge Function** generates a 1536-dim embedding (OpenAI
+   `text-embedding-3-small`) for every new `ai_decisions` row, stored in
+   `ai_decisions.embedding` (pgvector). Triggered async via DB trigger.
+2. **`claude-decide` Phase 7c** : before each Claude call, embeds the current
+   "campaign situation" and queries `similar_decisions_by_embedding()` to
+   retrieve the top-K most semantically similar past decisions (cosine
+   distance, HNSW index). These are injected into the prompt alongside the
+   rule-based recent decisions.
+
+Without this key, the rule-based memory layer (last 3 decisions per campaign,
+72h window) still works — Claude already avoids re-scaling and respects
+compounding guardrails. The semantic layer is incremental value.
+
+```bash
+supabase secrets set OPENAI_API_KEY=sk-...
+```
+
+Cost : text-embedding-3-small is $0.02 per 1M tokens. A typical decision
+reason is ~50 tokens → $0.000001 per embedding. Negligible vs Anthropic.
 
 ---
 

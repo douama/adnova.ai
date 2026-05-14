@@ -112,44 +112,50 @@ export function AIActivityPanel() {
           {runs.map((r) => {
             const tokens = (r.input_tokens ?? 0) + (r.output_tokens ?? 0);
             return (
-              <li
-                key={r.id}
-                className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-2.5 text-sm"
-              >
-                <div className="flex items-center gap-2">
-                  <StatusBadge status={r.status} />
-                  <span className="text-xs text-slate-500">
-                    {TRIGGER_LABEL[r.trigger_source] ?? r.trigger_source}
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <div className="truncate text-xs text-slate-600">
-                    {r.status === "completed" ? (
-                      <>
-                        <strong className="text-slate-900">{r.decisions_count}</strong> decision
-                        {r.decisions_count !== 1 ? "s" : ""} ·{" "}
-                        <span className="tabular-nums">{tokens.toLocaleString()}</span> tokens ·{" "}
-                        <span className="tabular-nums">
-                          {r.duration_ms ? `${(r.duration_ms / 1000).toFixed(1)}s` : "—"}
-                        </span>
-                      </>
-                    ) : r.status === "skipped" ? (
-                      <span className="italic text-slate-500">
-                        {r.error_message ?? "skipped"}
-                      </span>
-                    ) : r.status === "failed" ? (
-                      <span className="text-red-600">{r.error_message ?? "error"}</span>
-                    ) : (
-                      <span className="italic text-amber-700">running…</span>
-                    )}
+              <li key={r.id} className="px-4 py-2.5 text-sm">
+                {/* Top row : badges + cost */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <StatusBadge status={r.status} />
+                    <span className="text-xs text-slate-500">
+                      {TRIGGER_LABEL[r.trigger_source] ?? r.trigger_source}
+                    </span>
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    {formatRelative(r.started_at)}
-                    {r.claude_model ? ` · ${r.claude_model}` : ""}
+                  <div className="text-xs font-semibold tabular-nums text-slate-700">
+                    {formatCost(Number(r.cost_usd_estimate))}
                   </div>
                 </div>
-                <div className="text-right text-xs tabular-nums text-slate-700">
-                  {formatCost(Number(r.cost_usd_estimate))}
+
+                {/* Middle row : primary metric */}
+                <div className="mt-1 text-xs text-slate-700">
+                  {r.status === "completed" ? (
+                    <>
+                      <strong className="text-slate-900">{r.decisions_count}</strong> decision
+                      {r.decisions_count !== 1 ? "s" : ""}
+                      {" · "}
+                      <span className="tabular-nums">{tokens.toLocaleString()}</span> tokens
+                      {r.duration_ms ? (
+                        <>
+                          {" · "}
+                          <span className="tabular-nums">
+                            {(r.duration_ms / 1000).toFixed(1)}s
+                          </span>
+                        </>
+                      ) : null}
+                    </>
+                  ) : r.status === "skipped" ? (
+                    <span className="italic text-slate-500">{r.error_message ?? "skipped"}</span>
+                  ) : r.status === "failed" ? (
+                    <span className="text-red-600">{r.error_message ?? "error"}</span>
+                  ) : (
+                    <span className="italic text-amber-700">running…</span>
+                  )}
+                </div>
+
+                {/* Bottom row : meta */}
+                <div className="mt-0.5 text-[11px] text-slate-400">
+                  {formatRelative(r.started_at)}
+                  {r.claude_model ? ` · ${r.claude_model}` : ""}
                 </div>
               </li>
             );
