@@ -32,7 +32,7 @@ const FEED_POOL: FeedDecision[] = [
   { type: "scale",  brand: "Meta · Stagehand Audio",       action: "Scale +9% — keeping CPA $14 below target" },
 ];
 
-const VISIBLE = 3;
+const VISIBLE = 5;
 const TICK_MS = 3500;
 
 type FeedRow = FeedDecision & { id: number; bornAt: number };
