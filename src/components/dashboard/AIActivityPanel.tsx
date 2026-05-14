@@ -1,7 +1,5 @@
-// ─── AI Activity panel ─────────────────────────────────────────────────────
-// Streams the last N invocations of claude-decide (cron + user-triggered) for
-// the current tenant, with token usage, cost estimate, status and duration.
-// Live-updated via the useAIRunLog hook (postgres_changes Realtime).
+// Streams the last N invocations of claude-decide (cron + user-triggered).
+// Live-updated via useAIRunLog (postgres_changes Realtime).
 import { useAIRunLog, type AIRunLog } from "../../lib/queries";
 
 function formatRelative(iso: string): string {
@@ -21,40 +19,32 @@ function formatCost(usd: number | null): string {
   return `$${usd.toFixed(usd < 1 ? 3 : 2)}`;
 }
 
-const STATUS_STYLES: Record<string, string> = {
-  pending: "bg-amber-50 text-amber-700 border-amber-200",
-  completed: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  failed: "bg-red-50 text-red-700 border-red-200",
-  skipped: "bg-slate-50 text-slate-600 border-slate-200",
+const STATUS_STYLES: Record<string, { bg: string; text: string; dot?: string }> = {
+  pending: { bg: "bg-orange/[0.08]", text: "text-orange", dot: "bg-orange" },
+  completed: { bg: "bg-orange/[0.08]", text: "text-orange" },
+  failed: { bg: "bg-muted/[0.12]", text: "text-muted-strong" },
+  skipped: { bg: "bg-white/[0.04]", text: "text-muted" },
 };
 
 const TRIGGER_LABEL: Record<string, string> = {
-  cron: "🤖 Cron",
-  user: "👤 Manual",
-  manual: "🔧 Test",
+  cron: "Cron",
+  user: "Manual",
+  manual: "Test",
 };
 
 function StatusBadge({ status }: { status: string }) {
+  const s = STATUS_STYLES[status] ?? STATUS_STYLES.skipped!;
   return (
     <span
-      className={`inline-flex items-center rounded-md border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-        STATUS_STYLES[status] ?? STATUS_STYLES.skipped
-      }`}
+      className={`inline-flex items-center gap-1 rounded border border-border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${s.bg} ${s.text}`}
     >
-      {status === "pending" ? (
-        <span className="mr-1 h-1 w-1 animate-pulse rounded-full bg-amber-500" />
-      ) : null}
+      {s.dot ? <span className={`h-1 w-1 animate-pulse rounded-full ${s.dot}`} /> : null}
       {status}
     </span>
   );
 }
 
-function summarizeCost(runs: AIRunLog[]): {
-  totalUsd: number;
-  totalTokens: number;
-  todayUsd: number;
-  todayRuns: number;
-} {
+function summarizeCost(runs: AIRunLog[]) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const cutoff = today.getTime();
@@ -81,62 +71,65 @@ export function AIActivityPanel() {
   const summary = summarizeCost(runs ?? []);
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white">
-      <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+    <div className="rounded-2xl border border-border bg-card">
+      <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
         <div>
-          <h2 className="text-sm font-semibold text-slate-900">AI Activity</h2>
-          <p className="text-xs text-slate-500">
-            Live feed of Claude analyses · last 10 invocations
-          </p>
+          <h2 className="text-base font-bold text-ink">AI Activity</h2>
+          <p className="mt-0.5 text-xs text-muted">Live feed · last 10 runs</p>
         </div>
         <div className="text-right">
-          <div className="text-xs text-slate-500">Today</div>
-          <div className="text-sm font-semibold tabular-nums text-slate-900">
-            {formatCost(summary.todayUsd)} <span className="text-slate-400">·</span>{" "}
-            <span className="text-slate-600">{summary.todayRuns} runs</span>
+          <div className="text-[10px] font-bold uppercase tracking-wider text-muted">
+            Today
+          </div>
+          <div className="text-sm font-bold tabular-nums text-ink">
+            {formatCost(summary.todayUsd)}
+            <span className="ml-1 text-muted">· {summary.todayRuns} runs</span>
           </div>
         </div>
       </div>
 
       {loading && !runs ? (
-        <div className="px-4 py-8 text-center text-sm text-slate-400">Loading…</div>
+        <div className="px-5 py-12 text-center text-sm text-muted">Loading…</div>
       ) : error ? (
-        <div className="px-4 py-3 text-sm text-red-600">{error}</div>
+        <div className="m-5 rounded-lg border border-muted/20 bg-muted/[0.08] px-4 py-3 text-sm text-muted-strong">
+          {error}
+        </div>
       ) : !runs || runs.length === 0 ? (
-        <div className="px-4 py-8 text-center text-sm text-slate-400">
-          Aucune invocation pour l'instant. Active le mode <strong>Autonomous</strong> ou
-          clique <strong>Demander à l'IA</strong> pour générer le premier run.
+        <div className="space-y-2 px-5 py-12 text-center">
+          <p className="text-sm font-bold text-ink">No AI runs yet</p>
+          <p className="text-xs text-muted">
+            Click <strong className="text-ink">Ask AI</strong> or switch to{" "}
+            <strong className="text-ink">Autonomous</strong> mode to generate the first one.
+          </p>
         </div>
       ) : (
-        <ul className="divide-y divide-slate-100">
+        <ul className="divide-y divide-border/60">
           {runs.map((r) => {
             const tokens = (r.input_tokens ?? 0) + (r.output_tokens ?? 0);
             return (
-              <li key={r.id} className="px-4 py-2.5 text-sm">
-                {/* Top row : badges + cost */}
+              <li key={r.id} className="px-5 py-3 text-sm">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <StatusBadge status={r.status} />
-                    <span className="text-xs text-slate-500">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-strong">
                       {TRIGGER_LABEL[r.trigger_source] ?? r.trigger_source}
                     </span>
                   </div>
-                  <div className="text-xs font-semibold tabular-nums text-slate-700">
+                  <div className="text-xs font-bold tabular-nums text-ink">
                     {formatCost(Number(r.cost_usd_estimate))}
                   </div>
                 </div>
 
-                {/* Middle row : primary metric */}
-                <div className="mt-1 text-xs text-slate-700">
+                <div className="mt-1 text-xs text-body">
                   {r.status === "completed" ? (
                     <>
-                      <strong className="text-slate-900">{r.decisions_count}</strong> decision
+                      <strong className="text-ink">{r.decisions_count}</strong> decision
                       {r.decisions_count !== 1 ? "s" : ""}
-                      {" · "}
+                      <span className="text-muted"> · </span>
                       <span className="tabular-nums">{tokens.toLocaleString()}</span> tokens
                       {r.duration_ms ? (
                         <>
-                          {" · "}
+                          <span className="text-muted"> · </span>
                           <span className="tabular-nums">
                             {(r.duration_ms / 1000).toFixed(1)}s
                           </span>
@@ -144,16 +137,19 @@ export function AIActivityPanel() {
                       ) : null}
                     </>
                   ) : r.status === "skipped" ? (
-                    <span className="italic text-slate-500">{r.error_message ?? "skipped"}</span>
+                    <span className="italic text-muted">
+                      {r.error_message ?? "skipped"}
+                    </span>
                   ) : r.status === "failed" ? (
-                    <span className="text-red-600">{r.error_message ?? "error"}</span>
+                    <span className="text-muted-strong">
+                      {r.error_message ?? "error"}
+                    </span>
                   ) : (
-                    <span className="italic text-amber-700">running…</span>
+                    <span className="italic text-orange">running…</span>
                   )}
                 </div>
 
-                {/* Bottom row : meta */}
-                <div className="mt-0.5 text-[11px] text-slate-400">
+                <div className="mt-0.5 text-[10px] text-muted">
                   {formatRelative(r.started_at)}
                   {r.claude_model ? ` · ${r.claude_model}` : ""}
                 </div>
@@ -164,8 +160,8 @@ export function AIActivityPanel() {
       )}
 
       {runs && runs.length > 0 ? (
-        <div className="border-t border-slate-100 bg-slate-50 px-4 py-2 text-[11px] text-slate-500">
-          Last {runs.length} runs · cumulative {formatCost(summary.totalUsd)} ·{" "}
+        <div className="border-t border-border bg-surface px-5 py-2 text-[10px] text-muted">
+          {runs.length} runs · cumulative {formatCost(summary.totalUsd)} ·{" "}
           {summary.totalTokens.toLocaleString()} tokens · Sonnet 4.5 @ $3/$15 per Mtok
         </div>
       ) : null}

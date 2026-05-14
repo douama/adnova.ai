@@ -3,14 +3,21 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./stores/authStore";
 import { useTenants } from "./stores/tenantStore";
 import { PublicLayout } from "./components/layout/PublicLayout";
+import { TenantLayout } from "./components/layout/TenantLayout";
 import { RequireAuth } from "./components/layout/RequireAuth";
 
 import { LandingPage } from "./pages/public/Landing";
 import { LoginPage } from "./pages/auth/Login";
 import { RegisterPage } from "./pages/auth/Register";
-import { AuthCallback } from "./pages/AuthCallback";
-import { OnboardingPage } from "./pages/Onboarding";
+import { AuthCallback } from "./pages/auth/AuthCallback";
+import { OnboardingPage } from "./pages/auth/Onboarding";
+
 import { DashboardPage } from "./pages/tenant/Dashboard";
+import { DecisionsPage } from "./pages/tenant/Decisions";
+import { CreativesPage } from "./pages/tenant/Creatives";
+import { AudiencesPage } from "./pages/tenant/Audiences";
+import { AutomationPage } from "./pages/tenant/Automation";
+import { SettingsPage } from "./pages/tenant/Settings";
 
 export function App() {
   const { session, loading, init } = useAuth();
@@ -45,12 +52,11 @@ export function App() {
       {/* Public marketing */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<LandingPage />} />
-        {/* M3 marketing pages plug in here :
-            /pricing /customers /vs-smartly /blog /about /careers /press-kit
-            /partners /terms /privacy */}
+        {/* M3: /pricing, /customers, /vs-smartly, /blog, /about, /careers,
+            /press-kit, /partners, /terms, /privacy */}
       </Route>
 
-      {/* Auth (full-bleed dark, no PublicLayout) */}
+      {/* Auth (full-bleed dark, no PublicLayout chrome) */}
       <Route
         path="/login"
         element={session ? <Navigate to="/dashboard" replace /> : <LoginPage />}
@@ -60,8 +66,6 @@ export function App() {
         element={session ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
       />
       <Route path="/auth/callback" element={<AuthCallback />} />
-
-      {/* Auth-required */}
       <Route
         path="/onboarding"
         element={
@@ -70,16 +74,24 @@ export function App() {
           </RequireAuth>
         }
       />
+
+      {/* Authenticated tenant app */}
       <Route
-        path="/dashboard"
         element={
           <RequireAuth>
-            <DashboardPage />
+            <TenantLayout />
           </RequireAuth>
         }
-      />
+      >
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/decisions" element={<DecisionsPage />} />
+        <Route path="/creatives" element={<CreativesPage />} />
+        <Route path="/audiences" element={<AudiencesPage />} />
+        <Route path="/automation" element={<AutomationPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+      </Route>
 
-      {/* Fallback : send anything unknown back to landing */}
+      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

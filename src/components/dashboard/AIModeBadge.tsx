@@ -1,12 +1,7 @@
-// ─── AI Mode badge + dropdown ──────────────────────────────────────────────
-// Affiche le mode IA actuel du tenant et permet de switcher entre :
-//   • advisory   : Claude recommande, user valide chaque action
-//   • guardrails : Claude exécute dans les bornes que tu fixes
-//   • autonomous : Claude tourne en boucle (toutes les 30 min via pg_cron)
-//
-// Seuls owner/admin peuvent changer (vérifié côté RLS, mais on cache le bouton
-// pour les viewers/editors via useIsCurrentTenantAdmin).
+// Dropdown to switch tenant AI mode : advisory / guardrails / autonomous.
+// Only owner/admin can change (RLS guards this server-side too).
 import { useState } from "react";
+import { ChevronDown, Check } from "lucide-react";
 import {
   useCurrentTenant,
   useCurrentTenantId,
@@ -23,15 +18,9 @@ const MODE_LABELS: Record<AIMode, string> = {
 };
 
 const MODE_SUBLABELS: Record<AIMode, string> = {
-  advisory: "Vous validez chaque action",
-  guardrails: "Bornes que vous fixez · IA exécute dedans",
-  autonomous: "IA tourne 24/7 · décide seule · audit posteriori",
-};
-
-const MODE_COLOR: Record<AIMode, string> = {
-  advisory: "bg-slate-100 text-slate-700 border-slate-200",
-  guardrails: "bg-amber-50 text-amber-800 border-amber-200",
-  autonomous: "bg-orange-50 text-orange-800 border-orange-300",
+  advisory: "You approve every action",
+  guardrails: "AI runs within bounds you set",
+  autonomous: "AI runs 24/7 · audit-after",
 };
 
 export function AIModeBadge() {
@@ -45,6 +34,7 @@ export function AIModeBadge() {
 
   if (!tenant) return null;
   const mode = tenant.ai_mode as AIMode;
+  const isAutonomous = mode === "autonomous";
 
   async function switchMode(next: AIMode) {
     if (!tenantId || next === mode) {
@@ -55,10 +45,10 @@ export function AIModeBadge() {
     setErr(null);
     try {
       await updateTenantAiMode(tenantId, next);
-      await loadTenants(); // refresh from server pour synchroniser le store
+      await loadTenants();
       setOpen(false);
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Échec");
+      setErr(e instanceof Error ? e.message : "Failed");
     } finally {
       setSaving(false);
     }
@@ -69,44 +59,58 @@ export function AIModeBadge() {
       <button
         onClick={() => isAdmin && setOpen((o) => !o)}
         disabled={!isAdmin || saving}
-        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
-          MODE_COLOR[mode]
-        } ${isAdmin ? "hover:opacity-80 cursor-pointer" : "cursor-default opacity-90"}`}
-        title={isAdmin ? "Changer le mode IA" : "Seuls owner/admin peuvent changer"}
+        className={`inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+          isAutonomous
+            ? "border-orange/40 bg-orange/[0.08] text-orange"
+            : "border-border bg-card text-body"
+        } ${isAdmin ? "hover:border-border-strong cursor-pointer" : "cursor-default opacity-80"}`}
+        title={isAdmin ? "Change AI mode" : "Owner/admin only"}
       >
-        {mode === "autonomous" ? (
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-500" />
+        {isAutonomous ? (
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange" />
         ) : null}
-        Mode : {MODE_LABELS[mode]}
-        {isAdmin ? <span className="text-[10px] opacity-60">▾</span> : null}
+        Mode: {MODE_LABELS[mode]}
+        {isAdmin ? <ChevronDown className="h-3 w-3 opacity-60" /> : null}
       </button>
 
       {open && isAdmin ? (
-        <div className="absolute right-0 z-20 mt-2 w-72 rounded-md border border-slate-200 bg-white p-1 shadow-lg">
-          {(Object.keys(MODE_LABELS) as AIMode[]).map((m) => (
-            <button
-              key={m}
-              onClick={() => switchMode(m)}
-              disabled={saving}
-              className={`w-full rounded-md px-3 py-2 text-left text-sm transition-colors ${
-                m === mode ? "bg-slate-50" : "hover:bg-slate-50"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-slate-900">{MODE_LABELS[m]}</span>
-                {m === mode ? <span className="text-xs text-emerald-600">✓ actuel</span> : null}
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setOpen(false)}
+            aria-hidden
+          />
+          <div className="absolute right-0 z-20 mt-2 w-72 overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            {(Object.keys(MODE_LABELS) as AIMode[]).map((m) => {
+              const active = m === mode;
+              return (
+                <button
+                  key={m}
+                  onClick={() => switchMode(m)}
+                  disabled={saving}
+                  className={`w-full px-4 py-3 text-left transition-colors ${
+                    active ? "bg-white/[0.04]" : "hover:bg-white/[0.04]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-ink">{MODE_LABELS[m]}</span>
+                    {active ? <Check className="h-3.5 w-3.5 text-orange" /> : null}
+                  </div>
+                  <p className="mt-0.5 text-xs text-muted">{MODE_SUBLABELS[m]}</p>
+                </button>
+              );
+            })}
+            {err ? (
+              <div className="border-t border-border bg-muted/[0.08] px-4 py-2 text-xs text-muted-strong">
+                {err}
               </div>
-              <div className="mt-0.5 text-xs text-slate-500">{MODE_SUBLABELS[m]}</div>
-            </button>
-          ))}
-          {err ? (
-            <div className="mt-1 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">{err}</div>
-          ) : null}
-          <div className="mt-1 border-t border-slate-100 px-3 py-2 text-[11px] text-slate-500">
-            <strong>Autonomous</strong> : l'IA appelle Claude toutes les 30 min sur tes
-            campagnes actives. Coût Anthropic estimé : ~$0.50/jour par tenant.
+            ) : null}
+            <div className="border-t border-border bg-surface px-4 py-2 text-[10px] leading-relaxed text-muted">
+              <strong className="text-orange">Autonomous</strong> calls Claude every 30 min on
+              your active campaigns. Estimated cost ~$1/day per tenant.
+            </div>
           </div>
-        </div>
+        </>
       ) : null}
     </div>
   );
