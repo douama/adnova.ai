@@ -58,8 +58,8 @@ export function OnboardingPage() {
                 <PlatformPlaceholder name="Google Ads" />
               </div>
               <p className="pt-2 text-xs text-muted">
-                OAuth flows arrive in M3. You can already explore the demo data on the
-                dashboard — click "Load demo data" on the Campaigns card.
+                OAuth flows are coming soon. You can already explore the dashboard with
+                demo data — click "Load demo data" on the Campaigns card.
               </p>
             </div>
           )}
@@ -113,7 +113,7 @@ function PlatformPlaceholder({ name }: { name: string }) {
       className="rounded-xl border border-border bg-bg p-4 text-left transition-colors hover:border-border-strong disabled:opacity-60"
     >
       <div className="text-sm font-bold text-ink">{name}</div>
-      <div className="mt-1 text-[10px] uppercase tracking-wider text-muted">Coming M3</div>
+      <div className="mt-1 text-[10px] uppercase tracking-wider text-muted">Coming soon</div>
     </button>
   );
 }

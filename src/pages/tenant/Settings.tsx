@@ -116,7 +116,9 @@ function IntegrationsTab() {
   return (
     <div>
       <p className="text-sm text-muted-strong">
-        Connect your ad accounts. OAuth flows ship as part of M3.
+        Connect your ad accounts. OAuth flows are on the next-up roadmap — meanwhile, you can
+        explore the dashboard end-to-end with the "Load demo data" button on the Campaigns
+        card.
       </p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {PLATFORMS.map((p) => (
@@ -140,7 +142,7 @@ function IntegrationsTab() {
               disabled
               className="inline-flex h-9 items-center rounded-lg border border-border bg-white/[0.03] px-3 text-xs font-medium text-muted opacity-60"
             >
-              Coming M3
+              Coming soon
             </button>
           </div>
         ))}

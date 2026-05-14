@@ -14,14 +14,14 @@ export function AutomationPage() {
         <div className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-border bg-bg text-muted">
           <Workflow className="h-6 w-6" strokeWidth={1.5} />
         </div>
-        <h2 className="mt-5 text-xl font-bold text-ink">Rules engine ships in M3</h2>
+        <h2 className="mt-5 text-xl font-bold text-ink">Rules engine coming soon</h2>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted">
           Define hard guardrails the AI must follow : <em>"Never scale if ROAS &lt; 3.5×"</em>,{" "}
           <em>"Kill any creative with CTR &lt; 0.8% after 500 impressions"</em>. Currently
           enforced via the system prompt — soon editable per tenant.
         </p>
         <div className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-orange/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange">
-          <span className="h-1 w-1 rounded-full bg-orange" /> Coming M3
+          <span className="h-1 w-1 rounded-full bg-orange" /> On the roadmap
         </div>
       </div>
     </div>
