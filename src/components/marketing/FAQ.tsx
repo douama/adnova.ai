@@ -35,7 +35,7 @@ const FAQS: Item[] = [
   },
   {
     q: "Do you offer agency / white-label pricing?",
-    a: "Yes — the Agency plan ($499/mo, or $399/mo annually) gives you unlimited ad accounts, unlimited AI creatives, white-label dashboards for your clients, and the private API. Enterprise contracts add custom volume + dedicated CSM.",
+    a: "Yes — the Agency plan ($599/mo, or $479/mo annually) gives you unlimited ad accounts, unlimited AI creatives, white-label dashboards for your clients, and the private API. Enterprise contracts add custom volume + dedicated CSM.",
   },
 ];
 

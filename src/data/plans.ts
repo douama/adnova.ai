@@ -16,7 +16,7 @@ export const PLANS: Plan[] = [
   {
     id: "starter",
     name: "Starter",
-    price: 49,
+    price: 59,
     period: "month",
     popular: false,
     cta: "Start free trial",
@@ -33,7 +33,7 @@ export const PLANS: Plan[] = [
   {
     id: "pro",
     name: "Pro",
-    price: 149,
+    price: 159,
     period: "month",
     popular: true,
     cta: "Start free trial",
@@ -52,7 +52,7 @@ export const PLANS: Plan[] = [
   {
     id: "agency",
     name: "Agency",
-    price: 499,
+    price: 599,
     period: "month",
     popular: false,
     cta: "Start free trial",
