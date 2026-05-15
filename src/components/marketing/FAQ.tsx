@@ -10,7 +10,7 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="pb-14 pt-6 sm:pb-20 sm:pt-10">
+    <section id="faq" className="pb-14 pt-2 sm:pb-20 sm:pt-4">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-16">
           <div>

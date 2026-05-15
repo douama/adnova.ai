@@ -10,7 +10,7 @@ export function HowItWorks() {
     { n: "03", titleKey: "howItWorks.step3Title", bodyKey: "howItWorks.step3Body", icon: Rocket, duration: "24 / 7" },
   ];
   return (
-    <section id="how-it-works" className="pb-14 pt-6 sm:pb-20 sm:pt-10">
+    <section id="how-it-works" className="pb-14 pt-2 sm:pb-20 sm:pt-4">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange">
