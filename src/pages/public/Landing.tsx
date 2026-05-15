@@ -4,6 +4,7 @@ import { FeatureBento } from "../../components/marketing/FeatureBento";
 import { HowItWorks } from "../../components/marketing/HowItWorks";
 import { Pricing } from "../../components/marketing/Pricing";
 import { Testimonials } from "../../components/marketing/Testimonials";
+import { UGCShowcase } from "../../components/marketing/UGCShowcase";
 import { FAQ } from "../../components/marketing/FAQ";
 import { CTA } from "../../components/marketing/CTA";
 
@@ -15,6 +16,7 @@ export function LandingPage() {
       <FeatureBento />
       <HowItWorks />
       <Testimonials />
+      <UGCShowcase />
       <Pricing />
       <FAQ />
       <CTA />
