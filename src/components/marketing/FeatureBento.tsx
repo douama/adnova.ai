@@ -177,21 +177,9 @@ export function FeatureBento() {
                 {t("featureBento.tile4Sub")}
               </p>
               <div className="mt-auto grid grid-cols-3 gap-2">
-                <CreativeMini
-                  gradient="from-orange/30 to-fuchsia-500/20"
-                  label="Image"
-                  hint="2s · $0.04"
-                />
-                <CreativeMini
-                  gradient="from-cyan-500/30 to-blue-500/20"
-                  label="Video"
-                  hint="4-8s clip"
-                />
-                <CreativeMini
-                  gradient="from-emerald-500/30 to-orange/20"
-                  label="UGC"
-                  hint="Avatar IV"
-                />
+                <ImageAdCard />
+                <VideoAdCard />
+                <UGCAdCard />
               </div>
             </div>
           </Tile>
@@ -298,21 +286,117 @@ function LiveFeed({ t }: { t: (key: string) => string }) {
   );
 }
 
-function CreativeMini({
-  gradient,
-  label,
-  hint,
-}: {
-  gradient: string;
-  label: string;
-  hint: string;
-}) {
+/* ── Mini ad mockups ─────────────────────────────────────────────────── */
+
+function ImageAdCard() {
   return (
-    <div className="relative overflow-hidden rounded-lg border border-border">
-      <div className={`aspect-square w-full bg-gradient-to-br ${gradient}`} />
-      <div className="px-2 py-1.5">
-        <div className="text-[11px] font-bold text-ink">{label}</div>
-        <div className="text-[9px] text-muted">{hint}</div>
+    <div className="overflow-hidden rounded-lg border border-border flex flex-col">
+      {/* Creative */}
+      <div className="relative aspect-square overflow-hidden bg-[#0d0d0d]">
+        <img
+          src="https://images.pexels.com/photos/3685527/pexels-photo-3685527.jpeg?auto=compress&cs=tinysrgb&w=320"
+          className="h-full w-full object-cover"
+          loading="lazy"
+          alt=""
+        />
+        {/* Sponsored badge */}
+        <div className="absolute top-1.5 left-1.5 rounded bg-black/60 px-1 py-px text-[7px] leading-none text-white/70 backdrop-blur-sm">
+          Sponsored
+        </div>
+        {/* Bottom overlay */}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pt-6 pb-1.5">
+          <p className="text-[9px] font-bold leading-tight text-white">Glow Serum™</p>
+          <div className="mt-1 flex items-center justify-between">
+            <span className="text-[7px] text-white/60">lumineux.co</span>
+            <span className="rounded bg-white px-1.5 py-px text-[7px] font-bold text-black">
+              Shop Now
+            </span>
+          </div>
+        </div>
+      </div>
+      {/* Label */}
+      <div className="flex items-center justify-between bg-[#1877F2]/10 px-2 py-1">
+        <span className="text-[10px] font-bold text-ink">Image</span>
+        <span className="text-[8px] text-muted">2s · $0.04</span>
+      </div>
+    </div>
+  );
+}
+
+function VideoAdCard() {
+  return (
+    <div className="overflow-hidden rounded-lg border border-border flex flex-col">
+      {/* Creative */}
+      <div className="relative aspect-square overflow-hidden bg-[#0a0f1a]">
+        {/* Cinematic gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/60 via-slate-900 to-blue-950" />
+        {/* Horizontal bars simulating video frames */}
+        <div className="absolute inset-x-0 top-3 flex flex-col gap-[3px] px-3 opacity-20">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-[3px] rounded-full bg-white/40" style={{ width: `${80 - i * 12}%` }} />
+          ))}
+        </div>
+        {/* Play button */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 border border-white/30 backdrop-blur-sm">
+            <div className="ml-0.5 h-0 w-0 border-y-[5px] border-l-[8px] border-y-transparent border-l-white" />
+          </div>
+        </div>
+        {/* Duration badge */}
+        <div className="absolute bottom-1.5 right-1.5 rounded bg-black/70 px-1 py-px text-[7px] font-bold text-white">
+          0:28
+        </div>
+        {/* Platform dot */}
+        <div className="absolute top-1.5 right-1.5 flex items-center gap-0.5 rounded bg-black/60 px-1 py-px">
+          <div className="h-1.5 w-1.5 rounded-full bg-[#fe2c55]" />
+          <span className="text-[6px] font-bold text-white">TikTok</span>
+        </div>
+      </div>
+      {/* Label */}
+      <div className="flex items-center justify-between bg-[#fe2c55]/10 px-2 py-1">
+        <span className="text-[10px] font-bold text-ink">Video</span>
+        <span className="text-[8px] text-muted">4-8s clip</span>
+      </div>
+    </div>
+  );
+}
+
+function UGCAdCard() {
+  return (
+    <div className="overflow-hidden rounded-lg border border-border flex flex-col">
+      {/* Creative */}
+      <div className="relative aspect-square overflow-hidden bg-[#0a0a0a]">
+        <img
+          src="https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=320"
+          className="h-full w-full object-cover object-top"
+          loading="lazy"
+          alt=""
+        />
+        {/* AI Generated badge */}
+        <div className="absolute top-1.5 left-1.5 flex items-center gap-0.5 rounded-full border border-orange/50 bg-orange/20 px-1.5 py-px backdrop-blur-sm">
+          <span className="h-1 w-1 rounded-full bg-orange animate-pulse" />
+          <span className="text-[6px] font-bold uppercase tracking-wide text-orange">AI</span>
+        </div>
+        {/* TikTok-style bottom overlay */}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pt-8 pb-1.5">
+          <div className="flex items-center gap-1 mb-0.5">
+            <div className="h-4 w-4 rounded-full bg-gradient-to-br from-orange to-pink-500 flex items-center justify-center shrink-0">
+              <span className="text-[5px] font-bold text-white">S</span>
+            </div>
+            <span className="text-[7px] font-semibold text-white">@sophiaskin</span>
+          </div>
+          <p className="text-[6px] text-white/70 leading-tight">POV: skincare hits different 🌟</p>
+        </div>
+        {/* Engagement */}
+        <div className="absolute right-1.5 bottom-4 flex flex-col items-center gap-1">
+          <span className="text-[8px]">❤️</span>
+          <span className="text-[6px] text-white/70">84K</span>
+        </div>
+      </div>
+      {/* Label */}
+      <div className="flex items-center justify-between bg-orange/10 px-2 py-1">
+        <span className="text-[10px] font-bold text-ink">UGC</span>
+        <span className="text-[8px] text-muted">Avatar IV</span>
       </div>
     </div>
   );
