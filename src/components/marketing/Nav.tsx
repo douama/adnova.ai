@@ -15,7 +15,6 @@ export function Nav() {
     { href: "/#features", label: t("nav.features") },
     { href: "/pricing", label: t("nav.pricing") },
     { href: "/customers", label: t("nav.customers") },
-    { href: "/vs-smartly", label: t("nav.vsSmartly") },
   ];
 
   return (
