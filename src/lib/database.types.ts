@@ -1578,6 +1578,52 @@ export type Database = {
           created_at: string
         }[]
       }
+      set_payment_credential: {
+        Args: {
+          p_provider: string
+          p_slot: string
+          p_api_key: string
+          p_mode?: string
+          p_is_publishable?: boolean
+          p_notes?: string | null
+        }
+        Returns: Json
+      }
+      list_payment_credentials: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          provider: string
+          slot: string
+          key_preview: string
+          is_publishable: boolean
+          mode: string
+          is_active: boolean
+          last_rotated_at: string
+          rotated_by_email: string | null
+          notes: string | null
+        }[]
+      }
+      delete_payment_credential: {
+        Args: { p_provider: string; p_slot: string }
+        Returns: Json
+      }
+      toggle_payment_credential: {
+        Args: { p_provider: string; p_slot: string; p_is_active: boolean }
+        Returns: Json
+      }
+      get_payment_credential: {
+        Args: { p_provider: string; p_slot: string }
+        Returns: string | null
+      }
+      list_payment_credentials_public: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          provider: string
+          slot: string
+          api_key: string
+          mode: string
+        }[]
+      }
     }
     Enums: {
       ad_platform:

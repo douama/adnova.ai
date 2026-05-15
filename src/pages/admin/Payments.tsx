@@ -118,12 +118,12 @@ function fmtAgo(iso: string): string {
   return `${Math.floor(h / 24)}d ago`;
 }
 
-function inferMode(value: string, slot: SlotDef): Mode {
-  // Stripe convention: pk_test_..., sk_test_..., whsec_..., pk_live_...
+function inferMode(value: string): Mode {
+  // Stripe convention: pk_test_..., sk_test_..., pk_live_..., sk_live_...
   if (value.startsWith("pk_live_") || value.startsWith("sk_live_")) return "live";
   if (value.startsWith("pk_test_") || value.startsWith("sk_test_")) return "test";
-  // PayPal keys carry no prefix — default to current selection
-  return slot.slot === "webhook_secret" ? "test" : "test";
+  // whsec_ (Stripe webhook) and PayPal keys carry no mode prefix — caller uses formMode
+  return "test";
 }
 
 export function AdminPayments() {
@@ -140,8 +140,7 @@ export function AdminPayments() {
   const reload = useCallback(async () => {
     setLoading(true);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase.rpc as any)("list_payment_credentials");
+      const { data, error } = await supabase.rpc("list_payment_credentials");
       if (error) {
         setError(`Lookup failed: ${error.message}`);
         return;
@@ -186,13 +185,15 @@ export function AdminPayments() {
       setError(`Key looks too short (expected ≥ ${editing.slot.minLength} chars).`);
       return;
     }
-    const detected = inferMode(trimmed, editing.slot);
-    const finalMode = editing.provider === "stripe" ? detected : formMode;
+    const detected = inferMode(trimmed);
+    const finalMode =
+      editing.provider === "stripe" && editing.slot.slot !== "webhook_secret"
+        ? detected
+        : formMode;
     setSubmitting(true);
     setError(null);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.rpc as any)("set_payment_credential", {
+      const { error } = await supabase.rpc("set_payment_credential", {
         p_provider: editing.provider,
         p_slot: editing.slot.slot,
         p_api_key: trimmed,
@@ -216,8 +217,7 @@ export function AdminPayments() {
       return;
     setError(null);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.rpc as any)("delete_payment_credential", {
+      const { error } = await supabase.rpc("delete_payment_credential", {
         p_provider: provider,
         p_slot: slot,
       });
@@ -232,8 +232,7 @@ export function AdminPayments() {
   async function onToggle(provider: PaymentProvider, slot: string, next: boolean) {
     setError(null);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.rpc as any)("toggle_payment_credential", {
+      const { error } = await supabase.rpc("toggle_payment_credential", {
         p_provider: provider,
         p_slot: slot,
         p_is_active: next,
@@ -488,7 +487,7 @@ export function AdminPayments() {
                   spellCheck={false}
                 />
               </label>
-              {editing.provider === "paypal" ? (
+              {(editing.provider === "paypal" || editing.slot.slot === "webhook_secret") ? (
                 <label className="block">
                   <span className="text-xs font-medium text-muted-strong">Mode</span>
                   <div className="mt-1.5 inline-flex items-center gap-1.5 rounded-full glass p-1">

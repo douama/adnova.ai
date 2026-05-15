@@ -12,10 +12,11 @@ import {
   Trash2,
   Pencil,
   ShieldCheck,
+  Wand2,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
-type ProviderId = "anthropic" | "openai" | "runway" | "heygen";
+type ProviderId = "anthropic" | "openai" | "runway" | "heygen" | "genspark";
 
 type ProviderDef = {
   id: ProviderId;
@@ -77,6 +78,16 @@ const PROVIDERS: ProviderDef[] = [
     icon: Camera,
     setupUrl: "https://app.heygen.com/settings/api",
     keyHint: "...",
+  },
+  {
+    id: "genspark",
+    name: "Genspark — Image & Video AI",
+    vendor: "Genspark",
+    purpose: "AI image creative (text-to-image) + AI video creative (text-to-video). Without a key, falls back to demo mode.",
+    required: false,
+    icon: Wand2,
+    setupUrl: "https://www.genspark.ai/",
+    keyHint: "gs-...",
   },
 ];
 
@@ -288,6 +299,7 @@ export function AdminIntegrations() {
             openai: ["gpt-image-1"],
             runway: ["runway-gen4", "demo-video"],
             heygen: ["heygen-avatar-iv", "demo-ugc"],
+            genspark: ["genspark-image", "genspark-video", "demo-genspark"],
           };
           const engineKeys = engineMap[p.id] ?? [];
           const stats = engineKeys.reduce(
@@ -457,6 +469,8 @@ export function AdminIntegrations() {
         <code className="text-body">generate-creative-image</code>,{" "}
         <code className="text-body">generate-creative-video</code>,{" "}
         <code className="text-body">generate-creative-ugc</code>,{" "}
+        <code className="text-body">generate-creative-image-genspark</code>,{" "}
+        <code className="text-body">generate-creative-video-genspark</code>,{" "}
         <code className="text-body">healthcheck</code>. They look up{" "}
         <code className="text-body">provider_credentials</code> first, then fall back to Edge
         Function secrets.
