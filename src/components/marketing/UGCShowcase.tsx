@@ -1,11 +1,10 @@
 // UGC Showcase section — landing page proof of UGC ad generation capability.
-// Video: Pexels #8995580 "Woman doing skin care" — free commercial use (Pexels license).
-// Portrait 1080×1920, 25fps, plays on loop with no sound.
+// Video: Pexels #8131881 "Woman Applying Serum on her Face" — free commercial use (Pexels license).
+// Portrait 1440×2732 UHD, 25fps, ~25s. Loaded lazily on scroll to avoid wasting bandwidth.
 import { useRef, useEffect, useState } from "react";
 import { Camera, Zap, TrendingUp, Star, Play } from "lucide-react";
 
-const UGC_VIDEO_SRC = "https://videos.pexels.com/video-files/8995580/8995580-hd_1080_1920_25fps.mp4";
-const UGC_VIDEO_FALLBACK = "https://videos.pexels.com/video-files/8995580/8995580-hd_720_1280_25fps.mp4";
+const UGC_VIDEO_SRC = "https://videos.pexels.com/video-files/8131881/8131881-uhd_1440_2732_25fps.mp4";
 
 const BENEFITS = [
   {
@@ -39,13 +38,18 @@ export function UGCShowcase() {
         const entry = entries[0];
         if (!entry) return;
         if (entry.isIntersecting) {
+          // Lazy-load: set src only when user scrolls here to avoid downloading 17 MB upfront
+          if (!video.src || video.src === window.location.href) {
+            video.src = UGC_VIDEO_SRC;
+            video.load();
+          }
           video.play().then(() => setPlaying(true)).catch(() => {});
         } else {
           video.pause();
           setPlaying(false);
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.25 },
     );
     observer.observe(video);
     return () => observer.disconnect();
@@ -80,20 +84,12 @@ export function UGCShowcase() {
                   <div className="relative aspect-[9/19.5]">
                     <video
                       ref={videoRef}
-                      src={UGC_VIDEO_SRC}
                       loop
                       muted
                       playsInline
-                      preload="metadata"
+                      preload="none"
                       onLoadedData={() => setLoaded(true)}
-                      onError={(e) => {
-                        // Fallback to lower res if HD fails
-                        const video = e.currentTarget;
-                        if (video.src !== UGC_VIDEO_FALLBACK) {
-                          video.src = UGC_VIDEO_FALLBACK;
-                          video.load();
-                        }
-                      }}
+                      onCanPlay={() => setLoaded(true)}
                       className="h-full w-full object-cover"
                     />
 
@@ -117,7 +113,7 @@ export function UGCShowcase() {
                             <span className="text-xs font-semibold text-white">@sophiaskincare</span>
                           </div>
                           <p className="text-[10px] text-white/80 leading-tight max-w-[140px]">
-                            This serum changed my skin in 2 weeks ✨ #skincare #glowup
+                            POV: your skincare finally hits different 🌟 #serum #glowup #skincaretok
                           </p>
                         </div>
                         <div className="flex flex-col items-center gap-2.5">
