@@ -17,7 +17,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
-const CLAUDE_MODEL = "claude-sonnet-4-5";
+const CLAUDE_MODEL = "claude-sonnet-4-6";
 const MIN_PROMPT_CHARS = 1450;
 const MAX_PROMPT_CHARS = 1500;
 
@@ -314,10 +314,9 @@ Deno.serve(async (req: Request) => {
 
   if (!anthropicRes.ok) {
     const text = await anthropicRes.text();
-    return json(
-      { error: `Claude API ${anthropicRes.status}`, detail: text.slice(0, 400) },
-      502,
-    );
+    // Return 200 so the JSON body is accessible in the browser (non-2xx responses
+    // are wrapped opaquely by supabase-js invoke and the detail is lost).
+    return json({ error: `Claude API ${anthropicRes.status}`, detail: text.slice(0, 400) });
   }
   const claudeJson = await anthropicRes.json();
   const usage = claudeJson.usage ?? {};

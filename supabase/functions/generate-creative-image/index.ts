@@ -1,28 +1,35 @@
-// ─── generate-creative-image v1 ────────────────────────────────────────────
+// ─── generate-creative-image v2 ────────────────────────────────────────────
 // Calls OpenAI Images API (gpt-image-1, formerly DALL-E 3) to generate an
 // ad creative from a text prompt, uploads the bytes to the tenant's
 // creatives bucket, and inserts a row in public.creatives.
 //
-// Auth : user JWT (verify_jwt = true). We verify tenant membership via the
-// same `my_tenants` RPC pattern used by claude-decide.
+// If no OpenAI key is configured (DB credential or env var), falls back to
+// an Unsplash Source placeholder so the ad-pack flow still works in demo mode.
 //
-// Body : { tenant_id: string, prompt: string, style?: string, size?: "1024x1024" | "1024x1536" | "1536x1024" }
-// Returns : { creative: { id, storage_path, ... }, cost_usd, prompt }
+// Auth : user JWT (verify_jwt = true). Tenant membership verified via my_tenants RPC.
 //
-// Cost (OpenAI Images pricing, as of late 2026) :
-//   1024x1024 standard : ~$0.04 / image
-//   1024x1536 or 1536x1024 standard : ~$0.06 / image
+// Body : { tenant_id, prompt, style?, size?, ad_pack_id?,
+//          product_image_url?, product_url?, product_title?, product_description? }
+// Returns : { creative, cost_usd, duration_ms, model, prompt, is_demo? }
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const OPENAI_IMAGES_URL = "https://api.openai.com/v1/images/generations";
-const MODEL = "gpt-image-1"; // OpenAI's latest image model (replaces dall-e-3)
+const MODEL = "gpt-image-1";
 
 const COST: Record<string, number> = {
   "1024x1024": 0.04,
   "1024x1536": 0.06,
   "1536x1024": 0.06,
 };
+
+// Unsplash Source URLs used as demo placeholders (no API key required).
+const DEMO_IMAGES = [
+  "https://source.unsplash.com/1024x1024/?advertising,product",
+  "https://source.unsplash.com/1024x1024/?fashion,brand",
+  "https://source.unsplash.com/1024x1024/?technology,marketing",
+  "https://source.unsplash.com/1024x1024/?lifestyle,creative",
+];
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -78,23 +85,15 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Supabase env missing" }, 500);
   }
 
-  // Resolve OpenAI key : DB-stored credential first, env var fallback.
-  const lookupClient = createClient(supabaseUrl, serviceKey, {
-    auth: { persistSession: false },
-  });
+  const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
+
+  // Resolve OpenAI key : DB-stored credential first, env var fallback. Absent → demo mode.
   let openaiKey: string | null = null;
   try {
-    const { data } = await lookupClient.rpc("get_provider_credential", {
-      p_provider: "openai",
-    });
+    const { data } = await adminClient.rpc("get_provider_credential", { p_provider: "openai" });
     if (typeof data === "string" && data.length > 10) openaiKey = data;
-  } catch (_) {
-    /* fall through */
-  }
+  } catch (_) { /* fall through */ }
   if (!openaiKey) openaiKey = Deno.env.get("OPENAI_API_KEY") ?? null;
-  if (!openaiKey) {
-    return json({ error: "OpenAI key not configured (DB credential or env var)" }, 500);
-  }
 
   // ─── Tenant membership check ──────────────────────────────────────────
   const authHeader = req.headers.get("Authorization") ?? "";
@@ -108,7 +107,6 @@ Deno.serve(async (req: Request) => {
   if (!member) return json({ error: "You are not a member of this tenant" }, 403);
 
   // ─── Ad pack: validate ownership + enforce per-pack limit (max 4 images) ──
-  const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
   if (adPackId) {
     const { data: pack, error: pErr } = await adminClient
       .from("ad_packs")
@@ -123,8 +121,6 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  // ─── Call OpenAI Images ───────────────────────────────────────────────
-  // Enrich prompt with product context if provided
   const productContext = [
     productTitle ? `Product: ${productTitle}` : null,
     productDescription ? `Description: ${productDescription.slice(0, 400)}` : null,
@@ -140,48 +136,61 @@ Deno.serve(async (req: Request) => {
   ].filter(Boolean).join("\n\n");
 
   const t0 = Date.now();
-  const openaiRes = await fetch(OPENAI_IMAGES_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${openaiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      prompt: fullPrompt,
-      n: 1,
-      size,
-      // gpt-image-1 returns base64 by default
-    }),
-  });
+  let bytes: Uint8Array;
+  let isDemo = false;
+  let engine: string;
+  let costUsd: number;
 
-  if (!openaiRes.ok) {
-    const text = await openaiRes.text();
-    console.error("OpenAI image error:", openaiRes.status, text);
-    return json(
-      { error: `OpenAI ${openaiRes.status}`, detail: text.slice(0, 400) },
-      502,
-    );
+  if (openaiKey) {
+    // ─── PRODUCTION : OpenAI image generation ────────────────────────────
+    engine = MODEL;
+    costUsd = COST[size];
+
+    const openaiRes = await fetch(OPENAI_IMAGES_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${openaiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ model: MODEL, prompt: fullPrompt, n: 1, size }),
+    });
+
+    if (!openaiRes.ok) {
+      const text = await openaiRes.text();
+      console.error("OpenAI image error:", openaiRes.status, text);
+      // Return 200 so the JSON body is accessible in the browser
+      // (non-2xx responses are wrapped opaquely by supabase-js invoke).
+      return json({ error: `OpenAI ${openaiRes.status}`, detail: text.slice(0, 400) });
+    }
+
+    const openaiJson = await openaiRes.json();
+    const b64 = openaiJson.data?.[0]?.b64_json as string | undefined;
+    const imgUrl = openaiJson.data?.[0]?.url as string | undefined;
+
+    if (b64) {
+      bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    } else if (imgUrl) {
+      const imgRes = await fetch(imgUrl);
+      if (!imgRes.ok) return json({ error: "Failed to download image from OpenAI URL" });
+      bytes = new Uint8Array(await imgRes.arrayBuffer());
+    } else {
+      return json({ error: "OpenAI returned no image data" });
+    }
+  } else {
+    // ─── DEMO : fetch an Unsplash placeholder ────────────────────────────
+    isDemo = true;
+    engine = "demo-openai";
+    costUsd = 0;
+    const demoUrl = DEMO_IMAGES[Math.floor(Math.random() * DEMO_IMAGES.length)]!;
+    const demoRes = await fetch(demoUrl);
+    if (!demoRes.ok) return json({ error: `Demo image fetch failed: ${demoRes.status}` });
+    bytes = new Uint8Array(await demoRes.arrayBuffer());
   }
-  const openaiJson = await openaiRes.json();
-  const b64 = openaiJson.data?.[0]?.b64_json as string | undefined;
-  const url = openaiJson.data?.[0]?.url as string | undefined;
+
   const durationMs = Date.now() - t0;
 
-  // gpt-image-1 returns b64_json; dall-e-3 returns url. Handle both.
-  let bytes: Uint8Array;
-  if (b64) {
-    bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-  } else if (url) {
-    const imgRes = await fetch(url);
-    if (!imgRes.ok) return json({ error: "Failed to download image from OpenAI URL" }, 502);
-    bytes = new Uint8Array(await imgRes.arrayBuffer());
-  } else {
-    return json({ error: "OpenAI returned no image data" }, 502);
-  }
-
-  // ─── Upload to Supabase Storage (creatives bucket) ────────────────────
-  const filename = `ai-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
+  // ─── Upload to Supabase Storage ───────────────────────────────────────
+  const filename = `${isDemo ? "demo" : "ai"}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
   const storagePath = `${tenantId}/${filename}`;
 
   const { error: upErr } = await adminClient.storage
@@ -193,11 +202,10 @@ Deno.serve(async (req: Request) => {
     });
   if (upErr) {
     console.error("Storage upload failed:", upErr);
-    return json({ error: `Upload failed: ${upErr.message}` }, 500);
+    return json({ error: `Upload failed: ${upErr.message}` });
   }
 
   // ─── Insert creative row ──────────────────────────────────────────────
-  const costUsd = COST[size];
   const { data: inserted, error: insErr } = await adminClient
     .from("creatives")
     .insert({
@@ -207,16 +215,17 @@ Deno.serve(async (req: Request) => {
       status: "draft",
       headline: prompt.slice(0, 80),
       storage_path: storagePath,
-      generation_engine: MODEL,
+      generation_engine: engine,
       generation_prompt: prompt,
       generation_meta: {
-        provider: "openai",
-        model: MODEL,
+        provider: isDemo ? "demo" : "openai",
+        model: engine,
         size,
         style: style || null,
         cost_usd: costUsd,
         duration_ms: durationMs,
         bytes: bytes.length,
+        is_demo: isDemo,
         product_url: productUrl,
         product_image_url: productImageUrl,
         product_title: productTitle,
@@ -227,13 +236,11 @@ Deno.serve(async (req: Request) => {
     .single();
 
   if (insErr) {
-    // Rollback storage on DB failure
     await adminClient.storage.from("creatives").remove([storagePath]);
     console.error("Insert failed:", insErr);
-    return json({ error: `Insert failed: ${insErr.message}` }, 500);
+    return json({ error: `Insert failed: ${insErr.message}` });
   }
 
-  // Increment pack counter (best effort — failure here doesn't void the creative).
   if (adPackId) {
     await adminClient.rpc("ad_pack_increment_generated", {
       _pack_id: adPackId,
@@ -246,7 +253,8 @@ Deno.serve(async (req: Request) => {
     ad_pack_id: adPackId,
     cost_usd: costUsd,
     duration_ms: durationMs,
-    model: MODEL,
+    model: engine,
+    is_demo: isDemo,
     size,
     prompt,
   });
