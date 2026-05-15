@@ -1,8 +1,10 @@
-// ─── generate-creative-image v3 ────────────────────────────────────────────
+// ─── generate-creative-image v4 ────────────────────────────────────────────
 // Generates an ad image creative with a provider cascade:
 //   1. OpenAI gpt-image-1   (if OPENAI_API_KEY / DB credential configured)
 //   2. Genspark image API   (if GENSPARK_API_KEY / DB credential configured)
-//   3. Unsplash placeholder (demo fallback — always works, no key needed)
+//   3. Picsum placeholder   (demo fallback — always works, no key needed)
+//
+// Each provider is wrapped in try/catch so a network throw never crashes Deno.
 //
 // Auth : user JWT (verify_jwt = true). Tenant membership verified via my_tenants RPC.
 //
@@ -30,12 +32,8 @@ const GENSPARK_COST: Record<string, number> = {
   "1792x1024": 0.05,
 };
 
-const DEMO_IMAGES = [
-  "https://picsum.photos/1024/1024?random=1",
-  "https://picsum.photos/1024/1024?random=2",
-  "https://picsum.photos/1024/1024?random=3",
-  "https://picsum.photos/1024/1024?random=4",
-];
+// Picsum gives reliable placeholder images; random query makes each unique.
+const DEMO_URL = "https://picsum.photos/1024/1024";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -49,6 +47,70 @@ function json(data: unknown, status = 200) {
     headers: { "Content-Type": "application/json", ...CORS_HEADERS },
   });
 }
+
+// ─── Provider helpers — each returns bytes or null (never throws) ─────────
+
+async function fetchUrl(url: string): Promise<Uint8Array | null> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    return new Uint8Array(await res.arrayBuffer());
+  } catch {
+    return null;
+  }
+}
+
+async function tryOpenAI(key: string, prompt: string, size: string): Promise<Uint8Array | null> {
+  try {
+    const res = await fetch(OPENAI_IMAGES_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model: OPENAI_MODEL, prompt, n: 1, size }),
+    });
+    if (!res.ok) {
+      console.error("OpenAI image error:", res.status, (await res.text()).slice(0, 200));
+      return null;
+    }
+    const j = await res.json();
+    const b64: string | undefined = j.data?.[0]?.b64_json;
+    const url: string | undefined = j.data?.[0]?.url;
+    if (b64) return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    if (url) return await fetchUrl(url);
+    return null;
+  } catch (e) {
+    console.error("OpenAI image exception:", e);
+    return null;
+  }
+}
+
+async function tryGenspark(key: string, prompt: string, size: string): Promise<Uint8Array | null> {
+  try {
+    const res = await fetch(GENSPARK_IMAGE_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, size, n: 1, response_format: "b64_json" }),
+    });
+    if (!res.ok) {
+      console.error("Genspark image error:", res.status, (await res.text()).slice(0, 200));
+      return null;
+    }
+    const j = await res.json();
+    const b64: string | undefined = j.data?.[0]?.b64_json;
+    const url: string | undefined = j.data?.[0]?.url;
+    if (b64) return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    if (url) return await fetchUrl(url);
+    return null;
+  } catch (e) {
+    console.error("Genspark image exception:", e);
+    return null;
+  }
+}
+
+async function tryDemo(): Promise<Uint8Array | null> {
+  return await fetchUrl(`${DEMO_URL}?r=${Math.floor(Math.random() * 10000)}`);
+}
+
+// ─── Main handler ─────────────────────────────────────────────────────────
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -117,7 +179,7 @@ Deno.serve(async (req: Request) => {
   const member = (tenants ?? []).find((t: { tenant_id: string }) => t.tenant_id === tenantId);
   if (!member) return json({ error: "You are not a member of this tenant" }, 403);
 
-  // ─── Ad pack: validate ownership + enforce per-pack limit (max 4 images) ──
+  // ─── Ad pack: validate ownership + per-pack limit (max 4 images) ──────
   if (adPackId) {
     const { data: pack, error: pErr } = await adminClient
       .from("ad_packs")
@@ -149,102 +211,39 @@ Deno.serve(async (req: Request) => {
 
   // ─── Provider cascade: OpenAI → Genspark → demo ──────────────────────
   const t0 = Date.now();
-  let bytes: Uint8Array;
+  let bytes: Uint8Array | null = null;
   let isDemo = false;
-  let engine: string;
-  let costUsd: number;
+  let engine = "demo";
+  let costUsd = 0;
 
   if (openaiKey) {
-    // ── 1. Try OpenAI ─────────────────────────────────────────────────
-    const openaiRes = await fetch(OPENAI_IMAGES_URL, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${openaiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model: OPENAI_MODEL, prompt: fullPrompt, n: 1, size }),
-    });
-
-    if (openaiRes.ok) {
-      const openaiJson = await openaiRes.json();
-      const b64 = openaiJson.data?.[0]?.b64_json as string | undefined;
-      const imgUrl = openaiJson.data?.[0]?.url as string | undefined;
-      if (b64) {
-        bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-        engine = OPENAI_MODEL;
-        costUsd = COST[size];
-        // fall through to upload
-      } else if (imgUrl) {
-        const imgRes = await fetch(imgUrl);
-        if (imgRes.ok) {
-          bytes = new Uint8Array(await imgRes.arrayBuffer());
-          engine = OPENAI_MODEL;
-          costUsd = COST[size];
-        } else {
-          openaiKey = null; // force Genspark fallback below
-        }
-      } else {
-        openaiKey = null; // no image data — try Genspark
-      }
-    } else {
-      const errText = await openaiRes.text();
-      console.error(`OpenAI image error ${openaiRes.status}:`, errText.slice(0, 300));
-      openaiKey = null; // fall through to Genspark
-    }
+    bytes = await tryOpenAI(openaiKey, fullPrompt, size);
+    if (bytes) { engine = OPENAI_MODEL; costUsd = COST[size]; }
   }
 
-  if (!openaiKey && gensparkKey) {
-    // ── 2. Try Genspark ──────────────────────────────────────────────
-    const genRes = await fetch(GENSPARK_IMAGE_URL, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${gensparkKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: fullPrompt, size, n: 1, response_format: "b64_json" }),
-    });
-
-    if (genRes.ok) {
-      const genJson = await genRes.json();
-      const b64 = genJson.data?.[0]?.b64_json as string | undefined;
-      const imgUrl = genJson.data?.[0]?.url as string | undefined;
-      if (b64) {
-        bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-        engine = GENSPARK_MODEL;
-        costUsd = GENSPARK_COST[size] ?? 0.03;
-      } else if (imgUrl) {
-        const imgRes = await fetch(imgUrl);
-        if (imgRes.ok) {
-          bytes = new Uint8Array(await imgRes.arrayBuffer());
-          engine = GENSPARK_MODEL;
-          costUsd = GENSPARK_COST[size] ?? 0.03;
-        } else {
-          gensparkKey = null; // force demo
-        }
-      } else {
-        gensparkKey = null;
-      }
-    } else {
-      const errText = await genRes.text();
-      console.error(`Genspark image error ${genRes.status}:`, errText.slice(0, 300));
-      gensparkKey = null; // fall through to demo
-    }
+  if (!bytes && gensparkKey) {
+    bytes = await tryGenspark(gensparkKey, fullPrompt, size);
+    if (bytes) { engine = GENSPARK_MODEL; costUsd = GENSPARK_COST[size] ?? 0.03; }
   }
 
-  if (!openaiKey && !gensparkKey) {
-    // ── 3. Demo fallback ─────────────────────────────────────────────
+  if (!bytes) {
     isDemo = true;
     engine = "demo";
     costUsd = 0;
-    const demoUrl = DEMO_IMAGES[Math.floor(Math.random() * DEMO_IMAGES.length)]!;
-    const demoRes = await fetch(demoUrl);
-    if (!demoRes.ok) return json({ error: `Demo image fetch failed: ${demoRes.status}` });
-    bytes = new Uint8Array(await demoRes.arrayBuffer());
+    bytes = await tryDemo();
+    if (!bytes) return json({ error: "All image providers failed (including demo fallback)" });
   }
 
   const durationMs = Date.now() - t0;
 
   // ─── Upload to Supabase Storage ───────────────────────────────────────
-  const filename = `${isDemo ? "demo" : engine!.split("-")[0]}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
+  const prefix = isDemo ? "demo" : engine.startsWith("genspark") ? "genspark" : "openai";
+  const filename = `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
   const storagePath = `${tenantId}/${filename}`;
 
   const { error: upErr } = await adminClient.storage
     .from("creatives")
-    .upload(storagePath, bytes!, {
+    .upload(storagePath, bytes, {
       contentType: "image/png",
       cacheControl: "31536000",
       upsert: false,
@@ -264,16 +263,16 @@ Deno.serve(async (req: Request) => {
       status: "draft",
       headline: prompt.slice(0, 80),
       storage_path: storagePath,
-      generation_engine: engine!,
+      generation_engine: engine,
       generation_prompt: prompt,
       generation_meta: {
-        provider: isDemo ? "demo" : engine!.startsWith("genspark") ? "genspark" : "openai",
-        model: engine!,
+        provider: isDemo ? "demo" : engine.startsWith("genspark") ? "genspark" : "openai",
+        model: engine,
         size,
         style: style || null,
-        cost_usd: costUsd!,
+        cost_usd: costUsd,
         duration_ms: durationMs,
-        bytes: bytes!.length,
+        bytes: bytes.length,
         is_demo: isDemo,
         product_url: productUrl,
         product_image_url: productImageUrl,
@@ -300,9 +299,9 @@ Deno.serve(async (req: Request) => {
   return json({
     creative: inserted,
     ad_pack_id: adPackId,
-    cost_usd: costUsd!,
+    cost_usd: costUsd,
     duration_ms: durationMs,
-    model: engine!,
+    model: engine,
     is_demo: isDemo,
     size,
     prompt,
