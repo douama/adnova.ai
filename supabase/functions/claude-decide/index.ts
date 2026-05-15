@@ -404,7 +404,7 @@ Deno.serve(async (req: Request) => {
   const { data: campaigns, error: cErr } = await readClient
     .from("campaigns")
     .select(
-      "id, name, platform, status, daily_budget_usd, spend_total, revenue_total, impressions_total, clicks_total, conversions_total, roas, ctr, cpa"
+      "id, name, platform, status, daily_budget_usd, spend_total, revenue_total, impressions_total, clicks_total, conversions_total, roas, ctr, cpa, created_at"
     )
     .eq("tenant_id", tenantId)
     .in("status", ["live", "scaling", "paused"])
@@ -429,22 +429,30 @@ Deno.serve(async (req: Request) => {
     );
   }
 
-  // ─── Call Claude ───────────────────────────────────────────────────────
-  const campaignsBrief = campaigns.map((c) => ({
-    id: c.id,
-    name: c.name,
-    platform: c.platform,
-    status: c.status,
-    daily_budget_usd: c.daily_budget_usd,
-    spend_total: c.spend_total,
-    revenue_total: c.revenue_total,
-    roas: c.roas,
-    ctr: c.ctr,
-    cpa: c.cpa,
-    impressions: c.impressions_total,
-    clicks: c.clicks_total,
-    conversions: c.conversions_total,
-  }));
+  // ─── Build a base brief (age_hours / last-lift are filled in below
+  //     once we have the recent-decisions block from the memory layer). ──
+  const nowMs = Date.now();
+  const baseBrief = campaigns.map((c) => {
+    const createdAtMs = c.created_at ? new Date(c.created_at as string).getTime() : nowMs;
+    const ageHours = Math.max(0, Math.round((nowMs - createdAtMs) / 3_600_000));
+    return {
+      id: c.id,
+      name: c.name,
+      platform: c.platform,
+      status: c.status,
+      daily_budget_usd: c.daily_budget_usd,
+      spend_total: c.spend_total,
+      revenue_total: c.revenue_total,
+      roas: c.roas,
+      ctr: c.ctr,
+      cpa: c.cpa,
+      impressions: c.impressions_total,
+      clicks: c.clicks_total,
+      conversions: c.conversions_total,
+      age_hours: ageHours,
+      is_new_under_72h: ageHours < 72,
+    };
+  });
 
   // ─── Memory : recent + semantic recall ────────────────────────────────
   const campaignIds = campaigns.map((c) => c.id);
@@ -499,6 +507,24 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  // Per-campaign "hours since last budget lift" from the recent-decisions
+  // memory layer. Used by the +10%/48h scaling rule below.
+  const lastBudgetLiftByCampaign = new Map<string, number>();
+  for (const r of recent) {
+    if (r.decision_type !== "scale" && r.decision_type !== "budget_realloc") continue;
+    const existing = lastBudgetLiftByCampaign.get(r.campaign_id);
+    const t = new Date(r.created_at).getTime();
+    if (existing === undefined || t > existing) lastBudgetLiftByCampaign.set(r.campaign_id, t);
+  }
+  const campaignsBrief = baseBrief.map((c) => {
+    const last = lastBudgetLiftByCampaign.get(c.id as string);
+    return {
+      ...c,
+      hours_since_last_budget_lift:
+        last !== undefined ? Math.round((nowMs - last) / 3_600_000) : null,
+    };
+  });
+
   const memoryBlock =
     "\n\n## Past actions on these campaigns (last 72h) — do not contradict or duplicate:\n" +
     formatRecentDecisions(recent, campaignNameById) +
@@ -508,16 +534,31 @@ Deno.serve(async (req: Request) => {
   const systemPrompt =
     "You are AdNova's AI ad ops engine. You analyze campaign performance and propose " +
     "surgical optimization decisions. You are RUTHLESS about killing underperformers and " +
-    "AGGRESSIVE about scaling winners. You always justify decisions with the exact metrics. " +
-    "\n\nGuardrails (hard rules):\n" +
-    "- Don't scale a campaign with ROAS < 3.5×\n" +
-    "- Don't scale by more than 15% per 24h (CHECK PAST ACTIONS — they compound)\n" +
-    "- Kill creatives/campaigns with CTR < 0.8% after 500+ impressions\n" +
-    "- Reallocate budget from low-ROAS campaigns to high-ROAS ones (cross-platform OK)\n" +
-    "- Confidence must be honest — low if the data is thin (<1000 impressions or <30 conversions)\n" +
-    "- Don't re-propose a decision that was just executed (see 'Past actions' below)\n" +
-    "- Don't reverse a deliberate kill without strong evidence the underlying problem changed\n" +
-    "\nReturn 2-6 decisions max. Quality over quantity. If nothing meaningful to do, return empty array.";
+    "AGGRESSIVE about scaling winners. You always justify decisions with the exact metrics.\n\n" +
+    "## Early-life rule (age_hours < 72 — first 72 hours of a new campaign)\n" +
+    "- Examine every campaign with is_new_under_72h=true.\n" +
+    "- If ROAS < 1.5× OR CTR < 0.5% after 500+ impressions, propose a kill (type=kill or type=pause).\n" +
+    "- Do NOT scale anything in its first 72h, even if ROAS looks great — data is too thin. Wait it out.\n" +
+    "- Confidence reflects volume: <500 impressions → max confidence 0.5.\n\n" +
+    "## Continuous-improvement rule (winners get refreshed, not left alone)\n" +
+    "- For campaigns with ROAS >= 4× AND impressions >= 5,000 AND no 'create' decision in the past 7d,\n" +
+    "  propose a type=create decision: generate 2-3 new creative variations on the proven angle to\n" +
+    "  hedge against creative fatigue. This is the continuous-improvement loop.\n\n" +
+    "## Compounding-scale rule (+10% every 48h on healthy winners)\n" +
+    "- For campaigns with ROAS >= 3.5× AND age_hours >= 72 AND\n" +
+    "  (hours_since_last_budget_lift IS NULL OR hours_since_last_budget_lift >= 48),\n" +
+    "  propose a budget_realloc lifting the daily budget by EXACTLY +10%.\n" +
+    "- NEVER lift the same campaign twice within 48h (the past-actions block is authoritative).\n" +
+    "- NEVER lift if hours_since_last_budget_lift < 48, even if ROAS is great.\n\n" +
+    "## Standing guardrails (hard rules — never violate)\n" +
+    "- Don't scale a campaign with ROAS < 3.5×.\n" +
+    "- Don't scale by more than 15% per 24h (the +10%/48h rule already respects this).\n" +
+    "- Kill creatives/campaigns with CTR < 0.8% after 500+ impressions (general rule, more lax than the 72h one).\n" +
+    "- Reallocate budget from low-ROAS campaigns to high-ROAS ones (cross-platform OK).\n" +
+    "- Confidence must be honest — low if data is thin (<1,000 impressions or <30 conversions).\n" +
+    "- Don't re-propose a decision that was just executed (see Past actions block).\n" +
+    "- Don't reverse a deliberate kill without strong evidence the underlying problem changed.\n\n" +
+    "Return 2-6 decisions max. Quality over quantity. If nothing meaningful to do, return an empty array.";
 
   const userPrompt =
     `Tenant ID: ${tenantId}\n` +
