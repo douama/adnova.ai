@@ -6,8 +6,8 @@ ALTER TABLE public.plans
   ADD COLUMN IF NOT EXISTS max_ad_packs_per_month integer;
 
 UPDATE public.plans SET max_ad_packs_per_month = 20 WHERE id::text = 'trial';
-UPDATE public.plans SET max_ad_packs_per_month = 10 WHERE id::text = 'starter';
-UPDATE public.plans SET max_ad_packs_per_month = 50 WHERE id::text = 'growth';
+UPDATE public.plans SET max_ad_packs_per_month = 50  WHERE id::text = 'starter';
+UPDATE public.plans SET max_ad_packs_per_month = 200 WHERE id::text = 'growth';
 UPDATE public.plans SET max_ad_packs_per_month = NULL WHERE id::text = 'enterprise';
 
 COMMENT ON COLUMN public.plans.max_ad_packs_per_month IS
