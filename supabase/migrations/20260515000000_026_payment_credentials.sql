@@ -1,10 +1,10 @@
 -- Payment credentials — multi-slot per provider (Stripe / PayPal).
 -- Stripe needs publishable_key + secret_key + webhook_secret.
 -- PayPal needs client_id + client_secret + webhook_id.
--- We expose publishable keys to the browser (is_publishable=true), keep the
--- rest service-role-only.
+-- Publishable keys are returned to the browser via list_payment_credentials_public();
+-- secrets are service-role-only via get_payment_credential().
 
-CREATE TABLE IF NOT EXISTS payment_credentials (
+CREATE TABLE IF NOT EXISTS public.payment_credentials (
   provider text NOT NULL,
   slot text NOT NULL,
   api_key text NOT NULL,
@@ -24,15 +24,15 @@ CREATE TABLE IF NOT EXISTS payment_credentials (
   )
 );
 
-COMMENT ON TABLE payment_credentials IS
+COMMENT ON TABLE public.payment_credentials IS
   'Stripe + PayPal credentials, one row per (provider, slot). Secrets are service-role-only; publishable keys are returned to the browser via list_payment_credentials_public().';
 
--- RLS — table is locked tight; everything goes through SECURITY DEFINER RPCs.
-ALTER TABLE payment_credentials ENABLE ROW LEVEL SECURITY;
+-- RLS — zero policies = anon/authenticated cannot read or write directly.
+ALTER TABLE public.payment_credentials ENABLE ROW LEVEL SECURITY;
 
--- ── Admin RPCs ────────────────────────────────────────────────────────────
+-- ── Admin RPCs ─────────────────────────────────────────────────────────────
 
-CREATE OR REPLACE FUNCTION set_payment_credential(
+CREATE OR REPLACE FUNCTION public.set_payment_credential(
   p_provider text,
   p_slot text,
   p_api_key text,
@@ -57,10 +57,8 @@ BEGIN
   IF p_mode NOT IN ('test', 'live') THEN
     RAISE EXCEPTION 'mode must be test or live';
   END IF;
-
   v_preview := left(p_api_key, 7) || '…' || right(p_api_key, 4);
-
-  INSERT INTO payment_credentials (
+  INSERT INTO public.payment_credentials (
     provider, slot, api_key, key_preview, is_publishable, mode,
     last_rotated_at, rotated_by, notes
   ) VALUES (
@@ -68,23 +66,22 @@ BEGIN
     now(), auth.uid(), p_notes
   )
   ON CONFLICT (provider, slot) DO UPDATE SET
-    api_key = EXCLUDED.api_key,
-    key_preview = EXCLUDED.key_preview,
-    is_publishable = EXCLUDED.is_publishable,
-    mode = EXCLUDED.mode,
+    api_key         = EXCLUDED.api_key,
+    key_preview     = EXCLUDED.key_preview,
+    is_publishable  = EXCLUDED.is_publishable,
+    mode            = EXCLUDED.mode,
     last_rotated_at = now(),
-    rotated_by = auth.uid(),
-    notes = COALESCE(EXCLUDED.notes, payment_credentials.notes),
-    is_active = true;
-
+    rotated_by      = auth.uid(),
+    notes           = COALESCE(EXCLUDED.notes, public.payment_credentials.notes),
+    is_active       = true;
   RETURN json_build_object('ok', true, 'preview', v_preview);
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION set_payment_credential(text, text, text, text, boolean, text)
-  TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.set_payment_credential(text, text, text, text, boolean, text) FROM public, anon;
+GRANT  EXECUTE ON FUNCTION public.set_payment_credential(text, text, text, text, boolean, text) TO authenticated;
 
-CREATE OR REPLACE FUNCTION delete_payment_credential(p_provider text, p_slot text)
+CREATE OR REPLACE FUNCTION public.delete_payment_credential(p_provider text, p_slot text)
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -94,14 +91,15 @@ BEGIN
   IF NOT public.is_super_admin() THEN
     RAISE EXCEPTION 'access denied';
   END IF;
-  DELETE FROM payment_credentials WHERE provider = p_provider AND slot = p_slot;
+  DELETE FROM public.payment_credentials WHERE provider = p_provider AND slot = p_slot;
   RETURN json_build_object('ok', true);
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION delete_payment_credential(text, text) TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.delete_payment_credential(text, text) FROM public, anon;
+GRANT  EXECUTE ON FUNCTION public.delete_payment_credential(text, text) TO authenticated;
 
-CREATE OR REPLACE FUNCTION toggle_payment_credential(
+CREATE OR REPLACE FUNCTION public.toggle_payment_credential(
   p_provider text, p_slot text, p_is_active boolean
 )
 RETURNS json
@@ -113,27 +111,28 @@ BEGIN
   IF NOT public.is_super_admin() THEN
     RAISE EXCEPTION 'access denied';
   END IF;
-  UPDATE payment_credentials
-    SET is_active = p_is_active
-    WHERE provider = p_provider AND slot = p_slot;
+  UPDATE public.payment_credentials
+     SET is_active = p_is_active
+   WHERE provider = p_provider AND slot = p_slot;
   RETURN json_build_object('ok', true);
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION toggle_payment_credential(text, text, boolean) TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.toggle_payment_credential(text, text, boolean) FROM public, anon;
+GRANT  EXECUTE ON FUNCTION public.toggle_payment_credential(text, text, boolean) TO authenticated;
 
--- Admin listing — preview-only, no plain api_key
-CREATE OR REPLACE FUNCTION list_payment_credentials()
+-- Admin listing — preview only, no plain api_key exposed
+CREATE OR REPLACE FUNCTION public.list_payment_credentials()
 RETURNS TABLE (
-  provider text,
-  slot text,
-  key_preview text,
-  is_publishable boolean,
-  mode text,
-  is_active boolean,
+  provider        text,
+  slot            text,
+  key_preview     text,
+  is_publishable  boolean,
+  mode            text,
+  is_active       boolean,
   last_rotated_at timestamptz,
   rotated_by_email text,
-  notes text
+  notes           text
 )
 LANGUAGE plpgsql
 STABLE
@@ -155,16 +154,16 @@ BEGIN
       pc.last_rotated_at,
       (SELECT u.email FROM auth.users u WHERE u.id = pc.rotated_by),
       pc.notes
-    FROM payment_credentials pc
+    FROM public.payment_credentials pc
     ORDER BY pc.provider, pc.slot;
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION list_payment_credentials() TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.list_payment_credentials() FROM public, anon;
+GRANT  EXECUTE ON FUNCTION public.list_payment_credentials() TO authenticated;
 
--- Service-role only — returns the raw api_key. Used by Edge Functions
--- (e.g. stripe-checkout, paypal-webhook) to obtain the secret at call time.
-CREATE OR REPLACE FUNCTION get_payment_credential(p_provider text, p_slot text)
+-- Service-role only — returns the raw api_key for Edge Functions
+CREATE OR REPLACE FUNCTION public.get_payment_credential(p_provider text, p_slot text)
 RETURNS text
 LANGUAGE plpgsql
 STABLE
@@ -175,21 +174,22 @@ DECLARE
   v_key text;
 BEGIN
   SELECT api_key INTO v_key
-  FROM payment_credentials
+  FROM public.payment_credentials
   WHERE provider = p_provider AND slot = p_slot AND is_active = true;
   RETURN v_key;
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION get_payment_credential(text, text) TO service_role;
+REVOKE EXECUTE ON FUNCTION public.get_payment_credential(text, text) FROM public, anon, authenticated;
+GRANT  EXECUTE ON FUNCTION public.get_payment_credential(text, text) TO service_role;
 
--- Public-safe listing — publishable keys only, for use in frontend (Stripe.js init etc.)
-CREATE OR REPLACE FUNCTION list_payment_credentials_public()
+-- Public-safe listing — publishable keys only (Stripe.js / PayPal SDK init)
+CREATE OR REPLACE FUNCTION public.list_payment_credentials_public()
 RETURNS TABLE (
   provider text,
-  slot text,
-  api_key text,
-  mode text
+  slot     text,
+  api_key  text,
+  mode     text
 )
 LANGUAGE sql
 STABLE
@@ -197,8 +197,8 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
   SELECT provider, slot, api_key, mode
-  FROM payment_credentials
+  FROM public.payment_credentials
   WHERE is_publishable = true AND is_active = true;
 $$;
 
-GRANT EXECUTE ON FUNCTION list_payment_credentials_public() TO authenticated, anon;
+GRANT EXECUTE ON FUNCTION public.list_payment_credentials_public() TO authenticated, anon;
