@@ -1,10 +1,11 @@
 // UGC Showcase section — landing page proof of UGC ad generation capability.
-// Video: Pexels #8131881 "Woman Applying Serum on her Face" — free commercial use (Pexels license).
-// Portrait 1440×2732 UHD, 25fps, ~25s. Loaded lazily on scroll to avoid wasting bandwidth.
+// Video: Pexels #8075696 "A Young Woman Talking while Showing a Skincare Product" — free commercial use (Pexels license).
+// Portrait 1440×2732 UHD, 25fps, 29s. Person faces camera, speaks/demonstrates product application.
+// Loaded lazily on scroll to avoid wasting bandwidth.
 import { useRef, useEffect, useState } from "react";
 import { Camera, Zap, TrendingUp, Star, Play } from "lucide-react";
 
-const UGC_VIDEO_SRC = "https://videos.pexels.com/video-files/8131881/8131881-uhd_1440_2732_25fps.mp4";
+const UGC_VIDEO_SRC = "https://videos.pexels.com/video-files/8075696/8075696-uhd_1440_2732_25fps.mp4";
 
 const BENEFITS = [
   {
