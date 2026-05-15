@@ -43,6 +43,7 @@ import { AffiliateDashboardPage } from "./pages/tenant/Affiliate";
 import { AdminLoginPage } from "./pages/admin/AdminLogin";
 import { AdminOverview } from "./pages/admin/Overview";
 import { AdminIntegrations } from "./pages/admin/Integrations";
+import { AdminPayments } from "./pages/admin/Payments";
 import { AdminOAuthApps } from "./pages/admin/OAuthApps";
 import { AdminTenants } from "./pages/admin/Tenants";
 import { AdminUsers } from "./pages/admin/Users";
@@ -151,6 +152,7 @@ export function App() {
         <Route path="/admin/campaigns" element={<AdminCampaigns />} />
         <Route path="/admin/creatives" element={<AdminCreatives />} />
         <Route path="/admin/integrations" element={<AdminIntegrations />} />
+        <Route path="/admin/payments" element={<AdminPayments />} />
         <Route path="/admin/oauth-apps" element={<AdminOAuthApps />} />
         <Route path="/admin/tenants" element={<AdminTenants />} />
         <Route path="/admin/users" element={<AdminUsers />} />

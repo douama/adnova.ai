@@ -15,6 +15,7 @@ import {
   Image as ImageIcon,
   Handshake,
   KeyRound,
+  CreditCard,
 } from "lucide-react";
 import { Logo } from "../ui/logo";
 import { ThemeToggle } from "../ui/ThemeToggle";
@@ -47,6 +48,7 @@ const NAV_SECTIONS: { title: string; items: NavItem[] }[] = [
       { to: "/admin/users", label: "Users", icon: Users },
       { to: "/admin/affiliates", label: "Affiliates", icon: Handshake },
       { to: "/admin/revenue", label: "Revenue", icon: DollarSign },
+      { to: "/admin/payments", label: "Payments", icon: CreditCard },
     ],
   },
 ];
