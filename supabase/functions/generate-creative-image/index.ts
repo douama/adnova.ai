@@ -1,10 +1,8 @@
-// ─── generate-creative-image v2 ────────────────────────────────────────────
-// Calls OpenAI Images API (gpt-image-1, formerly DALL-E 3) to generate an
-// ad creative from a text prompt, uploads the bytes to the tenant's
-// creatives bucket, and inserts a row in public.creatives.
-//
-// If no OpenAI key is configured (DB credential or env var), falls back to
-// an Unsplash Source placeholder so the ad-pack flow still works in demo mode.
+// ─── generate-creative-image v3 ────────────────────────────────────────────
+// Generates an ad image creative with a provider cascade:
+//   1. OpenAI gpt-image-1   (if OPENAI_API_KEY / DB credential configured)
+//   2. Genspark image API   (if GENSPARK_API_KEY / DB credential configured)
+//   3. Unsplash placeholder (demo fallback — always works, no key needed)
 //
 // Auth : user JWT (verify_jwt = true). Tenant membership verified via my_tenants RPC.
 //
@@ -15,7 +13,10 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const OPENAI_IMAGES_URL = "https://api.openai.com/v1/images/generations";
-const MODEL = "gpt-image-1";
+const OPENAI_MODEL = "gpt-image-1";
+
+const GENSPARK_IMAGE_URL = "https://api.genspark.ai/v1/images/generate";
+const GENSPARK_MODEL = "genspark-image-1";
 
 const COST: Record<string, number> = {
   "1024x1024": 0.04,
@@ -23,12 +24,17 @@ const COST: Record<string, number> = {
   "1536x1024": 0.06,
 };
 
-// Unsplash Source URLs used as demo placeholders (no API key required).
+const GENSPARK_COST: Record<string, number> = {
+  "1024x1024": 0.03,
+  "1024x1792": 0.05,
+  "1792x1024": 0.05,
+};
+
 const DEMO_IMAGES = [
-  "https://source.unsplash.com/1024x1024/?advertising,product",
-  "https://source.unsplash.com/1024x1024/?fashion,brand",
-  "https://source.unsplash.com/1024x1024/?technology,marketing",
-  "https://source.unsplash.com/1024x1024/?lifestyle,creative",
+  "https://picsum.photos/1024/1024?random=1",
+  "https://picsum.photos/1024/1024?random=2",
+  "https://picsum.photos/1024/1024?random=3",
+  "https://picsum.photos/1024/1024?random=4",
 ];
 
 const CORS_HEADERS = {
@@ -64,6 +70,7 @@ Deno.serve(async (req: Request) => {
   } catch {
     return json({ error: "Invalid JSON" }, 400);
   }
+
   const tenantId = body.tenant_id;
   const prompt = body.prompt?.trim();
   const style = body.style?.trim() ?? "";
@@ -81,19 +88,23 @@ Deno.serve(async (req: Request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  if (!supabaseUrl || !anonKey || !serviceKey) {
-    return json({ error: "Supabase env missing" }, 500);
-  }
+  if (!supabaseUrl || !anonKey || !serviceKey) return json({ error: "Supabase env missing" }, 500);
 
   const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
 
-  // Resolve OpenAI key : DB-stored credential first, env var fallback. Absent → demo mode.
+  // ─── Resolve API keys ─────────────────────────────────────────────────
   let openaiKey: string | null = null;
+  let gensparkKey: string | null = null;
   try {
-    const { data } = await adminClient.rpc("get_provider_credential", { p_provider: "openai" });
-    if (typeof data === "string" && data.length > 10) openaiKey = data;
+    const [oRes, gRes] = await Promise.all([
+      adminClient.rpc("get_provider_credential", { p_provider: "openai" }),
+      adminClient.rpc("get_provider_credential", { p_provider: "genspark" }),
+    ]);
+    if (typeof oRes.data === "string" && oRes.data.length > 10) openaiKey = oRes.data;
+    if (typeof gRes.data === "string" && gRes.data.length > 10) gensparkKey = gRes.data;
   } catch (_) { /* fall through */ }
   if (!openaiKey) openaiKey = Deno.env.get("OPENAI_API_KEY") ?? null;
+  if (!gensparkKey) gensparkKey = Deno.env.get("GENSPARK_API_KEY") ?? null;
 
   // ─── Tenant membership check ──────────────────────────────────────────
   const authHeader = req.headers.get("Authorization") ?? "";
@@ -121,6 +132,7 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  // ─── Build enriched prompt ────────────────────────────────────────────
   const productContext = [
     productTitle ? `Product: ${productTitle}` : null,
     productDescription ? `Description: ${productDescription.slice(0, 400)}` : null,
@@ -135,6 +147,7 @@ Deno.serve(async (req: Request) => {
     "High-quality advertising creative, clean composition, professional product photography aesthetic, no text overlay unless requested.",
   ].filter(Boolean).join("\n\n");
 
+  // ─── Provider cascade: OpenAI → Genspark → demo ──────────────────────
   const t0 = Date.now();
   let bytes: Uint8Array;
   let isDemo = false;
@@ -142,44 +155,80 @@ Deno.serve(async (req: Request) => {
   let costUsd: number;
 
   if (openaiKey) {
-    // ─── PRODUCTION : OpenAI image generation ────────────────────────────
-    engine = MODEL;
-    costUsd = COST[size];
-
+    // ── 1. Try OpenAI ─────────────────────────────────────────────────
     const openaiRes = await fetch(OPENAI_IMAGES_URL, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ model: MODEL, prompt: fullPrompt, n: 1, size }),
+      headers: { Authorization: `Bearer ${openaiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model: OPENAI_MODEL, prompt: fullPrompt, n: 1, size }),
     });
 
-    if (!openaiRes.ok) {
-      const text = await openaiRes.text();
-      console.error("OpenAI image error:", openaiRes.status, text);
-      // Return 200 so the JSON body is accessible in the browser
-      // (non-2xx responses are wrapped opaquely by supabase-js invoke).
-      return json({ error: `OpenAI ${openaiRes.status}`, detail: text.slice(0, 400) });
-    }
-
-    const openaiJson = await openaiRes.json();
-    const b64 = openaiJson.data?.[0]?.b64_json as string | undefined;
-    const imgUrl = openaiJson.data?.[0]?.url as string | undefined;
-
-    if (b64) {
-      bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-    } else if (imgUrl) {
-      const imgRes = await fetch(imgUrl);
-      if (!imgRes.ok) return json({ error: "Failed to download image from OpenAI URL" });
-      bytes = new Uint8Array(await imgRes.arrayBuffer());
+    if (openaiRes.ok) {
+      const openaiJson = await openaiRes.json();
+      const b64 = openaiJson.data?.[0]?.b64_json as string | undefined;
+      const imgUrl = openaiJson.data?.[0]?.url as string | undefined;
+      if (b64) {
+        bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+        engine = OPENAI_MODEL;
+        costUsd = COST[size];
+        // fall through to upload
+      } else if (imgUrl) {
+        const imgRes = await fetch(imgUrl);
+        if (imgRes.ok) {
+          bytes = new Uint8Array(await imgRes.arrayBuffer());
+          engine = OPENAI_MODEL;
+          costUsd = COST[size];
+        } else {
+          openaiKey = null; // force Genspark fallback below
+        }
+      } else {
+        openaiKey = null; // no image data — try Genspark
+      }
     } else {
-      return json({ error: "OpenAI returned no image data" });
+      const errText = await openaiRes.text();
+      console.error(`OpenAI image error ${openaiRes.status}:`, errText.slice(0, 300));
+      openaiKey = null; // fall through to Genspark
     }
-  } else {
-    // ─── DEMO : fetch an Unsplash placeholder ────────────────────────────
+  }
+
+  if (!openaiKey && gensparkKey) {
+    // ── 2. Try Genspark ──────────────────────────────────────────────
+    const genRes = await fetch(GENSPARK_IMAGE_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${gensparkKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: fullPrompt, size, n: 1, response_format: "b64_json" }),
+    });
+
+    if (genRes.ok) {
+      const genJson = await genRes.json();
+      const b64 = genJson.data?.[0]?.b64_json as string | undefined;
+      const imgUrl = genJson.data?.[0]?.url as string | undefined;
+      if (b64) {
+        bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+        engine = GENSPARK_MODEL;
+        costUsd = GENSPARK_COST[size] ?? 0.03;
+      } else if (imgUrl) {
+        const imgRes = await fetch(imgUrl);
+        if (imgRes.ok) {
+          bytes = new Uint8Array(await imgRes.arrayBuffer());
+          engine = GENSPARK_MODEL;
+          costUsd = GENSPARK_COST[size] ?? 0.03;
+        } else {
+          gensparkKey = null; // force demo
+        }
+      } else {
+        gensparkKey = null;
+      }
+    } else {
+      const errText = await genRes.text();
+      console.error(`Genspark image error ${genRes.status}:`, errText.slice(0, 300));
+      gensparkKey = null; // fall through to demo
+    }
+  }
+
+  if (!openaiKey && !gensparkKey) {
+    // ── 3. Demo fallback ─────────────────────────────────────────────
     isDemo = true;
-    engine = "demo-openai";
+    engine = "demo";
     costUsd = 0;
     const demoUrl = DEMO_IMAGES[Math.floor(Math.random() * DEMO_IMAGES.length)]!;
     const demoRes = await fetch(demoUrl);
@@ -190,12 +239,12 @@ Deno.serve(async (req: Request) => {
   const durationMs = Date.now() - t0;
 
   // ─── Upload to Supabase Storage ───────────────────────────────────────
-  const filename = `${isDemo ? "demo" : "ai"}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
+  const filename = `${isDemo ? "demo" : engine!.split("-")[0]}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`;
   const storagePath = `${tenantId}/${filename}`;
 
   const { error: upErr } = await adminClient.storage
     .from("creatives")
-    .upload(storagePath, bytes, {
+    .upload(storagePath, bytes!, {
       contentType: "image/png",
       cacheControl: "31536000",
       upsert: false,
@@ -215,16 +264,16 @@ Deno.serve(async (req: Request) => {
       status: "draft",
       headline: prompt.slice(0, 80),
       storage_path: storagePath,
-      generation_engine: engine,
+      generation_engine: engine!,
       generation_prompt: prompt,
       generation_meta: {
-        provider: isDemo ? "demo" : "openai",
-        model: engine,
+        provider: isDemo ? "demo" : engine!.startsWith("genspark") ? "genspark" : "openai",
+        model: engine!,
         size,
         style: style || null,
-        cost_usd: costUsd,
+        cost_usd: costUsd!,
         duration_ms: durationMs,
-        bytes: bytes.length,
+        bytes: bytes!.length,
         is_demo: isDemo,
         product_url: productUrl,
         product_image_url: productImageUrl,
@@ -251,9 +300,9 @@ Deno.serve(async (req: Request) => {
   return json({
     creative: inserted,
     ad_pack_id: adPackId,
-    cost_usd: costUsd,
+    cost_usd: costUsd!,
     duration_ms: durationMs,
-    model: engine,
+    model: engine!,
     is_demo: isDemo,
     size,
     prompt,
