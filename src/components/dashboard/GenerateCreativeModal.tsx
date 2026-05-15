@@ -141,6 +141,7 @@ export function GenerateCreativeModal({
     if (!open || !tenantId) return;
     let cancelled = false;
     (async () => {
+      // ad_packs_quota_status is not in generated types — cast required
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error } = await (supabase.rpc as any)("ad_packs_quota_status", {
         _tenant_id: tenantId,

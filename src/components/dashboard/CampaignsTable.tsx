@@ -52,7 +52,7 @@ export function CampaignsTable() {
       await seedDemoData(tenantId);
       await refresh();
     } catch (e) {
-      console.error(e);
+      console.error("CampaignsTable seed:", e);
     } finally {
       setSeeding(false);
     }

@@ -64,7 +64,7 @@ export function CreativesPage() {
       await deleteCreative(id, path);
       await refresh();
     } catch (e) {
-      console.error(e);
+      console.error("Creatives delete:", e);
     }
   }
 
